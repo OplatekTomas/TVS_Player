@@ -1,0 +1,44 @@
+﻿<Window x:Class="TVS_Player.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TVS_Player"
+        mc:Ignorable="d"
+        Title="TVS Player" Height="648" Width="1152"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+
+        <Storyboard x:Key="sbShowLeftMenu" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-150,0,0,0" To="0,0,0,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Key="sbHideLeftMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="-150,0,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
+        </Storyboard>
+
+    </Window.Resources>
+    <Grid Background="#FF323232" Height="621" VerticalAlignment="Top" Margin="0,0,0,0">
+        <StackPanel Panel.ZIndex="2" Name="panelMenu" Orientation="Horizontal" HorizontalAlignment="Left" Margin="-152,0,0,0">
+            <Grid Width="200" Background="#FF282828" >
+                <Grid x:Name="ShowHideBtns" Margin="0,565,0,10">
+                    <Button x:Name="btnLeftMenuHide" Width="auto" Height="auto" Click="MenuHide_Click" Visibility="visible" Margin="0,0,0,0" Background="#FF1E1E1E">
+                        <StackPanel Orientation="Horizontal" Width="190">
+                            <TextBlock HorizontalAlignment="Center" Width="144" FontSize="24" Foreground="#FF323232">Show/Hide</TextBlock>
+                            <Image Source="Icons/IconMenu.png" HorizontalAlignment="Right" Width="43" Height="34"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnLeftMenuShow" Width="auto" Height="auto" Click="MenuShow_Click" Margin="0,0,0,0" Background="{x:Null}">
+                        <StackPanel Orientation="Horizontal" Width="190">
+                            <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Show/Hide</TextBlock>
+                            <Image Source="Icons/IconMenu.png" HorizontalAlignment="Right" Width="43" Height="34"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+        </StackPanel>
+        <Grid x:Name="hideOnClick" HorizontalAlignment="Left" Height="621" Margin="0,0,0,0" VerticalAlignment="Top" Width="1150" Background="#00000000" MouseLeftButtonUp="MenuHide_Click" Visibility="Visible"/>
+
+
+    </Grid>
+</Window>
