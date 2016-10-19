@@ -18,7 +18,7 @@
         </Storyboard>
 
     </Window.Resources>
-    <Grid Background="#FF323232" Height="621" VerticalAlignment="Top" Margin="0,0,0,0">
+    <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Height="621" VerticalAlignment="Top" Margin="0,0,0,0">
         <StackPanel Panel.ZIndex="2" Name="panelMenu" Orientation="Horizontal" HorizontalAlignment="Left" Margin="-152,0,0,0">
             <Grid Width="200" Background="#FF282828" >
                 <Grid x:Name="ShowHideBtns" Margin="0,565,0,10">

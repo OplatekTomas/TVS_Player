@@ -5,12 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
         mc:Ignorable="d"
-        Title="Library" Height="648" Width="1152">
+        Title="Library" Height="648" Width="1152" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
     <Grid>
-        <Label x:Name="label" Content="Knihovna serialu" FontSize="20"/>
-        <WrapPanel x:Name="List" Margin="10,30,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Canvas >
+            <Canvas.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#4C000000" Offset="0"/>
+                    <GradientStop Offset="1" Color="#00000000"/>
+                </LinearGradientBrush>
+            </Canvas.Background>
+        </Canvas>
+        <TextBlock FontSize="20" Text="Knihovna serialu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="White" />
+        <Button Content="Exit" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Quit_Event"/>
+        <DockPanel x:Name="SearchBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="24" Width="180" Margin="0,0,20,10">
+            <Rectangle Width="24" Margin="0,0,10,0" HorizontalAlignment="Left"/>
+            <TextBox Text="NejakySerial" VerticalContentAlignment="Center" />
+        </DockPanel>
 
-
-        </WrapPanel>
+        <ScrollViewer Grid.Row="1">
+            <WrapPanel  x:Name="List" Margin="10,30,10,10">
+                <Grid x:Name="BaseRectangle" Height="200" Width="150" Margin="10">
+                    <Rectangle  Fill="#FF994747" RadiusY="5" RadiusX="5">
+                        <Rectangle.Effect>
+                            <DropShadowEffect BlurRadius="20" Direction="270"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                    <TextBlock Text="Random jmeno serialu" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
+                </Grid>
+            </WrapPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
