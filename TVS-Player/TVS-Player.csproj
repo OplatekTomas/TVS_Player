@@ -59,7 +59,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Library.xaml">
     <Compile Include="Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
@@ -79,6 +78,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Library.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="Library.xaml.cs">
       <DependentUpon>Library.xaml</DependentUpon>
     </Compile>
@@ -88,6 +91,7 @@
     </Compile>
     <Page Include="Styles\Animations.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Shows.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -128,8 +132,6 @@
     <Resource Include="Icons\download.png" />
     <Resource Include="Icons\play-button.png" />
     <Resource Include="Icons\server.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\menu.png" />
   </ItemGroup>
   <ItemGroup />
