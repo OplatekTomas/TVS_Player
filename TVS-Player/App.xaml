@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:TVS_Player"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary x:Name="Dictionaries">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/TVS-Player;component/Styles/Brushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -16,7 +16,7 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="-150,0,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
     </Window.Resources>
-    <Grid Background="#FF323232" Margin="0,0,0,0">
+    <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Margin="0,0,0,0">
         <StackPanel Panel.ZIndex="3" Name="panelMenu" Orientation="Horizontal" HorizontalAlignment="Left" Margin="-152,0,0,0">
             <Grid Width="200" Background="#FF282828" >
                 <Grid x:Name="ShowHideBtns" VerticalAlignment="Bottom" Margin="0,0,0,0">
@@ -49,6 +49,6 @@
         </StackPanel>
         <Grid Panel.ZIndex="2" x:Name="hideOnClick" Margin="0,0,0,0" Background="#00000000" MouseLeftButtonUp="MenuHide_Click" Visibility="Hidden"/>
         <Frame x:Name="Frame" Margin="48,0,0,0" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler"/>
-
+        <Button x:Name="button" Content="WIP Library" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Click="OpenLibrary" Padding="3,1"/>
     </Grid>
 </Window>
