@@ -43,5 +43,12 @@ namespace TVS_Player {
                 btnShow.Visibility = System.Windows.Visibility.Visible;
             }
         }
+
+        private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
+            Frame.Content = new Shows();
+        }
+        private void btnDownloadShow_Click(object sender, RoutedEventArgs e) {
+            Frame.Content = new Download();
+        }
     }
 }
