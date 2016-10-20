@@ -7,6 +7,7 @@
         <ResourceDictionary x:Name="Dictionaries">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/TVS-Player;component/Styles/Brushes.xaml"/>
+                <ResourceDictionary Source="/TVS-Player;component/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
