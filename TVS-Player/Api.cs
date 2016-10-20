@@ -88,7 +88,7 @@ namespace TVS_Player {
             }
         }
         //Return info about specific show
-        public static string apiGet(int id) {
+        public static void apiGetPicture(int id) {
             string token = Properties.Settings.Default.token;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id);
             request.Method = "GET";
@@ -98,13 +98,13 @@ namespace TVS_Player {
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
+                    JObject parse = JObject.Parse(sr.ReadToEnd());
+
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure you are connected to the internet?", "Error");
-                return "error";
             }
         }
+
     }
 }
 
