@@ -43,7 +43,11 @@ namespace TVS_Player {
                 btnShow.Visibility = System.Windows.Visibility.Visible;
             }
         }
-
+        private void OpenLibrary(object sender, RoutedEventArgs e)
+        {
+            Library lib = new Library();
+            lib.Show();
+        }
         private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
             Frame.Content = new Shows();
         }
