@@ -48,5 +48,11 @@ namespace TVS_Player {
             Library lib = new Library();
             lib.Show();
         }
+        private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
+            Frame.Content = new Shows();
+        }
+        private void btnDownloadShow_Click(object sender, RoutedEventArgs e) {
+            Frame.Content = new Download();
+        }
     }
 }
