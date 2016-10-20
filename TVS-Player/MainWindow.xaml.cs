@@ -45,10 +45,14 @@ namespace TVS_Player {
             }
         }
         private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
-            Frame.Content = new Shows();
+            if (Frame.Content.GetType() != typeof(Shows)) {
+                Frame.Content = new Shows();
+            }
         }
-        private void btnDownloadShow_Click(object sender, RoutedEventArgs e) {
-            Frame.Content = new Download();
+        private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
+            if (Frame.Content.GetType() != typeof(Download)){
+                Frame.Content = new Download();
+            }
         }
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {

@@ -14,19 +14,16 @@ namespace TVS_Player
     /// Interaction logic for Shows.xaml
     /// </summary>
     public partial class Shows : Page {
-        public Shows()
-        {
+        public Shows(){
             InitializeComponent();
             Random r = new Random();
-            for (byte i = 0; i < 10; i++)
-            {
+            for (byte i = 0; i < 10; i++){
                 Grid folder = new Grid();
                 GenerateRectangle(out folder, r);
             }
-
         }
-        private void GenerateRectangle(out Grid folder, Random r)
-        {
+
+        private void GenerateRectangle(out Grid folder, Random r){
             var xaml = XamlWriter.Save(BaseRectangle);
             StringReader stringReader = new StringReader(xaml);
             XmlReader xmlReader = XmlReader.Create(stringReader);
@@ -34,14 +31,12 @@ namespace TVS_Player
             Rectangle rect = (Rectangle)folder.Children[0];
             Color genCol = Color.FromRgb((byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255));
             rect.Fill = new SolidColorBrush(genCol);
-            if (genCol.R > 160 || genCol.G > 160 || genCol.B > 160)
-            {
+            if (genCol.R > 160 || genCol.G > 160 || genCol.B > 160){
                 ((TextBlock)folder.Children[1]).Foreground = new SolidColorBrush(Colors.Black);
             }
             List.Children.Add(folder);
         }
-        private void Quit_Event(object sender, RoutedEventArgs e)
-        {
+        private void Quit_Event(object sender, RoutedEventArgs e){
             Application.Current.Shutdown();
         }
     }
