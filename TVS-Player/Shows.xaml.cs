@@ -34,7 +34,7 @@ namespace TVS_Player
             Rectangle rect = (Rectangle)folder.Children[0];
             Color genCol = Color.FromRgb((byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255));
             rect.Fill = new SolidColorBrush(genCol);
-            if (genCol.B > 128 || genCol.R > 128 || genCol.B > 128)
+            if (genCol.R > 160 || genCol.G > 160 || genCol.B > 160)
             {
                 ((TextBlock)folder.Children[1]).Foreground = new SolidColorBrush(Colors.Black);
             }
