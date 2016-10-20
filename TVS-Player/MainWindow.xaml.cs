@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using System.IO;
 
 namespace TVS_Player {
     /// <summary>
@@ -49,6 +50,12 @@ namespace TVS_Player {
         }
         private void btnDownloadShow_Click(object sender, RoutedEventArgs e) {
             Frame.Content = new Download();
+        }
+
+        private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
+            /*if (File.Exists()) {
+                Frame.Content = new Shows();
+            } else { }*/
         }
     }
 }
