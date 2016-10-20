@@ -23,10 +23,9 @@
             </Canvas.Background>
         </Canvas>
         <TextBlock FontSize="20" Text="Knihovna serialu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="White" />
-        <Button Content="Exit" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Quit_Event"/>
         <DockPanel x:Name="SearchBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="24" Width="180" Margin="0,0,20,10">
-            <Rectangle Width="24" Margin="0,0,10,0" HorizontalAlignment="Left"/>
-            <TextBox Text="NejakySerial" VerticalContentAlignment="Center" />
+            <Image Source="Icons/search.png" Margin="0,0,5,0" />
+            <TextBox Text="NejakySerial" VerticalContentAlignment="Center" Style="{DynamicResource SearchBox}" />
         </DockPanel>
 
         <ScrollViewer Grid.Row="1">
