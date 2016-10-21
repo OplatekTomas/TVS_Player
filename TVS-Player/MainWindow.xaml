@@ -20,26 +20,26 @@
         <StackPanel Panel.ZIndex="3" Name="panelMenu" Orientation="Horizontal" HorizontalAlignment="Left" Margin="-152,0,0,0">
             <Grid Width="200" Background="#FF282828" >
                 <Grid x:Name="ShowHideBtns" VerticalAlignment="Bottom" Margin="0,0,0,0">
-                    <Button x:Name="btnLeftMenuHide" Width="auto" Height="50" Click="MenuHide_Click" Visibility="visible" Margin="0,0,0,0" Background="#FF1E1E1E">
-                        <StackPanel Orientation="Horizontal" Width="190">
+                    <Button x:Name="btnLeftMenuHide" Width="auto" Height="50" Click="MenuHide_Click" Visibility="visible" Margin="0,0,0,0" Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
+                        <StackPanel Orientation="Horizontal" Width="190" VerticalAlignment="Center">
                             <TextBlock HorizontalAlignment="Center" Width="144" FontSize="24" Foreground="#FF323232">Show/Hide</TextBlock>
-                            <Image Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="34"/>
+                            <Image Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="37"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="btnLeftMenuShow" Width="auto" Height="50" Click="MenuShow_Click" Margin="0,0,0,0" Background="#FF1E1E1E">
-                        <StackPanel Orientation="Horizontal" Width="190">
+                    <Button x:Name="btnLeftMenuShow" Width="auto" Height="50" Click="MenuShow_Click" Margin="0,0,0,0" Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
+                        <StackPanel Orientation="Horizontal" Width="190" VerticalAlignment="Center">
                             <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Show/Hide</TextBlock>
-                            <Image Source="Icons/menu.png" Margin="0,0,0,3" HorizontalAlignment="Right" Width="43" Height="34"/>
+                            <Image Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="37"/>
                         </StackPanel>
                     </Button>
                 </Grid>
-                <Button x:Name="btnShowShows" Width="auto" Height="50" Click="btnShowsShow_Click" Margin="0,0,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E">
+                <Button x:Name="btnShowShows" Width="auto" Height="50" Click="btnShowsShow_Click" Margin="0,0,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
                     <StackPanel Orientation="Horizontal" Width="190">
                         <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Play</TextBlock>
                         <Image Source="Icons/play-button.png" Margin="0,0,0,3" HorizontalAlignment="Right" Width="43" Height="34"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="btnShowDownloads" Width="auto" Height="50" Click="btnDownloadShow_Click" Margin="0,51,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E">
+                <Button x:Name="btnShowDownloads" Width="auto" Height="50" Click="btnDownloadShow_Click" Margin="0,51,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
                     <StackPanel Orientation="Horizontal" Width="190">
                         <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Download</TextBlock>
                         <Image Source="Icons/download.png" Margin="0,0,0,3" HorizontalAlignment="Right" Width="43" Height="34"/>
@@ -48,7 +48,6 @@
             </Grid>
         </StackPanel>
         <Grid Panel.ZIndex="2" x:Name="hideOnClick" Margin="0,0,0,0" Background="#00000000" MouseLeftButtonUp="MenuHide_Click" Visibility="Hidden"/>
-        <Frame x:Name="Frame" Margin="48,0,0,0" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler"/>
-        <Button x:Name="button" Content="WIP Library" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Click="OpenLibrary" Padding="3,1"/>
+        <Frame x:Name="Frame" Margin="48,0,0,0" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler" Source="/TVS-Player;component/Shows.xaml"/>
     </Grid>
 </Window>
