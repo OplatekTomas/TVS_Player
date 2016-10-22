@@ -45,13 +45,17 @@ namespace TVS_Player {
             }
         }
         private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
-            Frame.Content = new Shows();
+            if (Frame.Content.GetType() != typeof(Shows)) {
+                Frame.Content = new Shows();
+            }
         }
-        private void btnDownloadShow_Click(object sender, RoutedEventArgs e) {
-            //Api.getToken();
-            //Api.apiGetPoster(73871,"Futurama");
-            //string kappa = Api.apiGet(1,1, 73871);
-            Frame.Content = new Startup();
+        private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
+            if (Frame.Content.GetType() != typeof(Download)){
+                Api.getToken();
+                //Api.apiGetPoster(73871,"Futurama");
+                string kappa = Api.apiGet(1,1, 73871);
+                Frame.Content = new Startup();
+            }
         }
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
@@ -59,5 +63,21 @@ namespace TVS_Player {
                 Frame.Content = new Shows();
             } else { }*/
         }
+        public void SetFrameView(Page page) {
+            if (Frame.Content.GetHashCode() != page.GetHashCode()) {
+                Frame.Content = page;
+            }
+        }
+        public void AddTempFrame(Page page) {
+            Frame fr = new Frame();
+            BaseGrid.Children.Add(fr);
+            Panel.SetZIndex(fr, 1000);
+            fr.Content = page;
+        }
+
+        public void CloseTempFrame() {
+            BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        }
+
     }
 }

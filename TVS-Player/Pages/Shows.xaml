@@ -23,21 +23,20 @@
             </Canvas.Background>
         </Canvas>
         <TextBlock FontSize="20" Text="Knihovna serialu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="White" />
-        <DockPanel x:Name="SearchBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="24" Width="180" Margin="0,0,20,10">
-            <Image Source="Icons/search.png" Margin="0,0,5,0" />
-            <TextBox Text="NejakySerial" VerticalContentAlignment="Center" Style="{DynamicResource SearchBox}" />
-        </DockPanel>
+        <Grid x:Name="SearchBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="24" Width="180" Margin="0,0,20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="../Icons/search.png" Height="24" Width="24" Margin="0,0,5,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <TextBox x:Name="SearchBox" Text="NejakySerial" Style="{DynamicResource SearchBox}" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Column="1" TextChanged="SearchInLibrary_Event"/>
+            <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" Margin="0" Padding="5,0" MouseLeftButtonDown="EraseSearchText_Event"/>
+        </Grid>
 
         <ScrollViewer Grid.Row="1">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
-                <Grid x:Name="BaseRectangle" Height="200" Width="150" Margin="10">
-                    <Rectangle  Fill="#FF994747" RadiusY="5" RadiusX="5">
-                        <Rectangle.Effect>
-                            <DropShadowEffect BlurRadius="20" Direction="270"/>
-                        </Rectangle.Effect>
-                    </Rectangle>
-                    <TextBlock Text="Random jmeno serialu" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
-                </Grid>
+                <local:ShowRectangle/>
             </WrapPanel>
         </ScrollViewer>
     </Grid>
