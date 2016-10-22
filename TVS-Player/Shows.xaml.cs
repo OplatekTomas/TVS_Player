@@ -49,5 +49,9 @@ namespace TVS_Player
                 }
             }
         }
+
+        private void EraseSearchText_Event(object sender, MouseButtonEventArgs e) {
+            SearchBox.Text = String.Empty;
+        }
     }
 }

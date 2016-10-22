@@ -12,7 +12,7 @@ namespace TVS_Player {
     /// </summary>
     public partial class ShowRectangle : Grid {
         public int ID = 121361;
-        public string ShowName;
+        public string ShowName = "Game of Thrones";
         public bool Disabled = false;
         public ShowRectangle() {
             InitializeComponent();
