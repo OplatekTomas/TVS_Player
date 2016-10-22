@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
         mc:Ignorable="d"
-        Title="TVS Player" Height="648" Width="1156"
+        Title="TVS Player" Height="648" Width="1152"
+        MinWidth="640"
+        MinHeight="360"
         >
 
     <Window.Resources>
