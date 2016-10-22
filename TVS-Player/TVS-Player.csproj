@@ -65,10 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CreatingDatabase\Startup.xaml.cs">
-      <DependentUpon>Startup.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CreatingDatabase\tvShowControl.xaml.cs">
+    <Compile Include="Controls\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Download.xaml.cs">
@@ -86,14 +83,10 @@
     <Compile Include="Pages\Shows.xaml.cs">
       <DependentUpon>Shows.xaml</DependentUpon>
     </Compile>
-    <Page Include="CreatingDatabase\Startup.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
-    <Page Include="CreatingDatabase\tvShowControl.xaml">
+    <Page Include="Controls\tvShowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -178,15 +171,9 @@
     <Resource Include="Icons\play-button.png" />
     <Resource Include="Icons\server.png" />
     <Resource Include="Icons\menu.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\search.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\checked.png" />
     <Resource Include="Icons\question.png" />
-  </ItemGroup>
-  <ItemGroup />
     <Resource Include="Icons\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

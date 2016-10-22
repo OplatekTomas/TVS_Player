@@ -7,8 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="648" d:DesignWidth="1104"
       Title="Startup">
-
-    <Grid>
+    <Grid Visibility="Visible">
         <Canvas >
             <Canvas.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -17,8 +16,28 @@
                 </LinearGradientBrush>
             </Canvas.Background>
         </Canvas>
-        <TextBlock x:Name="textBlock" Margin="0,50,0,0" Height="auto" Width="auto" FontSize="36" Foreground="White" TextAlignment="Center"><Run Text="Welcome!"/><LineBreak/><Run Text="No database was found"/><LineBreak/><Run/></TextBlock>
-        <Button x:Name="addDB" Content="add" HorizontalAlignment="Left" Margin="314,330,0,0" VerticalAlignment="Top" Width="74" Click="addDB_Click"/>
-        <Button x:Name="importDB" Content="import" HorizontalAlignment="Left" Margin="627,330,0,0" VerticalAlignment="Top" Width="75" Click="importDB_Click"/>
+        <Grid Visibility="Visible">
+            <TextBlock x:Name="textBlock" Margin="0,50,0,0" Height="auto" Width="auto" FontSize="36" Foreground="White" TextAlignment="Center"><Run Text="Welcome!"/><LineBreak/><Run Text="No database was found"/><LineBreak/><Run/></TextBlock>
+            <Button x:Name="addDB" Content="add" HorizontalAlignment="Left" Margin="314,330,0,0" VerticalAlignment="Top" Width="74" Click="addDB_Click"/>
+            <Button x:Name="importDB" Content="import" HorizontalAlignment="Left" Margin="627,330,0,0" VerticalAlignment="Top" Width="75" Click="importDB_Click"/>
+        </Grid>
+        <Grid x:Name="addShow" Margin="0" Background="#CC000000" Visibility="Hidden">
+            <Grid Margin="302,169,302,169" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
+
+                <TextBox x:Name="showLocation" Margin="5,10,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Enter TV Show location or double click to select" Style="{DynamicResource SearchBox}" MouseDoubleClick="selectFolder" TextChanged="showLocation_TextChanged" GotFocus="showLocation_GotFocus" Height="25"/>
+                <TextBox x:Name="nameTxt" Margin="5,50,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
+                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,80,5,0"/>
+                <ScrollViewer Margin="5,85,5,45">
+                    <StackPanel x:Name="panel">
+                        <local:tvShowControl Visibility="Hidden" />
+                    </StackPanel>
+                </ScrollViewer>
+                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Bottom" Background="#FF303030" Margin="5,0,5,40"/>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,85,10" Height="25" Width="52" Content="Finish" Style="{DynamicResource SideBarButton}" Background="#77303030" Foreground="#FF969696" Click="Button_Click"/>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,10" Height="25" Width="52" Content="Close" Style="{DynamicResource SideBarButton}" Background="#77303030" Foreground="#FF969696" Click="Button_Click_1"/>
+            </Grid>
+        </Grid>
+
     </Grid>
+    
 </Page>
