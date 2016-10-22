@@ -51,6 +51,9 @@ namespace TVS_Player {
         }
         private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
             if (Frame.Content.GetType() != typeof(Download)){
+                //Api.getToken();
+                //Api.apiGetPoster(73871,"Futurama");
+                string kappa = Api.apiGet(1,1, 73871);
                 Frame.Content = new Download();
             }
         }
