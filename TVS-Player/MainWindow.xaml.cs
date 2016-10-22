@@ -54,7 +54,7 @@ namespace TVS_Player {
                 //Api.getToken();
                 //Api.apiGetPoster(73871,"Futurama");
                 string kappa = Api.apiGet(1,1, 73871);
-                Frame.Content = new Download();
+                Frame.Content = new Startup();
             }
         }
 
