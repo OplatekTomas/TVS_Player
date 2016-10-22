@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TVS_Player {
     /// <summary>
@@ -19,15 +21,26 @@ namespace TVS_Player {
     /// </summary>
     public partial class ShowInfo : Page {
 
-        public Page lastPage;
-
         public ShowInfo() {
             InitializeComponent();
         }
 
+        public ShowInfo(int ID) {
+            InitializeComponent();
+            ID = 121361;
+            JObject jo = JObject.Parse(Api.apiGet(ID));
+            JmenoSerialu.Content = jo["data"]["seriesName"].ToString();
+            Popisek.Text = jo["data"]["overview"].ToString();
+            Rok.Text = jo["data"]["firstAired"].ToString();
+            Api.apiGetPoster(ID);
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += "\\TVS-Player\\" + ID.ToString() + "\\Pictures\\" + ID.ToString() + ".jpg";
+            Obrazek.Source = new BitmapImage(new Uri(path));
+        }
+
         private void ReturnBack_Event(object sender, MouseButtonEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).SetFrameView(lastPage);
+            ((MainWindow)main).SetFrameView((Page)new Shows());
         }
     }
 }

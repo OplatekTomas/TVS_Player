@@ -90,7 +90,7 @@ namespace TVS_Player {
             }
 
         }
-        public static void apiGetPoster(int id,string showName) {
+        public static void apiGetPoster(int id) {
             string token = Properties.Settings.Default.token;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
             request.Method = "GET";
@@ -98,7 +98,7 @@ namespace TVS_Player {
             request.Headers.Add("Accept-Language", "en");
             request.Headers.Add("Authorization", "Bearer " + token);
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\"+showName+ "\\Pictures" + "\\Poster\\"+showName+".jpg";
+            path += "\\TVS-Player\\"+id.ToString()+ "\\" + id.ToString() + ".jpg";
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
