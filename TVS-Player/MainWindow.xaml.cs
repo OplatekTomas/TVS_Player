@@ -59,9 +59,7 @@ namespace TVS_Player {
         }
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
-            /*if (File.Exists()) {
-                Frame.Content = new Shows();
-            } else { }*/
+            //Api.getToken();
         }
         public void SetFrameView(Page page) {
             if (Frame.Content.GetHashCode() != page.GetHashCode()) {
@@ -78,6 +76,5 @@ namespace TVS_Player {
         public void CloseTempFrame() {
             BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
         }
-
     }
 }

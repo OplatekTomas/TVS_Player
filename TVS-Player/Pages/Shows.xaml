@@ -34,7 +34,7 @@
             <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" Margin="0" Padding="5,0" MouseLeftButtonDown="EraseSearchText_Event"/>
         </Grid>
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
                 <local:ShowRectangle/>
             </WrapPanel>

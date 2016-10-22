@@ -61,13 +61,12 @@ namespace TVS_Player {
             request.Headers.Add("Accept-Language", "en");
             request.Headers.Add("Authorization", "Bearer " + token);
             try {
-                var response = request.GetResponse();
+                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                    return sr.ReadToEnd();
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure that data you entered is legit and that you are connected to the internet?", "Error");
-                return "error";
+                return null;
             }
         }
         //info o specifickém seriálu
