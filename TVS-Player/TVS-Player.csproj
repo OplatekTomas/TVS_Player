@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -70,21 +71,33 @@
     <Compile Include="CreatingDatabase\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Download.xaml.cs">
+    <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shows.xaml.cs">
+    <Compile Include="Pages\RenameShow.xaml.cs">
+      <DependentUpon>RenameShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ShowInfo.xaml.cs">
+      <DependentUpon>ShowInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShowRectangle.xaml.cs">
+      <DependentUpon>ShowRectangle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Shows.xaml.cs">
       <DependentUpon>Shows.xaml</DependentUpon>
     </Compile>
     <Page Include="CreatingDatabase\Startup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Pages\Startup.xaml.cs">
+      <DependentUpon>Startup.xaml</DependentUpon>
+    </Compile>
     <Page Include="CreatingDatabase\tvShowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Download.xaml">
+    <Page Include="Pages\Download.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -101,10 +114,26 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ShowInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShowRectangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Startup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Animations.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shows.xaml">
+    <Page Include="Pages\Shows.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Brushes.xaml">
@@ -158,6 +187,8 @@
     <Resource Include="Icons\question.png" />
   </ItemGroup>
   <ItemGroup />
+    <Resource Include="Icons\back.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

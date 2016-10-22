@@ -89,33 +89,53 @@ namespace TVS_Player {
             }
 
         }
-        public static void apiGetPoster(int id,string showName) {
+        public static void apiGetPoster(int id) {
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
+            string token = Properties.Settings.Default.token;
+            if (!File.Exists(path)) {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
+                request.Method = "GET";
+                request.Accept = "application/json";
+                request.Headers.Add("Accept-Language", "en");
+                request.Headers.Add("Authorization", "Bearer " + token);
+
+                try {
+                    var response = request.GetResponse();
+                    using (var sr = new StreamReader(response.GetResponseStream())) {
+                        JObject parse = JObject.Parse(sr.ReadToEnd());
+                        string url = "http://thetvdb.com/banners/" + parse["data"][0]["fileName"];
+                        if (!File.Exists(Path.GetDirectoryName(path))) {
+                            Directory.CreateDirectory(Path.GetDirectoryName(path));
+                        }
+                        using (WebClient client = new WebClient())
+                            client.DownloadFile(new Uri(url), path);
+                    }
+                } catch (WebException) {
+                    MessageBox.Show("Something");
+                }
+            }
+        }
+
+        public static string apiGetAllPosters(int id) {
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
             string token = Properties.Settings.Default.token;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");
             request.Headers.Add("Authorization", "Bearer " + token);
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\"+showName+ "\\Pictures" + "\\Poster\\"+showName+".jpg";
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    JObject parse = JObject.Parse(sr.ReadToEnd());              
-                    string url = "http://thetvdb.com/banners/" + parse["data"][0]["fileName"];
-                    if (!File.Exists(Path.GetDirectoryName(path))) {
-                        Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    }
-                    using (WebClient client = new WebClient())
-                        client.DownloadFile(new Uri(url),path);
-                    
+                    return sr.ReadToEnd();
                 }
             } catch (WebException) {
-                MessageBox.Show("Something");
+                MessageBox.Show("You fucked up");
+                return "FUCK YOU";
             }
         }
-
-
     }
 }
 

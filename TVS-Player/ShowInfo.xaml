@@ -1,0 +1,37 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="TVS_Player.ShowInfo"
+      mc:Ignorable="d" 
+      d:DesignHeight="648" d:DesignWidth="1152"
+      Title="ShowInfo">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="2" Margin="5,0,0,0">
+                <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                    <Label x:Name="JmenoSerialu" Content="JmenoSerialu" Foreground="White" FontSize="20"/>
+                    <TextBlock x:Name="Rok" TextWrapping="Wrap" Text="Rok vydani" DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Bottom" Margin="0,0,20,0" Padding="5"/>
+                </DockPanel>
+                <TextBlock x:Name="Popisek" TextWrapping="Wrap" Text="Nejaky popisek nejakeho serialu" Foreground="White" Margin="5,0,0,0"/>
+            </StackPanel>
+            <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="10,5" VerticalAlignment="Bottom">
+                <Image x:Name="Obrazek" Width="340" Height="500" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Viewbox>
+        </Grid>
+        <Image x:Name="BackIcon" HorizontalAlignment="Left" Margin="4" Source="../Icons/back.png" MouseLeftButtonDown="ReturnBack_Event" d:LayoutOverrides="HorizontalAlignment, Height" RenderOptions.BitmapScalingMode="HighQuality"/>
+    </Grid>
+</Page>
