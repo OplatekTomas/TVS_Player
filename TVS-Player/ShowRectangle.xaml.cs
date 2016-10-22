@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TVS_Player {
     /// <summary>
     /// Interaction logic for ShowRectangle.xaml
     /// </summary>
     public partial class ShowRectangle : Grid {
-        public int ID;
+        public int ID = 121361;
         public ShowRectangle() {
             InitializeComponent();
+            Api.apiGetPoster(ID);
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
+            Image.Source = new BitmapImage(new Uri(path));
         }
 
         private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {

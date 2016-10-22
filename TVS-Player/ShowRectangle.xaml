@@ -6,10 +6,11 @@
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="136" Margin="5" MouseLeftButtonDown="ShowClicked_Event">
-    <Rectangle  Fill="#FF994747" RadiusY="5" RadiusX="5" Height="200" Width="136">
-        <Rectangle.Effect>
-            <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.4"/>
-        </Rectangle.Effect>
-    </Rectangle>
-    <TextBlock Text="Random jmeno serialu" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
+    <Border CornerRadius="5">
+        <Image x:Name ="Image"  Height="200" Width="136">
+            <Image.Effect>
+                <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.4"/>
+            </Image.Effect>
+        </Image>
+    </Border>
 </Grid>

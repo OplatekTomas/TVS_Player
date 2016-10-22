@@ -26,16 +26,7 @@ namespace TVS_Player
 
         private void GenerateRectangle(out ShowRectangle folder, Random r){
             folder = new ShowRectangle();
-            Rectangle rect = (Rectangle)(folder.Children[0]);
-            Color genCol = Color.FromRgb((byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255));
-            rect.Fill = new SolidColorBrush(genCol);
-            if (genCol.R > 160 || genCol.G > 160 || genCol.B > 160){
-                ((TextBlock)folder.Children[1]).Foreground = new SolidColorBrush(Colors.Black);
-            }
             List.Children.Add(folder);
-        }
-        private void Quit_Event(object sender, RoutedEventArgs e){
-            Application.Current.Shutdown();
         }
     }
 }
