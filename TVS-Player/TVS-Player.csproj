@@ -74,7 +74,7 @@
     <Compile Include="ShowInfo.xaml.cs">
       <DependentUpon>ShowInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShowRectangle.xaml.cs">
+    <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shows.xaml.cs">
@@ -108,7 +108,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ShowRectangle.xaml">
+    <Page Include="Controls\ShowRectangle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

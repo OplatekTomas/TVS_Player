@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace TVS_Player {
@@ -10,6 +12,8 @@ namespace TVS_Player {
     /// </summary>
     public partial class ShowRectangle : Grid {
         public int ID = 121361;
+        public string ShowName;
+        public bool Disabled = false;
         public ShowRectangle() {
             InitializeComponent();
             Api.apiGetPoster(ID);
@@ -22,6 +26,26 @@ namespace TVS_Player {
             Page showPage = new ShowInfo(ID);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
+        }
+
+        public void GenerateName() {
+            string json = Api.apiGet(ID);
+            JObject info = JObject.Parse(json);
+            ShowName = info["data"]["seriesName"].ToString();
+        }
+        public void SearchDisable() {
+            if (!Disabled) {
+                Storyboard sb = this.FindResource("DisableSearch") as Storyboard;
+                sb.Begin();
+                Disabled = true;
+            }
+        }
+        public void SearchEnable() {
+            if(Disabled){
+                Storyboard sb = this.FindResource("EnableSearch") as Storyboard;
+                sb.Begin();
+                Disabled = false;
+            }
         }
     }
 }

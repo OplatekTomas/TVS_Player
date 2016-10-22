@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Markup;
 using System.Xml;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace TVS_Player
 {
@@ -27,6 +28,26 @@ namespace TVS_Player
         private void GenerateRectangle(out ShowRectangle folder, Random r){
             folder = new ShowRectangle();
             List.Children.Add(folder);
+        }
+
+        private void SearchInLibrary_Event(object sender, TextChangedEventArgs e) {
+            if (List != null) {
+                foreach (ShowRectangle sr in List.Children) {
+                    if (sr.ShowName == null) {
+                        sr.GenerateName();
+                    }
+                    if (Regex.IsMatch(SearchBox.Text, @"^[a-zA-Z0-9_ .-]*$", RegexOptions.None, new TimeSpan(0, 0, 1))) {
+                        Match m = Regex.Match(sr.ShowName, SearchBox.Text, RegexOptions.IgnoreCase);
+                        if (m.Success) {
+                     sr.SearchEnable();
+                        } else {
+                            sr.SearchDisable();
+                        }
+                    } else {
+                        sr.SearchEnable();
+                    }
+                }
+            }
         }
     }
 }
