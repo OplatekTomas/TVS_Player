@@ -178,15 +178,9 @@
     <Resource Include="Icons\play-button.png" />
     <Resource Include="Icons\server.png" />
     <Resource Include="Icons\menu.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\search.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\checked.png" />
     <Resource Include="Icons\question.png" />
-  </ItemGroup>
-  <ItemGroup />
     <Resource Include="Icons\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
