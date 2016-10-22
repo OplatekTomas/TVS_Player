@@ -55,19 +55,18 @@ namespace TVS_Player {
         //Info o možných seriálech
         public static string apiGet(string showname) {
             string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name="+showname.Replace(" ","."));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name="+showname.Replace(" ","+"));
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");
             request.Headers.Add("Authorization", "Bearer " + token);
             try {
-                var response = request.GetResponse();
+                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                    return sr.ReadToEnd();
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure that data you entered is legit and that you are connected to the internet?", "Error");
-                return "error";
+                return null;
             }
         }
         //info o specifickém seriálu

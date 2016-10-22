@@ -31,13 +31,16 @@ namespace TVS_Player {
 
         private void importDB_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Supported Formats (*.json)|.json";
+            ofd.Filter = "Json files (*.json)|*.json";
             ofd.Multiselect = false;
             string path;
             string moveTo = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
             var check = ofd.ShowDialog();
             if (check == DialogResult.OK) {
                 path = ofd.FileName;
+                if (File.Exists(moveTo)) {
+                    File.Delete(moveTo);
+                }
                 File.Move(path,moveTo);
             }
         }

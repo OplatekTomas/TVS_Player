@@ -28,7 +28,7 @@
             <TextBox Text="NejakySerial" VerticalContentAlignment="Center" Style="{DynamicResource SearchBox}" />
         </DockPanel>
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
                 <Grid x:Name="BaseRectangle" Height="200" Width="150" Margin="10">
                     <Rectangle  Fill="#FF994747" RadiusY="5" RadiusX="5">

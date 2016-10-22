@@ -55,9 +55,8 @@ namespace TVS_Player {
         }
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
-            /*if (File.Exists()) {
-                Frame.Content = new Shows();
-            } else { }*/
+            //Api.getToken();
         }
+
     }
 }

@@ -76,6 +76,9 @@
     <Compile Include="Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="tvShowControl.xaml.cs">
+      <DependentUpon>tvShowControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddShows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -112,6 +115,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="tvShowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,6 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\checked.png" />
+    <Resource Include="Icons\question.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
