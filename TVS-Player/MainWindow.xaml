@@ -18,7 +18,7 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="-150,0,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
     </Window.Resources>
-    <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Margin="0,0,0,0">
+    <Grid x:Name="BaseGrid" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Margin="0,0,0,0">
         <StackPanel Panel.ZIndex="3" Name="panelMenu" Orientation="Horizontal" HorizontalAlignment="Left" Margin="-152,0,0,0">
             <Grid Width="200" Background="#FF282828" >
                 <Grid x:Name="ShowHideBtns" VerticalAlignment="Bottom" Margin="0,0,0,0">
@@ -31,14 +31,14 @@
                     <Button x:Name="btnLeftMenuShow" Width="auto" Height="50" Click="MenuShow_Click" Margin="0,0,0,0" Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
                         <StackPanel Orientation="Horizontal" Width="190" VerticalAlignment="Center">
                             <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Show/Hide</TextBlock>
-                            <Image Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="37"/>
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="37"/>
                         </StackPanel>
                     </Button>
                 </Grid>
                 <Button x:Name="btnShowShows" Width="auto" Height="50" Click="btnShowsShow_Click" Margin="0,0,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
                     <StackPanel Orientation="Horizontal" Width="190">
                         <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Play</TextBlock>
-                        <Image Source="Icons/play-button.png" Margin="0,0,0,3" HorizontalAlignment="Right" Width="43" Height="34"/>
+                        <Image Source="Icons/play-button.png" Margin="0,0,0,3" HorizontalAlignment="Right" Width="43" Height="34" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </StackPanel>
                 </Button>
                 <Button x:Name="btnShowDownloads" Width="auto" Height="50" Click="btnDownloadShow_Click" Margin="0,51,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
@@ -50,6 +50,6 @@
             </Grid>
         </StackPanel>
         <Grid Panel.ZIndex="2" x:Name="hideOnClick" Margin="0,0,0,0" Background="#00000000" MouseLeftButtonUp="MenuHide_Click" Visibility="Hidden"/>
-        <Frame x:Name="Frame" Margin="48,0,0,0" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler" Source="/TVS-Player;component/Shows.xaml"/>
+        <Frame x:Name="Frame" Margin="48,0,0,0" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler" Source="/TVS-Player;component/Pages/Shows.xaml"/>
     </Grid>
 </Window>

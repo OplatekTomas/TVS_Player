@@ -68,5 +68,16 @@ namespace TVS_Player {
                 Frame.Content = page;
             }
         }
+        public void AddTempFrame(Page page) {
+            Frame fr = new Frame();
+            BaseGrid.Children.Add(fr);
+            Panel.SetZIndex(fr, 1000);
+            fr.Content = page;
+        }
+
+        public void CloseTempFrame() {
+            BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        }
+
     }
 }

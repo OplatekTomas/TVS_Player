@@ -55,7 +55,7 @@ namespace TVS_Player {
         //Info o možných seriálech
         public static string apiGet(string showname) {
             string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name="+showname.Replace(" ","."));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name="+showname.Replace(" ","+"));
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");

@@ -29,9 +29,9 @@
                 <TextBlock x:Name="Popisek" TextWrapping="Wrap" Text="Nejaky popisek nejakeho serialu" Foreground="White" Margin="5,0,0,0"/>
             </StackPanel>
             <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="10,5" VerticalAlignment="Bottom">
-                <Image x:Name="Obrazek" Width="340" Height="500"/>
+                <Image x:Name="Obrazek" Width="340" Height="500" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Viewbox>
         </Grid>
-        <Image x:Name="BackIcon" HorizontalAlignment="Left" Margin="4" Source="Icons/back.png" MouseLeftButtonDown="ReturnBack_Event" d:LayoutOverrides="HorizontalAlignment, Height"/>
+        <Image x:Name="BackIcon" HorizontalAlignment="Left" Margin="4" Source="../Icons/back.png" MouseLeftButtonDown="ReturnBack_Event" d:LayoutOverrides="HorizontalAlignment, Height" RenderOptions.BitmapScalingMode="HighQuality"/>
     </Grid>
 </Page>

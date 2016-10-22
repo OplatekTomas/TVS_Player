@@ -68,26 +68,29 @@
     <Compile Include="AddShows.xaml.cs">
       <DependentUpon>AddShows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Download.xaml.cs">
+    <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShowInfo.xaml.cs">
+    <Compile Include="Pages\RenameShow.xaml.cs">
+      <DependentUpon>RenameShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ShowInfo.xaml.cs">
       <DependentUpon>ShowInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Shows.xaml.cs">
+    <Compile Include="Pages\Shows.xaml.cs">
       <DependentUpon>Shows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Startup.xaml.cs">
+    <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
     <Page Include="AddShows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Download.xaml">
+    <Page Include="Pages\Download.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,7 +107,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ShowInfo.xaml">
+    <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ShowInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,14 +119,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Startup.xaml">
+    <Page Include="Pages\Startup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Animations.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shows.xaml">
+    <Page Include="Pages\Shows.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Brushes.xaml">

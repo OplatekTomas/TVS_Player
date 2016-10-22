@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
@@ -46,6 +47,24 @@ namespace TVS_Player {
                 sb.Begin();
                 Disabled = false;
             }
+        }
+
+        private void RenameShow_Event(object sender, RoutedEventArgs e) {
+            Page showPage = new RenameShow(this);
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).AddTempFrame(showPage);
+        }
+
+        private void ChooseImage_Event(object sender, RoutedEventArgs e) {
+
+        }
+        public void RegenerateInfo() {
+            JObject jo = JObject.Parse(Api.apiGet(ShowName));
+            Int32.TryParse(jo["data"][0]["id"].ToString(),out ID);
+            Api.apiGetPoster(ID);
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
+            Image.Source = new BitmapImage(new Uri(path));
         }
     }
 }

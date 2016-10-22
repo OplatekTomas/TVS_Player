@@ -15,7 +15,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="190"/>
             </DoubleAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border1">
-                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#88000000"/>
+                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#AA000000"/>
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="EnableSearch">
@@ -30,10 +30,16 @@
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
     </Grid.Resources>
+    <Grid.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Rename show" Click="RenameShow_Event"></MenuItem>
+            <MenuItem Header="Choose show image" Click="ChooseImage_Event"></MenuItem>
+        </ContextMenu>
+    </Grid.ContextMenu>
     <Border x:Name="border" CornerRadius="5">
         <Grid x:Name="grid1" Width="136" Height="200">
             <Viewbox x:Name="viewbox" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
-                <Image x:Name ="Image">
+                <Image x:Name ="Image" RenderOptions.BitmapScalingMode="HighQuality">
                     <Image.Effect>
                         <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.4"/>
                     </Image.Effect>
