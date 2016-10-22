@@ -29,9 +29,9 @@ namespace TVS_Player {
         public ShowInfo(int ID) {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             //downloads all images
-            /*path += "\\TVS-Player\\" + ID.ToString() + "\\";
+            //path += "\\TVS-Player\\" + ID.ToString() + "\\";
             InitializeComponent();
-            JObject posters = JObject.Parse(Api.apiGetAllPosters(ID));
+            /*JObject posters = JObject.Parse(Api.apiGetAllPosters(ID));
             foreach (JToken jtok in posters["data"]) {
                 string pathToImage = jtok["fileName"].ToString();
                 string url = "http://thetvdb.com/banners/" + pathToImage;
