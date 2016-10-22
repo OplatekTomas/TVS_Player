@@ -30,7 +30,7 @@
 
         <ScrollViewer Grid.Row="1">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
-                <Grid x:Name="BaseRectangle" Height="200" Width="150" Margin="10">
+                <Grid x:Name="BaseRectangle" Height="200" Width="150" Margin="10" MouseLeftButtonDown="ShowClicked_Event">
                     <Rectangle  Fill="#FF994747" RadiusY="5" RadiusX="5">
                         <Rectangle.Effect>
                             <DropShadowEffect BlurRadius="20" Direction="270"/>

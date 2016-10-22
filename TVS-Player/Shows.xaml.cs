@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Markup;
 using System.Xml;
+using System.Windows.Input;
 
 namespace TVS_Player
 {
@@ -31,6 +32,7 @@ namespace TVS_Player
             Rectangle rect = (Rectangle)folder.Children[0];
             Color genCol = Color.FromRgb((byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255), (byte)(r.NextDouble() * 255));
             rect.Fill = new SolidColorBrush(genCol);
+            rect.MouseLeftButtonDown += ShowClicked_Event;
             if (genCol.R > 160 || genCol.G > 160 || genCol.B > 160){
                 ((TextBlock)folder.Children[1]).Foreground = new SolidColorBrush(Colors.Black);
             }
@@ -38,6 +40,13 @@ namespace TVS_Player
         }
         private void Quit_Event(object sender, RoutedEventArgs e){
             Application.Current.Shutdown();
+        }
+
+        private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {
+            Page showPage = new ShowInfo();
+            ((ShowInfo)showPage).lastPage = this;
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).SetFrameView(showPage);
         }
     }
 }

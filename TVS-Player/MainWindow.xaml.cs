@@ -63,5 +63,10 @@ namespace TVS_Player {
                 Frame.Content = new Shows();
             } else { }*/
         }
+        public void SetFrameView(Page page) {
+            if (Frame.Content.GetHashCode() != page.GetHashCode()) {
+                Frame.Content = page;
+            }
+        }
     }
 }
