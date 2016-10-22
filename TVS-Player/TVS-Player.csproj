@@ -64,8 +64,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AddShows.xaml.cs">
-      <DependentUpon>AddShows.xaml</DependentUpon>
+    <Compile Include="CreatingDatabase\Startup.xaml.cs">
+      <DependentUpon>Startup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreatingDatabase\tvShowControl.xaml.cs">
+      <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
@@ -73,15 +76,13 @@
     <Compile Include="Shows.xaml.cs">
       <DependentUpon>Shows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Startup.xaml.cs">
-      <DependentUpon>Startup.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="tvShowControl.xaml.cs">
-      <DependentUpon>tvShowControl.xaml</DependentUpon>
-    </Compile>
-    <Page Include="AddShows.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="CreatingDatabase\Startup.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CreatingDatabase\tvShowControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Download.xaml">
       <SubType>Designer</SubType>
@@ -100,10 +101,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Startup.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\Animations.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -115,10 +112,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Styles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="tvShowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -164,6 +157,7 @@
     <Resource Include="Icons\checked.png" />
     <Resource Include="Icons\question.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

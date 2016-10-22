@@ -14,25 +14,45 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using System.IO;
-using Ookii.Dialogs.Wpf;
+using System.Windows.Threading;
+using System.Globalization;
 using TextBox = System.Windows.Controls.TextBox;
 using Path = System.IO.Path;
-using System.Threading;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
-using Newtonsoft.Json;
-using System.Windows.Threading;
 using MessageBox = System.Windows.MessageBox;
+using Newtonsoft.Json.Linq;
+using Ookii.Dialogs.Wpf;
+using System.Threading;
 
 namespace TVS_Player {
     /// <summary>
-    /// Interaction logic for AddShows.xaml
+    /// Interaction logic for Startup.xaml
     /// </summary>
-    public partial class AddShows : Window {
-        public AddShows() {
+    public partial class Startup : Page {
+        public Startup() {
             InitializeComponent();
         }
-        string path;
+       
+        private void addDB_Click(object sender, RoutedEventArgs e) {
+            addShow.Visibility = Visibility.Visible;
+
+        }
+
+        private void importDB_Click(object sender, RoutedEventArgs e) {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Json files (*.json)|*.json";
+            ofd.Multiselect = false;
+            string path;
+            string moveTo = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
+            var check = ofd.ShowDialog();
+            if (check == DialogResult.OK) {
+                path = ofd.FileName;
+                if (File.Exists(moveTo)) {
+                    File.Delete(moveTo);
+                }
+                File.Move(path,moveTo);
+            }
+        }
+        string directory;
         string showNameTemp;
         private void nameTxt_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;
@@ -50,16 +70,16 @@ namespace TVS_Player {
             VistaFolderBrowserDialog ofd = new VistaFolderBrowserDialog();
             var check = ofd.ShowDialog();
             if (check == true) {
-                path = ofd.SelectedPath;
-                showLocation.Text = path;
+                showLocation.Text = ofd.SelectedPath;
             }
-            if (Path.GetFileName(path) != "Downloads") {
-                nameTxt.Text = Path.GetFileName(path);
+            if (Path.GetFileName(directory) != "Downloads") {
+                nameTxt.Text = Path.GetFileName(directory);
             } else { nameTxt.Text = ""; }
 
         }
 
         private void showLocation_TextChanged(object sender, TextChangedEventArgs e) {
+            directory = showLocation.Text;
         }
 
         private void nameTxt_TextChanged(object sender, TextChangedEventArgs e) {
@@ -73,16 +93,16 @@ namespace TVS_Player {
             }
 
         }
-        struct Shows{
+        struct Shows {
             public string specificInfo;
             public string showName;
             public DateTime date;
             public string id;
         }
-        private void listShows() {          
+        private void listShows() {
             string info = Api.apiGet(showNameTemp);
             int numberOfShows = 0;
-            if (info != null) { 
+            if (info != null) {
                 JObject parse = JObject.Parse(info);
                 numberOfShows = parse["data"].Count();
                 Shows[] show = new Shows[numberOfShows];
@@ -105,22 +125,45 @@ namespace TVS_Player {
                     }
                 }), DispatcherPriority.Send);
             }
-       
+
         }
         private void addOption(string showName, string id, string date, string specific) {
             tvShowControl option = new tvShowControl();
             option.showName.Text = showName;
             option.firstAir.Text = date;
             option.info.Click += (s, e) => { showInfo(specific); };
-            option.confirm.Click += (s, e) => { selected(id); };
+            option.confirm.Click += (s, e) => { selected(id, showName); };
             panel.Children.Add(option);
 
         }
         private void showInfo(string specific) {
             MessageBox.Show(specific);
         }
-        private void selected(string id) {
-            MessageBox.Show(id+ "\n"+path);
+        struct SelectedShows {
+            private string idSel;
+            private string pathSel;
+
+            public SelectedShows(string id, string path) : this() {
+                this.idSel = id;
+                this.pathSel = path;
+            }
+        }
+        List<SelectedShows> ShowList = new List<SelectedShows>();
+        private void selected(string id, string showName) {
+            if (Directory.Exists(directory)) {
+                ShowList.Add(new SelectedShows(id, directory));
+            } else {
+                MessageBox.Show("Selected path doesn't exist", "Error");
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            addShow.Visibility = Visibility.Hidden;
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            addShow.Visibility = Visibility.Hidden;
         }
     }
 }
