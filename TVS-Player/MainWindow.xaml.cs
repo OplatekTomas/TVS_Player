@@ -22,6 +22,7 @@ namespace TVS_Player {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            Api.getToken();
         }
         private void MenuHide_Click(object sender, RoutedEventArgs e) {
             ShowHideMenu("sbHideLeftMenu", btnLeftMenuHide, btnLeftMenuShow, panelMenu);

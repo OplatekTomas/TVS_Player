@@ -5,14 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="136" Margin="5" MouseLeftButtonDown="ShowClicked_Event" Width="136" Height="200">
+             Margin="5" MouseLeftButtonDown="ShowClicked_Event" Width="187" Height="275">
     <Grid.Resources>
         <Storyboard x:Key="DisableSearch">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grid1">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="126"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="172"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grid1">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="190"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="260"/>
             </DoubleAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border1">
                 <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#AA000000"/>
@@ -20,10 +20,10 @@
         </Storyboard>
         <Storyboard x:Key="EnableSearch">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grid1">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="136"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="187"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grid1">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="275"/>
             </DoubleAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="border1">
                 <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#00000000"/>
@@ -37,11 +37,11 @@
         </ContextMenu>
     </Grid.ContextMenu>
     <Border x:Name="border" CornerRadius="5">
-        <Grid x:Name="grid1" Width="136" Height="200">
+        <Grid x:Name="grid1" Width="187" Height="275">
             <Viewbox x:Name="viewbox" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
                 <Image x:Name ="Image" RenderOptions.BitmapScalingMode="HighQuality">
                     <Image.Effect>
-                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.4"/>
+                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.8"/>
                     </Image.Effect>
                 </Image>
             </Viewbox>
