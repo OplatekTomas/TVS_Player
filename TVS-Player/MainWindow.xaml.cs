@@ -62,6 +62,7 @@ namespace TVS_Player {
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
             //Api.getToken();
         }
+
         public void SetFrameView(Page page) {
             if (Frame.Content.GetHashCode() != page.GetHashCode()) {
                 Frame.Content = page;

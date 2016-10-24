@@ -65,10 +65,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\DbCreationStruct.cs" />
     <Compile Include="Controls\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Database.cs" />
+    <Compile Include="Classes\Database.cs" />
+    <Compile Include="Pages\DbLocation.xaml.cs">
+      <DependentUpon>DbLocation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
@@ -94,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\DbLocation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Download.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,7 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Api.cs" />
+    <Compile Include="Classes\Api.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -184,6 +192,7 @@
     <Resource Include="Icons\question.png" />
     <Resource Include="Icons\back.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
