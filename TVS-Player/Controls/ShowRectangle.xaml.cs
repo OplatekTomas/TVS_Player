@@ -59,7 +59,12 @@ namespace TVS_Player {
 
         }
         public void RegenerateInfo() {
-            JObject jo = JObject.Parse(Api.apiGet(ShowName));
+            JObject jo = new JObject();
+            try {
+                jo = JObject.Parse(Api.apiGet(ShowName));
+            } catch {
+                return;
+            }
             Int32.TryParse(jo["data"][0]["id"].ToString(),out ID);
             Api.apiGetPoster(ID);
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
