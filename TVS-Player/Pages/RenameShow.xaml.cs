@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace TVS_Player {
     /// <summary>
@@ -24,8 +25,15 @@ namespace TVS_Player {
 
         private void RenameShow_Event(object sender, RoutedEventArgs e) {
             sr.ShowName = after.Text;
-            sr.RegenerateInfo();
+            sr.RegenerateInfo(false);
             Cancel_Event(this,e);
+        }
+
+        private void ResetText_Event(object sender, RoutedEventArgs e) {
+            if (string.Compare(after.Text, "Rename show") == 0) {
+                after.Text = string.Empty;
+                after.Foreground = new SolidColorBrush(Colors.Black);
+            }
         }
     }
 }

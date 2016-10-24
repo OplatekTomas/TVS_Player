@@ -8,7 +8,7 @@
       d:DesignHeight="648" d:DesignWidth="1152"
       Title="ShowList">
 
-    <Grid Background="#EE000000">
+    <Grid Background="{DynamicResource TempBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="3*" MinHeight="250"/>

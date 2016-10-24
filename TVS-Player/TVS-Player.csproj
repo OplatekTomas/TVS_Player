@@ -65,6 +65,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\PosterSelector.xaml.cs">
+      <DependentUpon>PosterSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\DbCreationStruct.cs" />
     <Compile Include="Controls\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
@@ -78,6 +81,9 @@
     </Compile>
     <Compile Include="Pages\RenameShow.xaml.cs">
       <DependentUpon>RenameShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SelectShowPoster.xaml.cs">
+      <DependentUpon>SelectShowPoster.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ShowInfo.xaml.cs">
       <DependentUpon>ShowInfo.xaml</DependentUpon>
@@ -94,6 +100,10 @@
     <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\PosterSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\tvShowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,6 +130,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SelectShowPoster.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
