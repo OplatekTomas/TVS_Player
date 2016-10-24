@@ -110,19 +110,12 @@ namespace TVS_Player {
         private void showInfo(string specific) {
             MessageBox.Show(specific);
         }
-        struct SelectedShows {
-            private string idSel;
-            private string pathSel;
-
-            public SelectedShows(string id, string path) : this() {
-                this.idSel = id;
-                this.pathSel = path;
-            }
-        }
-        List<SelectedShows> ShowsList = new List<SelectedShows>();
         private void selected(string id, string showName) {
             if (Directory.Exists(directory)) {
-                ShowsList.Add(new SelectedShows(id, directory));
+                DbCreationStruct.ShowsList.Add(new DbCreationStruct.SelectedShows(id, directory,showName));
+                showLocation.Text = string.Empty;
+                nameTxt.Text = string.Empty;
+                panel.Children.Clear();
             } else {
                 MessageBox.Show("Selected path doesn't exist", "Error");
             }
@@ -131,6 +124,8 @@ namespace TVS_Player {
         private void Button_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
+            Page showPage = new DbLocation();
+            ((MainWindow)main).AddTempFrame(showPage);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {

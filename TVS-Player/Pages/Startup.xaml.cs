@@ -12,7 +12,7 @@ namespace TVS_Player {
         public Startup() {
             InitializeComponent();
         }
-       
+
         private void addDB_Click(object sender, RoutedEventArgs e) {
             Page showPage = new ShowList();
             Window main = Window.GetWindow(this);
@@ -33,6 +33,7 @@ namespace TVS_Player {
                 }
                 File.Move(path,moveTo);
             }
+
         }
     }
 }
