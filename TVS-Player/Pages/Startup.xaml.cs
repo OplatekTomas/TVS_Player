@@ -54,6 +54,7 @@ namespace TVS_Player {
         }
         string directory;
         string showNameTemp;
+        string dbLoc;
         private void nameTxt_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;
             tb.Text = string.Empty;
@@ -159,11 +160,30 @@ namespace TVS_Player {
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             addShow.Visibility = Visibility.Hidden;
+            selectNewLoc.Visibility = Visibility.Visible;
 
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
+            List<SelectedShows> ShowList = new List<SelectedShows>();
             addShow.Visibility = Visibility.Hidden;
+        }
+
+        private void newDbLoc_TextChanged(object sender, TextChangedEventArgs e) {
+            dbLoc = newDbLoc.Text;
+        }
+
+        private void newDbLoc_GotFocus(object sender, RoutedEventArgs e) {
+            newDbLoc.Text = string.Empty;
+            newDbLoc.GotFocus -= newDbLoc_GotFocus;
+        }
+
+        private void newDbLoc_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
+            var check = fbd.ShowDialog();
+            if (check == true) {
+                dbLoc = fbd.SelectedPath;
+            }
         }
     }
 }
