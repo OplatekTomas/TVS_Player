@@ -18,7 +18,7 @@ namespace TVS_Player {
         public string pathToImage;
         public ShowRectangle() {
             InitializeComponent();
-            Api.apiGetPoster(ID);
+            Api.apiGetPoster(ID,false);
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
             pathToImage = path;
@@ -64,7 +64,7 @@ namespace TVS_Player {
         }
         public void RegenerateInfo(bool onlyImage) {
             if (onlyImage) {
-                Api.apiGetPoster(ID);
+                Api.apiGetPoster(ID,false);
                 Image.Source = new BitmapImage(new Uri(pathToImage));
             } else {
                 JObject jo = new JObject();
@@ -74,7 +74,7 @@ namespace TVS_Player {
                     return;
                 }
                 Int32.TryParse(jo["data"][0]["id"].ToString(), out ID);
-                Api.apiGetPoster(ID);
+                Api.apiGetPoster(ID,false);
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
                 Image.Source = new BitmapImage(new Uri(path));

@@ -33,7 +33,7 @@ namespace TVS_Player {
             JmenoSerialu.Content = jo["data"]["seriesName"].ToString();
             Popisek.Text = jo["data"]["overview"].ToString();
             Rok.Text = jo["data"]["firstAired"].ToString();
-            Api.apiGetPoster(ID);
+            Api.apiGetPoster(ID,false);
             Obrazek.Source = new BitmapImage(new Uri(sr.pathToImage));
         }
 
