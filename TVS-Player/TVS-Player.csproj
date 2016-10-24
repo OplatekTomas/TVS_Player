@@ -68,6 +68,7 @@
     <Compile Include="Controls\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database.cs" />
     <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
