@@ -10,22 +10,31 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="3*" MinWidth="500"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*" MinHeight="160"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="3" Grid.RowSpan="3" Background="#CC000000"/>
-        <Grid Margin="1" Grid.Row="1" Grid.Column="1" Background="#FF2C2C2C">
+        <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="3" Grid.RowSpan="3" Background="#EE000000"/>
+        <Grid Margin="1" Grid.Row="1" Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="3*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <Border Grid.ColumnSpan="3" Grid.RowSpan="3" Background="#FF2C2C2C" CornerRadius="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="4*"/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="#FF191919"></Rectangle>
+                </Grid>
+            </Border>
             <Label x:Name="label" Content="Edit show name" HorizontalAlignment="Center" Margin="0" d:LayoutOverrides="Height" Background="{x:Null}" Foreground="White" VerticalAlignment="Center"/>
             <DockPanel LastChildFill="False" Margin="0,0,3,0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBox x:Name="before" Height="23" TextWrapping="Wrap" Text="TextBox" Width="120" Style="{DynamicResource SearchBox}" Margin="30,0" IsEnabled="False"/>
