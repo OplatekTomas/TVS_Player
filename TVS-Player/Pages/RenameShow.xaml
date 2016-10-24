@@ -19,8 +19,8 @@
             <RowDefinition Height="2*" MinHeight="160"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.ColumnSpan="3" Grid.RowSpan="3" Background="#EE000000"/>
-        <Grid Margin="1" Grid.Row="1" Grid.Column="1" >
+        <Border BorderThickness="1" Grid.ColumnSpan="3" Grid.RowSpan="3" Background="{DynamicResource TempBackgroundBrush}" Margin="3.062,0.562,-3.062,-0.562"/>
+        <Grid Grid.Row="1" Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="3*"/>
@@ -32,7 +32,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
-                    <Rectangle Fill="#FF191919"></Rectangle>
+                    <Rectangle Fill="#FF191919"/>
                 </Grid>
             </Border>
             <Label x:Name="label" Content="Edit show name" HorizontalAlignment="Center" Margin="0" d:LayoutOverrides="Height" Background="{x:Null}" Foreground="White" VerticalAlignment="Center"/>

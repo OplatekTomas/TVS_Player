@@ -116,6 +116,34 @@ namespace TVS_Player {
                 }
             }
         }
+        public static void apiGetPoster(int id,string pathWWW,int i, bool isThumbnail) {
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (isThumbnail) {
+                if (i == 0) {
+                    path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + "-" + i + ".jpg";
+                } else {
+                    path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
+                }
+            } else {
+                if(i == 0) {
+                    path += "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\" + id.ToString() + "-" + i + ".jpg";
+                } else {
+                    path += "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\" + id.ToString() + ".jpg";
+                }
+            }
+            if (!File.Exists(path)) {
+                try {
+                    string url = "http://thetvdb.com/banners/" + pathWWW;
+                    if (!File.Exists(Path.GetDirectoryName(path))) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    }
+                    using (WebClient client = new WebClient())
+                        client.DownloadFile(new Uri(url), path);
+                } catch (WebException) {
+                    MessageBox.Show("Error while downloading specific show image");
+                }
+            }
+        }
 
         public static string apiGetAllPosters(int id) {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

@@ -24,7 +24,7 @@ namespace TVS_Player {
 
         private void RenameShow_Event(object sender, RoutedEventArgs e) {
             sr.ShowName = after.Text;
-            sr.RegenerateInfo();
+            sr.RegenerateInfo(false);
             Cancel_Event(this,e);
         }
     }

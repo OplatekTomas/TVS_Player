@@ -21,32 +21,20 @@ namespace TVS_Player {
     /// Interaction logic for ShowInfo.xaml
     /// </summary>
     public partial class ShowInfo : Page {
-
+        ShowRectangle sr;
         public ShowInfo() {
             InitializeComponent();
         }
 
-        public ShowInfo(int ID) {
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //downloads all images
-            //path += "\\TVS-Player\\" + ID.ToString() + "\\";
+        public ShowInfo(int ID, ShowRectangle sr) {
+            this.sr = sr;
             InitializeComponent();
-            /*JObject posters = JObject.Parse(Api.apiGetAllPosters(ID));
-            foreach (JToken jtok in posters["data"]) {
-                string pathToImage = jtok["fileName"].ToString();
-                string url = "http://thetvdb.com/banners/" + pathToImage;
-                using (WebClient client = new WebClient())
-                    client.DownloadFile(new Uri(url), path + jtok["id"] + ".jpg");
-            }
-            */
             JObject jo = JObject.Parse(Api.apiGet(ID));
             JmenoSerialu.Content = jo["data"]["seriesName"].ToString();
             Popisek.Text = jo["data"]["overview"].ToString();
             Rok.Text = jo["data"]["firstAired"].ToString();
             Api.apiGetPoster(ID);
-            path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
-            Obrazek.Source = new BitmapImage(new Uri(path));
+            Obrazek.Source = new BitmapImage(new Uri(sr.pathToImage));
         }
 
         private void ReturnBack_Event(object sender, MouseButtonEventArgs e) {
