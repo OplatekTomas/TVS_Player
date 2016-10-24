@@ -53,5 +53,12 @@ namespace TVS_Player
         private void EraseSearchText_Event(object sender, MouseButtonEventArgs e) {
             SearchBox.Text = String.Empty;
         }
+
+        private void ResetText_Event(object sender, RoutedEventArgs e) {
+            if (string.Compare(SearchBox.Text, "Search show") == 0) {
+                SearchBox.Text = string.Empty;
+                SearchBox.Foreground = new SolidColorBrush(Colors.Black);
+            }
+        }
     }
 }

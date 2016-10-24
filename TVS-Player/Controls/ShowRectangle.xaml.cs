@@ -15,16 +15,18 @@ namespace TVS_Player {
         public int ID = 121361;
         public string ShowName = "Game of Thrones";
         public bool Disabled = false;
+        public string pathToImage;
         public ShowRectangle() {
             InitializeComponent();
-            Api.apiGetPoster(ID);
+            Api.apiGetPoster(ID,false);
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
+            pathToImage = path;
             Image.Source = new BitmapImage(new Uri(path));
         }
 
         private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {
-            Page showPage = new ShowInfo(ID);
+            Page showPage = new ShowInfo(ID,this);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
         }
@@ -56,15 +58,28 @@ namespace TVS_Player {
         }
 
         private void ChooseImage_Event(object sender, RoutedEventArgs e) {
+            Page showPage = new SelectShowPoster(this);
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).AddTempFrame(showPage);
+        }
+        public void RegenerateInfo(bool onlyImage) {
+            if (onlyImage) {
+                Api.apiGetPoster(ID,false);
+                Image.Source = new BitmapImage(new Uri(pathToImage));
+            } else {
+                JObject jo = new JObject();
+                try {
+                    jo = JObject.Parse(Api.apiGet(ShowName));
+                } catch {
+                    return;
+                }
+                Int32.TryParse(jo["data"][0]["id"].ToString(), out ID);
+                Api.apiGetPoster(ID,false);
+                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
+                Image.Source = new BitmapImage(new Uri(path));
+            }
+        }
 
-        }
-        public void RegenerateInfo() {
-            JObject jo = JObject.Parse(Api.apiGet(ShowName));
-            Int32.TryParse(jo["data"][0]["id"].ToString(),out ID);
-            Api.apiGetPoster(ID);
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
-            Image.Source = new BitmapImage(new Uri(path));
-        }
     }
 }

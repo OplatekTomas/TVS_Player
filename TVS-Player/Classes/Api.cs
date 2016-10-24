@@ -34,9 +34,9 @@ namespace TVS_Player {
         }
 
         //info o epizodě
-        public static string apiGet(int season, int episode,int id) {
+        public static string apiGet(int season, int episode, int id) {
             string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/"+id+"/episodes/query?airedSeason="+season+"airedEpisode="+episode);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season + "airedEpisode=" + episode);
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");
@@ -49,21 +49,21 @@ namespace TVS_Player {
             } catch (WebException) {
                 MessageBox.Show("ERROR! Please check that you are connected to the internet", "Error!");
                 return "error-api";
-            }        
+            }
         }
 
         //Info o možných seriálech
         public static string apiGet(string showname) {
             string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name="+showname.Replace(" ","+"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name=" + showname.Replace(" ", "+"));
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");
             request.Headers.Add("Authorization", "Bearer " + token);
             try {
-                 var response = request.GetResponse();
+                var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                   return sr.ReadToEnd();
+                    return sr.ReadToEnd();
                 }
             } catch (WebException) {
                 return null;
@@ -89,9 +89,16 @@ namespace TVS_Player {
             }
 
         }
-        public static void apiGetPoster(int id) {
+        public static void apiGetPoster(int id, bool isThumbnail) {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
+            if (!isThumbnail) {
+                path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
+            } else {
+                if (!Directory.Exists(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\")) {
+                    Directory.CreateDirectory(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\");
+                }
+                path += "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\" + id.ToString() + ".jpg";
+            }
             string token = Properties.Settings.Default.token;
             if (!File.Exists(path)) {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
@@ -104,7 +111,12 @@ namespace TVS_Player {
                     var response = request.GetResponse();
                     using (var sr = new StreamReader(response.GetResponseStream())) {
                         JObject parse = JObject.Parse(sr.ReadToEnd());
-                        string url = "http://thetvdb.com/banners/" + parse["data"][0]["fileName"];
+                        string url;
+                        if (!isThumbnail) {
+                            url = "http://thetvdb.com/banners/" + parse["data"][0]["fileName"];
+                        } else {
+                            url = "http://thetvdb.com/banners/" + parse["data"][0]["thumbnail"];
+                        }
                         if (!File.Exists(Path.GetDirectoryName(path))) {
                             Directory.CreateDirectory(Path.GetDirectoryName(path));
                         }
@@ -113,6 +125,34 @@ namespace TVS_Player {
                     }
                 } catch (WebException) {
                     MessageBox.Show("Something");
+                }
+            }
+        }
+        public static void apiGetPoster(int id, string filename, int i, bool isThumbnail) {
+            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!isThumbnail) {
+                path += "\\TVS-Player\\" + id.ToString() + "\\" + filename;
+            } else {
+                if (!Directory.Exists(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\")) {
+                    Directory.CreateDirectory(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\");
+                }
+                path += "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\" + filename;
+            }
+            if (!File.Exists(path)) {
+                try {
+                    string url;
+                    if (!isThumbnail) {
+                        url = "http://thetvdb.com/banners/posters/" + filename;
+                    } else {
+                        url = "http://thetvdb.com/banners/_cache/posters/" + filename;
+                    }
+                    if (!File.Exists(Path.GetDirectoryName(path))) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    }
+                    using (WebClient client = new WebClient())
+                        client.DownloadFile(new Uri(url), path);
+                } catch (WebException) {
+                    MessageBox.Show("Error while downloading specific show image");
                 }
             }
         }

@@ -22,6 +22,7 @@ namespace TVS_Player {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+            Api.getToken();
         }
         private void MenuHide_Click(object sender, RoutedEventArgs e) {
             ShowHideMenu("sbHideLeftMenu", btnLeftMenuHide, btnLeftMenuShow, panelMenu);
@@ -51,9 +52,9 @@ namespace TVS_Player {
         }
         private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
             if (Frame.Content.GetType() != typeof(Download)){
-                Api.getToken();
+                //Api.getToken();
                 //Api.apiGetPoster(73871,"Futurama");
-                string kappa = Api.apiGet(1,1, 73871);
+                //string kappa = Api.apiGet(1,1, 73871);
                 Frame.Content = new Startup();
             }
         }
@@ -61,6 +62,7 @@ namespace TVS_Player {
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
             //Api.getToken();
         }
+
         public void SetFrameView(Page page) {
             if (Frame.Content.GetHashCode() != page.GetHashCode()) {
                 Frame.Content = page;
