@@ -44,11 +44,8 @@ namespace TVS_Player {
 
         private void Ok_Click(object sender, RoutedEventArgs e) {
             if (Directory.Exists(dbLoc)) {
-                Database.createDb(dbLoc);
-                foreach (var show in DbCreationStruct.ShowsList) {
-                    Database.addShowToDb(show.getId(), show.getName());
-                    //MessageBox.Show(show.getId()+"\n"+show.getPath());
-                }
+                DatabaseAPI.database.libraryLocation = dbLoc;
+                DatabaseAPI.saveDB();
                 Window main = Window.GetWindow(this);
                 ((MainWindow)main).CloseTempFrame();
             } else { MessageBox.Show("Path "+ dbLoc + " doesn't exist!","Error!"); }

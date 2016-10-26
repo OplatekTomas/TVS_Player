@@ -68,7 +68,6 @@
     <Compile Include="Controls\PosterSelector.xaml.cs">
       <DependentUpon>PosterSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\DbCreationStruct.cs" />
     <Compile Include="Controls\tvShowControl.xaml.cs">
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
