@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace TVS_Player {
     /// <summary>
@@ -20,20 +21,9 @@ namespace TVS_Player {
         }
 
         private void importDB_Click(object sender, RoutedEventArgs e) {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Json files (*.json)|*.json";
-            ofd.Multiselect = false;
-            string path;
-            string moveTo = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
-            var check = ofd.ShowDialog();
-            if (check == DialogResult.OK) {
-                path = ofd.FileName;
-                if (File.Exists(moveTo)) {
-                    File.Delete(moveTo);
-                }
-                File.Move(path,moveTo);
-            }
-
+            
         }
+
+
     }
 }

@@ -82,6 +82,9 @@
     <Compile Include="Pages\RenameShow.xaml.cs">
       <DependentUpon>RenameShow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SearchShow.xaml.cs">
+      <DependentUpon>SearchShow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SelectShowPoster.xaml.cs">
       <DependentUpon>SelectShowPoster.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

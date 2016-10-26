@@ -21,20 +21,13 @@
         </Grid.ColumnDefinitions>
         <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Grid.Column="1" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*" MinHeight="40"/>
-                <RowDefinition Height="6*"/>
+                <RowDefinition MinHeight="40"/>
+                <RowDefinition Height="12*"/>
                 <RowDefinition MinHeight="40"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.RowSpan="3">
                 <TextBox x:Name="showLocation" Margin="5" VerticalAlignment="Top" TextWrapping="Wrap" Text="Enter TV Show location or double click to select" Style="{DynamicResource SearchBox}" MouseDoubleClick="selectFolder" TextChanged="showLocation_TextChanged" GotFocus="showLocation_GotFocus" Height="25"/>
-                <TextBox x:Name="nameTxt" Margin="5" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
-                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5"/>
             </StackPanel>
-            <ScrollViewer Margin="5,0" Grid.Row="1">
-                <StackPanel x:Name="panel">
-                    <local:tvShowControl Visibility="Hidden" />
-                </StackPanel>
-            </ScrollViewer>
             <StackPanel Grid.Row="2">
                 <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5" Grid.Row="2"/>
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
@@ -42,6 +35,7 @@
                     <Button HorizontalAlignment="Right" Foreground="#FF969696" VerticalAlignment="Bottom" Margin="5,0" Height="25" Width="50" Content="Close" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Button_Click_1" Grid.Row="2"/>
                 </StackPanel>
             </StackPanel>
+            <Frame x:Name="frame" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Page>
