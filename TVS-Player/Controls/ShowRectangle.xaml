@@ -34,6 +34,7 @@
         <ContextMenu>
             <MenuItem Header="Rename show" Click="RenameShow_Event"></MenuItem>
             <MenuItem Header="Choose show image" Click="ChooseImage_Event"></MenuItem>
+            <MenuItem Header="Remove show" Click="RemoveShow_Event"></MenuItem>
         </ContextMenu>
     </Grid.ContextMenu>
     <Border x:Name="border" CornerRadius="5">

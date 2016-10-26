@@ -16,6 +16,7 @@ namespace TVS_Player {
         public string ShowName = "NON";
         public bool Disabled = false;
         public string filename;
+        public Shows library;
         public ShowRectangle() {
             InitializeComponent();
         }
@@ -89,5 +90,9 @@ namespace TVS_Player {
             }
         }
 
+        private void RemoveShow_Event(object sender, RoutedEventArgs e) {
+            DatabaseAPI.removeShowFromDb(ID.ToString(), true);
+            library.RemoveRectangle(this);
+        }
     }
 }

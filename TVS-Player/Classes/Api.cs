@@ -89,6 +89,45 @@ namespace TVS_Player {
             }
 
         }
+
+        public static string apiGetSeasons(int id) {
+            string token = Properties.Settings.Default.token;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/summary");
+            request.Method = "GET";
+            request.Accept = "application/json";
+            request.Headers.Add("Accept-Language", "en");
+            request.Headers.Add("Authorization", "Bearer " + token);
+            try {
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    return sr.ReadToEnd();
+
+                }
+            } catch (WebException) {
+                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
+                return "error";
+            }
+        }
+
+        public static string apiGetEpisodesBySeasons(int id,int season) {
+            string token = Properties.Settings.Default.token;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season);
+            request.Method = "GET";
+            request.Accept = "application/json";
+            request.Headers.Add("Accept-Language", "en");
+            request.Headers.Add("Authorization", "Bearer " + token);
+            try {
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    return sr.ReadToEnd();
+
+                }
+            } catch (WebException) {
+                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
+                return "error";
+            }
+        }
+
         public static void apiGetPoster(int id, bool isThumbnail) {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (!isThumbnail) {

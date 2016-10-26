@@ -27,7 +27,12 @@ namespace TVS_Player
 
         private void GenerateRectangle(out ShowRectangle folder,SelectedShows ss){
             folder = new ShowRectangle(ss);
+            folder.library = this;
             List.Children.Add(folder);
+        }
+
+        public void RemoveRectangle(ShowRectangle show) {
+            List.Children.Remove(show);
         }
 
         private void SearchInLibrary_Event(object sender, TextChangedEventArgs e) {
