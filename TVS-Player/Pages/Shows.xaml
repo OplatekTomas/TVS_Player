@@ -36,7 +36,6 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
-                <local:ShowRectangle/>
             </WrapPanel>
         </ScrollViewer>
     </Grid>

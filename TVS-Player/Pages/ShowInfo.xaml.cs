@@ -34,7 +34,7 @@ namespace TVS_Player {
             Popisek.Text = jo["data"]["overview"].ToString();
             Rok.Text = jo["data"]["firstAired"].ToString();
             Api.apiGetPoster(ID,false);
-            Obrazek.Source = new BitmapImage(new Uri(sr.pathToImage));
+            Obrazek.Source = new BitmapImage(new Uri(Helpers.path + "//"+ sr.ID+"//"+ sr.filename));
         }
 
         private void ReturnBack_Event(object sender, MouseButtonEventArgs e) {
