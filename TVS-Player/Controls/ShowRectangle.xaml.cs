@@ -24,6 +24,7 @@ namespace TVS_Player {
         public ShowRectangle(SelectedShows ss) {
             InitializeComponent();
             ID = Int32.Parse(ss.idSel);
+            ShowName = ss.nameSel;
             if (ss.posterFilename != null) {
                 filename = ss.posterFilename;
             } else {
