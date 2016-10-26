@@ -55,8 +55,10 @@ namespace TVS_Player {
                 string filename = Path.GetFileName(selected.path);
                 Api.apiGetPoster(sr.ID,filename,0, false);
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                sr.pathToImage = path + "\\TVS-Player\\" + sr.ID.ToString() + "\\" +filename;
+                sr.filename = filename;
                 sr.RegenerateInfo(true);
+                DatabaseAPI.FindShowByID(sr.ID.ToString()).posterFilename = filename;
+                DatabaseAPI.saveDB();
                 Window main = Window.GetWindow(this);
                 ((MainWindow)main).CloseTempFrame();
             }

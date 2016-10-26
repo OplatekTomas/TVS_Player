@@ -19,14 +19,14 @@ namespace TVS_Player
         public Shows(){
             InitializeComponent();
             Random r = new Random();
-            for (byte i = 0; i < 10; i++){
-                ShowRectangle folder = new ShowRectangle();
-                GenerateRectangle(out folder, r);
+            foreach ( SelectedShows ss in DatabaseAPI.database.Shows){
+                ShowRectangle folder = new ShowRectangle(ss);
+                GenerateRectangle(out folder,ss);
             }
         }
 
-        private void GenerateRectangle(out ShowRectangle folder, Random r){
-            folder = new ShowRectangle();
+        private void GenerateRectangle(out ShowRectangle folder,SelectedShows ss){
+            folder = new ShowRectangle(ss);
             List.Children.Add(folder);
         }
 

@@ -112,7 +112,7 @@ namespace TVS_Player {
         }
         private void selected(string id, string showName) {
             if (Directory.Exists(directory)) {
-                DbCreationStruct.ShowsList.Add(new DbCreationStruct.SelectedShows(id, directory,showName));
+                DatabaseAPI.addShowToDb(id, showName,true);
                 showLocation.Text = string.Empty;
                 nameTxt.Text = string.Empty;
                 panel.Children.Clear();

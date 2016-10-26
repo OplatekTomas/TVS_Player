@@ -12,17 +12,23 @@ namespace TVS_Player {
     /// Interaction logic for ShowRectangle.xaml
     /// </summary>
     public partial class ShowRectangle : Grid {
-        public int ID = 121361;
-        public string ShowName = "Game of Thrones";
+        public int ID = -1;
+        public string ShowName = "NON";
         public bool Disabled = false;
-        public string pathToImage;
+        public string filename;
         public ShowRectangle() {
             InitializeComponent();
-            Api.apiGetPoster(ID,false);
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
-            pathToImage = path;
-            Image.Source = new BitmapImage(new Uri(path));
+        }
+
+        public ShowRectangle(SelectedShows ss) {
+            InitializeComponent();
+            ID = Int32.Parse(ss.idSel);
+            if (ss.posterFilename != null) {
+                filename = ss.posterFilename;
+            } else {
+                filename = ID.ToString() + ".jpg";
+            }
+            RegenerateInfo(true);
         }
 
         private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {
@@ -65,7 +71,9 @@ namespace TVS_Player {
         public void RegenerateInfo(bool onlyImage) {
             if (onlyImage) {
                 Api.apiGetPoster(ID,false);
-                Image.Source = new BitmapImage(new Uri(pathToImage));
+                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
+                Image.Source = new BitmapImage(new Uri(path));
             } else {
                 JObject jo = new JObject();
                 try {

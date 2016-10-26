@@ -8,37 +8,66 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace TVS_Player {
-    class Database {
-        public static JObject readDb() {
-            JObject jo = JObject.Parse(File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json"));
-            return jo;
+    public static class DatabaseAPI {
+        public static Database database = new Database();
+
+        public static void readDb() {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
+            try {
+                string json = File.ReadAllText(path);
+                database = JsonConvert.DeserializeObject<Database>(json);
+            } catch {
+                database = new Database();
+            }
         }
-        public static void createDb(string dbLoc) {
-            string dbText = "{\n\"libraryLocation\": \"" + dbLoc.Replace("\\","\\\\") + "\",\n\"Shows\": [\n]\n}";
+        public static void resetDb(string dbLoc, bool save) {
+            database = new Database();
+            if (save) {
+                saveDB();
+            }
+        }
+        public static void addShowToDb(string id, string showname, bool save) {
+            SelectedShows newShow = new SelectedShows(id, showname);
+            database.Shows.Add(newShow);
+            if (save) {
+                saveDB();
+            }
+        }
+        public static void saveDB() {
+            string json = JsonConvert.SerializeObject(database);
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
             if (!File.Exists(Path.GetDirectoryName(path))) {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
-            File.AppendAllText(path, dbText);
+            File.WriteAllText(path, json);
         }
-        public static void addShowToDb(string id, string showname) {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
-            string prev = File.ReadAllText(path);
-            try {
-                JObject kappa = JObject.Parse(prev);
-                string damn = kappa["Shows"][0].ToString();
-                prev = prev.Remove(prev.Length - 2);
-                prev += ",{\"name\": \"" + showname + "\",\"id\": \"" + id + "\",\"poster\": \"" + id + "\"}]}";
-            } catch (ArgumentOutOfRangeException) {
-                prev = prev.Remove(prev.Length - 3);
-                prev += "{\"name\": \"" + showname + "\",\"id\": \"" + id + "\",\"poster\": \"" + id + "\"}]}";
+        public static SelectedShows FindShowByID(string ID) {
+            SelectedShows foundShow = null;
+            foreach (SelectedShows ss in database.Shows) {
+                if (ss.idSel == ID) {
+                    foundShow = ss;
+                }
             }
-            var file = File.Open(path, FileMode.Create);
-            file.Close();
-            File.WriteAllText(path, prev);
-
+            return foundShow;
+        }
     }
+    public class Database {
+        public string libraryLocation;
+        public List<SelectedShows> Shows;
 
-
+        public Database() {
+            libraryLocation = String.Empty;
+            Shows = new List<SelectedShows>();
+        }
+    }
+    public class SelectedShows {
+        public string idSel;
+        public string nameSel;
+        public string posterFilename;
+        public SelectedShows(string id, string showname, string poster = null) {
+            this.idSel = id;
+            this.nameSel = showname;
+            this.posterFilename = poster;
+        }
     }
 }
