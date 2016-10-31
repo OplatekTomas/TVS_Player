@@ -15,7 +15,7 @@ namespace TVS_Player {
         }
 
         private void addDB_Click(object sender, RoutedEventArgs e) {
-            Page showPage = new ShowList();
+            Page showPage = new ShowList(1);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrame(showPage);
         }

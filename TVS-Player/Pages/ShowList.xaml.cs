@@ -19,14 +19,13 @@ namespace TVS_Player {
     /// Interaction logic for ShowList.xaml
     /// </summary>
     public partial class ShowList : Page {
-        public ShowList() {
+        public ShowList(int nxt) {
             InitializeComponent();
+            next = nxt;
             frame.Content = new SearchShow();
         }
         string directory;
-
-
-
+        int next;
         private void showLocation_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;
             tb.Text = string.Empty;
@@ -46,10 +45,12 @@ namespace TVS_Player {
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
+            if (next == 1) {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
             Page showPage = new DbLocation();
             ((MainWindow)main).AddTempFrame(showPage);
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
