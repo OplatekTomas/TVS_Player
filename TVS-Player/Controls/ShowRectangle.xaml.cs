@@ -75,7 +75,14 @@ namespace TVS_Player {
                 Api.apiGetPoster(ID,false);
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
-                Image.Source = new BitmapImage(new Uri(path));
+                try {
+                    Image.Source = new BitmapImage(new Uri(path));
+                } catch {
+                    filename = ID.ToString() + ".jpg";
+                    path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
+                    Image.Source = new BitmapImage(new Uri(path));
+                }
             } else {
                 JObject jo = new JObject();
                 try {
