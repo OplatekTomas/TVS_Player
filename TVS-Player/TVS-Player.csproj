@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,6 +94,9 @@
     </Compile>
     <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ShowInfoSmall.xaml.cs">
+      <DependentUpon>ShowInfoSmall.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ShowList.xaml.cs">
       <DependentUpon>ShowList.xaml</DependentUpon>
@@ -149,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShowRectangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ShowInfoSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

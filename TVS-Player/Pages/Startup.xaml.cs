@@ -21,7 +21,6 @@ namespace TVS_Player {
         }
 
         private void importDB_Click(object sender, RoutedEventArgs e) {
-            Helpers.selectShow();
         }
 
 

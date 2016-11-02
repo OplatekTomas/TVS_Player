@@ -85,7 +85,9 @@ namespace TVS_Player {
 
         }
         private void showInfo(string specific) {
-            MessageBox.Show(specific);
+            Page showPage = new ShowInfoSmall(specific);
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).AddTempFrame(showPage);
         }
         private void nameTxt_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;
