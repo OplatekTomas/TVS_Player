@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,19 +27,35 @@ namespace TVS_Player {
             location = loc;
             readFolders();
         }
-        public void readFolders() {
+
+        public struct Shows {
+            string id;
+            string name;
+        }
+
+        private void readFolders() {
             List < string > subfolders = new List<String>();
-            subfolders = Directory.GetDirectories(location).ToList<string>();
-            foreach (string folder in subfolders) {
-            string show = Api.apiGet(Path.GetDirectoryName(folder));
-                if (show != null) {
+             subfolders = Directory.GetDirectories(location).ToList<string>();
+             foreach (string folder in subfolders) {
+             string show = Api.apiGet(Path.GetDirectoryName(folder));
+                 if (show != null) {
+                    JObject jo = JObject.Parse(show);
+                 }
 
-                }
-
-            }
-
+             }
 
         }
 
+        private void editShow_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void removeShow_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void showInfo_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

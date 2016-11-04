@@ -74,6 +74,9 @@
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Database.cs" />
+    <Compile Include="Controls\DBScanOption.xaml.cs">
+      <DependentUpon>DBScanOption.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\DbLocation.xaml.cs">
       <DependentUpon>DbLocation.xaml</DependentUpon>
     </Compile>
@@ -117,6 +120,10 @@
     <Page Include="Controls\tvShowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DBScanOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\DbLocation.xaml">
       <SubType>Designer</SubType>
@@ -230,6 +237,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
