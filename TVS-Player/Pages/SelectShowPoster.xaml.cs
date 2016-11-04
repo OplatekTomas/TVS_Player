@@ -27,7 +27,7 @@ namespace TVS_Player {
         public SelectShowPoster(ShowRectangle sri) {
             sr = sri;
             InitializeComponent();
-            //MessageBox.Show(Api.apiGetAllPosters(sr.ID));
+            MessageBox.Show(Api.apiGetAllPosters(sr.ID));
             JObject jo = JObject.Parse(Api.apiGetAllPosters(sr.ID));
             for(int i = 0; i < jo["data"].Count()-1; i++) {
                 string filename = jo["data"][i]["thumbnail"].ToString();

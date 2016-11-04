@@ -49,7 +49,7 @@ namespace TVS_Player {
             switch (next) {
                 case "createdb":                 
                     ((MainWindow)main).CloseTempFrame();
-                    Page showPage = new DbLocation();
+                    Page showPage = new DbLocation("nothing");
                     ((MainWindow)main).AddTempFrame(showPage);
                     break;
                 case ".":

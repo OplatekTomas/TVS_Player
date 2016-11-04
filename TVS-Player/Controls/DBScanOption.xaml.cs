@@ -21,5 +21,17 @@ namespace TVS_Player {
         public DBScanOption() {
             InitializeComponent();
         }
+
+        private void removeShow_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void showInfo_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void editShow_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }
