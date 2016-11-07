@@ -1,5 +1,9 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -96,6 +100,25 @@ namespace TVS_Player {
                 path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
                 Image.Source = new BitmapImage(new Uri(path));
             }
+            String paths = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            paths += "\\TVS-Player\\" + ID.ToString() + "\\own.png";
+            DrawText(ShowName,paths);
+            Image.Source = new BitmapImage(new Uri(paths));
+        }
+
+        public static void DrawText(String text,String path) {
+            StringFormat sf = new StringFormat();
+            sf.Trimming = StringTrimming.Word;
+            sf.LineAlignment = StringAlignment.Center;
+            sf.Alignment = StringAlignment.Center;
+            System.Drawing.Image img = new Bitmap(680,1000);
+            Graphics drawing = Graphics.FromImage(img);
+            drawing.Clear(System.Drawing.Color.FromArgb(45,45,45));
+            drawing.DrawString(text, new Font("Segoe UI", 80f),new SolidBrush(System.Drawing.Color.White),new RectangleF(0, 0,680,1000), sf);
+            drawing.Save();
+            try {
+                img.Save(path, ImageFormat.Png);
+            } catch { }
         }
 
         private void RemoveShow_Event(object sender, RoutedEventArgs e) {
