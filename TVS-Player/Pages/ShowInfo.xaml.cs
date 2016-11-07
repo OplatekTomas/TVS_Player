@@ -35,6 +35,32 @@ namespace TVS_Player {
             Rok.Text = jo["data"]["firstAired"].ToString();
             Api.apiGetPoster(ID,false);
             Obrazek.Source = new BitmapImage(new Uri(Helpers.path + "//"+ sr.ID+"//"+ sr.filename));
+            JObject series = JObject.Parse(Api.apiGetSeasons(ID));
+            int count = series["data"]["airedSeasons"].Count();
+            foreach (JToken jt in series["data"]["airedSeasons"]) {
+                if (jt.Value<int>() == 0) {
+                    count--;
+                }
+            }
+            for (int index = 1; index <= count; index++) {
+                foreach (JToken jt in series["data"]["airedSeasons"]) {
+                    if (index == jt.Value<int>()) {
+                        int i = Int32.Parse(jt.ToString());
+                        JObject eps = JObject.Parse(Api.apiGetEpisodesBySeasons(ID, i));
+                        foreach (JToken ep in eps["data"]) {
+                            TextBlock tb = new TextBlock();
+                            if (ep["overview"].Value<String>() != null) {
+                                tb.Text = ep["episodeName"].ToString() + " - " + ep["overview"].Value<String>().Replace("\r\n", "");
+                            } else {
+                                tb.Text = ep["episodeName"].ToString();
+                            }
+                            tb.Foreground = new SolidColorBrush(Colors.White);
+                            tb.Margin = new Thickness(5);
+                            EpisodesList.Children.Add(tb);
+                        }
+                    }
+                }
+            }
         }
 
         private void ReturnBack_Event(object sender, MouseButtonEventArgs e) {

@@ -33,5 +33,10 @@
             </Viewbox>
         </Grid>
         <Image x:Name="BackIcon" HorizontalAlignment="Left" Margin="4" Source="../Icons/back.png" MouseLeftButtonDown="ReturnBack_Event" d:LayoutOverrides="HorizontalAlignment, Height" RenderOptions.BitmapScalingMode="HighQuality"/>
+        <ScrollViewer Grid.Row="2">
+            <StackPanel x:Name="EpisodesList">
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

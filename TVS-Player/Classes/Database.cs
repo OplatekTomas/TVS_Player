@@ -33,6 +33,12 @@ namespace TVS_Player {
                 saveDB();
             }
         }
+        public static void removeShowFromDb(string id, bool save) {
+            database.Shows.Remove(FindShowByID(id));
+            if (save) {
+                saveDB();
+            }
+        }
         public static void saveDB() {
             string json = JsonConvert.SerializeObject(database);
             string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\db.json";
