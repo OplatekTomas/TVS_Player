@@ -26,6 +26,8 @@ namespace TVS_Player {
             InitializeComponent();
             info = inf;
             setBanner();
+            JObject jo = JObject.Parse(info);
+            Description.Text = jo["overview"].ToString();
         }
         private void setBanner() {
             JObject banner = JObject.Parse(info);

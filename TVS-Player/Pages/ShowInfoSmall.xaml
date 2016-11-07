@@ -25,7 +25,8 @@
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
             <Image x:Name="image" Grid.Row="0" Margin="10"/>
-            <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="587,275,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+            <TextBlock x:Name="Description" Grid.Row="1" Margin="10" TextWrapping="Wrap" Foreground="White"/>
+            <Button x:Name="button" Content="Close" HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Row="1" VerticalAlignment="Bottom" Width="60" Click="button_Click"/>
 
         </Grid>
     </Grid>
