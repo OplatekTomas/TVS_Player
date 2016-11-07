@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,6 @@ namespace TVS_Player {
         public SelectShowPoster(ShowRectangle sri) {
             sr = sri;
             InitializeComponent();
-            //MessageBox.Show(Api.apiGetAllPosters(sr.ID));
             Action downloadImages;
             downloadImages = () => downloadAll(sr.ID);
             Thread t = new Thread(downloadImages.Invoke);

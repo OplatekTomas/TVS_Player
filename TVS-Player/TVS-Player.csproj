@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,14 +74,23 @@
       <DependentUpon>tvShowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Database.cs" />
+    <Compile Include="Controls\DBScanOption.xaml.cs">
+      <DependentUpon>DBScanOption.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\DbLocation.xaml.cs">
       <DependentUpon>DbLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ManageShowList.xaml.cs">
+      <DependentUpon>ManageShowList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\RenameShow.xaml.cs">
       <DependentUpon>RenameShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SearchShow.xaml.cs">
+      <DependentUpon>SearchShow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SelectShowPoster.xaml.cs">
       <DependentUpon>SelectShowPoster.xaml</DependentUpon>
@@ -90,6 +100,9 @@
     </Compile>
     <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ShowInfoSmall.xaml.cs">
+      <DependentUpon>ShowInfoSmall.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ShowList.xaml.cs">
       <DependentUpon>ShowList.xaml</DependentUpon>
@@ -107,6 +120,10 @@
     <Page Include="Controls\tvShowControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DBScanOption.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\DbLocation.xaml">
       <SubType>Designer</SubType>
@@ -129,7 +146,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\ManageShowList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShowRectangle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ShowInfoSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -206,7 +235,12 @@
     <Resource Include="Icons\question.png" />
     <Resource Include="Icons\back.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\delete.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
