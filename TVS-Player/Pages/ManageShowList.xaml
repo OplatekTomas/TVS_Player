@@ -1,0 +1,38 @@
+﻿<Page x:Class="TVS_Player.ManageShowList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="648" d:DesignWidth="1152"
+      Title="ManageShowList">
+
+    <Grid Background="{DynamicResource TempBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Grid.Column="1" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="panel" Orientation="Vertical">
+                    <!-- <local:DBScanOption Height="65" Visibility="Hidden"/> -->
+                </StackPanel>
+            </ScrollViewer>
+            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5" Grid.Row="1"/>
+            <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FF969696" Margin="0,0,6,10" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click" Grid.Column="1" Grid.Row="1"/>
+            <Button x:Name="Ok" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,56,10" Foreground="#FF969696" Width="40" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Ok_Click" Grid.Column="1" Grid.Row="1" />
+        </Grid>
+     
+    </Grid>
+</Page>

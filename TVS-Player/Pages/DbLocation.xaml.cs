@@ -20,8 +20,10 @@ namespace TVS_Player {
     /// Interaction logic for DbLocation.xaml
     /// </summary>
     public partial class DbLocation : Page {
-        public DbLocation() {
+        string next;
+        public DbLocation(string nxt) {
             InitializeComponent();
+            next = nxt;
         }
         string dbLoc;
         private void newDbLoc_TextChanged(object sender, TextChangedEventArgs e) {
@@ -44,13 +46,19 @@ namespace TVS_Player {
 
         private void Ok_Click(object sender, RoutedEventArgs e) {
             if (Directory.Exists(dbLoc)) {
-                Database.createDb(dbLoc);
-                foreach (var show in DbCreationStruct.ShowsList) {
-                    Database.addShowToDb(show.getId(), show.getName());
-                    //MessageBox.Show(show.getId()+"\n"+show.getPath());
+                if (next == "nothing") {
+                    DatabaseAPI.database.libraryLocation = dbLoc;
+                    DatabaseAPI.saveDB();
+                    Window main = Window.GetWindow(this);
+                    ((MainWindow)main).CloseTempFrame();
+                } else if(next == "import") {
+                    DatabaseAPI.database.libraryLocation = dbLoc;
+                    DatabaseAPI.saveDB();
+                    Window main = Window.GetWindow(this);
+                    ((MainWindow)main).CloseTempFrame();
+                    Page showPage = new ManageShowList(dbLoc);
+                    ((MainWindow)main).AddTempFrame(showPage);
                 }
-                Window main = Window.GetWindow(this);
-                ((MainWindow)main).CloseTempFrame();
             } else { MessageBox.Show("Path "+ dbLoc + " doesn't exist!","Error!"); }
         }
 

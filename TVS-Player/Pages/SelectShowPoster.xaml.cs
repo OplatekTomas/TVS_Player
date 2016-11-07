@@ -27,7 +27,7 @@ namespace TVS_Player {
         public SelectShowPoster(ShowRectangle sri) {
             sr = sri;
             InitializeComponent();
-            //MessageBox.Show(Api.apiGetAllPosters(sr.ID));
+            MessageBox.Show(Api.apiGetAllPosters(sr.ID));
             JObject jo = JObject.Parse(Api.apiGetAllPosters(sr.ID));
             for(int i = 0; i < jo["data"].Count()-1; i++) {
                 string filename = jo["data"][i]["thumbnail"].ToString();
@@ -55,8 +55,10 @@ namespace TVS_Player {
                 string filename = Path.GetFileName(selected.path);
                 Api.apiGetPoster(sr.ID,filename,0, false);
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                sr.pathToImage = path + "\\TVS-Player\\" + sr.ID.ToString() + "\\" +filename;
+                sr.filename = filename;
                 sr.RegenerateInfo(true);
+                DatabaseAPI.FindShowByID(sr.ID.ToString()).posterFilename = filename;
+                DatabaseAPI.saveDB();
                 Window main = Window.GetWindow(this);
                 ((MainWindow)main).CloseTempFrame();
             }
