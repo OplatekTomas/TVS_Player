@@ -27,7 +27,12 @@ namespace TVS_Player
 
         private void GenerateRectangle(out ShowRectangle folder,SelectedShows ss){
             folder = new ShowRectangle(ss);
+            folder.library = this;
             List.Children.Add(folder);
+        }
+
+        public void RemoveRectangle(ShowRectangle show) {
+            List.Children.Remove(show);
         }
 
         private void SearchInLibrary_Event(object sender, TextChangedEventArgs e) {
@@ -39,7 +44,7 @@ namespace TVS_Player
                     if (Regex.IsMatch(SearchBox.Text, @"^[a-zA-Z0-9_ .-]*$", RegexOptions.None, new TimeSpan(0, 0, 1))) {
                         Match m = Regex.Match(sr.ShowName, SearchBox.Text, RegexOptions.IgnoreCase);
                         if (m.Success) {
-                     sr.SearchEnable();
+                            sr.SearchEnable();
                         } else {
                             sr.SearchDisable();
                         }
