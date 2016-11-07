@@ -34,5 +34,16 @@ namespace TVS_Player.Properties {
                 this["token"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime tokenTime {
+            get {
+                return ((global::System.DateTime)(this["tokenTime"]));
+            }
+            set {
+                this["tokenTime"] = value;
+            }
+        }
     }
 }

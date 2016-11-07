@@ -9,6 +9,8 @@ using System.Windows.Markup;
 using System.Xml;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
+using System.Threading;
 
 namespace TVS_Player
 {
@@ -18,10 +20,19 @@ namespace TVS_Player
     public partial class Shows : Page {
         public Shows(){
             InitializeComponent();
-            Random r = new Random();
-            foreach ( SelectedShows ss in DatabaseAPI.database.Shows){
-                ShowRectangle folder = new ShowRectangle(ss);
-                GenerateRectangle(out folder,ss);
+            Action load;
+            load = () => LoadShows();
+            Thread t = new Thread(load.Invoke);
+            t.Name = "Populate library";
+            t.Start();
+        }
+
+        public void LoadShows() {
+            for (int i = 0 ; i < DatabaseAPI.database.Shows.Count;i++) {
+                Dispatcher.Invoke(new Action(() => {
+                    ShowRectangle folder = new ShowRectangle(DatabaseAPI.database.Shows[i]);
+                    GenerateRectangle(out folder, DatabaseAPI.database.Shows[i]);
+                }), DispatcherPriority.Send);
             }
         }
 

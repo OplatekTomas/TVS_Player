@@ -42,9 +42,11 @@ namespace TVS_Player {
 
         }
         public void GetInfo(int ID) {
+            Dispatcher.Invoke(new Action(() => {
+                JmenoSerialu.Content = sr.ShowName;
+            }), DispatcherPriority.Send);
             JObject jo = JObject.Parse(Api.apiGet(ID));
             Dispatcher.Invoke(new Action(() => {
-                JmenoSerialu.Content = jo["data"]["seriesName"].ToString();
                 Popisek.Text = jo["data"]["overview"].ToString();
                 Rok.Text = jo["data"]["firstAired"].ToString();
             }), DispatcherPriority.Send);

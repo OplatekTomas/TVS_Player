@@ -100,10 +100,10 @@ namespace TVS_Player {
                 path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
                 Image.Source = new BitmapImage(new Uri(path));
             }
-            String paths = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            /*String paths = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             paths += "\\TVS-Player\\" + ID.ToString() + "\\own.png";
             DrawText(ShowName,paths);
-            Image.Source = new BitmapImage(new Uri(paths));
+            Image.Source = new BitmapImage(new Uri(paths));*/
         }
 
         public static void DrawText(String text,String path) {
