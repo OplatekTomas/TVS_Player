@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +16,7 @@ namespace TVS_Player {
         public string ShowName = "NON";
         public bool Disabled = false;
         public string filename;
+        public Shows library;
         public ShowRectangle() {
             InitializeComponent();
         }
@@ -23,6 +24,7 @@ namespace TVS_Player {
         public ShowRectangle(SelectedShows ss) {
             InitializeComponent();
             ID = Int32.Parse(ss.idSel);
+            ShowName = ss.nameSel;
             if (ss.posterFilename != null) {
                 filename = ss.posterFilename;
             } else {
@@ -73,7 +75,14 @@ namespace TVS_Player {
                 Api.apiGetPoster(ID,false);
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
-               Image.Source = new BitmapImage(new Uri(path));
+                try {
+                    Image.Source = new BitmapImage(new Uri(path));
+                } catch {
+                    filename = ID.ToString() + ".jpg";
+                    path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
+                    Image.Source = new BitmapImage(new Uri(path));
+                }
             } else {
                 JObject jo = new JObject();
                 try {
@@ -89,5 +98,9 @@ namespace TVS_Player {
             }
         }
 
+        private void RemoveShow_Event(object sender, RoutedEventArgs e) {
+            DatabaseAPI.removeShowFromDb(ID.ToString(), true);
+            library.RemoveRectangle(this);
+        }
     }
 }
