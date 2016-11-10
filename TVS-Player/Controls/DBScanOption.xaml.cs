@@ -22,9 +22,6 @@ namespace TVS_Player {
             InitializeComponent();
         }
 
-        private void removeShow_Click(object sender, RoutedEventArgs e) {
-
-        }
 
         private void showInfo_Click(object sender, RoutedEventArgs e) {
 
