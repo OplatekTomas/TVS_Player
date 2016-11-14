@@ -74,9 +74,10 @@ namespace TVS_Player {
         private void listFolders() {
             int i = 0;
             foreach (string folder in subfolders) {
-                i++;
+               
                 string show = Api.apiGet(Path.GetFileName(folder));
                 if (show != null) {
+                    i++;
                     Dispatcher.Invoke(new Action(() => {
                         addUI(show, folder,i);
                     }), DispatcherPriority.Send);
@@ -90,6 +91,8 @@ namespace TVS_Player {
                     DatabaseAPI.addShowToDb(shows[i].id, shows[i].name, true);
                 }
             }
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrame();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {

@@ -24,6 +24,8 @@ namespace TVS_Player {
                 idF = Helpers.showID;
                 nameF = Helpers.showName;
             });
+            showID = null;
+            showName = null;
             return new Tuple<string, string>(idF, nameF);
 
 
