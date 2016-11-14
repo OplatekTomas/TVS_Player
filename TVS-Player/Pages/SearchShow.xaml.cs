@@ -27,9 +27,24 @@ namespace TVS_Player {
             InitializeComponent();
 
         }
+        public struct selShow {
+            private string selName;
+            private string selID;
+            public selShow(string name, string id) {
+                selName = name;
+                selID = id;
+            }
+            public string getName() {
+                return selName;
+            }
+            public string getID() {
+                return selID;
+            }
+
+        }
 
         string showNameTemp;
-
+        public static List<selShow> selectedShow = new List<selShow>();
         private void nameTxt_TextChanged(object sender, TextChangedEventArgs e) {
             showNameTemp = nameTxt.Text;
             if (nameTxt.Text.Length >= 4 && nameTxt.Text != "Show name") {
@@ -95,10 +110,11 @@ namespace TVS_Player {
             tb.GotFocus -= nameTxt_GotFocus;
         }
         private void selected(string id, string showName) {
-            DatabaseAPI.addShowToDb(id, showName, true);
+            selectedShow.Add(new selShow(showName, id));
             nameTxt.Text = string.Empty;
             panel.Children.Clear();
-            
+
+
         }
     }
 }

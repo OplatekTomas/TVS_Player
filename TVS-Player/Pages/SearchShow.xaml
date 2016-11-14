@@ -10,14 +10,14 @@
 
     <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
             <RowDefinition/>
-            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="nameTxt" Margin="5,5,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
-        <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,40,5,0"/>
-        <ScrollViewer Margin="5,0" Grid.Row="2" VerticalScrollBarVisibility="Auto">
+        <TextBox x:Name="nameTxt" Grid.Row="0" Margin="5,5,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
+        <Border BorderThickness="1"  Grid.Row="0" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,40,5,0"/>
+        <ScrollViewer Margin="5,0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel x:Name="panel">
-                <local:tvShowControl Visibility="Hidden" />
+                <!-- <local:tvShowControl Visibility="Hidden" />-->
             </StackPanel>
         </ScrollViewer>
     </Grid>
