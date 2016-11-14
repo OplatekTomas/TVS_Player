@@ -12,13 +12,12 @@ using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using System.Threading;
 
-namespace TVS_Player
-{
+namespace TVS_Player {
     /// <summary>
     /// Interaction logic for Shows.xaml
     /// </summary>
     public partial class Shows : Page {
-        public Shows(){
+        public Shows() {
             InitializeComponent();
             Action load;
             load = () => LoadShows();
@@ -28,16 +27,15 @@ namespace TVS_Player
         }
 
         public void LoadShows() {
-            for (int i = 0 ; i < DatabaseAPI.database.Shows.Count;i++) {
+            for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
                 Dispatcher.Invoke(new Action(() => {
-                    ShowRectangle folder = new ShowRectangle(DatabaseAPI.database.Shows[i]);
-                    GenerateRectangle(out folder, DatabaseAPI.database.Shows[i]);
+                    GenerateRectangle(DatabaseAPI.database.Shows[i]);
                 }), DispatcherPriority.Send);
             }
         }
 
-        private void GenerateRectangle(out ShowRectangle folder,SelectedShows ss){
-            folder = new ShowRectangle(ss);
+        private void GenerateRectangle(SelectedShows ss) {
+            ShowRectangle folder = new ShowRectangle(ss);
             folder.library = this;
             List.Children.Add(folder);
         }

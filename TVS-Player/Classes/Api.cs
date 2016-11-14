@@ -112,7 +112,7 @@ namespace TVS_Player {
             }
         }
         //seznam epizod v serii
-        public static string apiGetEpisodesBySeasons(int id,int season) {
+        public static string apiGetEpisodesBySeasons(int id, int season) {
             string token = Properties.Settings.Default.token;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season);
             request.Method = "GET";
@@ -131,15 +131,15 @@ namespace TVS_Player {
             }
         }
         //ziska standartni poster s moznou volbou miniatury
-        public static void apiGetPoster(int id, bool isThumbnail) {
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static bool apiGetPoster(int id, bool isThumbnail) {
+            String path = Helpers.path;
             if (!isThumbnail) {
-                path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
+                path += id.ToString() + "\\" + id.ToString() + ".jpg";
             } else {
-                if (!Directory.Exists(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\")) {
-                    Directory.CreateDirectory(path + "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\");
+                if (!Directory.Exists(Helpers.path + id.ToString() + "\\Thumbnails\\")) {
+                    Directory.CreateDirectory(Helpers.path + id.ToString() + "\\Thumbnails\\");
                 }
-                path += "\\TVS-Player\\" + id.ToString() + "\\Thumbnails\\" + id.ToString() + ".jpg";
+                path += id.ToString() + "\\Thumbnails\\" + id.ToString() + ".jpg";
             }
             string token = Properties.Settings.Default.token;
             if (!File.Exists(path)) {
@@ -164,11 +164,14 @@ namespace TVS_Player {
                         }
                         using (WebClient client = new WebClient())
                             client.DownloadFile(new Uri(url), path);
+                        return true;
                     }
                 } catch (WebException) {
-                    MessageBox.Show("ERROR! Cannot download poster image!", "Error");
+                    MessageBox.Show("ERROR! Cannot download poster image or show doesn't have any posters!", "Error");
+                    return false;
                 }
             }
+            return true;
         }
         //ziska urcity poster s volbou miniatury
         public static void apiGetPoster(int id, string filename, int i, bool isThumbnail) {
@@ -195,7 +198,7 @@ namespace TVS_Player {
                     using (WebClient client = new WebClient())
                         client.DownloadFile(new Uri(url), path);
                 } catch (WebException) {
-                    MessageBox.Show("Error while downloading specific show image","ERROR");
+                    MessageBox.Show("Error while downloading specific show image", "ERROR");
                 }
             }
         }

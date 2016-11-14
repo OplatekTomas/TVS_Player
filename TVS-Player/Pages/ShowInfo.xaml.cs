@@ -50,10 +50,17 @@ namespace TVS_Player {
                 Popisek.Text = jo["data"]["overview"].ToString();
                 Rok.Text = jo["data"]["firstAired"].ToString();
             }), DispatcherPriority.Send);
-            Api.apiGetPoster(ID, false);
-            Dispatcher.Invoke(new Action(() => {
-                Obrazek.Source = new BitmapImage(new Uri(Helpers.path + "//" + sr.ID + "//" + sr.filename));
-            }), DispatcherPriority.Send);
+            if (sr.filename != "own.png") {
+                Api.apiGetPoster(ID, false);
+                Dispatcher.Invoke(new Action(() => {
+                    Obrazek.Source = new BitmapImage(new Uri(Helpers.path + "//" + sr.ID + "//" + sr.filename));
+                }), DispatcherPriority.Send);
+            } else {
+                Dispatcher.Invoke(new Action(() => {
+                    Obrazek.Source = new BitmapImage(new Uri(Helpers.path + "//" + sr.ID + "//" + sr.filename));
+                }), DispatcherPriority.Send);
+            }
+
         }
         private void ReturnBack_Event(object sender, MouseButtonEventArgs e) {
             Window main = Window.GetWindow(this);
@@ -72,6 +79,14 @@ namespace TVS_Player {
                     if (index == jt.Value<int>()) {
                         int i = Int32.Parse(jt.ToString());
                         JObject eps = JObject.Parse(Api.apiGetEpisodesBySeasons(ID, i));
+                        Dispatcher.Invoke(new Action(() => {
+                            TextBlock tb = new TextBlock();
+                            tb.Text = "SEASON " + i;
+                            tb.Foreground = new SolidColorBrush(Colors.White);
+                            tb.Margin = new Thickness(5);
+                            tb.TextWrapping = TextWrapping.Wrap;
+                            EpisodesList.Children.Add(tb);
+                        }), DispatcherPriority.Send);
                         foreach (JToken ep in eps["data"]) {
                             Dispatcher.Invoke(new Action(() => {
                                 TextBlock tb = new TextBlock();
@@ -82,6 +97,7 @@ namespace TVS_Player {
                                 }
                                 tb.Foreground = new SolidColorBrush(Colors.White);
                                 tb.Margin = new Thickness(5);
+                                tb.TextWrapping = TextWrapping.Wrap;
                                 EpisodesList.Children.Add(tb);
                             }), DispatcherPriority.Send);
                         }
