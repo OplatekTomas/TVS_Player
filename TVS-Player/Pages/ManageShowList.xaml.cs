@@ -105,9 +105,28 @@ namespace TVS_Player {
             shows[index - 1] = (new Shows(null, null));
             panel.Children.Remove(option);
         }
-        private void editShow(int index,DBScanOption option) {
-            option.showName.Text = "kappa123";
+        private void editShow(int index, DBScanOption option) {
+            Page showPage = new SelectShow();
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).AddTempFrame(showPage);
+            Action editS;
+            editS = () => wait(option);
+            Thread editShow = new Thread(editS.Invoke);
+            editShow.Start();
+          
+            //option.showName.Text = "kappa123";
         }
+        private void wait(DBScanOption option) {
+            string test, test2 = null;
+            while (Helpers.showID == null && Helpers.showName == null) {
+                test = Helpers.showID;
+                test2 = Helpers.showName;
+            }
+            Dispatcher.Invoke(new Action(() => {
+                option.showName.Text = test2;
+            }), DispatcherPriority.Send);
+            
 
+        }
     }
 }

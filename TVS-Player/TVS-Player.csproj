@@ -96,6 +96,9 @@
     <Compile Include="Pages\SearchShow.xaml.cs">
       <DependentUpon>SearchShow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SelectShow.xaml.cs">
+      <DependentUpon>SelectShow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SelectShowPoster.xaml.cs">
       <DependentUpon>SelectShowPoster.xaml</DependentUpon>
     </Compile>
@@ -159,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SearchShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SelectShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
