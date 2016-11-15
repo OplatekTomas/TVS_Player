@@ -70,7 +70,6 @@ namespace TVS_Player {
                 numberOfShows = parse["data"].Count();
                 Shows[] show = new Shows[numberOfShows];
                 for (int i = 0; i < numberOfShows; i++) {
-                    show[i].specificInfo = parse["data"][i].ToString();
                     show[i].showName = parse["data"][i]["seriesName"].ToString();
                     if (parse["data"][i]["firstAired"].ToString() == "") {
                         show[i].date = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
@@ -84,22 +83,23 @@ namespace TVS_Player {
                 Dispatcher.Invoke(new Action(() => {
                     panel.Children.Clear();
                     for (int i = 0; i < numberOfShows; i++) {
-                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"), show[i].specificInfo);
+                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"));
                     }
                 }), DispatcherPriority.Send);
             }
 
         }
-        private void addOption(string showName, string id, string date, string specific) {
+        private void addOption(string showName, string id, string date) {
             tvShowControl option = new tvShowControl();
             option.showName.Text = showName;
             option.firstAir.Text = date;
-            option.info.Click += (s, e) => { showInfo(specific); };
+            option.info.Click += (s, e) => { showInfo(id); };
             option.confirm.Click += (s, e) => { selected(id, showName); };
             panel.Children.Add(option);
 
         }
-        private void showInfo(string specific) {
+        private void showInfo(string id) {
+            string specific = Api.apiGet(Int32.Parse(id));
             Page showPage = new ShowInfoSmall(specific);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrame(showPage);
