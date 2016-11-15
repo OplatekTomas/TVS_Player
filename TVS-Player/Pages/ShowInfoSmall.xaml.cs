@@ -121,5 +121,10 @@ namespace TVS_Player {
                 }
             } catch (WebException) { }
         }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e) {
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrame();
+        }
     }
 }
