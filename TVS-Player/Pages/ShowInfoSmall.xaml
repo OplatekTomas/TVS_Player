@@ -49,11 +49,25 @@
                     <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,145,0,0" Text="12.03.2016" Grid.Row="0"/>
                     <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
                     <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0"/>
-                    <StackPanel Grid.Row="1">
-                        <Image x:Name="Actor1" Grid.Row="1"/>
-                    <Image x:Name="Actor2" Grid.Row="1"/>
-                    <Image x:Name="Actor3" Grid.Row="1"/>
-                        </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5,10" Grid.Row="0"/>
+                                <Label Content="Actors:" FontWeight="Bold" FontSize="14" Grid.Row="0" VerticalAlignment="Bottom"/>
+                                
+                            </Grid>
+                            <local:ActorInfo Grid.Row="1"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </ScrollViewer>
             <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FF969696" Margin="0,0,10,5" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click" Grid.Row="2"/>

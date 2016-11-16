@@ -71,6 +71,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Controls\ActorInfo.xaml.cs">
+      <DependentUpon>ActorInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PosterSelector.xaml.cs">
       <DependentUpon>PosterSelector.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
     <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ActorInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\PosterSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

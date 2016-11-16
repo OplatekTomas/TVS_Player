@@ -63,7 +63,7 @@ namespace TVS_Player {
             JObject actorInfoJ = JObject.Parse(actorInfo);
             for (int i = 0; i < actorInfoJ["data"].Count(); i++) {
                 if (Int32.Parse(actorInfoJ["data"][i]["sortOrder"].ToString()) == 0) {
-                    setActor(actorNumber,actorInfoJ["data"][i]["image"].ToString());
+                    setActor(actorNumber,actorInfoJ["data"][i]["image"].ToString(),jo);
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace TVS_Player {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
         }
-        private void setActor(int number,string link) {
+        private void setActor(int number,string link,JObject info) {
             WebClient wc = new WebClient();
             try {
                 using (MemoryStream stream = new MemoryStream(wc.DownloadData("http://thetvdb.com/banners/" + link))) {
@@ -106,15 +106,15 @@ namespace TVS_Player {
                     Dispatcher.Invoke(new Action(() => {
                         switch (number) {
                             case 1:
-                                Actor1.Source = GetImageStream(img);
+                                actorPic1.Source = GetImageStream(img);
                                 actorNumber++;
                                 break;
                             case 2:
-                                Actor2.Source = GetImageStream(img);
+                                actorPic2.Source = GetImageStream(img);
                                 actorNumber++;
                                 break;
                             case 3:
-                                Actor3.Source = GetImageStream(img);
+                                actorPic3.Source = GetImageStream(img);
                                 break;
                         }
                     }));
