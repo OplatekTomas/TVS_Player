@@ -8,10 +8,10 @@
              d:DesignHeight="171.897" d:DesignWidth="192">
     <Grid>
         <Grid>
-            <Image x:Name="actorPic1" Margin="20,10,20,60"  Width="auto" Grid.Column="0"/>
-            <Label x:Name="ActorName" Content="actor"  HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" Margin="0,30" FontSize="14"/>
-            <Label Content="playing character:"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15"/>
-            <Label x:Name="CharacterName" Content="charname"  HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold"/>
+            <Image x:Name="actorPic" Margin="20,10,20,60"  Width="auto" Grid.Column="0"/>
+            <TextBlock x:Name="ActorName" Text="Actor"  HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" Margin="0,35" FontSize="14" Foreground="White" TextDecorations="Underline"/>
+            <Label Content="playing character:"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,15" Foreground="White"/>
+            <Label x:Name="CharacterName" Content="charname"  HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="White"/>
 
         </Grid>
 

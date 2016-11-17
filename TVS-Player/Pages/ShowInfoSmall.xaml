@@ -34,21 +34,21 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="showName" VerticalAlignment="Top" Height="35px" FontSize="24" Margin="5,5,5,0" FontWeight="Bold" Grid.Row="0" >kappa123</TextBlock>
-                    <Label Content="Genre:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,40,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="genre" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,45,0,0" Grid.Row="0"/>
-                    <Label Content="First aired:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,60,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="firstAir" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,65,0,0" Text="12.03.2016" Grid.Row="0"/>
-                    <Label Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="status" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,85,0,0" Text="12.03.2016" Grid.Row="0"/>
-                    <Label Content="Network:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,100,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="network" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,105,0,0" Text="12.03.2016" Grid.Row="0"/>
-                    <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,120,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,125,0,0" Text="12.03.2016" Grid.Row="0"/>
-                    <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140,0,0" Grid.Row="0"/>
-                    <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,145,0,0" Text="12.03.2016" Grid.Row="0"/>
-                    <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0"/>
-                    <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0"/>
+                    <TextBlock x:Name="showName" VerticalAlignment="Top" Height="35px" FontSize="24" Margin="5,5,5,0" FontWeight="Bold" Grid.Row="0" Foreground="White">kappa123</TextBlock>
+                    <Label Content="Genre:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,40,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="genre" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,45,0,0" Grid.Row="0" Foreground="White"/>
+                    <Label Content="First aired:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,60,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="firstAir" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,65,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="status" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,85,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Network:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,100,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="network" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,105,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,120,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,125,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,145,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0" Foreground="White"/>
                     <Grid Grid.Row="1">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -62,10 +62,12 @@
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Row="0" Grid.ColumnSpan="3">
                                 <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5,10" Grid.Row="0"/>
-                                <Label Content="Actors:" FontWeight="Bold" FontSize="14" Grid.Row="0" VerticalAlignment="Bottom"/>
+                                <Label Content="Actors:" FontWeight="Bold" FontSize="14" Grid.Row="0" VerticalAlignment="Bottom" Foreground="White"/>
                                 
                             </Grid>
-                            <local:ActorInfo Grid.Row="1"/>
+                            <local:ActorInfo x:Name="f" Grid.Row="1" Grid.Column="0" Visibility="Hidden"/>
+                            <local:ActorInfo x:Name="s" Grid.Row="1" Grid.Column="1" Visibility="Hidden"/>
+                            <local:ActorInfo x:Name="t" Grid.Row="1" Grid.Column="2" Visibility="Hidden"/>
                         </Grid>
                     </Grid>
                 </Grid>

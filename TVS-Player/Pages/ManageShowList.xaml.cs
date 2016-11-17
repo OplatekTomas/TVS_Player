@@ -59,7 +59,7 @@ namespace TVS_Player {
             option.showName.Text = name;
             option.showLocation.Text = folder;
             option.showInfo.Click += (s, e) => {              
-                showInfo(Api.apiGet(id)); 
+                showInfo(Api.apiGet(Int32.Parse(id))); 
             };
             option.editShow.Click += (s, e) => {
                 editShow(index,option);
