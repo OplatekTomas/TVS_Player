@@ -35,6 +35,8 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock x:Name="showName" VerticalAlignment="Top" Height="35px" FontSize="24" Margin="5,5,5,0" FontWeight="Bold" Grid.Row="0" Foreground="White">kappa123</TextBlock>
+                    <Label Content="Rating:" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="15" Margin="0,40,90,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="rating" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="15"  Margin="70,45,50,0" Grid.Row="0" Foreground="White"/>                    
                     <Label Content="Genre:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,40,0,0" Grid.Row="0" Foreground="White"/>
                     <TextBlock x:Name="genre" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,45,0,0" Grid.Row="0" Foreground="White"/>
                     <Label Content="First aired:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,60,0,0" Grid.Row="0" Foreground="White"/>

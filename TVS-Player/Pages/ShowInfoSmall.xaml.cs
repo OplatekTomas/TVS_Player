@@ -49,6 +49,7 @@ namespace TVS_Player {
             epLenght.Text = parse["data"]["runtime"].ToString();
             airTime.Text = parse["data"]["airsDayOfWeek"].ToString() + " at " + parse["data"]["airsTime"].ToString();
             overview.Text = parse["data"]["overview"].ToString();
+            rating.Text = parse["data"]["siteRating"].ToString()+"/10";
             try {
                 DateTime dt = DateTime.ParseExact(parse["data"]["firstAired"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
                 firstAir.Text = dt.ToString("dd.MM.yyyy");
@@ -145,12 +146,13 @@ namespace TVS_Player {
         }
         private BitmapSource getImage(string url) {
             WebClient wc = new WebClient();
-            using (MemoryStream stream = new MemoryStream(wc.DownloadData("http://thetvdb.com/banners/" + url))) {
-                var imageSource = new BitmapImage();
-                Image img = Image.FromStream(stream);
-                return GetImageStream(img);
-            }
-
+            try {
+                using (MemoryStream stream = new MemoryStream(wc.DownloadData("http://thetvdb.com/banners/" + url))) {
+                    var imageSource = new BitmapImage();
+                    Image img = Image.FromStream(stream);
+                    return GetImageStream(img);
+                }
+            } catch (WebException) { return null; }
         }
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
