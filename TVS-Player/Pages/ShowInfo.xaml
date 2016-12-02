@@ -23,10 +23,10 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="2" Margin="5,0,0,0">
                 <DockPanel LastChildFill="False" Margin="0,0,0,10">
-                    <Label x:Name="JmenoSerialu" Content="JmenoSerialu" Foreground="White" FontSize="20"/>
-                    <TextBlock x:Name="Rok" TextWrapping="Wrap" Text="Rok vydani" DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Bottom" Margin="0,0,20,0" Padding="5"/>
+                    <Label x:Name="JmenoSerialu" Content="Series name" Foreground="White" FontSize="20"/>
+                    <TextBlock x:Name="Rok" TextWrapping="Wrap" Text="Aired on" DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Bottom" Margin="0,0,20,0" Padding="5"/>
                 </DockPanel>
-                <TextBlock x:Name="Popisek" TextWrapping="Wrap" Text="Nejaky popisek nejakeho serialu" Foreground="White" Margin="5,0,0,0"/>
+                <TextBlock x:Name="Popisek" TextWrapping="Wrap" Text="Description will load soon" Foreground="White" Margin="5,0,0,0"/>
             </StackPanel>
             <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="10,5" VerticalAlignment="Bottom">
                 <Image x:Name="Obrazek" Width="340" Height="500" RenderOptions.BitmapScalingMode="HighQuality"/>

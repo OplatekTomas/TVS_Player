@@ -1,5 +1,10 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,7 +39,7 @@ namespace TVS_Player {
         }
 
         private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {
-            Page showPage = new ShowInfo(ID,this);
+            Page showPage = new ShowInfo(ID, this);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
         }
@@ -52,7 +57,7 @@ namespace TVS_Player {
             }
         }
         public void SearchEnable() {
-            if(Disabled){
+            if (Disabled) {
                 Storyboard sb = this.FindResource("EnableSearch") as Storyboard;
                 sb.Begin();
                 Disabled = false;
@@ -72,16 +77,27 @@ namespace TVS_Player {
         }
         public void RegenerateInfo(bool onlyImage) {
             if (onlyImage) {
-                Api.apiGetPoster(ID,false);
-                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
-                try {
+                if (DatabaseAPI.FindShowByID(ID.ToString()).posterFilename == "own.png") {
+                    String path = Helpers.path + ID + "\\own.png";
                     Image.Source = new BitmapImage(new Uri(path));
-                } catch {
-                    filename = ID.ToString() + ".jpg";
-                    path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    path += "\\TVS-Player\\" + ID.ToString() + "\\" + filename;
+                } else if (!Api.apiGetPoster(ID, false)) {
+                    String path = Helpers.path;
+                    path += ID;
+                    DrawText(ShowName, path, ID);
+                    path += "\\own.png";
                     Image.Source = new BitmapImage(new Uri(path));
+                    filename = "own.png";
+                    DatabaseAPI.FindShowByID(ID.ToString()).posterFilename = "own.png";
+                    DatabaseAPI.saveDB();
+                } else {
+                    String path = Helpers.path + ID.ToString() + "\\" + filename;
+                    try {
+                        Image.Source = new BitmapImage(new Uri(path));
+                    } catch {
+                        filename = ID.ToString() + ".jpg";
+                        path = Helpers.path + ID.ToString() + "\\" + filename;
+                        Image.Source = new BitmapImage(new Uri(path));
+                    }
                 }
             } else {
                 JObject jo = new JObject();
@@ -91,10 +107,29 @@ namespace TVS_Player {
                     return;
                 }
                 Int32.TryParse(jo["data"][0]["id"].ToString(), out ID);
-                Api.apiGetPoster(ID,false);
-                String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                path += "\\TVS-Player\\" + ID.ToString() + "\\" + ID.ToString() + ".jpg";
+                Api.apiGetPoster(ID, false);
+                String path = Helpers.path + ID.ToString() + "\\" + ID.ToString() + ".jpg";
                 Image.Source = new BitmapImage(new Uri(path));
+            }
+        }
+
+        public static void DrawText(String text, String path, int ID) {
+            StringFormat sf = new StringFormat();
+            sf.Trimming = StringTrimming.Word;
+            sf.LineAlignment = StringAlignment.Center;
+            sf.Alignment = StringAlignment.Center;
+            System.Drawing.Image img = new Bitmap(680, 1000);
+            Graphics drawing = Graphics.FromImage(img);
+            drawing.Clear(System.Drawing.Color.FromArgb(45, 45, 45));
+            drawing.DrawString(text, new Font("Segoe UI", 80f), new SolidBrush(System.Drawing.Color.White), new RectangleF(0, 0, 680, 1000), sf);
+            drawing.Save();
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+            try {
+                img.Save(path + "\\own.png", ImageFormat.Png);
+            } catch {
+                MessageBox.Show("Error while creating placeholder image!");
             }
         }
 
