@@ -222,6 +222,22 @@ namespace TVS_Player {
                 return "FUCK YOU";
             }
         }
+        public static string apiGetActors(int id) {
+            string token = Properties.Settings.Default.token;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id+"/actors");
+            request.Method = "GET";
+            request.Accept = "application/json";
+            request.Headers.Add("Accept-Language", "en");
+            request.Headers.Add("Authorization", "Bearer " + token);
+            try {
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    return sr.ReadToEnd();
+                }
+            } catch (WebException) {
+                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
+                return "error";
+            }
+        }
     }
 }
-

@@ -24,42 +24,27 @@ namespace TVS_Player {
             next = nxt;
             frame.Content = new SearchShow();
         }
-        string directory;
+
         string next;
-        private void showLocation_GotFocus(object sender, RoutedEventArgs e) {
-            TextBox tb = (TextBox)sender;
-            tb.Text = string.Empty;
-            tb.GotFocus -= showLocation_GotFocus;
-        }
-
-        private void selectFolder(object sender, MouseButtonEventArgs e) {
-            VistaFolderBrowserDialog ofd = new VistaFolderBrowserDialog();
-            var check = ofd.ShowDialog();
-            if (check == true) {
-                showLocation.Text = ofd.SelectedPath;
-            }
-
-        }
-        private void showLocation_TextChanged(object sender, TextChangedEventArgs e) {
-            directory = showLocation.Text;
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
             switch (next) {
-                case "createdb":                 
+                case "createdb":
+                    for (int i = 0; i < SearchShow.selectedShow.Count(); i++) {
+                        DatabaseAPI.addShowToDb(SearchShow.selectedShow[i].getID(), SearchShow.selectedShow[i].getName(),true);
+                    }                 
                     ((MainWindow)main).CloseTempFrame();
                     Page showPage = new DbLocation("nothing");
                     ((MainWindow)main).AddTempFrame(showPage);
                     break;
-                case ".":
 
-                    break; 
                 default:
                     ((MainWindow)main).CloseTempFrame();
                     break;
             }
         }
+
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);

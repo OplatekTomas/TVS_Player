@@ -15,20 +15,11 @@ using System.Windows.Shapes;
 
 namespace TVS_Player {
     /// <summary>
-    /// Interaction logic for DBScanOption.xaml
+    /// Interaction logic for ActorInfo.xaml
     /// </summary>
-    public partial class DBScanOption : UserControl {
-        public DBScanOption() {
+    public partial class ActorInfo : UserControl {
+        public ActorInfo() {
             InitializeComponent();
-        }
-
-
-        private void showInfo_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void editShow_Click(object sender, RoutedEventArgs e) {
-
         }
     }
 }
