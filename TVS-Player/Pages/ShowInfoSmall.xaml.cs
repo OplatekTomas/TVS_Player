@@ -28,9 +28,7 @@ namespace TVS_Player {
         public ShowInfoSmall(string inf) {
             InitializeComponent();
             info = inf;
-            setBanner();
             JObject jo = JObject.Parse(info);
-            Description.Text = jo["overview"].ToString();
             fillLayout();
         }
         private void fillLayout() {
@@ -125,6 +123,7 @@ namespace TVS_Player {
                     var imageSource = new BitmapImage();
                     Image img = Image.FromStream(stream);
                     Dispatcher.Invoke(new Action(() => {
+                        
                         image.Source = GetImageStream(img);
                     }));
 
