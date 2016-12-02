@@ -11,22 +11,70 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*" MinWidth="400px"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1" Grid.Column="1" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Image x:Name="image" Grid.Row="0" Margin="10"/>
-            <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="587,275,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-
+            <Image x:Name="image" Margin="5" VerticalAlignment="Top" Height="auto" Grid.Row="0" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Bottom" Background="#FF303030" Margin="5,0" Grid.Row="0"/>
+            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5" Grid.Row="2"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="showName" VerticalAlignment="Top" Height="35px" FontSize="24" Margin="5,5,5,0" FontWeight="Bold" Grid.Row="0" Foreground="White">kappa123</TextBlock>
+                    <Label Content="Rating:" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="15" Margin="0,40,90,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="rating" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="15"  Margin="70,45,50,0" Grid.Row="0" Foreground="White"/>                    
+                    <Label Content="Genre:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,40,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="genre" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,45,0,0" Grid.Row="0" Foreground="White"/>
+                    <Label Content="First aired:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,60,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="firstAir" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,65,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="status" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,85,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Network:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,100,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="network" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,105,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,120,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,125,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="70,145,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0" Foreground="White"/>
+                    <Grid Grid.Row="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5,10" Grid.Row="0"/>
+                                <Label Content="Actors:" FontWeight="Bold" FontSize="14" Grid.Row="0" VerticalAlignment="Bottom" Foreground="White"/>
+                                
+                            </Grid>
+                            <local:ActorInfo x:Name="f" Grid.Row="1" Grid.Column="0" Visibility="Hidden"/>
+                            <local:ActorInfo x:Name="s" Grid.Row="1" Grid.Column="1" Visibility="Hidden"/>
+                            <local:ActorInfo x:Name="t" Grid.Row="1" Grid.Column="2" Visibility="Hidden"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+            <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FF969696" Margin="0,0,10,5" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click" Grid.Row="2"/>
         </Grid>
     </Grid>
 </Page>

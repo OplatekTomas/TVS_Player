@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,33 +17,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace TVS_Player {
+namespace TVS_Player
+{
     /// <summary>
-    /// Interaction logic for SearchShow.xaml
+    /// Interaction logic for SelectShow.xaml
     /// </summary>
-    public partial class SearchShow : Page {
-        public SearchShow() {
+    public partial class SelectShow : Page{
+        public SelectShow(){
             InitializeComponent();
-
         }
-        public struct selShow {
-            private string selName;
-            private string selID;
-            public selShow(string name, string id) {
-                selName = name;
-                selID = id;
-            }
-            public string getName() {
-                return selName;
-            }
-            public string getID() {
-                return selID;
-            }
-
-        }
-
         string showNameTemp;
-        public static List<selShow> selectedShow = new List<selShow>();
+
         private void nameTxt_TextChanged(object sender, TextChangedEventArgs e) {
             showNameTemp = nameTxt.Text;
             if (nameTxt.Text.Length >= 4 && nameTxt.Text != "Show name") {
@@ -70,6 +53,7 @@ namespace TVS_Player {
                 numberOfShows = parse["data"].Count();
                 Shows[] show = new Shows[numberOfShows];
                 for (int i = 0; i < numberOfShows; i++) {
+                    show[i].specificInfo = parse["data"][i].ToString();
                     show[i].showName = parse["data"][i]["seriesName"].ToString();
                     if (parse["data"][i]["firstAired"].ToString() == "") {
                         show[i].date = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
@@ -83,23 +67,22 @@ namespace TVS_Player {
                 Dispatcher.Invoke(new Action(() => {
                     panel.Children.Clear();
                     for (int i = 0; i < numberOfShows; i++) {
-                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"));
+                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"), show[i].specificInfo);
                     }
                 }), DispatcherPriority.Send);
             }
 
         }
-        private void addOption(string showName, string id, string date) {
+        private void addOption(string showName, string id, string date, string specific) {
             tvShowControl option = new tvShowControl();
             option.showName.Text = showName;
             option.firstAir.Text = date;
-            option.info.Click += (s, e) => { showInfo(id); };
+            option.info.Click += (s, e) => { showInfo(specific); };
             option.confirm.Click += (s, e) => { selected(id, showName); };
             panel.Children.Add(option);
 
         }
-        private void showInfo(string id) {
-            string specific = Api.apiGet(Int32.Parse(id));
+        private void showInfo(string specific) {
             Page showPage = new ShowInfoSmall(specific);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrame(showPage);
@@ -110,10 +93,12 @@ namespace TVS_Player {
             tb.GotFocus -= nameTxt_GotFocus;
         }
         private void selected(string id, string showName) {
-            selectedShow.Add(new selShow(showName, id));
-            nameTxt.Text = string.Empty;
-            panel.Children.Clear();
-
+            Helpers.showID = id;
+            Helpers.showName = showName;
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrame();
+            //nameTxt.Text = string.Empty;
+            //panel.Children.Clear();
 
         }
     }
