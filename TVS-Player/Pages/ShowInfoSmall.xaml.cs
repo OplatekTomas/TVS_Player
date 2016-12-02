@@ -28,6 +28,7 @@ namespace TVS_Player {
         public ShowInfoSmall(string inf) {
             InitializeComponent();
             info = inf;
+            JObject jo = JObject.Parse(info);
             fillLayout();
         }
         private void fillLayout() {
@@ -39,7 +40,7 @@ namespace TVS_Player {
             for (int i = 0; i < parse["data"]["genre"].Count(); i++) {
                 if (i == 0) {
                     genre.Text += parse["data"]["genre"][i].ToString();
-                } else { 
+                } else {
                     genre.Text += ", "+ parse["data"]["genre"][i].ToString();
                 }
             }
@@ -90,20 +91,20 @@ namespace TVS_Player {
             }
             if (selectedAc.Count() < 3) {
                 int role = 1;
-                do {                   
+                do {
                     for (int i = 0; i < actors.Count(); i++) {
                         if (actors[i].role == role) {
                             if (selectedAc.Count() == 3) {
                                 break;
                             }
-                            selectedAc.Add(actors[i]);                        
+                            selectedAc.Add(actors[i]);
                         }
                     }
                     role++;
                     if (role >= 4) {
                         selectedAc.Add(new Actor(null,null,null,0));
                     }
-                } while (selectedAc.Count<3);            
+                } while (selectedAc.Count<3);
             }
             try {
                 setLeft(selectedAc[0]);
@@ -122,6 +123,7 @@ namespace TVS_Player {
                     var imageSource = new BitmapImage();
                     Image img = Image.FromStream(stream);
                     Dispatcher.Invoke(new Action(() => {
+                        
                         image.Source = GetImageStream(img);
                     }));
 
@@ -167,7 +169,7 @@ namespace TVS_Player {
                 f.actorPic.Source = getImage(url);
                 f.ActorName.Text = name;
                 f.CharacterName.Content = character;
-                f.ActorName.MouseUp += (s, e) => openActor(actor.name); 
+                f.ActorName.MouseUp += (s, e) => openActor(actor.name);
 
             }));
         }

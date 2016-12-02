@@ -22,7 +22,7 @@
                 </LinearGradientBrush>
             </Canvas.Background>
         </Canvas>
-        <TextBlock FontSize="20" Text="Knihovna serialu" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="White" />
+        <TextBlock FontSize="20" Text="Library" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Foreground="White" />
         <Grid x:Name="SearchBarPanel" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="24" Width="180" Margin="0,0,20,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
