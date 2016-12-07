@@ -29,6 +29,7 @@ namespace TVS_Player {
             Cancel_Event(this,e);
         }
 
+
         private void ResetText_Event(object sender, RoutedEventArgs e) {
             if (string.Compare(after.Text, "Rename show") == 0) {
                 after.Text = string.Empty;

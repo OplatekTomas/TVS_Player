@@ -34,6 +34,12 @@
                             <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Icons/menu.png" HorizontalAlignment="Right" Width="43" Height="37"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="btnSettings" Width="auto" Height="50" VerticalAlignment="Bottom"  Margin="0,-51,0,51" Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
+                        <StackPanel Orientation="Horizontal" Width="190" VerticalAlignment="Center">
+                            <TextBlock HorizontalAlignment="Center" Width="144" Foreground="#FF323232" FontSize="24">Settings</TextBlock>
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="Icons/settings.png" HorizontalAlignment="Right" Width="45" Height="37"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
                 <Button x:Name="btnShowShows" Width="auto" Height="50" Click="btnShowsShow_Click" Margin="0,0,0,0" VerticalAlignment="Top"  Background="#FF1E1E1E" Style="{DynamicResource SideBarButton}">
                     <StackPanel Orientation="Horizontal" Width="190">
