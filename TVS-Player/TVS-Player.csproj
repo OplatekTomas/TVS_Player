@@ -84,6 +84,9 @@
     <Compile Include="Controls\DBScanOption.xaml.cs">
       <DependentUpon>DBScanOption.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FolderControl.xaml.cs">
+      <DependentUpon>FolderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\DbLocation.xaml.cs">
       <DependentUpon>DbLocation.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,9 @@
     </Compile>
     <Compile Include="Pages\RenameShow.xaml.cs">
       <DependentUpon>RenameShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ScanLocation.xaml.cs">
+      <DependentUpon>ScanLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SearchShow.xaml.cs">
       <DependentUpon>SearchShow.xaml</DependentUpon>
@@ -139,6 +145,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\FolderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\DbLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -165,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\RenameShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ScanLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
