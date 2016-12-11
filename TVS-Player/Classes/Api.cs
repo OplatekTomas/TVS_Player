@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -35,7 +36,39 @@ namespace TVS_Player {
                 }
             }
         }
-
+        //získat možné názvy seriálu
+        public static List<string> GetAliases(int id) {
+            List<string> aliases = new List<string>();
+            string info = apiGet(id);
+            JObject jo = JObject.Parse(info);
+            Regex reg = new Regex(@"\([0-9]{4}\)");
+            string sn = jo["data"]["seriesName"].ToString();
+            aliases.Add(sn);
+            if (aliases.Contains(sn.Replace(" ", "."))) {
+                aliases.Add(sn.Replace(" ", "."));
+            }
+            Match snMatch = reg.Match(sn);
+            if (snMatch.Success) {
+                aliases.Add(reg.Replace(sn, ""));
+                if (aliases.Contains(reg.Replace(sn, "").Replace(" ", "."))) { 
+                    aliases.Add(reg.Replace(sn, "").Replace(" ", "."));
+                }
+            }
+            foreach (string alias in jo["data"]["aliases"]) {
+                aliases.Add(alias);
+                if (!aliases.Contains(alias.Replace(" ", "."))) { 
+                    aliases.Add(alias.Replace(" ", "."));
+                }
+                Match regMatch = reg.Match(alias);
+                if (regMatch.Success) {
+                    aliases.Add(reg.Replace(alias, ""));
+                    if (aliases.Contains(reg.Replace(alias, "").Replace(" ", "."))) { 
+                    aliases.Add(reg.Replace(alias, "").Replace(" ", "."));
+                    }
+                }
+            }
+            return aliases;
+        }
         //info o epizodě
         public static string apiGet(int season, int episode, int id) {
             string token = Properties.Settings.Default.token;

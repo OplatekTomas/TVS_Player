@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Controls\ActorInfo.xaml.cs">
       <DependentUpon>ActorInfo.xaml</DependentUpon>
     </Compile>
