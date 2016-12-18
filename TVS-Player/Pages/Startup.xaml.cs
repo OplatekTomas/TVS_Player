@@ -17,16 +17,16 @@ namespace TVS_Player {
         }
 
         private void addDB_Click(object sender, RoutedEventArgs e) {
-            //Page showPage = new ShowList("createdb");
-            /*Page showPage = new ScanLocation();
+            Page showPage = new ShowList("createdb");
+            //Page showPage = new ScanLocation();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);*/
+            ((MainWindow)main).AddTempFrame(showPage);
 
             //List<string> test = Renamer.FilterExtensions(Renamer.ScanEpisodes(new List<string>{"D:\\Downloads\\Torrent"}, 263365));
             //Api.GetAliases();
             //Tuple<int,int> t = Renamer.GetInfo("D:\\Game of Thrones S01E01 - píčovina.avi");
             //Renamer.DownloadInfo(121361);
-            Renamer.RenameBatch(new List<int>() { 121361 }, new List<string>() { "D:\\Test\\TVS-RiP" },"D:\\Test\\TVS-Rip\\0");
+            //Renamer.RenameBatch(new List<int>() { 121361 }, new List<string>() { "D:\\Test\\TVS-RiP" },"D:\\Test\\TVS-Rip\\0");
             //Renamer.Rename(new List<string>() { "D:\\Game of Thrones S01E01 - píčovina.avi"},"D:\\",121361,"Game of Thrones");
         }
 

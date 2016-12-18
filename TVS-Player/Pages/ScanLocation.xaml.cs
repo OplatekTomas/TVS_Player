@@ -23,7 +23,6 @@ namespace TVS_Player {
         public ScanLocation() {
             InitializeComponent();
         }
-        int index=0;
         private void textbox_GotFocus(object sender, RoutedEventArgs e) {
             textbox.Text = string.Empty;
             textbox.GotFocus -= textbox_GotFocus;
@@ -63,11 +62,16 @@ namespace TVS_Player {
 
         private void scan_Click(object sender, RoutedEventArgs e) {
             List<string> locs = new List<string>();
+            List<int> ids = new List<int>(); 
             foreach (FolderControl fc in panel.Children) {
                 if (!locs.Contains(fc.pathBox.Text)) { 
                     locs.Add(fc.pathBox.Text);
                 }
             }
+            for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
+                ids.Add(Int32.Parse(DatabaseAPI.database.Shows[i].idSel));
+                }                
+            Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
 
         }
         
