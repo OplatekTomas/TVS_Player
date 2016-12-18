@@ -163,6 +163,12 @@ namespace TVS_Player {
                 return "error";
             }
         }
+        public static string getName(int id) {
+            string info = apiGet(id);
+            JObject jo = JObject.Parse(info);
+            return jo["data"]["seriesName"].ToString();
+        }
+
         //ziska standartni poster s moznou volbou miniatury
         public static bool apiGetPoster(int id, bool isThumbnail) {
             String path = Helpers.path;

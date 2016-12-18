@@ -41,27 +41,40 @@ namespace TVS_Player {
             }
             return null;
         }
-        public static string GetValidName(string path, string name) {
+        public static string GetValidName(string path, string name, string extension) {
             int filenumber = 1;
             string final;
             string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-            string extension = Path.GetExtension(path);
-            Match m = new Regex("[s][0 - 5][0 - 9]", RegexOptions.IgnoreCase).Match(name);
+            Match m = new Regex("s[0-5][0-9]", RegexOptions.IgnoreCase).Match(name);
             int s = Int32.Parse(m.Value.Remove(0, 1));
             foreach (char c in invalid) {
                 name = name.Replace(c.ToString(), "");
             }
-            if (s < 10) {
+            if (s < 10) {               
                 path += "\\Season 0" + s;
+                Directory.CreateDirectory(path);
             } else if (s >= 10) {
                 path += "\\Season " + s;
+                Directory.CreateDirectory(path);                
             }
-            do {
+            final = path + "\\" + name + extension;
+            while (File.Exists(final)){
                 final = path + "\\" + name + "_" + filenumber + extension;
                 filenumber++;
-            } while (File.Exists(path));
+            }
             return final;
         }
+        public static void RenameBatch(List<int> ids,List<string> scan,string lib) {
+            foreach (int id in ids) {
+                string showName = Api.getName(id);
+                List<string> files = ScanEpisodes(scan,id);
+                Directory.CreateDirectory(lib + "\\" +showName);
+                RenameFiles(files, lib+"\\"+showName, id, showName);
+
+            }
+
+        }
+
 
         public static List<string> ScanEpisodes(List<string> locations, int id) {
             List<string> showFiles = new List<string>();
@@ -95,7 +108,7 @@ namespace TVS_Player {
             return null;
         }
 
-        public static void Rename(List<string> files, string path, int id, string showName) {
+        public static void RenameFiles(List<string> files, string path, int id, string showName) {
             List<EPInfo> EPNames = DownloadInfo(id);
             foreach (string file in files) {
                 Tuple<int, int> t = GetInfo(file);
@@ -107,7 +120,8 @@ namespace TVS_Player {
                     MessageBox.Show("This TV Show doesnt have that amount of Episodes/Seasons", "Error");
                     break;
                 } else {
-                    File.Move(file, GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name))); 
+                    string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file));
+                    File.Move(file, output); 
                 }
             }
 

@@ -26,7 +26,8 @@ namespace TVS_Player {
             //Api.GetAliases();
             //Tuple<int,int> t = Renamer.GetInfo("D:\\Game of Thrones S01E01 - píčovina.avi");
             //Renamer.DownloadInfo(121361);
-            Renamer.Rename(new List<string>() { "D:\\Game of Thrones S01E01 - píčovina.avi"},"D:\\",121361,"Game of Thrones");
+            Renamer.RenameBatch(new List<int>() { 121361 }, new List<string>() { "D:\\Test\\TVS-RiP" },"D:\\Test\\TVS-Rip\\0");
+            //Renamer.Rename(new List<string>() { "D:\\Game of Thrones S01E01 - píčovina.avi"},"D:\\",121361,"Game of Thrones");
         }
 
         private void importDB_Click(object sender, RoutedEventArgs e) {
