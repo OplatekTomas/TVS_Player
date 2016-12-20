@@ -115,10 +115,8 @@ namespace TVS_Player {
                 int season = t.Item1;
                 int episode = t.Item2;
                 var selectedEP = EPNames.FirstOrDefault(o => o.season == season && o.episode == episode);
-                var EObject = EPNames.FirstOrDefault(o => o.episode == episode);
                 if (selectedEP == null) {
                     MessageBox.Show("This TV Show doesnt have that amount of Episodes/Seasons", "Error");
-                    break;
                 } else {
                     string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file));
                     File.Move(file, output); 
@@ -146,6 +144,14 @@ namespace TVS_Player {
                 }
             }
             return count;
+        }
+        public static void RenameSingle(string file, string lib, int id) {
+            string showName = Api.getName(id);
+            Tuple<int, int> t = GetInfo(file);
+            int season = t.Item1;
+            int episode = t.Item2;
+            string info = Api.apiGet(season, episode, id);
+
         }
 
 
