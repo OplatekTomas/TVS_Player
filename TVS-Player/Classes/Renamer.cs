@@ -41,6 +41,7 @@ namespace TVS_Player {
             }
             return null;
         }
+
         public static string GetValidName(string path, string name, string extension) {
             int filenumber = 1;
             string final;
@@ -116,7 +117,7 @@ namespace TVS_Player {
                 int episode = t.Item2;
                 var selectedEP = EPNames.FirstOrDefault(o => o.season == season && o.episode == episode);
                 if (selectedEP == null) {
-                    MessageBox.Show("This TV Show doesnt have that amount of Episodes/Seasons", "Error");
+                    MessageBox.Show("This TV Show doesnt have episode "+ episode + " in season " + season+".\nFile " + file + " won't be renamed", "Error");
                 } else {
                     string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file));
                     File.Move(file, output); 
@@ -150,8 +151,12 @@ namespace TVS_Player {
             Tuple<int, int> t = GetInfo(file);
             int season = t.Item1;
             int episode = t.Item2;
-            string info = Api.apiGet(season, episode, id);
-
+            string epName = JObject.Parse(Api.apiGet(season, episode, id))["data"][0]["episodeName"].ToString();
+            try {
+                File.Move(file, GetValidName(lib, GetName(showName, season, episode, epName), Path.GetExtension(file)));
+            } catch (Exception) {
+                MessageBox.Show("File couldn't be moved");
+            }
         }
 
 
