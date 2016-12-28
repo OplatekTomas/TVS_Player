@@ -110,28 +110,30 @@ namespace TVS_Player {
         }
 
         public static void RenameFiles(List<string> files, string path, int id, string showName) {
-            List<EPInfo> EPNames = DownloadInfo(id);
+            List<Episode> EPNames = DownloadInfo(id);
             foreach (string file in files) {
                 Tuple<int, int> t = GetInfo(file);
                 int season = t.Item1;
                 int episode = t.Item2;
                 var selectedEP = EPNames.FirstOrDefault(o => o.season == season && o.episode == episode);
+                int index = EPNames.FindIndex(o => o.season == season && o.episode == episode);
                 if (selectedEP == null) {
                     MessageBox.Show("This TV Show doesnt have episode "+ episode + " in season " + season+".\nFile " + file + " won't be renamed", "Error");
                 } else {
                     string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file));
-                    File.Move(file, output); 
-                }
+                    File.Move(file, output);
+                    EPNames[index].downloaded = true;
+                    EPNames[index].locations.Add(output);
+                }                               
             }
-
-
+            DatabaseEpisodes.createDB(id, EPNames);
         }
-        public static List<EPInfo> DownloadInfo(int id) {
-            List<EPInfo> epi = new List<EPInfo>();
+        public static List<Episode> DownloadInfo(int id) {
+            List<Episode> epi = new List<Episode>();
             for (int i = 1; i <= GetNumberOfSeasons(id); i++) { 
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
                 foreach (JToken jt in jo["data"]) {                 
-                    epi.Add(new EPInfo(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString())));
+                    epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), false, new List<string>()));
                 }          
             }
             return epi;

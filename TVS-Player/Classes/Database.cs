@@ -66,6 +66,20 @@ namespace TVS_Player {
             Shows = new List<SelectedShows>();
         }
     }
+    public class DatabaseEpisodes {
+        public static void createDB(int id,List<Episode> l) {
+            string path = Helpers.path + "\\" + id+"\\"+id+".json";
+            string json = JsonConvert.SerializeObject(l);
+            if (!File.Exists(Path.GetDirectoryName(path))) {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+            File.WriteAllText(path, json);
+        }
+
+
+
+    }
+
     public class SelectedShows {
         public string idSel;
         public string nameSel;
@@ -75,5 +89,21 @@ namespace TVS_Player {
             this.nameSel = showname;
             this.posterFilename = poster;
         }
+    }
+    public class Episode {
+        public string name;
+        public int season;
+        public int episode;
+        public int id;
+        public bool downloaded;
+        public List<string> locations; 
+        public Episode(string name, int season, int episode, int id, bool downloaded, List<string> l) {
+            this.name = name;
+            this.season = season;
+            this.episode = episode;
+            this.id = id;
+            this.downloaded = downloaded;
+            locations = l;
+        }        
     }
 }
