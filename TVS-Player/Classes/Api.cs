@@ -44,27 +44,20 @@ namespace TVS_Player {
             Regex reg = new Regex(@"\([0-9]{4}\)");
             string sn = jo["data"]["seriesName"].ToString();
             aliases.Add(sn);
-            if (aliases.Contains(sn.Replace(" ", "."))) {
-                aliases.Add(sn.Replace(" ", "."));
-            }
             Match snMatch = reg.Match(sn);
             if (snMatch.Success) {
                 aliases.Add(reg.Replace(sn, ""));
-                if (aliases.Contains(reg.Replace(sn, "").Replace(" ", "."))) { 
-                    aliases.Add(reg.Replace(sn, "").Replace(" ", "."));
-                }
             }
             foreach (string alias in jo["data"]["aliases"]) {
                 aliases.Add(alias);
-                if (!aliases.Contains(alias.Replace(" ", "."))) { 
-                    aliases.Add(alias.Replace(" ", "."));
-                }
                 Match regMatch = reg.Match(alias);
                 if (regMatch.Success) {
                     aliases.Add(reg.Replace(alias, ""));
-                    if (aliases.Contains(reg.Replace(alias, "").Replace(" ", "."))) { 
-                    aliases.Add(reg.Replace(alias, "").Replace(" ", "."));
-                    }
+                }
+            }
+            for (int i=0;i<aliases.Count();i++) {
+                if (aliases[i].Contains(" ")) {
+                    aliases.Add(aliases[i].Replace(" ", "."));
                 }
             }
             return aliases;

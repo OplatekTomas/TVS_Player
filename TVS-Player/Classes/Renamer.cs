@@ -80,17 +80,17 @@ namespace TVS_Player {
         public static List<string> ScanEpisodes(List<string> locations, int id) {
             List<string> showFiles = new List<string>();
             List<string> aliases = Api.GetAliases(id);
+            List<string> files = new List<string>();
             foreach (string location in locations) {
-                List<string> files = new List<string>();
                 files.AddRange(Directory.GetFiles(location, "*.*", System.IO.SearchOption.AllDirectories));
-                foreach (string file in files) {
-                    foreach (string alias in aliases) {
-                        if (Path.GetFileName(file).IndexOf(alias, StringComparison.OrdinalIgnoreCase) >= 0 && !showFiles.Contains(file)) {
-                            showFiles.Add(file);
-                        }
+            }
+            foreach (string file in files) {
+                foreach (string alias in aliases) {
+                    if (Path.GetFileName(file).IndexOf(alias, StringComparison.OrdinalIgnoreCase) >= 0 && !showFiles.Contains(file)) {
+                        showFiles.Add(file);
                     }
                 }
-            }
+            }           
             return FilterExtensions(showFiles);
         }
         public static Tuple<int, int> GetInfo(string file) {
