@@ -10,18 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace TVS_Player {
-    public class EPInfo {
-        public string name;
-        public int season;
-        public int episode;
-        public EPInfo(string n, int s, int e) {
-            name = n;
-            season = s;
-            episode = e;
-        }
-    }
-
-
     class Renamer {
 
         public static string GetName(string showName, int season, int episode,string epName) {

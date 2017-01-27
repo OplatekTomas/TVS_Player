@@ -22,6 +22,7 @@ namespace TVS_Player {
         public bool Disabled = false;
         public string filename;
         public Shows library;
+        public SelectedShows selected;
         public ShowRectangle() {
             InitializeComponent();
         }
@@ -29,6 +30,7 @@ namespace TVS_Player {
         public ShowRectangle(SelectedShows ss) {
             InitializeComponent();
             ID = Int32.Parse(ss.idSel);
+            selected = ss;
             ShowName = ss.nameSel;
             if (ss.posterFilename != null) {
                 filename = ss.posterFilename;
@@ -39,7 +41,7 @@ namespace TVS_Player {
         }
 
         private void ShowClicked_Event(object sender, MouseButtonEventArgs e) {
-            Page showPage = new ShowInfo(ID, this);
+            Page showPage = new Seasons(selected);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
         }

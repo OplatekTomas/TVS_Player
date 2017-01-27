@@ -74,5 +74,9 @@ namespace TVS_Player {
                 SearchBox.Foreground = new SolidColorBrush(Colors.Black);
             }
         }
+
+        private void AddShowButton_MouseUp(object sender, MouseButtonEventArgs e) {
+            
+        }
     }
 }

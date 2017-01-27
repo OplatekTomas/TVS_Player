@@ -56,6 +56,11 @@ namespace TVS_Player {
             }
             return foundShow;
         }
+        public static int GetSeasons(int id) {
+            return DatabaseEpisodes.readDb(id).Max(e => e.season);
+        }   
+
+
     }
     public class Database {
         public string libraryLocation;
@@ -67,19 +72,46 @@ namespace TVS_Player {
         }
     }
     public class DatabaseEpisodes {
-        public static void createDB(int id,List<Episode> l) {
-            string path = Helpers.path + "\\" + id+"\\"+id+".json";
+        public static void createDB(int id, List<Episode> l) {
+            string path = Helpers.path + id + "\\Detail.json";
             string json = JsonConvert.SerializeObject(l);
             if (!File.Exists(Path.GetDirectoryName(path))) {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
             File.WriteAllText(path, json);
         }
+        public static void addEPToDb(int id,Episode e) {
+            List <Episode> list = readDb(id);
+            list.Add(e);
+            createDB(id, list);           
+        }
+        public static int GetEpPerSeason(int id, int season) {
+            List<Episode> list = readDb(id);
+            int count = 0;
+            foreach (Episode e in list) {
+                if (e.season == season) {
+                    count++;
+                }
+            }
+            return count;
+        }
 
-
+        public static List<Episode> readDb(int id) {
+            List<Episode> e = new List<Episode>();
+            string path = Helpers.path + "\\" + id + "\\Detail.json";
+            JArray jo = new JArray();
+            try {
+                string json = File.ReadAllText(path);
+                jo = JArray.Parse(json);
+            } catch {
+            }
+            foreach (JToken jt in jo) {
+                e.Add(jt.ToObject<Episode>());             
+            }
+            return e;
+        }
 
     }
-
     public class SelectedShows {
         public string idSel;
         public string nameSel;

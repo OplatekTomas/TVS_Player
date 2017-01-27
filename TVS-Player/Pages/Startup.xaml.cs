@@ -17,14 +17,13 @@ namespace TVS_Player {
         }
 
         private void addDB_Click(object sender, RoutedEventArgs e) {
-            Page showPage = new ShowList("createdb");
+            /*Page showPage = new ShowList("createdb");
             //Page showPage = new ScanLocation();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
-            
-
-            //Renamer.RenameBatch(new List<int>(){ 248835 },new List<string>() {"D:\\Downloads\\Torrent","D:\\Downloads\\Chrome" }, "D:\\Downloads\\Seriály");
-
+            ((MainWindow)main).AddTempFrame(showPage);*/
+            //Renamer.RenameBatch(new List<int>(){ 121361 },new List<string>() {"D:\\Test\\S1" }, "D:\\Test\\DB");
+            //DatabaseEpisodes.readDb(121361);
+            //int k = DatabaseAPI.GetSeasons(121361);
         }
 
         private void importDB_Click(object sender, RoutedEventArgs e) {

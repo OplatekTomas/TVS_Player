@@ -33,9 +33,13 @@
             <TextBox x:Name="SearchBox" Text="Search show" Style="{DynamicResource SearchBox}" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Column="1" TextChanged="SearchInLibrary_Event" GotFocus="ResetText_Event" Foreground="#FFA4A4A4" />
             <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" Margin="0" Padding="5,0" MouseLeftButtonDown="EraseSearchText_Event"/>
         </Grid>
-
+        <Grid x:Name="AddShowButton" Height="60" Width="60" Grid.Row="1" Panel.ZIndex="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="50,20" MouseUp="AddShowButton_MouseUp">
+            <Ellipse Fill="#FF222222"/>
+            <TextBlock Text="+" Background="{x:Null}" Foreground="#FF858585" TextAlignment="Center" FontSize="38"/>
+        </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel  x:Name="List" Margin="10,30,10,10">
+                
             </WrapPanel>
         </ScrollViewer>
     </Grid>

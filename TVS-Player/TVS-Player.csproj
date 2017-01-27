@@ -106,6 +106,9 @@
     <Compile Include="Pages\SearchShow.xaml.cs">
       <DependentUpon>SearchShow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Seasons.xaml.cs">
+      <DependentUpon>Seasons.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SelectShow.xaml.cs">
       <DependentUpon>SelectShow.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,9 @@
     </Compile>
     <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SeasonControl.xaml.cs">
+      <DependentUpon>SeasonControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ActorInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -187,6 +193,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Seasons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SelectShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,6 +222,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Startup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SeasonControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
