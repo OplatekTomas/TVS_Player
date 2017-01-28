@@ -10,8 +10,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60px"/>
@@ -35,6 +35,6 @@
                 <!-- <local:SeasonControl Height="40"/>-->
             </StackPanel>
         </ScrollViewer>
-        <Image x:Name="Poster" Grid.Row="1" Grid.Column="1" Margin="50,30,50,20" VerticalAlignment="Top" />
+        <Image x:Name="Poster" Grid.Row="1" Grid.Column="1" Margin="0,0,20,20" VerticalAlignment="Top" MinHeight="70" MinWidth="50" />
     </Grid>
 </Page>

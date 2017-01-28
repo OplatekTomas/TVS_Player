@@ -51,7 +51,7 @@ namespace TVS_Player {
                     DatabaseAPI.saveDB();
                     Window main = Window.GetWindow(this);
                     ((MainWindow)main).CloseTempFrame();
-                    Page showPage = new ScanLocation();
+                    Page showPage = new ScanLocation(false);
                     ((MainWindow)main).AddTempFrame(showPage);
                 } else if(next == "import") {
                     DatabaseAPI.database.libraryLocation = dbLoc;

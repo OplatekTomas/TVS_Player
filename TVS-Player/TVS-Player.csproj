@@ -88,43 +88,43 @@
     <Compile Include="Controls\FolderControl.xaml.cs">
       <DependentUpon>FolderControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DbLocation.xaml.cs">
+    <Compile Include="Pages\Database\DbLocation.xaml.cs">
       <DependentUpon>DbLocation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Download.xaml.cs">
       <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ManageShowList.xaml.cs">
+    <Compile Include="Pages\SelectingShow\ManageShowList.xaml.cs">
       <DependentUpon>ManageShowList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\RenameShow.xaml.cs">
+    <Compile Include="Pages\Database\RenameShow.xaml.cs">
       <DependentUpon>RenameShow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ScanLocation.xaml.cs">
+    <Compile Include="Pages\Database\ScanLocation.xaml.cs">
       <DependentUpon>ScanLocation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SearchShow.xaml.cs">
+    <Compile Include="Pages\SelectingShow\SearchShow.xaml.cs">
       <DependentUpon>SearchShow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Seasons.xaml.cs">
       <DependentUpon>Seasons.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SelectShow.xaml.cs">
+    <Compile Include="Pages\SelectingShow\SelectShow.xaml.cs">
       <DependentUpon>SelectShow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SelectShowPoster.xaml.cs">
+    <Compile Include="Pages\Database\SelectShowPoster.xaml.cs">
       <DependentUpon>SelectShowPoster.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShowInfo.xaml.cs">
+    <Compile Include="Pages\ShowInfo\ShowInfo.xaml.cs">
       <DependentUpon>ShowInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShowInfoSmall.xaml.cs">
+    <Compile Include="Pages\ShowInfo\ShowInfoSmall.xaml.cs">
       <DependentUpon>ShowInfoSmall.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShowList.xaml.cs">
+    <Compile Include="Pages\SelectingShow\ShowList.xaml.cs">
       <DependentUpon>ShowList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Shows.xaml.cs">
@@ -156,7 +156,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\DbLocation.xaml">
+    <Page Include="Pages\Database\DbLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,19 +177,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\ManageShowList.xaml">
+    <Page Include="Pages\SelectingShow\ManageShowList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\RenameShow.xaml">
+    <Page Include="Pages\Database\RenameShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ScanLocation.xaml">
+    <Page Include="Pages\Database\ScanLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SearchShow.xaml">
+    <Page Include="Pages\SelectingShow\SearchShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,15 +197,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SelectShow.xaml">
+    <Page Include="Pages\SelectingShow\SelectShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SelectShowPoster.xaml">
+    <Page Include="Pages\Database\SelectShowPoster.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShowInfo.xaml">
+    <Page Include="Pages\ShowInfo\ShowInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,11 +213,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShowInfoSmall.xaml">
+    <Page Include="Pages\ShowInfo\ShowInfoSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShowList.xaml">
+    <Page Include="Pages\SelectingShow\ShowList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

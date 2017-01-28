@@ -20,8 +20,10 @@ namespace TVS_Player {
     /// Interaction logic for ScanLocation.xaml
     /// </summary>
     public partial class ScanLocation : Page {
-        public ScanLocation() {
+        bool addDb;
+        public ScanLocation(bool addToDb) {
             InitializeComponent();
+            addDb = addToDb;
         }
         private void textbox_GotFocus(object sender, RoutedEventArgs e) {
             textbox.Text = string.Empty;
@@ -68,11 +70,17 @@ namespace TVS_Player {
                     locs.Add(fc.pathBox.Text);
                 }
             }
-            for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
-                ids.Add(Int32.Parse(DatabaseAPI.database.Shows[i].idSel));
-                }                
-            Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
-
+            if (!addDb) {
+                for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
+                    ids.Add(Int32.Parse(DatabaseAPI.database.Shows[i].idSel));
+                }
+                Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
+            } else {
+                ids.Add(Int32.Parse(DatabaseAPI.database.Shows.Last().idSel));
+                Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
+            }
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrame();
         }
         
         private void Cancel_Click(object sender, RoutedEventArgs e) {

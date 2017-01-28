@@ -75,8 +75,19 @@ namespace TVS_Player {
             }
         }
 
-        private void AddShowButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            
+        private async void AddShowButton_MouseUp(object sender, MouseButtonEventArgs e) {
+            Page showPage = new SelectShow();
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).AddTempFrame(showPage);
+            var show = await Helpers.showSelector();
+            string name = show.Item2;
+            string id = show.Item1;
+            DatabaseAPI.addShowToDb(id,name,true);
+            Page selectLoc = new ScanLocation(true);
+            ((MainWindow)main).AddTempFrame(selectLoc);
+            Page refreshView = new Shows();
+            ((MainWindow)main).SetFrameView(refreshView);
+
         }
     }
 }
