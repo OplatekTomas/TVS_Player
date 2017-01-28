@@ -291,6 +291,15 @@
   <ItemGroup>
     <Resource Include="Icons\settings.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\page-blank.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

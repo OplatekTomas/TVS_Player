@@ -17,12 +17,38 @@
             </Canvas.Background>
         </Canvas>
         <Grid>
-            <TextBlock x:Name="textBlock" Margin="0,50,0,0" FontSize="36" Foreground="White" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center"><Run Text="Welcome!"/><LineBreak/><Run Text="No database was found"/><LineBreak/><Run/></TextBlock>
-            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
-                <Button x:Name="addDB" Content="add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Click="addDB_Click"/>
-                <Button x:Name="importDB" Content="import" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="importDB_Click" DockPanel.Dock="Right"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="260"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="125"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.ColumnSpan="3" Grid.RowSpan="2">
+                <TextBlock  x:Name="WelcomeSign" Margin="38,50,74,0" FontSize="60" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Welcome to TVS-Player" />
+                <TextBlock  x:Name="SetupSign" Margin="80,150,115,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Continue by going through simple setup" />
+                <TextBlock  x:Name="CreateSign" Margin="13,200,49,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="You can either create or import library of TV shows"/>
+            </Grid>
+            <DockPanel Grid.Column="1" Grid.Row="2">
+                <Grid x:Name="AddShowBlock" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="90" Height="90">
+                    <Grid x:Name="AddShowButton" Height="60" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center"  MouseUp="AddShowButton_MouseUp">
+                        <Ellipse Fill="#FF222222"/>
+                        <Image Source="..\Icons\page-blank.png" Margin="12,10,8,10" />
+                    </Grid>
+                    <TextBlock Text="Create" FontSize="22" Foreground="#FF111111" TextAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
+                <Grid x:Name="ImportShowBlock" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="90" Height="90" >
+                    <Grid x:Name="ImportShowButton" Height="60" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center" MouseUp="ImportShowBlock_MouseUp">
+                        <Ellipse Fill="#FF222222"/>
+                        <Image Source="..\Icons\import.png" Margin="13,10,7,10" />
+                    </Grid>
+                    <TextBlock Text="Import" FontSize="22" Foreground="#FF111111" TextAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+                </Grid>
             </DockPanel>
         </Grid>
-
     </Grid>
 </Page>
