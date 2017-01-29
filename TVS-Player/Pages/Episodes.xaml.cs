@@ -57,7 +57,7 @@ namespace TVS_Player {
                 }
                 Dispatcher.Invoke(new Action(() => {
                     EpisodeControl EPC = new EpisodeControl();
-                    EPC.EPGrid.MouseLeftButtonUp += (s, ev) => PlayEP(episode.locations[0]);
+                    EPC.EPGrid.MouseLeftButtonUp += (s, ev) => PlayEP(episode.locations[0],episode);
                     EPC.EpisodeName.Text = episode.name;
                     EPC.noEp.Text = getEPOrder(episode);
                     EPC.timerText.Text = text;
@@ -68,8 +68,8 @@ namespace TVS_Player {
       
         }
 
-        private void PlayEP(string path) {
-            Page showPage = new Player(path);
+        private void PlayEP(string path,Episode e) {
+            Page showPage = new Player(path,e,ss);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrame(showPage);
         }

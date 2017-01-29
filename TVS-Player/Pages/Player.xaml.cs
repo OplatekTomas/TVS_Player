@@ -28,13 +28,20 @@ namespace TVS_Player {
     /// </summary>
     public partial class Player : Page {
         string path;
-        public Player(string p) {
+        DispatcherTimer hideMenu;
+        Episode episode;
+        SelectedShows selectedShow;
+        public Player(string p, Episode e,SelectedShows ss) {
             InitializeComponent();
             ClickTimer = new Timer(300);
             ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
             path = p;
+            hideMenu = new DispatcherTimer();
+            hideMenu.Interval = TimeSpan.FromSeconds(1);
+            hideMenu.Tick += OnTimedEvent;
+            episode = e;
+            selectedShow = ss;
         }
-        Timer hideMenu;
         Timer moveProgress;
         bool isplaying = true;
         bool maximized = false;
@@ -45,28 +52,30 @@ namespace TVS_Player {
             Storyboard sb = Resources[Storyboard] as Storyboard;
             sb.Begin(pnl);
         }
-        private void OnTimedEvent(object source, ElapsedEventArgs e) {
+        private void ShowHideMenu(string Storyboard, Grid pnl) {
+            Storyboard sb = Resources[Storyboard] as Storyboard;
+            sb.Begin(pnl);
+        }
+        private void OnTimedEvent(object source, EventArgs e) {
+            BackgroundGrid.MouseMove += overlayTrigger_MouseEnter;
             Dispatcher.Invoke(new Action(() => {
                 ShowHideMenu("sbHideBottomMenu", panelMenu);
+                ShowHideMenu("sbHideTopMenu", topPanel);
                 System.Windows.Forms.Cursor.Hide();
             }), DispatcherPriority.Send);
-            MediaElement.MouseMove += overlayTrigger_MouseEnter;
             hideMenu.Stop();
         }
 
         private void overlayTrigger_MouseEnter(object sender, MouseEventArgs e) {
             ShowHideMenu("sbShowBottomMenu", panelMenu);
-            MediaElement.MouseMove -= overlayTrigger_MouseEnter;
+            ShowHideMenu("sbShowTopMenu", topPanel);
             System.Windows.Forms.Cursor.Show();
-            hideMenu = new Timer();
+            BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
             hideMenu.Stop();
-            hideMenu.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            hideMenu.Interval = 3000;
             hideMenu.Start();
+
         }
-
-
-        private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
+            private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
             MediaElement.Source = new Uri(path);
             MediaElement.LoadedBehavior = MediaState.Manual;
             MediaElement.Play();
@@ -129,18 +138,66 @@ namespace TVS_Player {
             }), DispatcherPriority.Send);
         }
 
+        private void Clock(TimeSpan videoLenght) {
+            Dispatcher.Invoke(new Action(() => {
+                if (videoLenght.Hours == 0) {
+                    ClockText.Text = MediaElement.Position.ToString(@"mm\:ss") +"/"+ videoLenght.ToString(@"mm\:ss");
+                } else {
+                    ClockText.Text = MediaElement.Position.ToString(@"hh\:mm\:ss")+"/" + videoLenght.ToString(@"hh\:mm\:ss");
+                }
+            }), DispatcherPriority.Send);
+        }
+
         private void MediaElement_MediaOpened(object sender, RoutedEventArgs e) {
-            Progress.Maximum = MediaElement.NaturalDuration.TimeSpan.TotalMilliseconds;
+            TimeSpan VideoLenght = MediaElement.NaturalDuration.TimeSpan;
+            Timer clock = new Timer();
+            clock.Interval = 1000;
+            clock.Elapsed += (s, ea) => Clock(VideoLenght);
+            Progress.Maximum = VideoLenght.TotalSeconds;
             System.Windows.Forms.Cursor.Hide();
             moveProgress = new Timer();
-            moveProgress.Interval = 100;
-            double countSpeed = MediaElement.NaturalDuration.TimeSpan.TotalMilliseconds/10000;
-            moveProgress.Elapsed += (s, ev) => MoveBar(countSpeed);
-
+            moveProgress.Interval = VideoLenght.TotalSeconds;
+            double countSpeed = VideoLenght.TotalSeconds/1000;
+            moveProgress.Elapsed += (s, eb) => MoveBar(countSpeed);
+            clock.Start();
             moveProgress.Start();
+            EPName.Text = episode.name;
+            ShowName.Text = selectedShow.nameSel;
+            SeasonInfo.Text = getEPOrder(episode);
+            FileInfo.Text = getFileInfo();
+
         }
         private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-            MediaElement.Position = TimeSpan.FromMilliseconds(Progress.Value);
+            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
+        }
+
+        private string getFileInfo() {
+            int height = MediaElement.NaturalVideoHeight;
+            int width = MediaElement.NaturalVideoWidth;
+            var ffProbe = new NReco.VideoInfo.FFProbe();
+            var videoInfo = ffProbe.GetMediaInfo(path);
+            var res = videoInfo.Streams;
+            string codec = res[0].CodecName.ToString();
+            return width + "x" + height + " " + codec;
+        }
+
+        private string getEPOrder(Episode e) {
+            int season = e.season;
+            int episode = e.episode;
+            if (season < 10) {
+                if (episode < 10) {
+                    return "S0" + season + "E0" + episode;
+                } else if (episode >= 10) {
+                    return "S0" + season + "E" + episode;
+                }
+            } else if (season >= 10) {
+                if (episode < 10) {
+                    return "S" + season + "E0" + episode;
+                } else if (episode >= 10) {
+                    return "S" + season + "E" + episode;
+                }
+            }
+            return null;
         }
 
         private void MediaElement_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -149,10 +206,6 @@ namespace TVS_Player {
             ClickTimer.Start();
 
         }
-        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e) {
-
-        }
-
         private void EvaluateClicks(object source, ElapsedEventArgs e) {
             ClickTimer.Stop();
             if (ClickCounter == 2) {
@@ -173,6 +226,16 @@ namespace TVS_Player {
                 }
             }
             ClickCounter = 0;
+        }
+
+        private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrame();
+            System.Windows.Forms.Cursor.Show();
+            if (maximized) {
+                main.WindowStyle = WindowStyle.SingleBorderWindow;
+                main.WindowState = WindowState.Normal;
+            }
         }
     }
 }
