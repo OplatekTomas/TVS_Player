@@ -9,7 +9,7 @@
   <!--  Slider Brushes -->
   <SolidColorBrush x:Key="SliderThumbBackgroundBrush" Color="{StaticResource Color_005}" />
   <SolidColorBrush x:Key="SliderThumbHoverBackgroundBrush" Color="{StaticResource Color_002}" />
-  <SolidColorBrush x:Key="SliderThumbPressedBackgroundBrush" Color="{StaticResource Color_024}" />
+  <SolidColorBrush x:Key="SliderThumbPressedBackgroundBrush" Color="{StaticResource Color_404}" />
   <SolidColorBrush x:Key="SliderThumbDisabledBackgroundBrush" Color="{StaticResource Color_005}" />
   <SolidColorBrush x:Key="SliderTrackDisabledOverlayBackgroundBrush" Color="{StaticResource Color_008}" />
   <SolidColorBrush x:Key="SliderThumbFocusedBorderBrush" Color="{StaticResource Color_024}" />

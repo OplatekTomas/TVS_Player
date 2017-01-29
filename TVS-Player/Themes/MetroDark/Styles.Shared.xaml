@@ -16,14 +16,14 @@
   <!-- Scrollbar/ScrollViewer Brushes -->
   <SolidColorBrush x:Key="HScrollbarThumbBackgroundBrush" Color="{StaticResource Color_005}" />
   <SolidColorBrush x:Key="VScrollbarThumbBackgroundBrush" Color="{StaticResource Color_005}" />
-  <SolidColorBrush x:Key="ScrollbarPageButtonArrowBackgroundBrush" Color="{StaticResource Color_005}" />
-  <SolidColorBrush x:Key="ScrollbarPageButtonArrowPressedBackgroundBrush" Color="{StaticResource Color_024}" />
-  <SolidColorBrush x:Key="ScrollbarPageButtonArrowHoverBackgroundBrush" Color="{StaticResource Color_003}" />
+  <SolidColorBrush x:Key="ScrollbarPageButtonArrowBackgroundBrush" Color="#00FFFFFF"/>
+  <SolidColorBrush x:Key="ScrollbarPageButtonArrowPressedBackgroundBrush" Color="{StaticResource Color_420}" />
+  <SolidColorBrush x:Key="ScrollbarPageButtonArrowHoverBackgroundBrush" Color="{StaticResource Color_005}" />
   <SolidColorBrush x:Key="ScrollbarPageButtonArrowDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
   <SolidColorBrush x:Key="VScrollbarThumbHoverBackgroundBrush" Color="{StaticResource Color_003}" />
   <SolidColorBrush x:Key="HScrollbarThumbHoverBackgroundBrush" Color="{StaticResource Color_003}" />
-  <SolidColorBrush x:Key="VScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_024}" />
-  <SolidColorBrush x:Key="HScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_024}" />
+  <SolidColorBrush x:Key="VScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_420}" />
+  <SolidColorBrush x:Key="HScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_420}" />
   <SolidColorBrush x:Key="VScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
   <SolidColorBrush x:Key="HScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
   <SolidColorBrush x:Key="ScrollbarDisabledBackgroundBrush" Color="{StaticResource Color_008}" />
