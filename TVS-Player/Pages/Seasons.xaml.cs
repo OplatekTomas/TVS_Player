@@ -44,17 +44,23 @@ namespace TVS_Player {
             }
             Poster.Source = new BitmapImage(new Uri(path));
         }
-        private void ShowSeason(int id, int season) {
-            MessageBox.Show(id+" "+season);
+        private void ShowSeason(int season) {
+            Page ep = new Episodes(selectedShow,season);
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).SetFrameView(ep);
         }
         private SeasonControl CreateControl(int season) {
             SeasonControl se = new SeasonControl();
             se.seasonText.Text = "Season " + season;
             se.noEp.Text = DatabaseEpisodes.GetEpPerSeason(Int32.Parse(selectedShow.idSel), season).ToString();
             se.finishedText.Text = "No";
-            se.SeasonGrid.MouseDown += (s, e) => { ShowSeason(Int32.Parse(selectedShow.idSel), season); };
+            se.SeasonGrid.MouseDown += (s, e) => { ShowSeason(season); };
             se.Height = 45;
             return se;
+        }
+
+        private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) {
+
         }
     }
 }

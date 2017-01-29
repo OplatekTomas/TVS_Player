@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="TVS_Player.EpisodeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVS_Player"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="748">
+    <Grid x:Name="EPGrid">
+        <TextBlock TextWrapping="Wrap" x:Name="EpisodeName" Text="Battle of Bastards" Foreground="White" FontSize="20" Margin="5,0,250,0"/>
+        <TextBlock Text="Length:" Foreground="White" FontSize="16" Width="70" HorizontalAlignment="Right" Margin="85,5"/>
+        <TextBlock x:Name="timerText" Text="01:44:16" Foreground="White" FontSize="16" Margin="0,5" HorizontalAlignment="Right" FontWeight="Bold" Width="85"/>
+        <TextBlock x:Name="noEp" Text="S01E01" Foreground="White" FontSize="16" Margin="165,5" HorizontalAlignment="Right" FontWeight="Bold" Width="70"/>
+        <Border Margin="5,0" Height="2" VerticalAlignment="Bottom" Background="#222222" CornerRadius="2" />
+    </Grid>
+</UserControl>

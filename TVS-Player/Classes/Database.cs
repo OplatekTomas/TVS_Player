@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace TVS_Player {
     public static class DatabaseAPI {
@@ -26,9 +27,27 @@ namespace TVS_Player {
                 saveDB();
             }
         }
+
+        public static bool CheckIfExists(string id) {
+            foreach (SelectedShows ss in database.Shows) {
+                if (ss.idSel == id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static void addShowToDb(string id, string showname, bool save) {
             SelectedShows newShow = new SelectedShows(id, showname);
-            database.Shows.Add(newShow);
+            if (!CheckIfExists(id)) {
+                database.Shows.Add(newShow);
+            } else {
+                DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Shows already exists", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes) {
+                    removeShowFromDb(id, true);
+                    database.Shows.Add(newShow);
+                }
+            }          
             if (save) {
                 saveDB();
             }
@@ -98,7 +117,7 @@ namespace TVS_Player {
 
         public static List<Episode> readDb(int id) {
             List<Episode> e = new List<Episode>();
-            string path = Helpers.path + "\\" + id + "\\Detail.json";
+            string path = Helpers.path + id + "\\Detail.json";
             JArray jo = new JArray();
             try {
                 string json = File.ReadAllText(path);

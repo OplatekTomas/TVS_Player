@@ -1,13 +1,12 @@
-﻿<Application x:Class="TVS_Player.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TVS_Player"
-             StartupUri="MainWindow.xaml">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:local="clr-namespace:TVS_Player" StartupUri="MainWindow.xaml" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <Application.Resources>
-        <ResourceDictionary x:Name="Dictionaries">
+        <ResourceDictionary p4:Name="Dictionaries" xmlns:p4="http://schemas.microsoft.com/winfx/2006/xaml">
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TVS-Player;component/Styles/Brushes.xaml"/>
-                <ResourceDictionary Source="/TVS-Player;component/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="/TVS-Player;component/Styles/Brushes.xaml" />
+                <ResourceDictionary Source="/TVS-Player;component/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Themes/MetroDark/MetroDark.MSControls.Core.Implicit.xaml" />
+                <ResourceDictionary Source="Themes/MetroDark/MetroDark.MSControls.Toolkit.Implicit.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,0 +1,69 @@
+﻿<Page x:Class="TVS_Player.Player"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="648" d:DesignWidth="1152"
+      Title="Player">
+    <Page.Resources>
+        <Storyboard x:Key="sbShowBottomMenu" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,-100" To="0,0,0,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Key="sbHideBottomMenu">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,-100" AccelerationRatio=".5" Duration="0:0:0.15" />
+        </Storyboard>
+    </Page.Resources>
+    <Grid Background="Black">
+        <StackPanel Panel.ZIndex="5" Name="panelMenu" Orientation="Vertical" Margin="0,0,0,-100" VerticalAlignment="Bottom" Grid.Row="1">
+            <Grid Height="100" Background="#CC000000" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel x:Name="MiddleControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Margin="9,0,13,0">
+                    <Button x:Name="PrevEpButton" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="PrevEpButton_Click">
+                        <StackPanel Orientation="Vertical">
+                            <Image Source="../Icons/back.png" HorizontalAlignment="Center" Width="30"/>
+                            <TextBlock HorizontalAlignment="Center" Foreground="#FF323232" FontSize="15">Previous</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="PlayPauseButton" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="Play_Click">
+                        <StackPanel Orientation="Vertical">
+                            <Image x:Name="PlayPauseImage" Source="../Icons/pause.png" HorizontalAlignment="Center" Width="30"/>
+                            <TextBlock x:Name="PlayPauseText" HorizontalAlignment="Center" Foreground="#FF323232" FontSize="15">Pause</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="NextEpButton_Click">
+                        <StackPanel Orientation="Vertical">
+                            <Image x:Name="NextPicture" Source="../Icons/back.png" HorizontalAlignment="Center" Width="30" RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="180"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                            <TextBlock HorizontalAlignment="Center" Foreground="#FF323232" FontSize="15">Next</TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+                <Button x:Name="MuteButton" Margin="5,0" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="MuteButton_Click" Grid.Column="2">
+                    <StackPanel Orientation="Vertical">
+                        <Image x:Name="MuteImage" Source="../Icons/speaker.png" HorizontalAlignment="Center" Width="33"/>
+                        <TextBlock HorizontalAlignment="Center" Foreground="#FF323232" FontSize="15">Mute</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Slider x:Name="Progress" Margin="10,10,10,0" VerticalAlignment="Top" Foreground="#FF9B9B9B" Grid.ColumnSpan="3" Thumb.DragCompleted="Progress_DragCompleted"  />
+                <Slider x:Name="SoundLevel" Maximum="1" Grid.Column="2" VerticalAlignment="Bottom" Margin="80,0,40,25" ValueChanged="SoundLevel_ValueChanged"/>
+            </Grid>
+        </StackPanel>
+        <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded" MouseMove="overlayTrigger_MouseEnter" MouseUp="MediaElement_MouseUp" />
+       
+    </Grid>
+</Page>

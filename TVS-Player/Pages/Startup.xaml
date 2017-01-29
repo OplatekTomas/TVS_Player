@@ -18,22 +18,23 @@
         </Canvas>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="260"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="0.5*"/>
                 <RowDefinition Height="125"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="500"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="3" Grid.RowSpan="2">
-                <TextBlock  x:Name="WelcomeSign" Margin="38,50,74,0" FontSize="60" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Welcome to TVS-Player" />
-                <TextBlock  x:Name="SetupSign" Margin="80,150,115,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Continue by going through simple setup" />
-                <TextBlock  x:Name="CreateSign" Margin="13,200,49,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="You can either create or import library of TV shows"/>
+            <Grid Grid.ColumnSpan="3" Grid.Row="1">
+                <TextBlock  x:Name="WelcomeSign" Margin="38,0,74,0" FontSize="60" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Welcome to TVS-Player" />
+                <TextBlock  x:Name="SetupSign" Margin="80,100,115,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="Continue by going through simple setup" />
+                <TextBlock  x:Name="CreateSign" Margin="13,150,49,0" FontSize="30" Foreground="#111111" TextAlignment="Center" VerticalAlignment="Top" HorizontalAlignment="Center" Text="You can either create or import library of TV shows"/>
             </Grid>
-            <DockPanel Grid.Column="1" Grid.Row="2">
+            <DockPanel Grid.Column="1" Grid.Row="3">
                 <Grid x:Name="AddShowBlock" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="90" Height="90">
                     <Grid x:Name="AddShowButton" Height="60" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center"  MouseUp="AddShowButton_MouseUp">
                         <Ellipse Fill="#FF222222"/>

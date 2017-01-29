@@ -30,7 +30,7 @@ namespace TVS_Player {
             return null;
         }
 
-        public static string GetValidName(string path, string name, string extension) {
+        public static string GetValidName(string path, string name, string extension,string original) {
             int filenumber = 1;
             string final;
             string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
@@ -47,9 +47,11 @@ namespace TVS_Player {
                 Directory.CreateDirectory(path);                
             }
             final = path + "\\" + name + extension;
-            while (File.Exists(final)){
-                final = path + "\\" + name + "_" + filenumber + extension;
-                filenumber++;
+            if (original != final) { 
+                while (File.Exists(final)){
+                    final = path + "\\" + name + "_" + filenumber + extension;
+                    filenumber++;
+                }
             }
             return final;
         }
@@ -108,8 +110,10 @@ namespace TVS_Player {
                 if (selectedEP == null) {
                     MessageBox.Show("This TV Show doesnt have episode "+ episode + " in season " + season+".\nFile " + file + " won't be renamed", "Error");
                 } else {
-                    string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file));
-                    File.Move(file, output);
+                    string output = GetValidName(path, GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file),file);
+                    if (file != output) { 
+                        File.Move(file, output);
+                    }
                     EPNames[index].downloaded = true;
                     EPNames[index].locations.Add(output);
                 }                               
@@ -143,7 +147,7 @@ namespace TVS_Player {
             int episode = t.Item2;
             string epName = JObject.Parse(Api.apiGet(season, episode, id))["data"][0]["episodeName"].ToString();
             try {
-                File.Move(file, GetValidName(lib, GetName(showName, season, episode, epName), Path.GetExtension(file)));
+                File.Move(file, GetValidName(lib, GetName(showName, season, episode, epName), Path.GetExtension(file),file));
             } catch (Exception) {
                 MessageBox.Show("File couldn't be moved");
             }

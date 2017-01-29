@@ -73,8 +73,7 @@ namespace TVS_Player {
 
         private void listFolders() {
             int i = 0;
-            foreach (string folder in subfolders) {
-               
+            foreach (string folder in subfolders) {           
                 string show = Api.apiGet(Path.GetFileName(folder));
                 if (show != null) {
                     i++;
@@ -86,13 +85,22 @@ namespace TVS_Player {
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e) {
+            List<int> id = new List<int>();
+            List<string> locs = new List<string>();
             for (int i = 0; i < shows.Count(); i++){
                 if (shows[i].id != null) { 
                     DatabaseAPI.addShowToDb(shows[i].id, shows[i].name, true);
+                    id.Add(Int32.Parse(shows[i].id));
                 }
             }
+            foreach (DBScanOption fc in panel.Children) {
+                locs.Add(fc.showLocation.Text);
+            }
+            Page page = new TVS_Player.Shows();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
+            Renamer.RenameBatch(id,locs,DatabaseAPI.database.libraryLocation);
+            ((MainWindow)main).SetFrameView(page);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
