@@ -21,6 +21,8 @@
   <Color x:Key="Color_009">#FF444444</Color>
   <Color x:Key="Color_420">#FF111111</Color>
   <Color x:Key="Color_404">#FFCDCDCD</Color>
+  <Color x:Key="Color_405">#FF666666</Color>
+    <Color x:Key="Color_406">#FF555555</Color>
 
     <!--Transparent and Whites with transparency-->
   <Color x:Key="Color_010">#E5FFFFFF</Color>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Timer = System.Timers.Timer;
 
 namespace TVS_Player {
     /// <summary>
@@ -23,12 +25,18 @@ namespace TVS_Player {
         int id;
         int season;
         SelectedShows ss;
+
         public Episodes(SelectedShows s, int season2) {
             InitializeComponent();
             id = Int32.Parse(s.idSel);
             season = season2;
             ss = s;
+            ClickTimer = new Timer(300);
+            ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
         }
+        private Timer ClickTimer;
+        private int ClickCounter;
+        private Episode lastEP;
 
         private void List_Loaded(object sender, RoutedEventArgs e) {
             Action a;
@@ -57,7 +65,7 @@ namespace TVS_Player {
                 }
                 Dispatcher.Invoke(new Action(() => {
                     EpisodeControl EPC = new EpisodeControl();
-                    EPC.EPGrid.MouseLeftButtonUp += (s, ev) => PlayEP(episode.locations[0],episode);
+                    EPC.EPGrid.MouseLeftButtonDown += (s, ev) => ClickCheck(episode);
                     EPC.EpisodeName.Text = episode.name;
                     EPC.noEp.Text = getEPOrder(episode);
                     EPC.timerText.Text = text;
@@ -97,6 +105,34 @@ namespace TVS_Player {
             Page showPage = new Seasons(ss);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
+        }
+
+        private void ClickCheck(Episode e) {
+            lastEP = e;
+            ClickTimer.Stop();
+            ClickCounter++;
+            ClickTimer.Start();
+        }
+        private void EvaluateClicks(object source, ElapsedEventArgs e) {
+            Episode episode = lastEP;
+            ClickTimer.Stop();
+            switch (ClickCounter){
+                case 1:
+                    Dispatcher.Invoke(new Action(() => {
+                        SetInfo(episode);
+                    }), DispatcherPriority.Send);
+                    break;
+                case 2:
+                    Dispatcher.Invoke(new Action(() => {
+                        PlayEP(episode.locations[0], episode);
+                    }), DispatcherPriority.Send);
+                    break;
+            }
+            ClickCounter = 0;
+        }
+
+        private void SetInfo(Episode episode) {
+            
         }
     }
 }

@@ -31,6 +31,7 @@ namespace TVS_Player {
         DispatcherTimer hideMenu;
         Episode episode;
         SelectedShows selectedShow;
+
         public Player(string p, Episode e,SelectedShows ss) {
             InitializeComponent();
             ClickTimer = new Timer(300);
@@ -47,6 +48,7 @@ namespace TVS_Player {
         bool maximized = false;
         private Timer ClickTimer;
         private int ClickCounter;
+        private double VolumeLevel;
 
         private void ShowHideMenu(string Storyboard, StackPanel pnl) {
             Storyboard sb = Resources[Storyboard] as Storyboard;
@@ -73,7 +75,7 @@ namespace TVS_Player {
             BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
             hideMenu.Stop();
             hideMenu.Start();
-
+            PlayerPage.Focus();
         }
             private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
             MediaElement.Source = new Uri(path);
@@ -109,11 +111,14 @@ namespace TVS_Player {
         }
 
         private void MuteButton_Click(object sender, RoutedEventArgs e) {
-            if (MediaElement.IsMuted) {
+            if (MediaElement.IsMuted) {             
+                SoundLevel.Value = VolumeLevel;
                 MediaElement.IsMuted = false;
                 BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
                 MuteImage.Source = img;
             } else {
+                VolumeLevel = MediaElement.Volume;
+                SoundLevel.Value = 0;
                 MediaElement.IsMuted = true;
                 BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
                 MuteImage.Source = img;
@@ -128,13 +133,14 @@ namespace TVS_Player {
                 BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
                 MuteImage.Source = img;
             } else {
+                MediaElement.IsMuted = false;
                 BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
                 MuteImage.Source = img;
             }
         }
-        private void MoveBar(double speed) {
+        private void MoveBar() {
             Dispatcher.Invoke(new Action(() => {
-                Progress.Value += speed;
+                Progress.Value = MediaElement.Position.TotalSeconds;
             }), DispatcherPriority.Send);
         }
 
@@ -156,19 +162,16 @@ namespace TVS_Player {
             Progress.Maximum = VideoLenght.TotalSeconds;
             System.Windows.Forms.Cursor.Hide();
             moveProgress = new Timer();
-            moveProgress.Interval = VideoLenght.TotalSeconds;
-            double countSpeed = VideoLenght.TotalSeconds/1000;
-            moveProgress.Elapsed += (s, eb) => MoveBar(countSpeed);
+            moveProgress.Interval = 1000;
+            moveProgress.Elapsed += (s, eb) => MoveBar();
             clock.Start();
             moveProgress.Start();
             EPName.Text = episode.name;
             ShowName.Text = selectedShow.nameSel;
             SeasonInfo.Text = getEPOrder(episode);
             FileInfo.Text = getFileInfo();
+            PlayPauseButton.Focus();
 
-        }
-        private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
         }
 
         private string getFileInfo() {
@@ -209,26 +212,56 @@ namespace TVS_Player {
         private void EvaluateClicks(object source, ElapsedEventArgs e) {
             ClickTimer.Stop();
             if (ClickCounter == 2) {
-                if (!maximized) {
-                    maximized = true;
-                    Dispatcher.Invoke(new Action(() => {
-                        Window main = Window.GetWindow(this);
-                        main.WindowStyle = WindowStyle.None;
-                        main.WindowState = WindowState.Maximized;
-                    }), DispatcherPriority.Send);
-                } else {
-                    maximized = false;
-                    Dispatcher.Invoke(new Action(() => {
-                        Window main = Window.GetWindow(this);
-                        main.WindowStyle = WindowStyle.SingleBorderWindow;
-                        main.WindowState = WindowState.Normal;
-                    }), DispatcherPriority.Send);
-                }
+                Dispatcher.Invoke(new Action(() => {
+                    FullScreen();
+                }), DispatcherPriority.Send);
             }
             ClickCounter = 0;
         }
 
+        private void FullScreen() {
+            if (!maximized) {
+                maximized = true;
+                Window main = Window.GetWindow(this);
+                main.WindowStyle = WindowStyle.None;
+                main.WindowState = WindowState.Maximized;
+            } else {
+                maximized = false;
+                Window main = Window.GetWindow(this);
+                main.WindowStyle = WindowStyle.SingleBorderWindow;
+                main.WindowState = WindowState.Normal;
+            }
+        }
+
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
+            Quit();   
+        }
+
+        private void BackgroundGrid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
+            PlayerPage.Focus();
+            switch (e.Key) {
+                case Key.F:
+                    FullScreen();
+                    break;
+                case Key.Space:
+                    Play_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.Right:
+                    MediaElement.Position += new TimeSpan(0, 0, 10);
+                    break;
+                case Key.Left:
+                    MediaElement.Position -= new TimeSpan(0, 0, 10);
+                    break;
+                case Key.M:
+                    MuteButton_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.Escape:
+                    Quit();
+                    break;
+            }
+        }
+
+        private void Quit() {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
             System.Windows.Forms.Cursor.Show();
@@ -237,5 +270,18 @@ namespace TVS_Player {
                 main.WindowState = WindowState.Normal;
             }
         }
+
+        private void Progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
+        }
+
+        private void Progress_DragStarted(object sender, RoutedEventArgs e) {
+            Progress.ValueChanged -= Progress_ValueChanged;
+        }
+        private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
+            Progress.ValueChanged += Progress_ValueChanged;
+        }
+
     }
 }
