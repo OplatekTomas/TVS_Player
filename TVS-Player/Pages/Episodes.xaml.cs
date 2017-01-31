@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +19,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Timer = System.Timers.Timer;
+using Image = System.Drawing.Image;
+using System.Drawing;
+using System.Globalization;
 
 namespace TVS_Player {
     /// <summary>
@@ -119,7 +125,11 @@ namespace TVS_Player {
             switch (ClickCounter){
                 case 1:
                     Dispatcher.Invoke(new Action(() => {
-                        SetInfo(episode);
+                        Action a;
+                        a = () => SetInfo(episode);
+                        Thread t = new Thread(a.Invoke);
+                        t.Name = "Episode Detail";
+                        t.Start();
                     }), DispatcherPriority.Send);
                     break;
                 case 2:
@@ -132,7 +142,63 @@ namespace TVS_Player {
         }
 
         private void SetInfo(Episode episode) {
-            
+            JObject jo = JObject.Parse(Api.EPInfo(episode.id));
+            string directors = "";
+            string writers = "";
+            Action p = () => CreatePic("http://thetvdb.com/banners/" + jo["data"]["filename"].ToString());
+            Thread setPicutre = new Thread(p.Invoke);
+            setPicutre.Start();
+            Dispatcher.Invoke(new Action(() => {
+                foreach (JToken JT in jo["data"]["directors"]) {
+                    directors += JT.ToString() + ", ";
+                }
+                System.Windows.GridLength gl = new GridLength(1,GridUnitType.Star);
+                Base.ColumnDefinitions[1].Width = gl;
+                foreach (JToken JT in jo["data"]["writers"]) {
+                    writers += JT.ToString() + ", ";
+                }
+                EPName.Text = episode.name;
+                ShowName.Text = ss.nameSel;
+                FirstAired.Text = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
+                Director.Text = directors.Remove(directors.Length - 2, 2);
+                if (writers.Length > 0) { 
+                    Writer.Text = writers.Remove(writers.Length - 2, 2);
+                }
+                Overview.Text = jo["data"]["overview"].ToString();
+            }), DispatcherPriority.Send);
+        }
+
+        private void CreatePic(string url) {         
+            Dispatcher.Invoke(new Action(() => {
+                BitmapSource bmp = setThumbnail(url);
+                thumbnail.Source = bmp;
+            }), DispatcherPriority.Send);
+        }
+
+        private BitmapSource setThumbnail(string url) {
+            WebClient wc = new WebClient();
+            try {
+                using (MemoryStream stream = new MemoryStream(wc.DownloadData(url))) {
+                    var imageSource = new BitmapImage();
+                    Image img = Image.FromStream(stream);
+                    BitmapSource bmp = GetImageStream(img);
+                    return bmp;
+                }
+            } catch (WebException) {
+                return null;
+            }
+
+        }
+        public static BitmapSource GetImageStream(Image myImage) {
+            var bitmap = new Bitmap(myImage);
+            IntPtr bmpPt = bitmap.GetHbitmap();
+            BitmapSource bitmapSource =
+             System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                   bmpPt,
+                   IntPtr.Zero,
+                   Int32Rect.Empty,
+                   BitmapSizeOptions.FromEmptyOptions());
+            return bitmapSource;
         }
     }
 }

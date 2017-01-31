@@ -81,6 +81,23 @@ namespace TVS_Player {
             }
         }
 
+        //Detailed info about EP
+        public static string EPInfo(int id) {
+            string token = Properties.Settings.Default.token;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/episodes/"+id);
+            request.Method = "GET";
+            request.Accept = "application/json";
+            request.Headers.Add("Accept-Language", "en");
+            request.Headers.Add("Authorization", "Bearer " + token);
+            try {
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    return sr.ReadToEnd();
+                }
+            } catch (WebException) {
+                return null;
+            }
+        }
         //Info o možných seriálech
         public static string apiGet(string showname) {
             string token = Properties.Settings.Default.token;

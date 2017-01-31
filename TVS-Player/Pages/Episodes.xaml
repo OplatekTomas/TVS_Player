@@ -8,10 +8,10 @@
       d:DesignHeight="648" d:DesignWidth="1152"
       Title="Episodes">
 
-    <Grid>
+    <Grid x:Name="Base">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="0"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="60px"/>
@@ -35,6 +35,34 @@
                 <!-- <local:EpisodeControl Height="40"/> -->
             </StackPanel>
         </ScrollViewer>
-        <Image x:Name="Poster" Grid.Row="1" Grid.Column="1" Margin="0,0,20,20" VerticalAlignment="Top" MinHeight="70" MinWidth="50" />
+        <Grid Grid.Row="1" Grid.Column="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Image x:Name="thumbnail" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,41,10,20" RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="350" ShadowDepth="10" Softness="1" Opacity="0.6"/>
+                        </Image.BitmapEffect>
+                    </Image>
+                    <TextBlock Margin="0,5,10,0" TextWrapping="Wrap" x:Name="EPName" Text="Battle of Bastards" Foreground="White" FontSize="20"/>
+                    <TextBlock  Margin="0,5,10,0" TextWrapping="Wrap" x:Name="ShowName" Text="Game of Thrones" Foreground="White" FontSize="16"/>
+                    <Grid Margin="0,5,10,0">
+                        <TextBlock TextWrapping="Wrap" Text="Air date:" Foreground="White" FontSize="14" HorizontalAlignment="Left"/>
+                        <TextBlock TextWrapping="Wrap" x:Name="FirstAired" Text="14.09.2016" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="65,0" />
+                    </Grid>
+                    <Grid Margin="0,5,10,0">
+                        <TextBlock TextWrapping="Wrap" Text="Director:" Foreground="White" FontSize="14" HorizontalAlignment="Left"/>
+                        <TextBlock TextWrapping="Wrap" x:Name="Director" Text="David Benioff" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="65,0"/>
+                    </Grid>
+                    <Grid Margin="0,5,10,0">
+                        <TextBlock TextWrapping="Wrap" Text="Writer:" Foreground="White" FontSize="14" HorizontalAlignment="Left"/>
+                        <TextBlock TextWrapping="Wrap" x:Name="Writer" Text="David Benioff" Foreground="White" FontSize="14" HorizontalAlignment="Left" Margin="65,0"/>
+                    </Grid>
+                    <Grid Margin="0,5,10,0">
+                        <TextBlock TextWrapping="Wrap" Text="Overview:" Foreground="White" FontSize="14" HorizontalAlignment="Left"/>
+                    </Grid>
+                    <TextBlock TextWrapping="Wrap" x:Name="Overview" Text="Ned Stark, Lord of Winterfell learns that his mentor, Jon Arryn, has died and that King Robert is on his way north to offer Ned Arryn's position as the King's Hand. Across the Narrow Sea in Pentos, Viserys Targaryen plans to wed his sister Daenerys to the nomadic Dothraki warrior leader, Khal Drogo to forge an alliance to take the throne." Foreground="White" FontSize="12" HorizontalAlignment="Left" Margin="0,5,10,0" VerticalAlignment="Bottom"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Page>
