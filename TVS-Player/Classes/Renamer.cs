@@ -61,9 +61,7 @@ namespace TVS_Player {
                 List<string> files = ScanEpisodes(scan,id);
                 Directory.CreateDirectory(lib + "\\" +showName);
                 RenameFiles(files, lib+"\\"+showName, id, showName);
-
             }
-
         }
 
 

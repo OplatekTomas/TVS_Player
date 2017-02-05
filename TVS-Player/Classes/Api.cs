@@ -76,8 +76,7 @@ namespace TVS_Player {
                     return sr.ReadToEnd();
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Please check that you are connected to the internet", "Error!");
-                return "error-api";
+                return null;
             }
         }
 
