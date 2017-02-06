@@ -25,44 +25,37 @@ namespace TVS_Player {
             Api.getToken();
             DatabaseAPI.readDb();
         }
-        private void MenuHide_Click(object sender, RoutedEventArgs e) {
-            ShowHideMenu("sbHideLeftMenu", btnLeftMenuHide, btnLeftMenuShow, panelMenu);
-            hideOnClick.Visibility = Visibility.Hidden;
+
+        private void MenuButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            ShowHideMenu("sbShowLeftMenu", Sidebar);
+            MenuBackground.Visibility = Visibility.Visible;
+            ShowHideMenu("sbShowBackground", MenuBackground);
+
         }
 
-        private void MenuShow_Click(object sender, RoutedEventArgs e) {
-            ShowHideMenu("sbShowLeftMenu", btnLeftMenuHide, btnLeftMenuShow, panelMenu);
-            hideOnClick.Visibility = Visibility.Visible;
+        private void MenuHideButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            HideMenu();
         }
 
-        private void ShowHideMenu(string Storyboard, Button btnHide, Button btnShow, StackPanel pnl) {
+        private void HideMenu() {
+            ShowHideMenu("sbHideLeftMenu", Sidebar);
+            MenuBackground.Visibility = Visibility.Hidden;
+            ShowHideMenu("sbHideBackground", MenuBackground);
+        }
+
+        private void ShowHideMenu(string Storyboard, Grid pnl) {
             Storyboard sb = Resources[Storyboard] as Storyboard;
             sb.Begin(pnl);
-            if (Storyboard.Contains("Show")) {
-                btnHide.Visibility = System.Windows.Visibility.Visible;
-                btnShow.Visibility = System.Windows.Visibility.Hidden;
-            } else if (Storyboard.Contains("Hide")) {
-                btnHide.Visibility = System.Windows.Visibility.Hidden;
-                btnShow.Visibility = System.Windows.Visibility.Visible;
-            }
         }
-        private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
-            if (Frame.Content.GetType() != typeof(Shows)) {
-                Frame.Content = new Shows();
-            }
-        }
-        private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
-            if (Frame.Content.GetType() != typeof(Download)){
-                //Api.getToken();
-                //Api.apiGetPoster(73871,"Futurama");
-                //string kappa = Api.apiGet(1,1, 73871);
-                //Frame.Content = new Startup();
-                Checker.CheckForUpdates(73739);
-            }
-        }
+        /* private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
+
+         }
+         private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
+          
+         }*/
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
-            //Api.getToken();
+            Api.getToken();
         }
 
         public void SetFrameView(Page page) {
@@ -79,6 +72,38 @@ namespace TVS_Player {
 
         public void CloseTempFrame() {
             BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        }
+
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e) {
+            SearchBar.Text = "";
+            SearchBar.GotFocus -= SearchBar_GotFocus;
+        }
+
+        private void ShowLibraryButon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            HideMenu();
+            if (Frame.Content.GetType() != typeof(Shows)) {
+                Frame.Content = new Shows();
+            }
+        }
+
+        private void DownloadPageButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            HideMenu();
+            if (Frame.Content.GetType() != typeof(Download)) {
+                //Api.getToken();
+                //Api.apiGetPoster(73871,"Futurama");
+                //string kappa = Api.apiGet(1,1, 73871);
+                Frame.Content = new Startup();
+
+                //Checker.CheckForUpdates(73739);
+            }
+        }
+
+        private void SettingsButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+        }
+
+        private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
         }
     }
 }

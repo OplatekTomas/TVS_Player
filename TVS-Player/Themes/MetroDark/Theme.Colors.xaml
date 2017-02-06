@@ -5,7 +5,7 @@
   <SolidColorBrush x:Key="Brush02" Color="White" />
   <SolidColorBrush x:Key="Brush03" Color="#FFC6C6C6" />
   <SolidColorBrush x:Key="Brush04" Color="#FF565656" />
-  <SolidColorBrush x:Key="Brush05" Color="#FF333333" />
+  <SolidColorBrush x:Key="Brush05" Color="#FF444444" />
 
   <!-- ********************************** THEME COLORS **********************************-->
   <!--Base Colors-->
@@ -14,15 +14,18 @@
   <Color x:Key="Color_002">#FFBABABA</Color>
   <Color x:Key="Color_003">#FF151515</Color>
   <Color x:Key="Color_004">#FF747474</Color>
-  <Color x:Key="Color_005">#FF222222</Color>
+  <Color x:Key="Color_005">#FF444444</Color>
   <Color x:Key="Color_006">#FF454545</Color>
   <Color x:Key="Color_007">#FF333333</Color>
   <Color x:Key="Color_008">#FF292929</Color>
-  <Color x:Key="Color_009">#FF444444</Color>
+  <Color x:Key="Color_009">#FF232323</Color>
   <Color x:Key="Color_420">#FF111111</Color>
   <Color x:Key="Color_404">#FFCDCDCD</Color>
   <Color x:Key="Color_405">#FF666666</Color>
-    <Color x:Key="Color_406">#FF555555</Color>
+  <Color x:Key="Color_406">#FF555555</Color>
+    <Color x:Key="ThemeAccent">#2196F3</Color>
+    <Color x:Key="ThemeDarkAccent">#1976D2</Color>
+    <Color x:Key="ThemeMediumAccent">#1E88E5</Color>
 
     <!--Transparent and Whites with transparency-->
   <Color x:Key="Color_010">#E5FFFFFF</Color>

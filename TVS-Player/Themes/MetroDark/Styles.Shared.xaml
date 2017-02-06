@@ -11,19 +11,19 @@
   <SolidColorBrush x:Key="TransparentBrush" Color="{StaticResource Color_016}" />
   <SolidColorBrush x:Key="DisabledVisualElement" Color="{StaticResource Color_009}" Opacity="0.6" />
   <SolidColorBrush x:Key="ValidationErrorElement" Color="{StaticResource Color_028}" />
-  <SolidColorBrush x:Key="CaretForegroundBrush" Color="{StaticResource Color_022}" />
+    <SolidColorBrush x:Key="CaretForegroundBrush" Color="{StaticResource Color_022}" />
 
-  <!-- Scrollbar/ScrollViewer Brushes -->
-  <SolidColorBrush x:Key="HScrollbarThumbBackgroundBrush" Color="{StaticResource Color_005}" />
-  <SolidColorBrush x:Key="VScrollbarThumbBackgroundBrush" Color="{StaticResource Color_005}" />
+    <!-- Scrollbar/ScrollViewer Brushes -->
+  <SolidColorBrush x:Key="HScrollbarThumbBackgroundBrush" Color="{StaticResource ThemeAccent}" />
+  <SolidColorBrush x:Key="VScrollbarThumbBackgroundBrush" Color="{StaticResource ThemeAccent}" />
   <SolidColorBrush x:Key="ScrollbarPageButtonArrowBackgroundBrush" Color="#00FFFFFF"/>
   <SolidColorBrush x:Key="ScrollbarPageButtonArrowPressedBackgroundBrush" Color="{StaticResource Color_420}" />
   <SolidColorBrush x:Key="ScrollbarPageButtonArrowHoverBackgroundBrush" Color="{StaticResource Color_005}" />
   <SolidColorBrush x:Key="ScrollbarPageButtonArrowDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
-  <SolidColorBrush x:Key="VScrollbarThumbHoverBackgroundBrush" Color="{StaticResource Color_003}" />
-  <SolidColorBrush x:Key="HScrollbarThumbHoverBackgroundBrush" Color="{StaticResource Color_003}" />
-  <SolidColorBrush x:Key="VScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_420}" />
-  <SolidColorBrush x:Key="HScrollbarThumbPressedBackgroundBrush" Color="{StaticResource Color_420}" />
+  <SolidColorBrush x:Key="VScrollbarThumbHoverBackgroundBrush" Color="{StaticResource ThemeMediumAccent}" />
+  <SolidColorBrush x:Key="HScrollbarThumbHoverBackgroundBrush" Color="{StaticResource ThemeMediumAccent}" />
+  <SolidColorBrush x:Key="VScrollbarThumbPressedBackgroundBrush" Color="{StaticResource ThemeDarkAccent}" />
+  <SolidColorBrush x:Key="HScrollbarThumbPressedBackgroundBrush" Color="{StaticResource ThemeDarkAccent}" />
   <SolidColorBrush x:Key="VScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
   <SolidColorBrush x:Key="HScrollbarThumbDisabledBackgroundBrush" Color="{StaticResource Color_006}" />
   <SolidColorBrush x:Key="ScrollbarDisabledBackgroundBrush" Color="{StaticResource Color_008}" />
