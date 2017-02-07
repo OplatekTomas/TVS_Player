@@ -10,7 +10,11 @@
 
     <Grid>
         <Grid x:Name="AddShowButton" Height="50" Width="50" Grid.Row="1" Panel.ZIndex="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="50,30" MouseUp="AddShowButton_MouseUp">
-            <Ellipse Fill="{DynamicResource AccentColor}"/>
+            <Ellipse Fill="{DynamicResource AccentColor}">
+                <Ellipse.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="6" Opacity="0.6"  />
+                </Ellipse.Effect>
+            </Ellipse>
             <TextBlock Text="+" Background="{x:Null}" Foreground="White" TextAlignment="Center" FontSize="31"/>
         </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

@@ -115,6 +115,11 @@ namespace TVS_Player {
             return count;
         }
 
+        public static string GetSeasonRelease(int id, int season) {
+            List<Episode> list = readDb(id);
+            return list.FindAll(s => s.season == season).Min(e => e.release);
+        }
+
         public static List<Episode> readDb(int id) {
             List<Episode> e = new List<Episode>();
             string path = Helpers.path + id + "\\Detail.json";
@@ -146,12 +151,14 @@ namespace TVS_Player {
         public int season;
         public int episode;
         public int id;
+        public string release;
         public bool downloaded;
         public List<string> locations; 
-        public Episode(string name, int season, int episode, int id, bool downloaded, List<string> l) {
+        public Episode(string name, int season, int episode, int id, string releaseDate ,bool downloaded, List<string> l) {
             this.name = name;
             this.season = season;
             this.episode = episode;
+            release = releaseDate;
             this.id = id;
             this.downloaded = downloaded;
             locations = l;

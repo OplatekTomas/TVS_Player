@@ -53,9 +53,9 @@ namespace TVS_Player {
             SeasonControl se = new SeasonControl();
             se.seasonText.Text = "Season " + season;
             se.noEp.Text = DatabaseEpisodes.GetEpPerSeason(Int32.Parse(selectedShow.idSel), season).ToString();
-            se.finishedText.Text = "No";
             se.SeasonGrid.MouseDown += (s, e) => { ShowSeason(season); };
-            se.Height = 45;
+            se.releaseDate.Text = DatabaseEpisodes.GetSeasonRelease(Int32.Parse(selectedShow.idSel), season);
+            se.Height = 51;
             return se;
         }
 

@@ -5,13 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="732">
+             Height="51"
+             d:DesignHeight="51" d:DesignWidth="732">
     <Grid x:Name="SeasonGrid">
-        <TextBlock x:Name="seasonText" Text="Season 1" Foreground="White" FontSize="28" Width="200" HorizontalAlignment="Left" Margin="5,0"/>
-        <TextBlock Text="Finished:" Foreground="White" FontSize="20" Width="100" HorizontalAlignment="Right" Margin="25,5"/>
-        <TextBlock Text="Number of episodes:" Foreground="White" FontSize="20" Width="190" HorizontalAlignment="Right" Margin="165,5"/>
-        <TextBlock x:Name="finishedText" Text="Yes" Foreground="White" FontSize="20" Margin="5,5" HorizontalAlignment="Right" FontWeight="Bold" Width="30"/>
-        <TextBlock x:Name="noEp" Text="16" Foreground="White" FontSize="20" Margin="140,5" HorizontalAlignment="Right" FontWeight="Bold" Width="25"/>
-        <Border Margin="5,0" Height="2" VerticalAlignment="Bottom" Background="#222222" CornerRadius="2" />
+        <Grid.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="10" Opacity="0.8" ShadowDepth="5"></DropShadowEffect>
+        </Grid.Effect>
+        <TextBlock x:Name="seasonText" Text="Season " Foreground="White" FontSize="24" Width="200" HorizontalAlignment="Left" Margin="5,0"/>
+        <TextBlock x:Name="releaseDate" Text="--.--.----" Foreground="White" FontSize="12" Width="200" HorizontalAlignment="Left" Margin="6,29,0,0"/>
+        <TextBlock Text="Episodes:" Foreground="White" FontSize="18" Width="95" HorizontalAlignment="Right" Margin="20,6"/>
+        <TextBlock x:Name="noEp" Text="0" Foreground="White" FontSize="18" Margin="10,7" HorizontalAlignment="Right" FontWeight="Bold" Width="25"/>
+        <Border Margin="4,0" Height="2" VerticalAlignment="Bottom" Background="#444444" CornerRadius="2" />
         </Grid>
 </UserControl>

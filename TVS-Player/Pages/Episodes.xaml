@@ -14,31 +14,27 @@
             <ColumnDefinition Width="0"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60px"/>
+            <RowDefinition Height="50px"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Canvas Panel.ZIndex="0" Grid.ColumnSpan="2">
-            <Canvas.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#4C000000" Offset="0"/>
-                    <GradientStop Offset="1" Color="#00000000"/>
-                </LinearGradientBrush>
-            </Canvas.Background>
-        </Canvas>
-        <Grid x:Name="BackButton" Grid.Row="0" Panel.ZIndex="1" Width="125" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp">
-            <Ellipse Width="40" Height="40" HorizontalAlignment="Left" Margin="10,0" Fill="#222222" />
-            <Image Source="../Icons/back.png" Width="25" HorizontalAlignment="Left" Margin="16,10" />
-            <TextBlock Text="Back" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,0,0,0" Foreground="White" />
+
+        <Grid x:Name="BackButton" Grid.Row="0" Panel.ZIndex="1" HorizontalAlignment="Left" Margin="0,15,0,0" MouseUp="BackButton_MouseUp">
+            <Ellipse Width="35" Height="35" HorizontalAlignment="Left" Margin="10,0" Fill="{StaticResource AccentColor}" >
+                <Ellipse.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="6" Opacity="0.6"  />
+                </Ellipse.Effect>
+            </Ellipse>
+            <Image Source="../Icons/back.png" Width="25" HorizontalAlignment="Left" Margin="16,8" />
         </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0">
-            <StackPanel  x:Name="List" Margin="10,30,10,10" Loaded="List_Loaded">
+            <StackPanel  x:Name="List" Margin="10" Loaded="List_Loaded">
                 <!-- <local:EpisodeControl Height="40"/> -->
             </StackPanel>
         </ScrollViewer>
         <Grid Grid.Row="1" Grid.Column="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <Image x:Name="thumbnail" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,41,10,20" RenderOptions.BitmapScalingMode="HighQuality">
+                    <Image x:Name="thumbnail" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,21,10,20" RenderOptions.BitmapScalingMode="HighQuality">
                         <Image.BitmapEffect>
                             <DropShadowBitmapEffect Color="Black" Direction="350" ShadowDepth="10" Softness="1" Opacity="0.6"/>
                         </Image.BitmapEffect>

@@ -22,6 +22,10 @@ using Timer = System.Timers.Timer;
 using Image = System.Drawing.Image;
 using System.Drawing;
 using System.Globalization;
+using Color = System.Drawing.Color;
+using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace TVS_Player {
     /// <summary>
@@ -69,19 +73,39 @@ namespace TVS_Player {
                 } else {
                     text= "--:--:--";
                 }
-                Dispatcher.Invoke(new Action(() => {
-                    EpisodeControl EPC = new EpisodeControl();
-                    EPC.EPGrid.MouseLeftButtonDown += (s, ev) => ClickCheck(episode);
-                    EPC.EpisodeName.Text = episode.name;
-                    EPC.noEp.Text = getEPOrder(episode);
-                    EPC.timerText.Text = text;
-                    List.Children.Add(EPC);
-                }), DispatcherPriority.Send);
-
+                if (episode.downloaded) {
+                    Dispatcher.Invoke(new Action(() => {
+                        EpisodeControl EPC = new EpisodeControl();
+                        EPC.EPGrid.MouseLeftButtonDown += (s, ev) => ClickCheck(episode);
+                        EPC.EpisodeName.Text = episode.name;
+                        EPC.noEp.Text = getEPOrder(episode);
+                        EPC.timerText.Text = text;
+                        EPC.PlayEP.MouseLeftButtonDown += (s, ev) => PlayEP(episode.locations[0], episode);
+                        List.Children.Add(EPC);
+                    }), DispatcherPriority.Send);
+                } else {
+                    Dispatcher.Invoke(new Action(() => {
+                        Color c = Color.FromArgb(255, 68, 68, 68);
+                        SolidColorBrush cb = new SolidColorBrush(ToMediaColor(c));
+                        EpisodeControl EPC = new EpisodeControl();
+                        EPC.EPGrid.MouseLeftButtonDown += (s, ev) => ThreadForInfo(episode);
+                        EPC.EpisodeName.Text = episode.name;
+                        EPC.EpisodeName.Foreground = cb;
+                        EPC.noEp.Text = getEPOrder(episode);
+                        EPC.noEp.Foreground = cb;
+                        EPC.timerText.Text = text;
+                        EPC.timerText.Foreground = cb;
+                        EPC.lenghtText.Foreground = cb;
+                        EPC.PlayEP.Source = Convert(new Bitmap(Properties.Resources.play_button_dark));
+                        List.Children.Add(EPC);
+                    }), DispatcherPriority.Send);
                 }
+            }
       
         }
-
+        private System.Windows.Media.Color ToMediaColor(Color color) {
+            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
         private void PlayEP(string path,Episode e) {
             Page showPage = new Player(path,e,ss);
             Window main = Window.GetWindow(this);
@@ -125,11 +149,7 @@ namespace TVS_Player {
             switch (ClickCounter){
                 case 1:
                     Dispatcher.Invoke(new Action(() => {
-                        Action a;
-                        a = () => SetInfo(episode);
-                        Thread t = new Thread(a.Invoke);
-                        t.Name = "Episode Detail";
-                        t.Start();
+                        ThreadForInfo(episode);
                     }), DispatcherPriority.Send);
                     break;
                 case 2:
@@ -139,6 +159,14 @@ namespace TVS_Player {
                     break;
             }
             ClickCounter = 0;
+        }
+
+        private void ThreadForInfo(Episode e) {
+            Action a;
+            a = () => SetInfo(e);
+            Thread t = new Thread(a.Invoke);
+            t.Name = "Episode Detail";
+            t.Start();
         }
 
         private void SetInfo(Episode episode) {
@@ -188,6 +216,19 @@ namespace TVS_Player {
                 return null;
             }
 
+        }
+        public BitmapImage Convert(Bitmap bitmap) {
+            using (MemoryStream stream = new MemoryStream()) {
+                bitmap.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
+                BitmapImage result = new BitmapImage();
+                result.BeginInit();
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+                return result;
+            }
         }
         public static BitmapSource GetImageStream(Image myImage) {
             var bitmap = new Bitmap(myImage);

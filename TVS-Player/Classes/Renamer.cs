@@ -122,8 +122,9 @@ namespace TVS_Player {
             List<Episode> epi = new List<Episode>();
             for (int i = 1; i <= GetNumberOfSeasons(id); i++) { 
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
-                foreach (JToken jt in jo["data"]) {                 
-                    epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), false, new List<string>()));
+                foreach (JToken jt in jo["data"]) {
+                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd",CultureInfo.InvariantCulture);
+                    epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),dt.ToString("dd.mm.yyyy"),false, new List<string>()));
                 }          
             }
             return epi;
