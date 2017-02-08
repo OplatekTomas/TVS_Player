@@ -24,7 +24,7 @@
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="GridOnTop">
         <Grid x:Name="Sidebar" Width="200" Margin="-200,0,0,0" HorizontalAlignment="Left" Panel.ZIndex="4" Background="{StaticResource BackgroundBrush}">
             <StackPanel VerticalAlignment="Top">
                 <Grid Height="60" x:Name="MenuHideButton" MouseLeftButtonUp="MenuHideButton_MouseLeftButtonUp">

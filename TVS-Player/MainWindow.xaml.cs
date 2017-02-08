@@ -69,9 +69,18 @@ namespace TVS_Player {
             Panel.SetZIndex(fr, 1000);
             fr.Content = page;
         }
+        public void AddTempFrameIndex(Page page) {
+            Frame fr = new Frame();
+            GridOnTop.Children.Add(fr);
+            Panel.SetZIndex(fr, 1000);
+            fr.Content = page;
+        }
 
         public void CloseTempFrame() {
             BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        }
+        public void CloseTempFrameIndex() {
+            GridOnTop.Children.RemoveAt(GridOnTop.Children.Count - 1);
         }
 
         private void SearchBar_GotFocus(object sender, RoutedEventArgs e) {
@@ -89,12 +98,12 @@ namespace TVS_Player {
         private void DownloadPageButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             HideMenu();
             if (Frame.Content.GetType() != typeof(Download)) {
-                //Api.getToken();
+                Api.getToken();
                 //Api.apiGetPoster(73871,"Futurama");
                 //string kappa = Api.apiGet(1,1, 73871);
                 //Frame.Content = new Startup();
 
-                Checker.UpdateShowFull(121361);
+                Checker.UpdateShowFull(277928);
                 //Checker.CheckForUpdates(121361);
             }
         }

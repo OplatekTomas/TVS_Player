@@ -263,7 +263,7 @@ namespace TVS_Player {
 
         private void Quit() {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
             System.Windows.Forms.Cursor.Show();
             if (maximized) {
                 main.WindowStyle = WindowStyle.SingleBorderWindow;

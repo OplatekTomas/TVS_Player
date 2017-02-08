@@ -109,7 +109,7 @@ namespace TVS_Player {
         private void PlayEP(string path,Episode e) {
             Page showPage = new Player(path,e,ss);
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
 
         private string getEPOrder(Episode e) {
