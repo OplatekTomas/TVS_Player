@@ -26,6 +26,7 @@
     <Color x:Key="ThemeAccent">#2196F3</Color>
     <Color x:Key="ThemeDarkAccent">#1976D2</Color>
     <Color x:Key="ThemeMediumAccent">#1E88E5</Color>
+    <Color x:Key="ThemeDarkestAccent">#0D47A1</Color>
 
     <!--Transparent and Whites with transparency-->
   <Color x:Key="Color_010">#E5FFFFFF</Color>

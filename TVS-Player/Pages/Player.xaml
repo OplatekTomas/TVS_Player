@@ -7,13 +7,13 @@
       mc:Ignorable="d"
       x:Name="PlayerPage"
       d:DesignHeight="648" d:DesignWidth="1152"
-      Title="Player" KeyUp="BackgroundGrid_KeyUp">
+      Title="Player">
     <Page.Resources>
         <Storyboard x:Key="sbShowBottomMenu" >
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="sbHideBottomMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,-100" AccelerationRatio=".5" Duration="0:0:0.15" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,-40" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
         <Storyboard x:Key="sbShowTopMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" AccelerationRatio=".5" Duration="0:0:0.25" />
@@ -22,7 +22,7 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,-40,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
     </Page.Resources>
-    <Grid x:Name="BackgroundGrid" Background="Black" MouseMove="overlayTrigger_MouseEnter">
+    <Grid x:Name="BackgroundGrid" Background="Black" MouseMove="overlayTrigger_MouseEnter" KeyUp="BackgroundGrid_KeyUp">
         <Grid Height="40" VerticalAlignment="Top" Margin="0,-40" Panel.ZIndex="3" x:Name="topPanel" Background="{StaticResource AccentColor}">
 
             <Grid>
@@ -38,52 +38,16 @@
                 <TextBlock x:Name="FileInfo" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="" Foreground="#FF666666" FontSize="20" Margin="13,23"/>
             </Grid>
         </Grid>
-        <StackPanel Panel.ZIndex="5" Name="panelMenu" Orientation="Vertical" Margin="0,0,0,-100" VerticalAlignment="Bottom" Grid.Row="1">
-            <Grid Height="100" Background="#CC000000">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel x:Name="MiddleControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="1" Margin="9,0,13,0">
-                    <Button x:Name="PrevEpButton" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="PrevEpButton_Click">
-                        <StackPanel Orientation="Vertical">
-                            <Image Source="../Icons/back.png" HorizontalAlignment="Center" Width="30"/>
-                            <TextBlock HorizontalAlignment="Center" Foreground="#FF666666" FontSize="15">Previous</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="PlayPauseButton" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="Play_Click">
-                        <StackPanel Orientation="Vertical">
-                            <Image x:Name="PlayPauseImage" Source="../Icons/pause.png" HorizontalAlignment="Center" Width="30"/>
-                            <TextBlock x:Name="PlayPauseText" HorizontalAlignment="Center" Foreground="#FF666666" FontSize="15">Pause</TextBlock>
-                        </StackPanel>
-                    </Button>
-                    <Button Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" Click="NextEpButton_Click">
-                        <StackPanel Orientation="Vertical">
-                            <Image x:Name="NextPicture" Source="../Icons/back.png" HorizontalAlignment="Center" Width="30" RenderTransformOrigin="0.5,0.5">
-                                <Image.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform Angle="180"/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </Image.RenderTransform>
-                            </Image>
-                            <TextBlock HorizontalAlignment="Center" Foreground="#FF666666" FontSize="15">Next</TextBlock>
-                        </StackPanel>
-                    </Button>
+        <StackPanel Panel.ZIndex="5" Name="panelMenu" Orientation="Vertical" Margin="0,0,0,-40" VerticalAlignment="Bottom" Grid.Row="1">
+            <Grid Height="40" Background="{StaticResource AccentColor}">
+                <Image x:Name="PlayPauseButton" Source="../Icons/pause.png" HorizontalAlignment="Left" Margin="10,10,0,10" Width="20" MouseLeftButtonUp="PlayPauseButton_MouseLeftButtonUp" />
+                <Image x:Name="MuteImage" Source="../Icons/speaker.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="283,0" MouseLeftButtonUp="MuteImage_MouseLeftButtonUp"/>
+                <Image x:Name="FullScreenImage" Source="../Icons/fullscreen.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="20,0" MouseLeftButtonUp="FullScreenImage_MouseLeftButtonUp"/>
 
-                </StackPanel>
-                <Button x:Name="MuteButton" Margin="5,0" Background="#001E1E1E" Style="{DynamicResource SideBarButton}" Width="61" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="MuteButton_Click" Grid.Column="2">
-                    <StackPanel Orientation="Vertical">
-                        <Image x:Name="MuteImage" Source="../Icons/speaker.png" HorizontalAlignment="Center" Width="33"/>
-                        <TextBlock HorizontalAlignment="Center" Foreground="#FF666666" FontSize="15">Mute</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Slider x:Name="Progress" Margin="10,10,10,0" VerticalAlignment="Top" Foreground="#FF9B9B9B" Grid.ColumnSpan="3" Thumb.DragStarted="Progress_DragStarted"  Thumb.DragCompleted="Progress_DragCompleted" IsMoveToPointEnabled="True" ValueChanged="Progress_ValueChanged" />
-                <Slider x:Name="SoundLevel" Maximum="1" Grid.Column="2" VerticalAlignment="Bottom" Margin="80,0,40,25" ValueChanged="SoundLevel_ValueChanged" IsMoveToPointEnabled="True"/>
-                <TextBlock x:Name="ClockText" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="--:--:--/--:--:--" Foreground="#FF666666" Margin="15,40" FontSize="15"></TextBlock>
+                <Slider x:Name="Progress" Margin="140,11,320,0" Thumb.DragStarted="Progress_DragStarted"  Thumb.DragCompleted="Progress_DragCompleted" IsMoveToPointEnabled="True" ValueChanged="Progress_ValueChanged" IsSelectionRangeEnabled="True" Grid.ColumnSpan="2">
+                </Slider>
+                <Slider x:Name="SoundLevel" Maximum="1" Margin="0,11,60,0" ValueChanged="SoundLevel_ValueChanged" HorizontalAlignment="Right" Width="210" IsMoveToPointEnabled="True"/>
+                <TextBlock x:Name="ClockText" Grid.Column="0" HorizontalAlignment="Left" Text="5:55:55/5:55:55" Foreground="White" Margin="40,9,0,9" FontSize="13"></TextBlock>
             </Grid>
         </StackPanel>
         <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded"  MouseUp="MediaElement_MouseUp" />

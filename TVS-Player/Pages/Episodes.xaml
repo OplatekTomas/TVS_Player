@@ -26,8 +26,8 @@
             </Ellipse>
             <Image Source="../Icons/back.png" Width="25" HorizontalAlignment="Left" Margin="16,8" />
         </Grid>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0">
-            <StackPanel  x:Name="List" Margin="10" Loaded="List_Loaded">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0" Focusable="False">
+            <StackPanel  x:Name="List" Margin="10" Loaded="List_Loaded" Focusable="False">
                 <!-- <local:EpisodeControl Height="40"/> -->
             </StackPanel>
         </ScrollViewer>

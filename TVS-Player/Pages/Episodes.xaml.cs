@@ -110,6 +110,7 @@ namespace TVS_Player {
             Page showPage = new Player(path,e,ss);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrameIndex(showPage);
+            showPage.Focus();
         }
 
         private string getEPOrder(Episode e) {

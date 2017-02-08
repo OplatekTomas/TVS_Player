@@ -75,7 +75,7 @@ namespace TVS_Player {
             BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
             hideMenu.Stop();
             hideMenu.Start();
-            PlayerPage.Focus();
+            BackgroundGrid.Focus();
         }
             private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
             MediaElement.Source = new Uri(path);
@@ -84,48 +84,6 @@ namespace TVS_Player {
             SoundLevel.Value = 0.5;
         }
 
-        private void Play_Click(object sender, RoutedEventArgs e) {
-            if (isplaying) {
-                isplaying = false;
-                MediaElement.Pause();
-                moveProgress.Stop();
-                PlayPauseText.Text = "Play";
-                BitmapImage img = new BitmapImage(new Uri("../Icons/play-button.png", UriKind.Relative));
-                PlayPauseImage.Source = img;
-            } else {
-                isplaying = true;
-                MediaElement.Play();
-                moveProgress.Start();
-                PlayPauseText.Text = "Pause";
-                BitmapImage img = new BitmapImage(new Uri("../Icons/pause.png", UriKind.Relative));
-                PlayPauseImage.Source = img;
-            }
-        }
-
-        private void PrevEpButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void NextEpButton_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void MuteButton_Click(object sender, RoutedEventArgs e) {
-            if (MediaElement.IsMuted) {             
-                SoundLevel.Value = VolumeLevel;
-                MediaElement.IsMuted = false;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
-                MuteImage.Source = img;
-            } else {
-                VolumeLevel = MediaElement.Volume;
-                SoundLevel.Value = 0;
-                MediaElement.IsMuted = true;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
-                MuteImage.Source = img;
-
-            }
-
-        }
         private void SoundLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             MediaElement.Volume = SoundLevel.Value;
             if (MediaElement.Volume == 0) {
@@ -149,7 +107,7 @@ namespace TVS_Player {
                 if (videoLenght.Hours == 0) {
                     ClockText.Text = MediaElement.Position.ToString(@"mm\:ss") +"/"+ videoLenght.ToString(@"mm\:ss");
                 } else {
-                    ClockText.Text = MediaElement.Position.ToString(@"hh\:mm\:ss")+"/" + videoLenght.ToString(@"hh\:mm\:ss");
+                    ClockText.Text = MediaElement.Position.ToString(@"h\:mm\:ss")+"/" + videoLenght.ToString(@"h\:mm\:ss");
                 }
             }), DispatcherPriority.Send);
         }
@@ -170,8 +128,7 @@ namespace TVS_Player {
             ShowName.Text = selectedShow.nameSel;
             SeasonInfo.Text = getEPOrder(episode);
             FileInfo.Text = getFileInfo();
-            PlayPauseButton.Focus();
-
+            BackgroundGrid.Focus();
         }
 
         private string getFileInfo() {
@@ -238,13 +195,13 @@ namespace TVS_Player {
         }
 
         private void BackgroundGrid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
-            PlayerPage.Focus();
+            BackgroundGrid.Focus();
             switch (e.Key) {
                 case Key.F:
                     FullScreen();
                     break;
                 case Key.Space:
-                    Play_Click(new object(), new RoutedEventArgs());
+                    PlayPause();
                     break;
                 case Key.Right:
                     MediaElement.Position += new TimeSpan(0, 0, 10);
@@ -253,14 +210,16 @@ namespace TVS_Player {
                     MediaElement.Position -= new TimeSpan(0, 0, 10);
                     break;
                 case Key.M:
-                    MuteButton_Click(new object(), new RoutedEventArgs());
+                    Mute();
                     break;
                 case Key.Escape:
                     Quit();
                     break;
+                default:
+                    break;
             }
         }
-
+        
         private void Quit() {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
@@ -283,5 +242,49 @@ namespace TVS_Player {
             Progress.ValueChanged += Progress_ValueChanged;
         }
 
+        private void PlayPause() {
+            if (isplaying) {
+                isplaying = false;
+                MediaElement.Pause();
+                moveProgress.Stop();
+                BitmapImage img = new BitmapImage(new Uri("../Icons/play-button.png", UriKind.Relative));
+                PlayPauseButton.Source = img;
+            } else {
+                isplaying = true;
+                MediaElement.Play();
+                moveProgress.Start();
+                BitmapImage img = new BitmapImage(new Uri("../Icons/pause.png", UriKind.Relative));
+                PlayPauseButton.Source = img;
+            }
+        }
+
+        private void Mute() {
+            if (MediaElement.IsMuted) {
+                SoundLevel.Value = VolumeLevel;
+                MediaElement.IsMuted = false;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
+                MuteImage.Source = img;
+            } else {
+                VolumeLevel = MediaElement.Volume;
+                SoundLevel.Value = 0;
+                MediaElement.IsMuted = true;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
+                MuteImage.Source = img;
+
+            }
+
+        }
+
+        private void PlayPauseButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            PlayPause();
+        }
+
+        private void FullScreenImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            FullScreen();
+        }
+
+        private void MuteImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            Mute();
+        }
     }
 }
