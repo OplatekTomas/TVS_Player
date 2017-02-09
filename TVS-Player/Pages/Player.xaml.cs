@@ -75,7 +75,6 @@ namespace TVS_Player {
             BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
             hideMenu.Stop();
             hideMenu.Start();
-            BackgroundGrid.Focus();
         }
             private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
             MediaElement.Source = new Uri(path);
@@ -128,7 +127,9 @@ namespace TVS_Player {
             ShowName.Text = selectedShow.nameSel;
             SeasonInfo.Text = getEPOrder(episode);
             FileInfo.Text = getFileInfo();
-            BackgroundGrid.Focus();
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).KeyUp += BackgroundGrid_KeyUp;
+
         }
 
         private string getFileInfo() {
@@ -173,6 +174,11 @@ namespace TVS_Player {
                     FullScreen();
                 }), DispatcherPriority.Send);
             }
+            if (ClickCounter == 1) {
+                Dispatcher.Invoke(new Action(() => {
+                    PlayPause();
+                }), DispatcherPriority.Send);
+            }
             ClickCounter = 0;
         }
 
@@ -195,7 +201,6 @@ namespace TVS_Player {
         }
 
         private void BackgroundGrid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
-            BackgroundGrid.Focus();
             switch (e.Key) {
                 case Key.F:
                     FullScreen();
@@ -223,6 +228,7 @@ namespace TVS_Player {
         private void Quit() {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
+            ((MainWindow)main).KeyUp -= BackgroundGrid_KeyUp;
             System.Windows.Forms.Cursor.Show();
             if (maximized) {
                 main.WindowStyle = WindowStyle.SingleBorderWindow;
