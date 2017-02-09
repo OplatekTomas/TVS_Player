@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace TVS_Player {
@@ -25,6 +28,75 @@ namespace TVS_Player {
             threadCheck.Start();
         }
 
+        private static void RescanEP(int id, List<string> locations) {
+            List<string> showFiles = new List<string>();
+            List<string> aliases = Api.GetAliases(id);
+            List<string> files = new List<string>();
+            foreach (string location in locations) {
+                files.AddRange(Directory.GetFiles(location, "*.*", System.IO.SearchOption.AllDirectories));
+            }
+            foreach (string file in files) {
+                foreach (string alias in aliases) {
+                    if (Path.GetFileName(file).IndexOf(alias, StringComparison.OrdinalIgnoreCase) >= 0 && !showFiles.Contains(file)) {
+                        showFiles.Add(file);
+                    }
+                }
+            }
+            showFiles = FilterExtensions(showFiles);
+           //Database
+            //RenameFiles(files, lib + "\\" + showName, id, showName);
+
+        }
+
+        public static void RenameFiles(List<string> files, string path, int id, string showName) {
+            List<Episode> EPNames = new List<Episode>(); //DownloadInfo(id);
+            foreach (string file in files) {
+                Tuple<int, int> t = GetInfo(file);
+                int season = t.Item1;
+                int episode = t.Item2;
+                var selectedEP = EPNames.FirstOrDefault(o => o.season == season && o.episode == episode);
+                int index = EPNames.FindIndex(o => o.season == season && o.episode == episode);
+                if (selectedEP == null) {
+                    MessageBox.Show("This TV Show doesnt have episode " + episode + " in season " + season + ".\nFile " + file + " won't be renamed", "Error");
+                } else {
+                    string output = Renamer.GetValidName(path, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
+                    if (file != output) {
+                        File.Move(file, output);
+                    }
+                    EPNames[index].downloaded = true;
+                    EPNames[index].locations.Add(output);
+                }
+            }
+            DatabaseEpisodes.createDB(id, EPNames);
+        }
+
+        
+
+        public static Tuple<int, int> GetInfo(string file) {
+            Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
+            Match episode = new Regex("[e][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
+            Match special = new Regex("[0-5][0-9][x][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
+            if (season.Success && episode.Success) {
+                int s = Int32.Parse(season.Value.Remove(0, 1));
+                int e = Int32.Parse(episode.Value.Remove(0, 1));
+                return new Tuple<int, int>(s, e);
+            } else if (special.Success) {
+                int s = Int32.Parse(special.Value.Substring(0, 2));
+                int e = Int32.Parse(special.Value.Substring(3, 2));
+                return new Tuple<int, int>(s, e);
+            }
+            return null;
+        }
+        public static List<string> FilterExtensions(List<string> files) {
+            string[] fileExtension = new string[10] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv", ".idx" };
+            List<string> filtered = new List<string>();
+            foreach (string file in files) {
+                if (fileExtension.Any(file.Contains)) {
+                    filtered.Add(file);
+                }
+            }
+            return filtered;
+        }
         private static void Update(int id) {
             List<Episode> EPList = DatabaseEpisodes.readDb(id);
             int season = EPList.Max(y => y.season);
