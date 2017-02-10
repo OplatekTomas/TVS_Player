@@ -10,8 +10,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -25,11 +25,60 @@
             </Ellipse>
             <Image Source="../Icons/back.png" Width="25" HorizontalAlignment="Left" Margin="16,8" />
         </Grid>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0">
-            <StackPanel  x:Name="List" Margin="10">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0" Focusable="False">
+            <StackPanel  x:Name="List" Margin="10" Focusable="False">
                 <!-- <local:SeasonControl Height="40"/>-->
             </StackPanel>
         </ScrollViewer>
-        <Image x:Name="Poster" Grid.Row="1" Grid.Column="1" Margin="0,0,20,20" VerticalAlignment="Top" MinHeight="70" MinWidth="50" />
+        <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <StackPanel>
+                    <Image x:Name="image" Margin="5" VerticalAlignment="Top" Height="auto" Grid.Row="0" RenderOptions.BitmapScalingMode="HighQuality">
+                    </Image>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="showName" VerticalAlignment="Top" Height="35px" FontSize="24" Margin="5,5,5,0" FontWeight="Bold"  Grid.Row="0" Foreground="White" TextDecorations="Underline">Show Info</TextBlock>
+                        <Label Content="Rating:" VerticalAlignment="Top" FontWeight="Bold" HorizontalAlignment="Right" FontSize="15" Margin="0,7,65,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="rating" VerticalAlignment="Top" FontWeight="Bold" HorizontalAlignment="Right" FontSize="15"  Margin="70,12,20,0" Grid.Row="0" Foreground="White"/>
+                        <Label Content="Genre:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,40,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="genre" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,46.5,0,0" Grid.Row="0" Foreground="White"/>
+                        <Label Content="First aired:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,60,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="firstAir" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="74,66.5,0,0" Text="" Grid.Row="0" Foreground="White"/>
+                        <Label Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,80,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="status" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,86.5,0,0" Text="" Grid.Row="0" Foreground="White"/>
+                        <Label Content="Network:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,100,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="network" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,106.5,0,0" Text="" Grid.Row="0" Foreground="White"/>
+                        <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,120,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,126.5,0,0" Text="" Grid.Row="0" Foreground="White"/>
+                        <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,140,0,0" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,146.5,0,0" Text="" Grid.Row="0" Foreground="White"/>
+                        <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0" Foreground="White"/>
+                        <TextBlock x:Name="overview" VerticalAlignment="Top" Text="" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0" Foreground="White"/>
+                        <Grid Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                                    <Label Content="Actors:" FontWeight="Bold" FontSize="14" Margin="5,0,0,0" Grid.Row="0" VerticalAlignment="Bottom" Foreground="White"/>
+                                </Grid>
+                                <local:ActorInfo x:Name="f" Grid.Row="1" Grid.Column="0" Visibility="Hidden"/>
+                                <local:ActorInfo x:Name="s" Grid.Row="1" Grid.Column="1" Visibility="Hidden"/>
+                                <local:ActorInfo x:Name="t" Grid.Row="1" Grid.Column="2" Visibility="Hidden"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

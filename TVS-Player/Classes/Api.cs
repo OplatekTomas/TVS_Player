@@ -129,8 +129,7 @@ namespace TVS_Player {
 
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
-                return "error";
+                return null;
             }
 
         }
