@@ -43,13 +43,14 @@ namespace TVS_Player {
                 }
             }
             showFiles = FilterExtensions(showFiles);
-           //Database
-            //RenameFiles(files, lib + "\\" + showName, id, showName);
+            string showName = DatabaseAPI.database.Shows.Find(s => Int32.Parse(s.idSel)== id).nameSel;
+            string lib = DatabaseAPI.database.libraryLocation;
+            RenameFiles(files, lib + "\\" + showName, id, showName);
 
         }
 
         public static void RenameFiles(List<string> files, string path, int id, string showName) {
-            List<Episode> EPNames = new List<Episode>(); //DownloadInfo(id);
+            List<Episode> EPNames = new List<Episode>(); 
             foreach (string file in files) {
                 Tuple<int, int> t = GetInfo(file);
                 int season = t.Item1;
@@ -62,15 +63,13 @@ namespace TVS_Player {
                     string output = Renamer.GetValidName(path, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
                     if (file != output) {
                         File.Move(file, output);
+                        int ShowIndex = DatabaseAPI.database.Shows.FindIndex(e => Int32.Parse(e.idSel) == id);
                     }
                     EPNames[index].downloaded = true;
                     EPNames[index].locations.Add(output);
                 }
             }
-            DatabaseEpisodes.createDB(id, EPNames);
         }
-
-        
 
         public static Tuple<int, int> GetInfo(string file) {
             Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);

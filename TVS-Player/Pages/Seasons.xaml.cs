@@ -93,7 +93,7 @@ namespace TVS_Player {
                 try {
                     DateTime dt = DateTime.ParseExact(parse["data"]["firstAired"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
                     firstAir.Text = dt.ToString("dd.MM.yyyy");
-                } catch (Exception e) {
+                } catch (Exception) {
                     firstAir.Text = ("");
                 }
             }));
