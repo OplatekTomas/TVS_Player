@@ -22,20 +22,20 @@ namespace TVS_Player {
         public bool Disabled = false;
         public string filename;
         public Shows library;
-        public SelectedShows selected;
+        public Show selected;
         public ShowRectangle() {
             InitializeComponent();
         }
 
-        public ShowRectangle(SelectedShows ss) {
+        public ShowRectangle(Show ss) {
             InitializeComponent();
-            ID = Int32.Parse(ss.idSel);
+            ID = ss.id;
             selected = ss;
-            ShowName = ss.nameSel;
+            ShowName = ss.name;
             if (ss.posterFilename != null) {
                 filename = ss.posterFilename;
             } else {
-                filename = ID.ToString() + ".jpg";
+                filename = ss.id.ToString() + ".jpg";
             }
             RegenerateInfo(true);
         }
@@ -89,7 +89,7 @@ namespace TVS_Player {
         }
         public void RegenerateInfo(bool onlyImage) {
             if (onlyImage) {
-                if (DatabaseAPI.FindShowByID(ID.ToString()).posterFilename == "own.png") {
+                if (DatabaseShows.FindShow(ID).posterFilename == "own.png") {
                     String path = Helpers.path + ID + "\\own.png";
                     Image.Source = new BitmapImage(new Uri(path));
                 } else if (!Api.apiGetPoster(ID, false)) {
@@ -99,8 +99,9 @@ namespace TVS_Player {
                     path += "\\own.png";
                     Image.Source = new BitmapImage(new Uri(path));
                     filename = "own.png";
-                    DatabaseAPI.FindShowByID(ID.ToString()).posterFilename = "own.png";
-                    DatabaseAPI.saveDB();
+                    Show s = DatabaseShows.FindShow(ID);
+                    s.posterFilename = "own.png";
+                    DatabaseShows.Edit(s);
                 } else {
                     String path = Helpers.path + ID.ToString() + "\\" + filename;
                     try {
@@ -146,7 +147,7 @@ namespace TVS_Player {
         }
 
         private void RemoveShow_Event(object sender, RoutedEventArgs e) {
-            DatabaseAPI.removeShowFromDb(ID.ToString(), true);
+            DatabaseShows.RemoveShowFromDb(ID);
             library.RemoveRectangle(this);
         }
     }

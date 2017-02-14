@@ -116,7 +116,7 @@ namespace TVS_Player {
                     EPNames[index].locations.Add(output);
                 }                               
             }
-            DatabaseEpisodes.createDB(id, EPNames);
+            DatabaseEpisodes.CreateDB(id, EPNames);
         }
         public static List<Episode> DownloadInfo(int id) {
             List<Episode> epi = new List<Episode>();

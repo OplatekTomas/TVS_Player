@@ -24,8 +24,8 @@ namespace TVS_Player {
     /// Interaction logic for Seasons.xaml
     /// </summary>
     public partial class Seasons : Page {
-        private SelectedShows selectedShow;
-        public Seasons(SelectedShows ss) {
+        private Show selectedShow;
+        public Seasons(Show ss) {
             InitializeComponent();
             selectedShow = ss;
             StartUp();
@@ -38,7 +38,7 @@ namespace TVS_Player {
         }
 
         private void StartUp() {
-            int seasons = DatabaseAPI.GetSeasons(Int32.Parse(selectedShow.idSel));
+            int seasons = DatabaseShows.GetSeasons(selectedShow.id);
             for (int i = 1; i <= seasons; i++) {
                 SeasonControl se = CreateControl(i);
                 List.Children.Add(se);
@@ -50,7 +50,7 @@ namespace TVS_Player {
         }
 
         private void FillLayoutDownload() {
-            string info = Api.apiGet(Int32.Parse(selectedShow.idSel));
+            string info = Api.apiGet(selectedShow.id);
             fillLayout(info);
         }
 
@@ -62,9 +62,9 @@ namespace TVS_Player {
         private SeasonControl CreateControl(int season) {
             SeasonControl se = new SeasonControl();
             se.seasonText.Text = "Season " + season;
-            se.noEp.Text = DatabaseEpisodes.GetEpPerSeason(Int32.Parse(selectedShow.idSel), season).ToString();
+            se.noEp.Text = DatabaseEpisodes.GetEpPerSeason(selectedShow.id, season).ToString();
             se.SeasonGrid.MouseDown += (s, e) => { ShowSeason(season); };
-            se.releaseDate.Text = DatabaseEpisodes.GetSeasonRelease(Int32.Parse(selectedShow.idSel), season);
+            se.releaseDate.Text = DatabaseEpisodes.GetSeasonRelease(selectedShow.id, season);
             se.Height = 51;
             return se;
         }

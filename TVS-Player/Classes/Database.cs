@@ -31,7 +31,7 @@ namespace TVS_Player {
             return jo.ToObject<SettingsDB>();
         }
         public static string GetLibLocation() {
-            SettingsDB sdb =  ReadDB();
+            SettingsDB sdb = ReadDB();
             return sdb.LibLocation;
         }
         public static void SetLibLocation(string path) {
@@ -45,7 +45,7 @@ namespace TVS_Player {
     public static class DatabaseShows {
         public static List<Show> ReadDb() {
             List<Show> ss = new List<Show>();
-            string path = Helpers.path + "\\TVS-Player\\Shows.TVSP";
+            string path = Helpers.path + "\\Shows.TVSP";
             JArray jo = new JArray();
             try {
                 string json = File.ReadAllText(path);
@@ -81,6 +81,20 @@ namespace TVS_Player {
             }
             SaveDB(ss);
         }
+        public static void AddShowToDb(Show s) {
+            List<Show> ss = ReadDb();
+            Show newShow = new Show(s.id, s.name);
+            if (!CheckIfExists(s.id)) {
+                ss.Add(newShow);
+            } else {
+                DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Show already exists", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes) {
+                    RemoveShowFromDb(s.id);
+                    AddShowToDb(s);
+                }
+            }
+            SaveDB(ss);
+        }
         public static void RemoveShowFromDb(int id) {
             List<Show> ss = ReadDb();
             Show sel = ss.Find(s=> s.id == id);
@@ -106,7 +120,13 @@ namespace TVS_Player {
         }
         public static int GetSeasons(int id) {
             return DatabaseEpisodes.ReadDb(id).Max(e => e.season);
-        }   
+        }
+        public static void Edit(Show s) {
+            List<Show> ls = ReadDb();
+            int index = ls.FindIndex(sh => sh.id == s.id);
+            ls[index] = s;
+            SaveDB(ls);
+        }
     }
     public class DatabaseEpisodes {
         public static void CreateDB(int id, List<Episode> l) {

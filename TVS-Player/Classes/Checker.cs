@@ -43,8 +43,8 @@ namespace TVS_Player {
                 }
             }
             showFiles = FilterExtensions(showFiles);
-            string showName = DatabaseAPI.database.Shows.Find(s => Int32.Parse(s.idSel)== id).nameSel;
-            string lib = DatabaseAPI.database.libraryLocation;
+            string showName = DatabaseShows.FindShow(id).name;
+            string lib = AppSettings.GetLibLocation();
             RenameFiles(files, lib + "\\" + showName, id, showName);
 
         }
@@ -63,7 +63,7 @@ namespace TVS_Player {
                     string output = Renamer.GetValidName(path, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
                     if (file != output) {
                         File.Move(file, output);
-                        int ShowIndex = DatabaseAPI.database.Shows.FindIndex(e => Int32.Parse(e.idSel) == id);
+                        int ShowIndex = DatabaseEpisodes.ReadDb(id).FindIndex(e => e.id == id);
                     }
                     EPNames[index].downloaded = true;
                     EPNames[index].locations.Add(output);
@@ -97,7 +97,7 @@ namespace TVS_Player {
             return filtered;
         }
         private static void Update(int id) {
-            List<Episode> EPList = DatabaseEpisodes.readDb(id);
+            List<Episode> EPList = DatabaseEpisodes.ReadDb(id);
             int season = EPList.Max(y => y.season);
             string seasonInfo = Api.apiGetEpisodesBySeasons(id, season);
             string nextSeason = Api.apiGetEpisodesBySeasons(id, season+1);
@@ -115,10 +115,10 @@ namespace TVS_Player {
                 int index = EPList.FindIndex(s =>s.season == season && s.episode == episode);            
                 EPList[index] = new Episode(jt["episodeName"].ToString(),season,episode, Int32.Parse(jt["id"].ToString()), dt.ToString("dd.MM.yyyy"), EPList[index].downloaded, EPList[index].locations);
             }
-            DatabaseEpisodes.createDB(id,EPList);
+            DatabaseEpisodes.CreateDB(id,EPList);
         }
         private static void UpdateFull(int id) {
-            List<Episode> epi = DatabaseEpisodes.readDb(id);
+            List<Episode> epi = DatabaseEpisodes.ReadDb(id);
             for (int i = 1; i <= Renamer.GetNumberOfSeasons(id); i++) {
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
                 foreach (JToken jt in jo["data"]) {
@@ -132,7 +132,7 @@ namespace TVS_Player {
                     }
                 }
             }
-            DatabaseEpisodes.createDB(id, epi);
+            DatabaseEpisodes.CreateDB(id, epi);
         }
 
     }

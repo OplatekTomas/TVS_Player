@@ -32,16 +32,7 @@ namespace TVS_Player {
             readFolders();
         }
         List<string> subfolders = new List<String>();
-        List<Shows> shows = new List<Shows>();
-        public struct Shows {
-            public string id;
-            public string name;
-            public Shows(string id, string name) : this() {
-                this.id = id;
-                this.name = name;
-            }
-
-        }
+        List<Show> shows = new List<Show>();
         private void readFolders() {
             subfolders = Directory.GetDirectories(location).ToList<string>();
             Action list;
@@ -67,7 +58,7 @@ namespace TVS_Player {
             option.removeShow.Click += (s, e) => {
                 removeShow(s,e,index,option);
             };
-            shows.Add(new Shows(id, name));
+            shows.Add(new Show(Int32.Parse(id), name));
             panel.Children.Add(option);
         }
 
@@ -87,10 +78,10 @@ namespace TVS_Player {
         private void Ok_Click(object sender, RoutedEventArgs e) {
             List<int> id = new List<int>();
             List<string> locs = new List<string>();
-            for (int i = 0; i < shows.Count(); i++){
-                if (shows[i].id != null) { 
-                    DatabaseAPI.addShowToDb(shows[i].id, shows[i].name, true);
-                    id.Add(Int32.Parse(shows[i].id));
+            foreach(Show s in shows) { 
+                if (s.id != null) {
+                    DatabaseShows.AddShowToDb(s);
+                    id.Add(s.id);
                 }
             }
             foreach (DBScanOption fc in panel.Children) {
@@ -99,7 +90,7 @@ namespace TVS_Player {
             Page page = new TVS_Player.Shows();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
-            Renamer.RenameBatch(id,locs,DatabaseAPI.database.libraryLocation);
+            Renamer.RenameBatch(id,locs,AppSettings.GetLibLocation());
             ((MainWindow)main).SetFrameView(page);
         }
 
@@ -113,7 +104,7 @@ namespace TVS_Player {
             ((MainWindow)main).AddTempFrame(showPage);
         }
         private void removeShow(object sender, RoutedEventArgs e, int index, DBScanOption option) {
-            shows[index - 1] = new Shows(null, null);
+            shows.RemoveAt(index);
             panel.Children.Remove(option);
         }
         private async void editShow(int index, DBScanOption option) {
@@ -124,7 +115,7 @@ namespace TVS_Player {
             string name = show.Item2;
             string id = show.Item1;
             option.showName.Text = name;
-            shows[index-1] = new Shows(id, name);
+            shows[index-1] = new Show(Int32.Parse(id), name);
 
         }
 

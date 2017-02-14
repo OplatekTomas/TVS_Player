@@ -66,8 +66,9 @@ namespace TVS_Player {
                 String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 sr.filename = filename;
                 sr.RegenerateInfo(true);
-                DatabaseAPI.FindShowByID(sr.ID.ToString()).posterFilename = filename;
-                DatabaseAPI.saveDB();
+                Show s = DatabaseShows.FindShow(sr.ID);
+                s.posterFilename = filename;
+                DatabaseShows.Edit(s);
                 Window main = Window.GetWindow(this);
                 ((MainWindow)main).CloseTempFrame();
             }

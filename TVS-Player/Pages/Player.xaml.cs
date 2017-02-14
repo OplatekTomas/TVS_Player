@@ -30,9 +30,9 @@ namespace TVS_Player {
         string path;
         DispatcherTimer hideMenu;
         Episode episode;
-        SelectedShows selectedShow;
+        Show selectedShow;
 
-        public Player(string p, Episode e,SelectedShows ss) {
+        public Player(string p, Episode e,Show ss) {
             InitializeComponent();
             ClickTimer = new Timer(300);
             ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
@@ -124,7 +124,7 @@ namespace TVS_Player {
             clock.Start();
             moveProgress.Start();
             EPName.Text = episode.name;
-            ShowName.Text = selectedShow.nameSel;
+            ShowName.Text = selectedShow.name;
             SeasonInfo.Text = getEPOrder(episode);
             FileInfo.Text = getFileInfo();
             Window main = Window.GetWindow(this);

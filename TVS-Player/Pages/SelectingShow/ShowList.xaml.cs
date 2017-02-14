@@ -31,9 +31,11 @@ namespace TVS_Player {
             Window main = Window.GetWindow(this);
             switch (next) {
                 case "createdb":
-                    for (int i = 0; i < SearchShow.selectedShow.Count(); i++) {
-                        DatabaseAPI.addShowToDb(SearchShow.selectedShow[i].getID(), SearchShow.selectedShow[i].getName(),true);
-                    }                 
+                    List <Show> list = new List<Show>();
+                    foreach(SearchShow.selShow s in SearchShow.selectedShow) {
+                        list.Add(new Show(s.getID(),s.getName()));
+                    }
+                    DatabaseShows.SaveDB(list);                 
                     ((MainWindow)main).CloseTempFrame();
                     Page showPage = new DbLocation("nothing");
                     ((MainWindow)main).AddTempFrame(showPage);

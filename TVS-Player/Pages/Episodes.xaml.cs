@@ -34,11 +34,11 @@ namespace TVS_Player {
     public partial class Episodes : Page {
         int id;
         int season;
-        SelectedShows ss;
+        Show ss;
 
-        public Episodes(SelectedShows s, int season2) {
+        public Episodes(Show s, int season2) {
             InitializeComponent();
-            id = Int32.Parse(s.idSel);
+            id = s.id;
             season = season2;
             ss = s;
             ClickTimer = new Timer(300);
@@ -57,7 +57,7 @@ namespace TVS_Player {
         }
         private void LoadEP() {
             List<Episode> temp = new List<Episode>();
-            List<Episode> tempCheck = DatabaseEpisodes.readDb(id);
+            List<Episode> tempCheck = DatabaseEpisodes.ReadDb(id);
             foreach (Episode episode in tempCheck) {
                 if (episode.season == season) {
                     temp.Add(episode);
@@ -187,7 +187,7 @@ namespace TVS_Player {
                     writers += JT.ToString() + ", ";
                 }
                 EPName.Text = episode.name;
-                ShowName.Text = ss.nameSel;
+                ShowName.Text = ss.name;
                 FirstAired.Text = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
                 Director.Text = directors.Remove(directors.Length - 2, 2);
                 if (writers.Length > 0) { 

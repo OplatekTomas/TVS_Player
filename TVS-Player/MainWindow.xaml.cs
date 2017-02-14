@@ -23,7 +23,6 @@ namespace TVS_Player {
         public MainWindow() {
             InitializeComponent();
             Api.getToken();
-            DatabaseAPI.readDb();
         }
 
         private void MenuButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

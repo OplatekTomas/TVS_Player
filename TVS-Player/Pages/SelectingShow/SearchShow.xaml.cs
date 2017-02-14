@@ -37,8 +37,8 @@ namespace TVS_Player {
             public string getName() {
                 return selName;
             }
-            public string getID() {
-                return selID;
+            public int getID() {
+                return Int32.Parse(selID);
             }
 
         }

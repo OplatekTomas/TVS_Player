@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace TVS_Player {
     /// <summary>
@@ -27,14 +28,15 @@ namespace TVS_Player {
         }
 
         public void LoadShows() {
-            for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
+            List<Show> list = DatabaseShows.ReadDb(); 
+            foreach(Show s in list) { 
                 Dispatcher.Invoke(new Action(() => {
-                    GenerateRectangle(DatabaseAPI.database.Shows[i]);
+                    GenerateRectangle(s);
                 }), DispatcherPriority.Send);
             }
         }
 
-        private void GenerateRectangle(SelectedShows ss) {
+        private void GenerateRectangle(Show ss) {
             ShowRectangle folder = new ShowRectangle(ss);
             folder.library = this;
             List.Children.Add(folder);
@@ -50,7 +52,7 @@ namespace TVS_Player {
             var show = await Helpers.showSelector();
             string name = show.Item2;
             string id = show.Item1;
-            DatabaseAPI.addShowToDb(id,name,true);
+            DatabaseShows.AddShowToDb(Int32.Parse(id),name);
             Page selectLoc = new ScanLocation(true);
             ((MainWindow)main).AddTempFrame(selectLoc);
             Page refreshView = new Shows();

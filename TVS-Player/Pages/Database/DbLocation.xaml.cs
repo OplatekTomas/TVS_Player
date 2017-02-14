@@ -47,15 +47,15 @@ namespace TVS_Player {
         private void Ok_Click(object sender, RoutedEventArgs e) {
             if (Directory.Exists(dbLoc)) {
                 if (next == "nothing") {
-                    DatabaseAPI.database.libraryLocation = dbLoc;
-                    DatabaseAPI.saveDB();
+                    SettingsDB s = new SettingsDB(dbLoc);
+                    AppSettings.SaveDB(s);
                     Window main = Window.GetWindow(this);
                     ((MainWindow)main).CloseTempFrame();
                     Page showPage = new ScanLocation(false);
                     ((MainWindow)main).AddTempFrame(showPage);
                 } else if(next == "import") {
-                    DatabaseAPI.database.libraryLocation = dbLoc;
-                    DatabaseAPI.saveDB();
+                    SettingsDB s = new SettingsDB(dbLoc);
+                    AppSettings.SaveDB(s);
                     Window main = Window.GetWindow(this);
                     ((MainWindow)main).CloseTempFrame();
                     Page showPage = new ManageShowList(dbLoc);

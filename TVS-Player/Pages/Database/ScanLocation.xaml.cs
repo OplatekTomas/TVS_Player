@@ -70,14 +70,14 @@ namespace TVS_Player {
                     locs.Add(fc.pathBox.Text);
                 }
             }
-            if (!addDb) {
-                for (int i = 0; i < DatabaseAPI.database.Shows.Count; i++) {
-                    ids.Add(Int32.Parse(DatabaseAPI.database.Shows[i].idSel));
+            if (!addDb) {             
+                foreach(Show s in DatabaseShows.ReadDb()) { 
+                    ids.Add(s.id);
                 }
-                Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
+                Renamer.RenameBatch(ids, locs, AppSettings.GetLibLocation());
             } else {
-                ids.Add(Int32.Parse(DatabaseAPI.database.Shows.Last().idSel));
-                Renamer.RenameBatch(ids, locs, DatabaseAPI.database.libraryLocation);
+                ids.Add(DatabaseShows.ReadDb().Last().id);
+                Renamer.RenameBatch(ids, locs, AppSettings.GetLibLocation());
             }
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
