@@ -38,19 +38,40 @@ namespace TVS_Player {
 
 
         private void RunChecker() {
-            Action a = () => CheckChanges();
+            Notification n = new Notification();
+            Action a = () => CheckChanges(n);
             CheckThread = new Thread(a.Invoke);
             CheckThread.Name = "Background checker for changes";
-            CheckThread.SetApartmentState(ApartmentState.STA);
             CheckThread.Start();
         }
-        private void CheckChanges() {
+        private void CheckChanges(Notification n) {
             while (true) {
                 if (LastLaunch < (DateTime.Now.AddDays(-1))) {
                 }
-                //Notifier.UpdateDBAll();
+                UpdateDBAll(n);
                 Thread.Sleep(TimeSpan.FromHours(1));
             }
+        }
+
+        private void UpdateDBAll(Notification n) {
+            List<Show> sh = DatabaseShows.ReadDb();
+            Dispatcher.Invoke(new Action(() => {
+                n.ProgBar.Maximum = sh.Count;
+                notifications.Add(n);
+            }), DispatcherPriority.Send);
+            foreach (Show s in sh) {
+                Dispatcher.Invoke(new Action(() => {
+                    int sIndex = sh.IndexOf(s) + 1;
+                    n.MainText.Text = "Updating: " + s.name;
+                    n.SecondText.Text = sIndex + "/" + sh.Count;
+                    n.ProgBar.Value = sIndex;
+                    int index = MainWindow.notifications.IndexOf(n);
+                    notifications[index] = n;
+                }), DispatcherPriority.Send);
+                Checker.UpdateFull(s.id);
+            }
+            MainWindow.notifications.Remove(n);
+
         }
 
         private void MenuButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

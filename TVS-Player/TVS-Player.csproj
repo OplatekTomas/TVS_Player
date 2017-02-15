@@ -128,7 +128,6 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Checker.cs" />
     <Compile Include="Classes\Helpers.cs" />
-    <Compile Include="Classes\Notifier.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Controls\ActorInfo.xaml.cs">
       <DependentUpon>ActorInfo.xaml</DependentUpon>

@@ -108,7 +108,7 @@ namespace TVS_Player {
             DatabaseEpisodes.CreateDB(id,EPList);
         }
 
-        static void UpdateFull(int id) {
+        public static void UpdateFull(int id) {
             List<Episode> epi = DatabaseEpisodes.ReadDb(id);
             for (int i = 1; i <= Renamer.GetNumberOfSeasons(id); i++) {
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
