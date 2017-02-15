@@ -68,8 +68,12 @@ namespace TVS_Player {
                 string text;
                 var ffProbe = new NReco.VideoInfo.FFProbe();
                 if (episode.locations.Count > 0) {
-                    var videoInfo = ffProbe.GetMediaInfo(episode.locations[0]);
-                    text = videoInfo.Duration.ToString(@"hh\:mm\:ss");
+                    try {
+                        var videoInfo = ffProbe.GetMediaInfo(episode.locations[0]);
+                        text = videoInfo.Duration.ToString(@"hh\:mm\:ss");
+                    } catch (Exception) {
+                        text = "--:--:--";
+                    }
                 } else {
                     text= "--:--:--";
                 }
@@ -188,12 +192,27 @@ namespace TVS_Player {
                 }
                 EPName.Text = episode.name;
                 ShowName.Text = ss.name;
-                FirstAired.Text = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
-                Director.Text = directors.Remove(directors.Length - 2, 2);
-                if (writers.Length > 0) { 
-                    Writer.Text = writers.Remove(writers.Length - 2, 2);
+                if (jo["data"]["firstAired"].ToString() != "") {
+                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    FirstAired.Text = dt.ToString("dd.mm.yyyy");
+                    if (dt >= DateTime.Now) {
+                        Director.Text = "-";
+                        Writer.Text = "-";
+                        Overview.Text = "-";
+                    } else {
+                        Director.Text = directors.Remove(directors.Length - 2, 2);
+                        if (writers.Length > 0) {
+                            Writer.Text = writers.Remove(writers.Length - 2, 2);
+                        }
+                        Overview.Text = jo["data"]["overview"].ToString();
+                    }
+                } else {
+                    FirstAired.Text = "--.--.----";
+                    Director.Text = "-";
+                    Writer.Text = "-";
+                    Overview.Text = "-";
                 }
-                Overview.Text = jo["data"]["overview"].ToString();
+                
             }), DispatcherPriority.Send);
         }
 

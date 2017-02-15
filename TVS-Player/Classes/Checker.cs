@@ -29,6 +29,7 @@ namespace TVS_Player {
         }
 
         private static void RescanEP(int id, List<string> locations) {
+            CheckExistence(id);
             List<string> showFiles = new List<string>();
             List<string> aliases = Api.GetAliases(id);
             List<string> files = new List<string>();
@@ -42,60 +43,49 @@ namespace TVS_Player {
                     }
                 }
             }
-            showFiles = FilterExtensions(showFiles);
+            showFiles = Renamer.FilterExtensions(showFiles);
             string showName = DatabaseShows.FindShow(id).name;
             string lib = AppSettings.GetLibLocation();
-            RenameFiles(files, lib + "\\" + showName, id, showName);
-
+            AddFiles(files, lib + "\\" + showName, id, showName);
         }
 
-        public static void RenameFiles(List<string> files, string path, int id, string showName) {
-            List<Episode> EPNames = new List<Episode>(); 
+        public static void CheckExistence(int id) {
+            List<Episode> list = DatabaseEpisodes.ReadDb(id);
+            foreach (Episode e in list) {
+                foreach (string file in e.locations) {
+                    if (!File.Exists(file)) {
+                        e.locations.Remove(file);
+                    }
+                }
+            }
+            DatabaseEpisodes.CreateDB(id, list);
+        }
+
+        public static void AddFiles(List<string> files, string path, int id, string showName) {
+            List<Episode> EPNames = DatabaseEpisodes.ReadDb(id);
             foreach (string file in files) {
-                Tuple<int, int> t = GetInfo(file);
+                Tuple<int, int> t = Renamer.GetInfo(file);
                 int season = t.Item1;
                 int episode = t.Item2;
                 var selectedEP = EPNames.FirstOrDefault(o => o.season == season && o.episode == episode);
-                int index = EPNames.FindIndex(o => o.season == season && o.episode == episode);
                 if (selectedEP == null) {
                     MessageBox.Show("This TV Show doesnt have episode " + episode + " in season " + season + ".\nFile " + file + " won't be renamed", "Error");
                 } else {
                     string output = Renamer.GetValidName(path, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
                     if (file != output) {
                         File.Move(file, output);
-                        int ShowIndex = DatabaseEpisodes.ReadDb(id).FindIndex(e => e.id == id);
+                        int ShowIndex = EPNames.FindIndex(e => e.season == season && e.episode == episode);
+                        Episode ep = EPNames.Find(e => e.season == season && e.episode == episode);
+                        List<string> tempPath = ep.locations;
+                        tempPath.Add(output);
+                        EPNames[ShowIndex] = new Episode(ep.name,ep.season,ep.episode,ep.id,ep.release,true,tempPath);
                     }
-                    EPNames[index].downloaded = true;
-                    EPNames[index].locations.Add(output);
                 }
             }
+            DatabaseEpisodes.CreateDB(id,EPNames);
         }
 
-        public static Tuple<int, int> GetInfo(string file) {
-            Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
-            Match episode = new Regex("[e][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
-            Match special = new Regex("[0-5][0-9][x][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
-            if (season.Success && episode.Success) {
-                int s = Int32.Parse(season.Value.Remove(0, 1));
-                int e = Int32.Parse(episode.Value.Remove(0, 1));
-                return new Tuple<int, int>(s, e);
-            } else if (special.Success) {
-                int s = Int32.Parse(special.Value.Substring(0, 2));
-                int e = Int32.Parse(special.Value.Substring(3, 2));
-                return new Tuple<int, int>(s, e);
-            }
-            return null;
-        }
-        public static List<string> FilterExtensions(List<string> files) {
-            string[] fileExtension = new string[10] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv", ".idx" };
-            List<string> filtered = new List<string>();
-            foreach (string file in files) {
-                if (fileExtension.Any(file.Contains)) {
-                    filtered.Add(file);
-                }
-            }
-            return filtered;
-        }
+       
         private static void Update(int id) {
             List<Episode> EPList = DatabaseEpisodes.ReadDb(id);
             int season = EPList.Max(y => y.season);
@@ -104,7 +94,7 @@ namespace TVS_Player {
             if (nextSeason != null) {
                 JObject jo = JObject.Parse(nextSeason);
                 foreach (JToken jt in jo["data"]) {
-                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     EPList.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), false, new List<string>()));
                 }
             }
@@ -117,18 +107,25 @@ namespace TVS_Player {
             }
             DatabaseEpisodes.CreateDB(id,EPList);
         }
-        private static void UpdateFull(int id) {
+
+        static void UpdateFull(int id) {
             List<Episode> epi = DatabaseEpisodes.ReadDb(id);
             for (int i = 1; i <= Renamer.GetNumberOfSeasons(id); i++) {
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
                 foreach (JToken jt in jo["data"]) {
-                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                    string time;
+                    if (jt["firstAired"].ToString() != "") {
+                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        time = dt.ToString("dd.mm.yyyy");
+                    } else {
+                        time = "--.--.----";
+                    }
                     int episode = Int32.Parse(jt["airedEpisodeNumber"].ToString());
                     try {
                         int index = epi.FindIndex(s => s.season == i && s.episode == episode);
-                        epi[index] = new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), epi[index].downloaded, epi[index].locations);
+                        epi[index] = new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),time , epi[index].downloaded, epi[index].locations);
                     } catch (ArgumentNullException) {
-                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), false, new List<string>()));
+                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),time, false, new List<string>()));
                     }
                 }
             }

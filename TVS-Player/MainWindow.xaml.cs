@@ -14,22 +14,49 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.IO;
+using System.Threading;
+using Timer = System.Timers.Timer;
+using System.Windows.Threading;
 
 namespace TVS_Player {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        DateTime LastLaunch;
         public MainWindow() {
             InitializeComponent();
             Api.getToken();
+            LastLaunch = Properties.Settings.Default.LastLaunched;
+            Properties.Settings.Default.LastLaunched = DateTime.Now;
+            Properties.Settings.Default.Save();
+            RunChecker();
+        }
+        Thread CheckThread;
+        Timer t = new Timer();
+        public static List<Notification> notifications = new List<Notification>();
+
+
+        private void RunChecker() {
+            Action a = () => CheckChanges();
+            CheckThread = new Thread(a.Invoke);
+            CheckThread.Name = "Background checker for changes";
+            CheckThread.SetApartmentState(ApartmentState.STA);
+            CheckThread.Start();
+        }
+        private void CheckChanges() {
+            while (true) {
+                if (LastLaunch < (DateTime.Now.AddDays(-1))) {
+                }
+                //Notifier.UpdateDBAll();
+                Thread.Sleep(TimeSpan.FromHours(1));
+            }
         }
 
         private void MenuButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             ShowHideMenu("sbShowLeftMenu", Sidebar);
             MenuBackground.Visibility = Visibility.Visible;
             ShowHideMenu("sbShowBackground", MenuBackground);
-
         }
 
         private void MenuHideButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -102,7 +129,8 @@ namespace TVS_Player {
                 //string kappa = Api.apiGet(1,1, 73871);
                 //Frame.Content = new Startup();
 
-                Checker.UpdateShowFull(277928);
+                //string test = AppSettings.GetLibLocation();
+                //Checker.UpdateShowFull(277928);
                 //Checker.CheckForUpdates(121361);
             }
         }
@@ -117,6 +145,34 @@ namespace TVS_Player {
 
         private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
 
+        }
+
+        private void RenderNotifications() {
+            for (int i = 0; i < notifications.Count; i++) {
+                Dispatcher.Invoke(new Action(() => {
+                    NotificationsList.Children[i] = notifications[i];
+                }), DispatcherPriority.Send);
+            }
+        }
+
+        private void NotificationButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (notifications.Count > 0) {
+                foreach (Notification n in notifications) {
+                    NotificationsList.Children.Add(n);
+                }
+                t.Interval = 100;
+                t.Elapsed += (s, ea) => RenderNotifications();
+                t.Enabled = true;
+                NotificationPanel.Visibility = Visibility.Visible;
+                NotificationPanel.Focusable = true;
+                NotificationPanel.Focus();
+            }
+        }
+        private void NotificationPanel_LostFocus(object sender, RoutedEventArgs e) {
+            t.Enabled = false;
+            NotificationsList.Children.RemoveRange(0, NotificationsList.Children.Count);
+            NotificationPanel.Focusable = false;
+            NotificationPanel.Visibility = Visibility.Hidden;
         }
     }
 }

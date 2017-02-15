@@ -123,8 +123,14 @@ namespace TVS_Player {
             for (int i = 1; i <= GetNumberOfSeasons(id); i++) { 
                 JObject jo = JObject.Parse(Api.apiGetEpisodesBySeasons(id, i));
                 foreach (JToken jt in jo["data"]) {
-                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd",CultureInfo.InvariantCulture);
-                    epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),dt.ToString("dd.mm.yyyy"),false, new List<string>()));
+
+                    if (jt["firstAired"].ToString() != "") {
+                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), false, new List<string>()));
+
+                    } else {
+                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), "--.--.----", false, new List<string>()));
+                    }
                 }          
             }
             return epi;

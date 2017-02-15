@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
-             Margin="5" MouseLeftButtonDown="ShowClicked_Event" Width="187" Height="275">
+             Margin="7" MouseLeftButtonDown="ShowClicked_Event" Width="187" Height="275">
     <Grid.Resources>
         <Storyboard x:Key="DisableSearch">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grid1">
@@ -37,16 +37,12 @@
             <MenuItem Header="Remove show" Click="RemoveShow_Event"></MenuItem>
         </ContextMenu>
     </Grid.ContextMenu>
-    <Border x:Name="border" CornerRadius="5">
-        <Grid x:Name="grid1" Width="187" Height="275">
-            <Viewbox x:Name="viewbox" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
-                <Image x:Name ="Image" RenderOptions.BitmapScalingMode="HighQuality">
-                    <Image.Effect>
-                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.8"/>
-                    </Image.Effect>
-                </Image>
-            </Viewbox>
-            <Border x:Name="border1" BorderBrush="Black" BorderThickness="1" Background="#000F1332"/>
-        </Grid>
-    </Border>
+    <Grid x:Name="grid1" Width="187" Height="275">
+        <Grid.BitmapEffect>
+            <DropShadowBitmapEffect Color="Black" Direction="315" ShadowDepth="7" Softness="0.8" Opacity="0.6"/>
+        </Grid.BitmapEffect>
+        <Viewbox x:Name="viewbox" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+            <Image x:Name ="Image" RenderOptions.BitmapScalingMode="HighQuality"/>
+        </Viewbox>
+    </Grid>
 </Grid>

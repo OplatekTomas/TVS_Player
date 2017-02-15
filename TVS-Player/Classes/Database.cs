@@ -20,11 +20,11 @@ namespace TVS_Player {
             File.WriteAllText(path, tempJS);
         }
         public static SettingsDB ReadDB() {
-            string path = Helpers.path + "\\TVS-Player\\Settings.TVSP";
-            JArray jo = new JArray();
+            string path = Helpers.path + "Settings.TVSP";
+            JObject jo = new JObject();
             try {
                 string json = File.ReadAllText(path);
-                jo = JArray.Parse(json);
+                jo = JObject.Parse(json);
             } catch {
                 return new SettingsDB(null);
             }
@@ -45,7 +45,7 @@ namespace TVS_Player {
     public static class DatabaseShows {
         public static List<Show> ReadDb() {
             List<Show> ss = new List<Show>();
-            string path = Helpers.path + "\\Shows.TVSP";
+            string path = Helpers.path + "Shows.TVSP";
             JArray jo = new JArray();
             try {
                 string json = File.ReadAllText(path);

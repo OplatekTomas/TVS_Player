@@ -60,7 +60,6 @@ namespace TVS_Player {
             //Page showPage = new ScanLocation();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrame(showPage);
-
             //Renamer.RenameBatch(new List<int>() { 272644 }, new List<string>() { "D:\\Test\\S1" }, "D:\\Test\\DB");
             //Renamer.RenameBatch(new List<int>(){ 121361 },new List<string>() {"D:\\Test\\S1" }, "D:\\Test\\DB");
             //DatabaseEpisodes.readDb(121361);

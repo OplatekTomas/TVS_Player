@@ -25,7 +25,7 @@
         </Storyboard>
     </Window.Resources>
     <Grid x:Name="GridOnTop">
-        <Grid x:Name="Sidebar" Width="200" Margin="-200,0,0,0" HorizontalAlignment="Left" Panel.ZIndex="4" Background="{StaticResource BackgroundBrush}">
+        <Grid x:Name="Sidebar" Width="200" Margin="-200,0,0,0" HorizontalAlignment="Left" Panel.ZIndex="5" Background="{StaticResource BackgroundBrush}">
             <StackPanel VerticalAlignment="Top">
                 <Grid Height="60" x:Name="MenuHideButton" MouseLeftButtonUp="MenuHideButton_MouseLeftButtonUp">
                     <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
@@ -70,6 +70,9 @@
             <Grid x:Name="MenuButton" Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0" MouseLeftButtonUp="MenuButton_MouseLeftButtonUp">
                 <Image Source="/Icons/menu.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Grid>
+            <Grid x:Name="NotificationButton" Width="40" Height="40" HorizontalAlignment="Right" Margin="5,0,5,0" MouseLeftButtonUp="NotificationButton_MouseLeftButtonUp">
+                <Image Source="/Icons/ShowMore.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
+            </Grid>
             <Grid Background="#1565C0" HorizontalAlignment="Center" Width="400" Margin="5" MaxWidth="600">
                 <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0" GotFocus="SearchBar_GotFocus">
                     <TextBox.Style>
@@ -84,7 +87,25 @@
         <Grid x:Name="BaseGrid" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Margin="0,40,0,0">
             <Frame x:Name="Frame" NavigationUIVisibility="Hidden" Loaded="FrameLoaded_Handler" Source="/TVS-Player;component/Pages/Shows.xaml"/>
         </Grid>
-        <Grid Panel.ZIndex="3" x:Name="MenuBackground" Margin="0,0,0,0" Background="#AA000000" MouseLeftButtonUp="MenuHideButton_MouseLeftButtonUp" Opacity="0" Visibility="Hidden"/>
+        <Grid Panel.ZIndex="4" x:Name="MenuBackground" Margin="0,0,0,0" Background="#AA000000" MouseLeftButtonUp="MenuHideButton_MouseLeftButtonUp" Opacity="0" Visibility="Hidden"/>
+        <Grid Panel.ZIndex="3" x:Name="SearchPanel" Background="{StaticResource BackgroundBrush}" Width="400" Margin="0,35" VerticalAlignment="Top"  MaxHeight="400" Visibility="Hidden">
+            <Grid.BitmapEffect>
+                <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
+            </Grid.BitmapEffect>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel  x:Name="SearchList" Margin="0,3,0,0">
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid Panel.ZIndex="3" x:Name="NotificationPanel" Background="{StaticResource LighterBackgroundBrush}" Width="300" HorizontalAlignment="Right" Margin="25,6" VerticalAlignment="Top"  MaxHeight="400" Visibility="Hidden" LostFocus="NotificationPanel_LostFocus">
+            <Grid.BitmapEffect>
+                <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
+            </Grid.BitmapEffect>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                <StackPanel  x:Name="NotificationsList" Margin="0,3,0,0">
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 
 </Window>

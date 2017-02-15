@@ -26,8 +26,8 @@
   <SolidColorBrush x:Key="GridSplitterFocusedBorderBrush" Color="{StaticResource Color_024}" />
 
   <!-- ProgressBar Brushes -->
-  <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{StaticResource Color_005}" />
-  <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{StaticResource Color_024}" />
+  <SolidColorBrush x:Key="ProgressBarBackgroundBrush" Color="{StaticResource ThemeDarkAccent}" />
+  <SolidColorBrush x:Key="ProgressBarForegroundBrush" Color="{StaticResource ThemeDarkestAccent}" />
   <LinearGradientBrush x:Key="ProgressBarIndeterminateBackgroundBrush" EndPoint="0,1" MappingMode="Absolute" SpreadMethod="Repeat" StartPoint="20,1" Opacity="0.8">
     <LinearGradientBrush.Transform>
       <TransformGroup>

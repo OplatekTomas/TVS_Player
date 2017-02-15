@@ -128,6 +128,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Checker.cs" />
     <Compile Include="Classes\Helpers.cs" />
+    <Compile Include="Classes\Notifier.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Controls\ActorInfo.xaml.cs">
       <DependentUpon>ActorInfo.xaml</DependentUpon>
@@ -147,6 +148,9 @@
     </Compile>
     <Compile Include="Controls\EpisodeControl.xaml.cs">
       <DependentUpon>EpisodeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Notification.xaml.cs">
+      <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Episodes.xaml.cs">
       <DependentUpon>Episodes.xaml</DependentUpon>
@@ -199,6 +203,9 @@
     <Compile Include="Controls\SeasonControl.xaml.cs">
       <DependentUpon>SeasonControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SearchResult.xaml.cs">
+      <DependentUpon>SearchResult.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\ActorInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -220,6 +227,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\EpisodeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Notification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,6 +312,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Player.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SearchResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -441,6 +456,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\fullscreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ShowMore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
