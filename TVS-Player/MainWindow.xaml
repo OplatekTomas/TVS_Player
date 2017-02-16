@@ -102,7 +102,7 @@
                 <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
             </Grid.BitmapEffect>
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
-                <StackPanel  x:Name="NotificationsList" Margin="0,3,0,0">
+                <StackPanel  x:Name="NotificationsList" Margin="0,3,0,5">
                 </StackPanel>
             </ScrollViewer>
         </Grid>

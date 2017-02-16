@@ -47,31 +47,60 @@ namespace TVS_Player {
         private void CheckChanges(Notification n) {
             while (true) {
                 if (LastLaunch < (DateTime.Now.AddDays(-1))) {
+                    new Task(() => UpdateDBAll(n)).Start();
                 }
-                UpdateDBAll(n);
+
+                new Task(() => RescanFilesAll(n)).Start();
+                //RescanFilesAll(n);
                 Thread.Sleep(TimeSpan.FromHours(1));
             }
         }
 
-        private void UpdateDBAll(Notification n) {
+        private void RescanFilesAll(Notification n) {
             List<Show> sh = DatabaseShows.ReadDb();
             Dispatcher.Invoke(new Action(() => {
+                n = new Notification();
                 n.ProgBar.Maximum = sh.Count;
                 notifications.Add(n);
             }), DispatcherPriority.Send);
             foreach (Show s in sh) {
                 Dispatcher.Invoke(new Action(() => {
                     int sIndex = sh.IndexOf(s) + 1;
-                    n.MainText.Text = "Updating: " + s.name;
+                    n.MainText.Text = "Updating files: " + s.name;
                     n.SecondText.Text = sIndex + "/" + sh.Count;
                     n.ProgBar.Value = sIndex;
-                    int index = MainWindow.notifications.IndexOf(n);
+                    int index = notifications.IndexOf(n);
                     notifications[index] = n;
                 }), DispatcherPriority.Send);
-                Checker.UpdateFull(s.id);
+                Checker.RescanEP(s.id, new List<string>());
             }
-            MainWindow.notifications.Remove(n);
-
+            notifications.Remove(n);
+            Dispatcher.Invoke(new Action(() => {
+                NotificationsList.Children.Remove(n);
+            }), DispatcherPriority.Send);
+        }
+        private void UpdateDBAll(Notification n) {
+            List<Show> sh = DatabaseShows.ReadDb();
+            Dispatcher.Invoke(new Action(() => {
+                n = new Notification();
+                n.ProgBar.Maximum = sh.Count;
+                notifications.Add(n);
+            }), DispatcherPriority.Send);
+            foreach (Show s in sh) {
+                Dispatcher.Invoke(new Action(() => {
+                    int sIndex = sh.IndexOf(s) + 1;
+                    n.MainText.Text = "Updating DB: " + s.name;
+                    n.SecondText.Text = sIndex + "/" + sh.Count;
+                    n.ProgBar.Value = sIndex;
+                    int index = notifications.IndexOf(n);
+                    notifications[index] = n;
+                }), DispatcherPriority.Send);
+                Checker.Update(s.id);
+            }
+            notifications.Remove(n);
+            Dispatcher.Invoke(new Action(() => {
+                NotificationsList.Children.Remove(n);
+            }), DispatcherPriority.Send);
         }
 
         private void MenuButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -94,9 +123,7 @@ namespace TVS_Player {
             Storyboard sb = Resources[Storyboard] as Storyboard;
             sb.Begin(pnl);
         }
-        /* private void btnShowsShow_Click(object sender, RoutedEventArgs e) {
-
-         }
+        /*
          private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
           
          }*/

@@ -77,7 +77,7 @@ namespace TVS_Player {
                 } else {
                     text= "--:--:--";
                 }
-                if (episode.downloaded) {
+                if (episode.locations.Count > 0) {
                     Dispatcher.Invoke(new Action(() => {
                         EpisodeControl EPC = new EpisodeControl();
                         EPC.EPGrid.MouseLeftButtonDown += (s, ev) => ClickCheck(episode);
@@ -193,7 +193,7 @@ namespace TVS_Player {
                 EPName.Text = episode.name;
                 ShowName.Text = ss.name;
                 if (jo["data"]["firstAired"].ToString() != "") {
-                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
                     FirstAired.Text = dt.ToString("dd.mm.yyyy");
                     if (dt >= DateTime.Now) {
                         Director.Text = "-";

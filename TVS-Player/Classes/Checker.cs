@@ -13,22 +13,8 @@ using System.Windows.Threading;
 
 namespace TVS_Player {
     class Checker {
-        public static void UpdateShow(int id) {
-            Action check;
-            check = () => Update(id);
-            Thread threadCheck = new Thread(check.Invoke);
-            threadCheck.Name = "Checking for updates";
-            threadCheck.Start();
-        }
-        public static void UpdateShowFull(int id) {
-            Action check;
-            check = () => UpdateFull(id);
-            Thread threadCheck = new Thread(check.Invoke);
-            threadCheck.Name = "Checking for updates";
-            threadCheck.Start();
-        }
 
-        private static void RescanEP(int id, List<string> locations) {
+        public static void RescanEP(int id, List<string> locations) {
             CheckExistence(id);
             List<string> showFiles = new List<string>();
             List<string> aliases = Api.GetAliases(id);
@@ -49,10 +35,10 @@ namespace TVS_Player {
             AddFiles(files, lib + "\\" + showName, id, showName);
         }
 
-        public static void CheckExistence(int id) {
+        private static void CheckExistence(int id) {
             List<Episode> list = DatabaseEpisodes.ReadDb(id);
             foreach (Episode e in list) {
-                foreach (string file in e.locations) {
+                foreach (string file in e.locations.ToList()) {
                     if (!File.Exists(file)) {
                         e.locations.Remove(file);
                     }
@@ -61,7 +47,7 @@ namespace TVS_Player {
             DatabaseEpisodes.CreateDB(id, list);
         }
 
-        public static void AddFiles(List<string> files, string path, int id, string showName) {
+        private static void AddFiles(List<string> files, string path, int id, string showName) {
             List<Episode> EPNames = DatabaseEpisodes.ReadDb(id);
             foreach (string file in files) {
                 Tuple<int, int> t = Renamer.GetInfo(file);
@@ -86,7 +72,7 @@ namespace TVS_Player {
         }
 
        
-        private static void Update(int id) {
+        public static void Update(int id) {
             List<Episode> EPList = DatabaseEpisodes.ReadDb(id);
             int season = EPList.Max(y => y.season);
             string seasonInfo = Api.apiGetEpisodesBySeasons(id, season);
@@ -94,16 +80,26 @@ namespace TVS_Player {
             if (nextSeason != null) {
                 JObject jo = JObject.Parse(nextSeason);
                 foreach (JToken jt in jo["data"]) {
-                    DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    EPList.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), false, new List<string>()));
+                    string time;
+                    if (jt["firstAired"].ToString() != "") {
+                        time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
+                    } else {
+                        time = "--.--.----";
+                    }
+                    EPList.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), time , false, new List<string>()));
                 }
             }
             JObject jo2 = JObject.Parse(seasonInfo);
             foreach (JToken jt in jo2["data"]) {
-                DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                string time;
+                if (jt["firstAired"].ToString() != "") {
+                    time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
+                } else {
+                    time = "--.--.----";
+                }
                 int episode = Int32.Parse(jt["airedEpisodeNumber"].ToString());
                 int index = EPList.FindIndex(s =>s.season == season && s.episode == episode);            
-                EPList[index] = new Episode(jt["episodeName"].ToString(),season,episode, Int32.Parse(jt["id"].ToString()), dt.ToString("dd.MM.yyyy"), EPList[index].downloaded, EPList[index].locations);
+                EPList[index] = new Episode(jt["episodeName"].ToString(),season,episode, Int32.Parse(jt["id"].ToString()), time, EPList[index].downloaded, EPList[index].locations);
             }
             DatabaseEpisodes.CreateDB(id,EPList);
         }
@@ -115,16 +111,16 @@ namespace TVS_Player {
                 foreach (JToken jt in jo["data"]) {
                     string time;
                     if (jt["firstAired"].ToString() != "") {
-                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
                         time = dt.ToString("dd.mm.yyyy");
                     } else {
-                        time = "--.--.----";
+                        time = ".--.----";
                     }
                     int episode = Int32.Parse(jt["airedEpisodeNumber"].ToString());
                     try {
                         int index = epi.FindIndex(s => s.season == i && s.episode == episode);
                         epi[index] = new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),time , epi[index].downloaded, epi[index].locations);
-                    } catch (ArgumentNullException) {
+                    } catch (Exception) {
                         epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()),time, false, new List<string>()));
                     }
                 }
