@@ -17,6 +17,7 @@ using System.IO;
 using System.Threading;
 using Timer = System.Timers.Timer;
 using System.Windows.Threading;
+using Newtonsoft.Json;
 
 namespace TVS_Player {
     /// <summary>
@@ -35,7 +36,7 @@ namespace TVS_Player {
         Thread CheckThread;
         Timer t = new Timer();
         public static List<Notification> notifications = new List<Notification>();
-
+        public static List<SearchItem> searchIndex = new List<SearchItem>();
 
         private void RunChecker() {
             Notification n = new Notification();
@@ -46,14 +47,31 @@ namespace TVS_Player {
         }
         private void CheckChanges(Notification n) {
             while (true) {
-                if (LastLaunch < (DateTime.Now.AddDays(-1))) {
-                    new Task(() => UpdateDBAll(n)).Start();
-                }
-
+                //if (LastLaunch < (DateTime.Now.AddDays(-1))) {
+                    Task t1 = new Task(() => UpdateDBAll(n));
+                    t1.ContinueWith(t => SearchIndexer() );
+                    t1.Start();
+                //}
                 new Task(() => RescanFilesAll(n)).Start();
                 //RescanFilesAll(n);
                 Thread.Sleep(TimeSpan.FromHours(1));
             }
+        }
+
+        private void SearchIndexer() {
+            SearchIndexDB.SaveDB(CreateSearchIndex());
+            searchIndex.AddRange(SearchIndexDB.ReadDB());
+        }
+
+        private List<SearchItem> CreateSearchIndex() {
+            List<SearchItem> items = new List<SearchItem>();
+            foreach (Show s in DatabaseShows.ReadDb()) {
+                foreach (Episode ep in DatabaseEpisodes.ReadDb(s.id)) {
+                    items.Add(new SearchItem(s.name, ep.season, ep.episode, ep.name));
+                }
+            }
+            items.Reverse();
+            return items;
         }
 
         private void RescanFilesAll(Notification n) {
@@ -129,7 +147,7 @@ namespace TVS_Player {
          }*/
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
-            Api.getToken();
+            SearchBar.TextChanged += SearchBar_TextChanged;
         }
 
         public void SetFrameView(Page page) {
@@ -222,5 +240,39 @@ namespace TVS_Player {
             NotificationPanel.Focusable = false;
             NotificationPanel.Visibility = Visibility.Hidden;
         }
+
+        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e) {
+            SearchList.Children.Clear();
+            if (SearchBar.Text.Length > 1) {
+                string text = SearchBar.Text.ToUpper();
+                List<SearchItem> ItemList = new List<SearchItem>();
+                List<Tuple<string, SearchItem>> crazytuple = MergeName();
+                foreach (Tuple<string, SearchItem> t in crazytuple) {
+                    if (t.Item1.Contains(text)) {
+                        ItemList.Add(t.Item2);
+                    }
+                }
+                if (ItemList.Count > 0) {
+                    SearchPanel.Visibility = Visibility.Visible;
+                    foreach (SearchItem s in ItemList) {
+                        SearchResult se = new SearchResult();
+                        se.SerachText.Text = s.showName + " " + s.season + s.episode + " " + s.name;
+                        SearchList.Children.Add(se);
+                    }
+                }
+            }        
+        }
+        private List<Tuple<string, SearchItem>> MergeName() {
+            List<Tuple<string, SearchItem>> list = new List<Tuple<string, SearchItem>>();
+            foreach (SearchItem i in searchIndex) {
+                list.Add(new Tuple<string, SearchItem>(i.showName.ToUpper() + " " + i.season.ToUpper() + i.episode.ToUpper() + " " + i.name.ToUpper(), i));
+            }
+            return list;
+        }
+
     }
+   
+    
 }
+
+

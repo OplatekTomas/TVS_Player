@@ -174,7 +174,66 @@ namespace TVS_Player {
         }
 
     }
-    public class Show {
+
+    public class SearchIndexDB {
+        public static void SaveDB(List<SearchItem> list) {
+            string tempJS = JsonConvert.SerializeObject(list);
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\TVS-Player\\SearchIndex.TVSP";
+            if (!File.Exists(Path.GetDirectoryName(path))) {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+            File.WriteAllText(path, tempJS);
+        }
+        public static List<SearchItem> ReadDB(){
+            List<SearchItem> e = new List<SearchItem>();
+            string path = Helpers.path + "SearchIndex.TVSP";
+            JArray jo = new JArray();
+            try {
+                string json = File.ReadAllText(path);
+                jo = JArray.Parse(json);
+            } catch {
+            }
+            foreach (JToken jt in jo) {
+                e.Add(jt.ToObject<SearchItem>());
+            }
+            return e;
+        }
+    }
+    public class SearchItem {
+        public string showName;
+        public string season;
+        public string episode;
+        public string name;
+        public SearchItem(string showname, int season, int episode, string name) {
+            this.showName = showname;
+            this.season = SE(season);
+            this.episode = EP(episode);
+            this.name = name;
+        }
+        [JsonConstructor]
+        public SearchItem(string showname, string season, string episode, string name) {
+            this.showName = showname;
+            this.season = season;
+            this.episode = episode;
+            this.name = name;
+        }
+        private string EP(int number) {
+            if (number < 10) {
+                return "E0" + number;
+            } else {
+                return "E" + number;
+            }
+        }
+        private string SE(int number) {
+            if (number < 10) {
+                return "S0" + number;
+            } else {
+                return "S" + number;
+            }
+        }
+    }
+        
+        public class Show {
         public int id;
         public string name;
         public string posterFilename;

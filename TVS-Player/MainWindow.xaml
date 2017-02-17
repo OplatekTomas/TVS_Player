@@ -74,7 +74,7 @@
                 <Image Source="/Icons/ShowMore.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Grid>
             <Grid Background="#1565C0" HorizontalAlignment="Center" Width="400" Margin="5" MaxWidth="600">
-                <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0" GotFocus="SearchBar_GotFocus">
+                <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0"  GotFocus="SearchBar_GotFocus">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Background" Value="#00000000"/>
