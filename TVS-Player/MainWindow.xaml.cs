@@ -43,31 +43,37 @@ namespace TVS_Player {
             Action a = () => CheckChanges(n);
             CheckThread = new Thread(a.Invoke);
             CheckThread.Name = "Background checker for changes";
+            CheckThread.IsBackground = true;
             CheckThread.Start();
         }
         private void CheckChanges(Notification n) {
             while (true) {
-                //if (LastLaunch < (DateTime.Now.AddDays(-1))) {
+                if (LastLaunch < (DateTime.Now.AddDays(-1))) {
                     Task t1 = new Task(() => UpdateDBAll(n));
-                    t1.ContinueWith(t => SearchIndexer() );
+                    var secondtask = t1.ContinueWith(t3 => SaveSearch());
+                    secondtask.ContinueWith(t4 => LoadSearch());
                     t1.Start();
-                //}
-                new Task(() => RescanFilesAll(n)).Start();
-                //RescanFilesAll(n);
-                Thread.Sleep(TimeSpan.FromHours(1));
+                }
+                Task t2 = new Task(() => LoadSearch());
+                t2.ContinueWith(t => RescanFilesAll(n));
+                t2.Start();
+                Thread.Sleep(TimeSpan.FromSeconds(30));
             }
         }
 
-        private void SearchIndexer() {
+        private void SaveSearch() {
+            
             SearchIndexDB.SaveDB(CreateSearchIndex());
-            searchIndex.AddRange(SearchIndexDB.ReadDB());
+        }
+        private void LoadSearch() {
+            searchIndex = SearchIndexDB.ReadDB();
         }
 
         private List<SearchItem> CreateSearchIndex() {
             List<SearchItem> items = new List<SearchItem>();
             foreach (Show s in DatabaseShows.ReadDb()) {
                 foreach (Episode ep in DatabaseEpisodes.ReadDb(s.id)) {
-                    items.Add(new SearchItem(s.name, ep.season, ep.episode, ep.name));
+                    items.Add(new SearchItem(ep,s));
                 }
             }
             items.Reverse();
@@ -190,10 +196,10 @@ namespace TVS_Player {
         private void DownloadPageButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             HideMenu();
             if (Frame.Content.GetType() != typeof(Download)) {
-                Api.getToken();
+                //Api.getToken();
                 //Api.apiGetPoster(73871,"Futurama");
                 //string kappa = Api.apiGet(1,1, 73871);
-                //Frame.Content = new Startup();
+                Frame.Content = new Startup();
 
                 //string test = AppSettings.GetLibLocation();
                 //Checker.UpdateShowFull(277928);
@@ -206,16 +212,38 @@ namespace TVS_Player {
         }
 
         private void SettingsButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-
+            HideMenu();
+            if (Frame.Content.GetType() != typeof(Settings)) {
+                Frame.Content = new Settings();
+            }
         }
 
         private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            /*foreach (Show s in DatabaseShows.ReadDb()) {
+                Checker.UpdateFull(s.id);
+            }*/
+            Stream s = File.Open(@"E:\01Lib\Game of Thrones\Season 06\Game of Thrones - S06E01 - The Red Woman.srt",FileMode.Open);
+            List <SubtitleItem> listofSubs = SrtParser.ParseStream(GetEncoding(s));
+            string test = listofSubs[0].ToString();
+        }
 
+        private Encoding GetEncoding(Stream fileName) {
+            using (StreamReader reader = new StreamReader(fileName, Encoding.Default, true)) {
+                reader.Peek(); // you need this!
+                var encoding = reader.CurrentEncoding;
+                return encoding;
+            }
         }
 
         private void RenderNotifications() {
             for (int i = 0; i < notifications.Count; i++) {
                 Dispatcher.Invoke(new Action(() => {
+                    if (NotificationsList.Children.Count < notifications.Count) {
+                        while(NotificationsList.Children.Count < notifications.Count) {
+                            Notification n = new Notification();
+                            NotificationsList.Children.Add(n);
+                        }
+                    }
                     NotificationsList.Children[i] = notifications[i];
                 }), DispatcherPriority.Send);
             }
@@ -232,6 +260,8 @@ namespace TVS_Player {
                 NotificationPanel.Visibility = Visibility.Visible;
                 NotificationPanel.Focusable = true;
                 NotificationPanel.Focus();
+            } else {
+                MessageBox.Show("No notifications", "Info");
             }
         }
         private void NotificationPanel_LostFocus(object sender, RoutedEventArgs e) {
@@ -256,23 +286,30 @@ namespace TVS_Player {
                     SearchPanel.Visibility = Visibility.Visible;
                     foreach (SearchItem s in ItemList) {
                         SearchResult se = new SearchResult();
-                        se.SerachText.Text = s.showName + " " + s.season + s.episode + " " + s.name;
+                        se.MouseLeftButtonDown += (s1,e1) => LoadEP(s);
+                        se.SerachText.Text = s.show.name + " " + s.seasonNumber + s.episodeNumber + " " + s.episodeObject.name;
                         SearchList.Children.Add(se);
                     }
                 }
             }        
         }
+
+        private void LoadEP(SearchItem s) {
+            SetFrameView(new Episodes(s.show,s.episodeObject.season,s.episodeObject));
+        }
+
         private List<Tuple<string, SearchItem>> MergeName() {
             List<Tuple<string, SearchItem>> list = new List<Tuple<string, SearchItem>>();
             foreach (SearchItem i in searchIndex) {
-                list.Add(new Tuple<string, SearchItem>(i.showName.ToUpper() + " " + i.season.ToUpper() + i.episode.ToUpper() + " " + i.name.ToUpper(), i));
+                list.Add(new Tuple<string, SearchItem>(i.show.name.ToUpper() + " " + i.seasonNumber.ToUpper() + i.episodeNumber.ToUpper() + " " + i.episodeObject.name.ToUpper(), i));
             }
             return list;
         }
 
-    }
-   
-    
+        private void SearchBar_LostFocus(object sender, RoutedEventArgs e) {
+            SearchPanel.Visibility = Visibility.Hidden;
+        }
+    }   
 }
 
 

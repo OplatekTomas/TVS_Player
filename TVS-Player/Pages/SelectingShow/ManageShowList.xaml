@@ -19,20 +19,23 @@
             <RowDefinition Height="5*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1" Grid.Column="1" Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}">
-            <Grid.RowDefinitions>
+        <Border  Background="{StaticResource BackgroundBrush}" Grid.Row="1" Grid.Column="1" CornerRadius="4">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="270" ShadowDepth="5" Opacity="1" BlurRadius="20"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="45"/>
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="panel" Orientation="Vertical">
-                    <!-- <local:DBScanOption Height="65" Visibility="Hidden"/> -->
-                </StackPanel>
-            </ScrollViewer>
-            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF303030" Margin="5" Grid.Row="1"/>
-            <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FF969696" Margin="0,0,6,10" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click" Grid.Column="1" Grid.Row="1"/>
-            <Button x:Name="Ok" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,56,10" Foreground="#FF969696" Width="40" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Ok_Click" Grid.Column="1" Grid.Row="1" />
-        </Grid>
-     
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="panel" Orientation="Vertical">
+                        <!-- <local:DBScanOption Height="65" Visibility="Hidden"/> -->
+                    </StackPanel>
+                </ScrollViewer>
+                <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="White" Margin="0,0,6,10" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click" Grid.Column="1" Grid.Row="1"/>
+            <Button x:Name="Ok" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,56,10" Foreground="White" Width="40" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Ok_Click" Grid.Column="1" Grid.Row="1" />
+    </Grid>
+    </Border>
     </Grid>
 </Page>

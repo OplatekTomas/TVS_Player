@@ -82,7 +82,7 @@ namespace TVS_Player {
                 foreach (JToken jt in jo["data"]) {
                     string time;
                     if (jt["firstAired"].ToString() != "") {
-                        time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
+                        time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd.MM.yyyy");
                     } else {
                         time = "--.--.----";
                     }
@@ -93,7 +93,7 @@ namespace TVS_Player {
             foreach (JToken jt in jo2["data"]) {
                 string time;
                 if (jt["firstAired"].ToString() != "") {
-                    time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture).ToString("dd.mm.yyyy");
+                    time = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd.MM.yyyy");
                 } else {
                     time = "--.--.----";
                 }
@@ -111,8 +111,8 @@ namespace TVS_Player {
                 foreach (JToken jt in jo["data"]) {
                     string time;
                     if (jt["firstAired"].ToString() != "") {
-                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
-                        time = dt.ToString("dd.mm.yyyy");
+                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        time = dt.ToString("dd.MM.yyyy");
                     } else {
                         time = ".--.----";
                     }

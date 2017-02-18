@@ -52,7 +52,7 @@ namespace TVS_Player {
             overview.Text = parse["data"]["overview"].ToString();
             rating.Text = parse["data"]["siteRating"].ToString()+"/10";
             try {
-                DateTime dt = DateTime.ParseExact(parse["data"]["firstAired"].ToString(), "yyyy-mm-dd", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime dt = DateTime.ParseExact(parse["data"]["firstAired"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
                 firstAir.Text = dt.ToString("dd.MM.yyyy");
             } catch (Exception e) {
                 firstAir.Text = ("");

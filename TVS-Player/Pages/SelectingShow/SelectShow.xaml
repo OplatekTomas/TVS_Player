@@ -8,7 +8,7 @@
       d:DesignHeight="648" d:DesignWidth="1152"
       Title="SelectShow">
 
-    <Grid Background="#EE000000">
+    <Grid Background="{StaticResource TempBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="2*"/>
@@ -19,18 +19,23 @@
             <RowDefinition Height="2*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="4*"/>
-            </Grid.RowDefinitions>
-            <TextBox x:Name="nameTxt" Margin="5,5,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
-            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,40,5,0"/>
-            <ScrollViewer Margin="5,0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="panel">
-                    <local:tvShowControl Visibility="Hidden" />
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
+        <Border Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Grid.Column="1" Grid.Row="1" CornerRadius="4">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="270" ShadowDepth="5" Opacity="1" BlurRadius="20"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <TextBox x:Name="nameTxt" Margin="5,5,5,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="Show name" Style="{DynamicResource SearchBox}" TextChanged="nameTxt_TextChanged" GotFocus="nameTxt_GotFocus" Height="25"/>
+                <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,40,5,0"/>
+                <ScrollViewer Margin="5,0" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="panel">
+                        <local:tvShowControl Visibility="Hidden" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

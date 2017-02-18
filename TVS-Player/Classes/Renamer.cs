@@ -125,8 +125,8 @@ namespace TVS_Player {
                 foreach (JToken jt in jo["data"]) {
 
                     if (jt["firstAired"].ToString() != "") {
-                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
-                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.mm.yyyy"), false, new List<string>()));
+                        DateTime dt = DateTime.ParseExact(jt["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), dt.ToString("dd.MM.yyyy"), false, new List<string>()));
 
                     } else {
                         epi.Add(new Episode(jt["episodeName"].ToString(), Int32.Parse(jt["airedSeason"].ToString()), Int32.Parse(jt["airedEpisodeNumber"].ToString()), Int32.Parse(jt["id"].ToString()), "--.--.----", false, new List<string>()));
@@ -160,7 +160,7 @@ namespace TVS_Player {
 
 
         public static List<string> FilterExtensions(List<string> files) {
-            string[] fileExtension = new string[10] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv", ".idx" };
+            string[] fileExtension = new string[9] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv" };
             List<string> filtered = new List<string>();
             foreach (string file in files) {
                 if (fileExtension.Any(file.Contains)) {

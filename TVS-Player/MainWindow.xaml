@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
         mc:Ignorable="d"
-        Title="TVS Player" Height="648" Width="1152"
+        Title="TVS Player" Height="720" Width="1280"
         MinWidth="640"
         MinHeight="360"
         >
@@ -74,7 +74,7 @@
                 <Image Source="/Icons/ShowMore.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Grid>
             <Grid Background="#1565C0" HorizontalAlignment="Center" Width="400" Margin="5" MaxWidth="600">
-                <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0"  GotFocus="SearchBar_GotFocus">
+                <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0"  GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Background" Value="#00000000"/>

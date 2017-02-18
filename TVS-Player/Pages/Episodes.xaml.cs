@@ -36,13 +36,22 @@ namespace TVS_Player {
         int season;
         Show ss;
 
-        public Episodes(Show s, int season2) {
+        public Episodes(Show s, int season) {
             InitializeComponent();
             id = s.id;
-            season = season2;
+            this.season = season;
             ss = s;
             ClickTimer = new Timer(300);
             ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
+        }
+        public Episodes(Show s, int season,Episode e) {
+            InitializeComponent();
+            id = s.id;
+            this.season = season;
+            ss = s;
+            ClickTimer = new Timer(300);
+            ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
+            ThreadForInfo(e);
         }
         private Timer ClickTimer;
         private int ClickCounter;
@@ -193,14 +202,14 @@ namespace TVS_Player {
                 EPName.Text = episode.name;
                 ShowName.Text = ss.name;
                 if (jo["data"]["firstAired"].ToString() != "") {
-                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
-                    FirstAired.Text = dt.ToString("dd.mm.yyyy");
+                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    FirstAired.Text = dt.ToString("dd.MM.yyyy");
                     if (dt >= DateTime.Now) {
                         Director.Text = "-";
                         Writer.Text = "-";
                         Overview.Text = "-";
                     } else {
-                        Director.Text = directors.Remove(directors.Length - 2, 2);
+                       Director.Text = directors.Remove(directors.Length - 2, 2);
                         if (writers.Length > 0) {
                             Writer.Text = writers.Remove(writers.Length - 2, 2);
                         }

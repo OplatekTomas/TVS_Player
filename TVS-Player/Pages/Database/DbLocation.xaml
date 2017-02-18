@@ -8,24 +8,27 @@
       d:DesignHeight="648" d:DesignWidth="1152"
       Title="DbLocation">
 
-    <Grid x:Name="selectNewLoc" Background="#EE000000" Visibility="Visible">
+    <Grid x:Name="selectNewLoc" Background="#99000000" Visibility="Visible">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="2*" MinWidth="300px"/>
+            <ColumnDefinition Width="2*" MinWidth="276"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="1.5*" MinHeight="150px"/>
+            <RowDefinition Height="1.5*" MinHeight="105"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        <Grid Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Height="100" Width="276" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,1.5,1" Grid.Row="1" Grid.Column="1">
-            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,30,5,0"/>
-            <Border BorderThickness="1" CornerRadius=".5,.5,.5,.5" BorderBrush="#FF252525" VerticalAlignment="Top" Background="#FF252525" Margin="5,70,5,0"/>
-            <Label Content="Choose library location" Height="30" VerticalAlignment="Top" Foreground="#FF969696" HorizontalAlignment="Center" />
-            <TextBox x:Name="newDbLoc" Style="{DynamicResource SearchBox}"  VerticalAlignment="Top" Margin="5,40,5,0" TextChanged="newDbLoc_TextChanged" GotFocus="newDbLoc_GotFocus" MouseDoubleClick="newDbLoc_MouseDoubleClick" Text="Enter location (double click to select)"/>
-            <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="#FF969696" Margin="0,0,10,5" Width="40" Style="{DynamicResource SideBarButton}" Background="#20000000" Click="Cancel_Click"/>
-            <Button x:Name="Ok" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,60,5" Foreground="#FF969696" Width="40" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Ok_Click" />
-        </Grid>
+        <Border  Background="{StaticResource BackgroundBrush}" Height="105" Width="276" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" CornerRadius="4">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="270" ShadowDepth="5" Opacity="1" BlurRadius="20"/>
+            </Border.Effect>
+            <Grid>
+                <Label Content="Choose library location" Height="30" VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" />
+                <TextBox x:Name="newDbLoc" Style="{DynamicResource SearchBox}"  VerticalAlignment="Top" Margin="5,40,5,0" TextChanged="newDbLoc_TextChanged" GotFocus="newDbLoc_GotFocus" MouseDoubleClick="newDbLoc_MouseDoubleClick" Text="Enter location (double click to select)"/>
+                <Button x:Name="Cancel" Content="Close" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="White" Margin="0,0,10,10" Width="40" Style="{DynamicResource SideBarButton}" Background="{StaticResource AccentColor}" Click="Cancel_Click"/>
+                <Button x:Name="Ok" Content="Ok" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,60,10" Foreground="White" Width="40" Style="{DynamicResource SideBarButton}" Background="{StaticResource AccentColor}" Click="Ok_Click" />
+            </Grid>
+        </Border>
     </Grid>
 </Page>

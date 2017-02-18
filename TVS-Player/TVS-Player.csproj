@@ -129,6 +129,7 @@
     <Compile Include="Classes\Checker.cs" />
     <Compile Include="Classes\Helpers.cs" />
     <Compile Include="Classes\Renamer.cs" />
+    <Compile Include="Classes\SubParsers\SubParse.cs" />
     <Compile Include="Controls\ActorInfo.xaml.cs">
       <DependentUpon>ActorInfo.xaml</DependentUpon>
     </Compile>
@@ -181,9 +182,6 @@
     <Compile Include="Pages\Database\SelectShowPoster.xaml.cs">
       <DependentUpon>SelectShowPoster.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShowInfo\ShowInfo.xaml.cs">
-      <DependentUpon>ShowInfo.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ShowRectangle.xaml.cs">
       <DependentUpon>ShowRectangle.xaml</DependentUpon>
     </Compile>
@@ -196,6 +194,7 @@
     <Compile Include="Pages\Shows.xaml.cs">
       <DependentUpon>Shows.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\SubParsers\SrtParser.cs" />
     <Compile Include="Pages\Startup.xaml.cs">
       <DependentUpon>Startup.xaml</DependentUpon>
     </Compile>
@@ -204,6 +203,9 @@
     </Compile>
     <Compile Include="Controls\SearchResult.xaml.cs">
       <DependentUpon>SearchResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ActorInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -286,10 +288,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShowInfo\ShowInfo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\ShowRectangle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -315,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SearchResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

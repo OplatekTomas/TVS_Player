@@ -200,23 +200,24 @@ namespace TVS_Player {
         }
     }
     public class SearchItem {
-        public string showName;
-        public string season;
-        public string episode;
-        public string name;
-        public SearchItem(string showname, int season, int episode, string name) {
-            this.showName = showname;
-            this.season = SE(season);
-            this.episode = EP(episode);
-            this.name = name;
+        public Episode episodeObject;
+        public Show show;
+        public string episodeNumber;
+        public string seasonNumber;
+        public SearchItem(Episode episode, Show show) {
+            episodeObject = episode;
+            this.show = show;
+            this.seasonNumber = SE(episode.season);
+            this.episodeNumber = EP(episode.episode);
         }
         [JsonConstructor]
-        public SearchItem(string showname, string season, string episode, string name) {
-            this.showName = showname;
-            this.season = season;
-            this.episode = episode;
-            this.name = name;
+        public SearchItem(Episode episode, Show show,string seasonNumber,string episodeNumber) {
+            episodeObject = episode;
+            this.show = show;
+            this.seasonNumber = seasonNumber;
+            this.episodeNumber = episodeNumber;
         }
+
         private string EP(int number) {
             if (number < 10) {
                 return "E0" + number;

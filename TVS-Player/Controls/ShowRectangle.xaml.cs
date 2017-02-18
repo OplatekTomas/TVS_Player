@@ -66,22 +66,6 @@ namespace TVS_Player {
             }
         }
 
-        private async void RenameShow_Event(object sender, RoutedEventArgs e) {
-            Page showPage = new SelectShow();
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
-            var show = await Helpers.showSelector();
-            string name = show.Item2;
-            string id = show.Item1;
-            this.ShowName = name;
-            RenameShow(id);
-        }
-
-        private void RenameShow(string id) {
-
-
-        }
-
         private void ChooseImage_Event(object sender, RoutedEventArgs e) {
             Page showPage = new SelectShowPoster(this);
             Window main = Window.GetWindow(this);

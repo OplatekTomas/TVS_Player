@@ -54,9 +54,9 @@ namespace TVS_Player
                 for (int i = 0; i < numberOfShows; i++) {
                     show[i].showName = parse["data"][i]["seriesName"].ToString();
                     if (parse["data"][i]["firstAired"].ToString() == "") {
-                        show[i].date = DateTime.ParseExact("1900-01-01", "yyyy-mm-dd", CultureInfo.InvariantCulture); ;
+                        show[i].date = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
                     } else {
-                        show[i].date = DateTime.ParseExact(parse["data"][i]["firstAired"].ToString(), "yyyy-mm-dd", CultureInfo.InvariantCulture);
+                        show[i].date = DateTime.ParseExact(parse["data"][i]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     }
                     show[i].id = parse["data"][i]["id"].ToString();
                 }

@@ -8,17 +8,17 @@
              d:DesignHeight="65" d:DesignWidth="478.714"
              MaxHeight="65">
     <Grid Margin="5">
-        <Border x:Name="foundShow" CornerRadius="2" Background="#FF252525">
+        <Border x:Name="foundShow" CornerRadius="2" Background="#343434">
             <Grid>
-                <TextBlock x:Name="showName" Margin="5,0,100,25" FontSize="24" Foreground="#FF4B4B4B" TextWrapping="Wrap" ><Run Text="Game of Thrones"/></TextBlock>
-                <TextBlock x:Name="showLocation" Margin="5,35,100,0" Foreground="#FF4B4B4B" TextWrapping="Wrap"><Run Text="D:\Downloads\Seriály\Game of Thrones"/></TextBlock>
-                <Button x:Name="editShow" Width="30" HorizontalAlignment="Right" Style="{DynamicResource SideBarButton}" Background="#252525" Click="editShow_Click" Margin="69,13">
+                <TextBlock x:Name="showName" Margin="5,0,100,20" FontSize="25" Foreground="White" TextWrapping="Wrap" ><Run Text="Game of Thrones"/></TextBlock>
+                <TextBlock x:Name="showLocation" Margin="5,35,100,0" Foreground="White" FontSize="12" TextWrapping="Wrap"><Run Text="D:\Downloads\Seriály\Game of Thrones"/></TextBlock>
+                <Button x:Name="editShow" Width="30" HorizontalAlignment="Right" Style="{DynamicResource DarkButton}" Background="#252525" Click="editShow_Click" Margin="69,13">
                     <Image Source="../Icons/edit.png" HorizontalAlignment="Right" Width="20" Height="20"/>
                 </Button>
-                <Button x:Name="removeShow" Width="30" HorizontalAlignment="Right" Style="{DynamicResource SideBarButton}" Background="#252525"  Margin="5,13">
+                <Button x:Name="removeShow" Width="30" HorizontalAlignment="Right" Style="{DynamicResource DarkButton}" Background="#252525"  Margin="5,13">
                     <Image Source="../Icons/delete.png" HorizontalAlignment="Right" Width="20" Height="20"/>
                 </Button>
-                <Button x:Name="showInfo" Width="30" HorizontalAlignment="Right" Style="{DynamicResource SideBarButton}" Background="#252525" Click="showInfo_Click" Margin="37,13">
+                <Button x:Name="showInfo" Width="30" HorizontalAlignment="Right" Style="{DynamicResource DarkButton}" Background="#252525" Click="showInfo_Click" Margin="37,13">
                     <Image Source="../Icons/question.png" HorizontalAlignment="Right" Width="20" Height="20"/>
                 </Button>
             </Grid>
