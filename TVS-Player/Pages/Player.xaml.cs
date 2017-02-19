@@ -21,6 +21,7 @@ using Cursor = System.Windows.Forms;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using System.Threading;
 
 namespace TVS_Player {
     /// <summary>
@@ -31,7 +32,7 @@ namespace TVS_Player {
         DispatcherTimer hideMenu;
         Episode episode;
         Show selectedShow;
-
+        Timer subTimer;
         public Player(string p, Episode e,Show ss) {
             InitializeComponent();
             ClickTimer = new Timer(300);
@@ -49,6 +50,9 @@ namespace TVS_Player {
         private Timer ClickTimer;
         private int ClickCounter;
         private double VolumeLevel;
+        List<SubtitleItem> allSubs;
+        HashSet<SubtitleItem> subs;
+        Thread subsThread;
 
         private void ShowHideMenu(string Storyboard, StackPanel pnl) {
             Storyboard sb = Resources[Storyboard] as Storyboard;
@@ -129,8 +133,53 @@ namespace TVS_Player {
             FileInfo.Text = getFileInfo();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).KeyUp += BackgroundGrid_KeyUp;
+            allSubs = SrtParser.ParseStream(Encoding.Default);
+            foreach (SubtitleItem s in allSubs) {
+                s.CraeteTimes();
+            }
+            RenderSubs();
+        }
+
+        private void RenderSubs() {
+            subsThread = new Thread(nAction  => {
+                /*subTimer = new Timer();
+                subTimer.Elapsed += (s, e) => TimedSubs();
+                subTimer.Interval = 0.5;
+                subTimer.Start();*/
+                while (true) {
+                    Dispatcher.Invoke(new Action(() => {
+                        double position = Math.Ceiling(MediaElement.Position.TotalMilliseconds);
+                        for (int i = 0; i < 6; i++) {
+                            if (position == allSubs[0].StartTimes[i]) {
+                                if (allSubs[0].TextStyle == 'i') {
+                                    SubtitleBlock.FontStyle = FontStyles.Italic;
+                                    for (int x = 0; x < allSubs[0].Lines.Count; x++) {
+                                        if (x == allSubs[0].Lines.Count - 1) {
+                                            SubtitleBlock.Text = allSubs[0].Lines[x];
+                                        } else {
+                                            SubtitleBlock.Text = allSubs[0].Lines[x] + "\n";
+                                        }
+                                    }
+                                    allSubs.RemoveAt(0);
+                                }
+                            }
+                            /*if (position == allSubs[0].EndTimes[i]) {
+                                SubtitleBlock.FontStyle = FontStyles.Normal;
+                                SubtitleBlock.Text = "";
+                            }*/
+                        }
+                        Thread.Sleep(TimeSpan.FromMilliseconds(0.5));
+                    }), DispatcherPriority.Send);
+                }
+            });
+            subsThread.Name = "Subs render";
+            subsThread.Start();
+        }
+
+        private void TimedSubs() {
 
         }
+
 
         private string getFileInfo() {
             int height = MediaElement.NaturalVideoHeight;

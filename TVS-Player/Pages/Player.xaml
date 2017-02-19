@@ -50,5 +50,6 @@
             </Grid>
         </StackPanel>
         <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded"  MouseUp="MediaElement_MouseUp" />
+        <TextBlock x:Name="SubtitleBlock" VerticalAlignment="Bottom" Margin="40,20" Height="80" TextAlignment="Center" FontSize="30" Text="(Air howling)" Foreground="White"/>
     </Grid>
 </Page>

@@ -29,7 +29,6 @@ namespace TVS_Player {
 
             // seek the beginning of the stream
             srtStream.Position = 0;
-
             var reader = new StreamReader(srtStream, encoding, true);
 
             var items = new List<SubtitleItem>();
@@ -66,8 +65,8 @@ namespace TVS_Player {
                         items.Add(item);
                     }
                 }
-
                 if (items.Any()) {
+                    srtStream.Close();
                     return items;
                 } else {
                     throw new ArgumentException("Stream is not in a valid Srt format");

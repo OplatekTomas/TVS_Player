@@ -12,6 +12,8 @@ namespace TVS_Player {
         //StartTime and EndTime times are in milliseconds
         public int StartTime { get; set; }
         public int EndTime { get; set; }
+        public List<int> StartTimes = new List<int>();
+        public List<int> EndTimes = new List<int>();
         public List<string> Lines { get; set; }
         public char TextStyle { get; set; }
 
@@ -24,7 +26,12 @@ namespace TVS_Player {
         public SubtitleItem() {
             this.Lines = new List<string>();
         }
-
+        public void CraeteTimes() {
+            for (int i = 0; i < 6; i++) {
+                StartTimes.Add(StartTime + i);
+                EndTimes.Add(EndTime + i);
+            }
+        }
 
         // Methods --------------------------------------------------------------------------
         public TimeSpan GetStart() {
