@@ -49,7 +49,7 @@ namespace TVS_Player {
         }
 
         private void MediaEl_MediaOpened(object sender, RoutedEventArgs e) {
-            subs = SrtParser.ParseStream(Encoding.Default);
+            subs = SrtParser.ParseStream(episode.locations[1],Encoding.Default);
             Subs();
         }
         private void Subs() {

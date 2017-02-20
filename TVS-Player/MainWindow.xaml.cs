@@ -222,9 +222,6 @@ namespace TVS_Player {
             /*foreach (Show s in DatabaseShows.ReadDb()) {
                 Checker.UpdateFull(s.id);
             }*/
-            Stream s = File.Open(@"E:\01Lib\Game of Thrones\Season 06\Game of Thrones - S06E01 - The Red Woman.srt",FileMode.Open);
-            List <SubtitleItem> listofSubs = SrtParser.ParseStream(GetEncoding(s));
-            string test = listofSubs[0].ToString();
         }
 
         private Encoding GetEncoding(Stream fileName) {

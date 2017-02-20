@@ -20,7 +20,7 @@
     <Grid Background="Black" x:Name="Base">
         <!-- <ffme:MediaElement x:Name="MediaEl" Background="Black" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" /> -->
         <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" MouseMove="MediaEl_MouseMove"/>
-        <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40" Foreground="White" FontSize="36" TextAlignment="Center" />
+        <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40,10" Foreground="White" FontSize="32" TextAlignment="Center" />
         <Grid x:Name="TopPanel" VerticalAlignment="Top" Height="40" Margin="0,-40" Panel.ZIndex="2" Background="{StaticResource BackgroundBrush}">
             
         </Grid>
