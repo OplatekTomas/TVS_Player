@@ -18,7 +18,7 @@ namespace TVS_Player {
         // Methods -------------------------------------------------------------------------
 
         public static List<SubtitleItem> ParseStream(Encoding encoding) {
-            Stream srtStream = File.Open(@"E:\01Lib\Game of Thrones\Season 06\Game of Thrones - S06E01 - The Red Woman.srt", FileMode.Open);
+            Stream srtStream = File.Open(@"F:\TVS\Library\Lost\Season 03\Lost - S03E01 - A Tale of Two Cities.srt", FileMode.Open);
             // test if stream if readable and seekable (just a check, should be good)
             if (!srtStream.CanRead || !srtStream.CanSeek) {
                 var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +

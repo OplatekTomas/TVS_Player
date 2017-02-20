@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TVS_Player"
+      xmlns:ffme="clr-namespace:Unosquare.FFmpegMediaElement;assembly=Unosquare.FFmpegMediaElement"
       mc:Ignorable="d"
       x:Name="PlayerPage"
       d:DesignHeight="648" d:DesignWidth="1152"
@@ -49,7 +50,8 @@
                 <TextBlock x:Name="ClockText" Grid.Column="0" HorizontalAlignment="Left" Text="5:55:55/5:55:55" Foreground="White" Margin="40,9,0,9" FontSize="13"></TextBlock>
             </Grid>
         </StackPanel>
-        <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded"  MouseUp="MediaElement_MouseUp" />
+        <ffme:MediaElement x:Name="MediaEl" Grid.RowSpan="2" Background="Gray" LoadedBehavior="Play" UnloadedBehavior="Manual" />
+        <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded"  MouseUp="MediaElement_MouseUp" Visibility="Hidden"/>
         <TextBlock x:Name="SubtitleBlock" VerticalAlignment="Bottom" Margin="40,20" Height="80" TextAlignment="Center" FontSize="30" Text="(Air howling)" Foreground="White"/>
     </Grid>
 </Page>

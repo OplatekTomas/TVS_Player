@@ -36,10 +36,10 @@ namespace TVS_Player {
         public Player(string p, Episode e,Show ss) {
             InitializeComponent();
             ClickTimer = new Timer(300);
-            ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
+            //ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
             path = p;
             hideMenu = new DispatcherTimer();
-            hideMenu.Interval = TimeSpan.FromSeconds(1);
+            //hideMenu.Interval = TimeSpan.FromSeconds(1);
             hideMenu.Tick += OnTimedEvent;
             episode = e;
             selectedShow = ss;
@@ -78,13 +78,17 @@ namespace TVS_Player {
             System.Windows.Forms.Cursor.Show();
             BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
             hideMenu.Stop();
-            hideMenu.Start();
+            //hideMenu.Start();
         }
             private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
-            MediaElement.Source = new Uri(path);
-            MediaElement.LoadedBehavior = MediaState.Manual;
-            MediaElement.Play();
-            SoundLevel.Value = 0.5;
+            //MediaElement.Source = new Uri(path);
+            //MediaElement.LoadedBehavior = MediaState.Manual;
+            //MediaElement.Play();
+            //SoundLevel.Value = 0.5;
+            MediaEl.Source = new Uri(path);
+            System.Windows.MessageBox.Show(MediaEl.VideoFrameLength.ToString());
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            MediaEl.Play();
         }
 
         private void SoundLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -173,7 +177,7 @@ namespace TVS_Player {
                 }
             });
             subsThread.Name = "Subs render";
-            subsThread.Start();
+            //subsThread.Start();
         }
 
         private void TimedSubs() {
