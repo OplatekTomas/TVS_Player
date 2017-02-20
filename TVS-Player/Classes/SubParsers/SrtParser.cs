@@ -18,7 +18,7 @@ namespace TVS_Player {
         // Methods -------------------------------------------------------------------------
 
         public static List<SubtitleItem> ParseStream(Encoding encoding) {
-            Stream srtStream = File.Open(@"F:\TVS\Library\Lost\Season 03\Lost - S03E01 - A Tale of Two Cities.srt", FileMode.Open);
+            Stream srtStream = File.Open(@"F:\TVS\Library\Lost\Season 03\Lost - S03E01 - A Tale of Two Cities_1.srt", FileMode.Open);
             // test if stream if readable and seekable (just a check, should be good)
             if (!srtStream.CanRead || !srtStream.CanSeek) {
                 var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
@@ -57,7 +57,11 @@ namespace TVS_Player {
                             item.TextStyle = t.Item1;
                             // we found the timecode, now we get the text
                             item.Lines.Add(t.Item2);
+                            item.CraeteTimes();
                         }
+                    }
+                    for (int i = 0; i < item.Lines.Count; i++) {
+                        item.line += item.Lines[i] + "\n";
                     }
 
                     if ((item.StartTime != 0 || item.EndTime != 0) && item.Lines.Any()) {

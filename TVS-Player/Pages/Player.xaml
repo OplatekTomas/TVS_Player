@@ -23,35 +23,10 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,-40,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
     </Page.Resources>
-    <Grid x:Name="BackgroundGrid" Background="Black" MouseMove="overlayTrigger_MouseEnter" KeyUp="BackgroundGrid_KeyUp">
-        <Grid Height="40" VerticalAlignment="Top" Margin="0,-40" Panel.ZIndex="3" x:Name="topPanel" Background="{StaticResource AccentColor}">
+    <Grid>
+        <!-- <ffme:MediaElement x:Name="MediaEl" Background="Black" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" /> -->
+        <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" />
+        <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40" Foreground="White" Text="Test123" FontSize="36" TextAlignment="Center" />
 
-            <Grid>
-                <Grid x:Name="BackButton" Grid.Row="0" Panel.ZIndex="1" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5" MouseLeftButtonUp="BackButton_MouseUp">
-                    <Grid.BitmapEffect>
-                        <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
-                    </Grid.BitmapEffect>
-                    <Image Source="../Icons/back.png" Width="25" HorizontalAlignment="Left" Margin="10,5" />
-                </Grid>
-                <TextBlock x:Name="EPName" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="" Foreground="#FF666666" FontSize="36" Margin="10,55"/>
-                <TextBlock x:Name="ShowName" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="" Foreground="#FF666666" FontSize="20" Margin="13,25"/>
-                <TextBlock x:Name="SeasonInfo" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="" Foreground="#FF666666" FontSize="26" Margin="10,55"/>
-                <TextBlock x:Name="FileInfo" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="" Foreground="#FF666666" FontSize="20" Margin="13,23"/>
-            </Grid>
-        </Grid>
-        <StackPanel Panel.ZIndex="5" Name="panelMenu" Orientation="Vertical" Margin="0,0,0,-40" VerticalAlignment="Bottom" Grid.Row="1">
-            <Grid Height="40" Background="{StaticResource AccentColor}">
-                <Image x:Name="PlayPauseButton" Source="../Icons/pause.png" HorizontalAlignment="Left" Margin="10,10,0,10" Width="20" MouseLeftButtonUp="PlayPauseButton_MouseLeftButtonUp" />
-                <Image x:Name="MuteImage" Source="../Icons/speaker.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="283,0" MouseLeftButtonUp="MuteImage_MouseLeftButtonUp"/>
-                <Image x:Name="FullScreenImage" Source="../Icons/fullscreen.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="20,0" MouseLeftButtonUp="FullScreenImage_MouseLeftButtonUp"/>
-                <Slider x:Name="Progress" Margin="140,11,320,0" Thumb.DragStarted="Progress_DragStarted"  Thumb.DragCompleted="Progress_DragCompleted" IsMoveToPointEnabled="True" ValueChanged="Progress_ValueChanged" IsSelectionRangeEnabled="True" Grid.ColumnSpan="2">
-                </Slider>
-                <Slider x:Name="SoundLevel" Maximum="1" Margin="0,11,60,0" ValueChanged="SoundLevel_ValueChanged" HorizontalAlignment="Right" Width="210" IsMoveToPointEnabled="True"/>
-                <TextBlock x:Name="ClockText" Grid.Column="0" HorizontalAlignment="Left" Text="5:55:55/5:55:55" Foreground="White" Margin="40,9,0,9" FontSize="13"></TextBlock>
-            </Grid>
-        </StackPanel>
-        <ffme:MediaElement x:Name="MediaEl" Grid.RowSpan="2" Background="Gray" LoadedBehavior="Play" UnloadedBehavior="Manual" />
-        <MediaElement x:Name="MediaElement" MediaOpened="MediaElement_MediaOpened" OpacityMask="Black" Grid.RowSpan="2" Loaded="MediaElement_Loaded"  MouseUp="MediaElement_MouseUp" Visibility="Hidden"/>
-        <TextBlock x:Name="SubtitleBlock" VerticalAlignment="Bottom" Margin="40,20" Height="80" TextAlignment="Center" FontSize="30" Text="(Air howling)" Foreground="White"/>
     </Grid>
 </Page>
