@@ -10,23 +10,22 @@
       d:DesignHeight="648" d:DesignWidth="1152"
       Title="Player">
     <Page.Resources>
-        <Storyboard x:Key="sbShowBottomMenu" >
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        <Storyboard x:Key="StoryBoardShow" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0" DecelerationRatio=".5" Duration="0:0:0.25" Timeline.DesiredFrameRate="30"/>
         </Storyboard>
-        <Storyboard x:Key="sbHideBottomMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,-40" AccelerationRatio=".5" Duration="0:0:0.15" />
-        </Storyboard>
-        <Storyboard x:Key="sbShowTopMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" AccelerationRatio=".5" Duration="0:0:0.25" />
-        </Storyboard>
-        <Storyboard x:Key="sbHideTopMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,-40,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
+        <Storyboard x:Key="StoryBoardHide">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,-40" AccelerationRatio=".5" Duration="0:0:0.15" Timeline.DesiredFrameRate="30"/>
         </Storyboard>
     </Page.Resources>
-    <Grid>
+    <Grid Background="Black" x:Name="Base">
         <!-- <ffme:MediaElement x:Name="MediaEl" Background="Black" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" /> -->
-        <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" />
-        <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40" Foreground="White" Text="Test123" FontSize="36" TextAlignment="Center" />
+        <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Close" MouseMove="MediaEl_MouseMove"/>
+        <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40" Foreground="White" FontSize="36" TextAlignment="Center" />
+        <Grid x:Name="TopPanel" VerticalAlignment="Top" Height="40" Margin="0,-40" Panel.ZIndex="2" Background="{StaticResource BackgroundBrush}">
+            
+        </Grid>
+        <Grid x:Name="BottomPanel" VerticalAlignment="Bottom" Height="40" Margin="0,-40" Panel.ZIndex="2" Background="{StaticResource BackgroundBrush}">
 
+        </Grid>
     </Grid>
 </Page>

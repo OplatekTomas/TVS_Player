@@ -39,6 +39,7 @@ namespace TVS_Player {
             selectedShow = ss;
         }
         List<SubtitleItem> subs;
+        Timer menuTimer;
         bool renderSubs = true;
         int subIndex = 0;
         private void MediaEl_Loaded(object sender, RoutedEventArgs e) {
@@ -58,9 +59,6 @@ namespace TVS_Player {
             t.Start();
         }
 
-        private void timetest() {
-        }
-
         private void RenderSubs() {
             while (renderSubs) {
                 SubtitleItem sub = subs[subIndex];
@@ -78,6 +76,33 @@ namespace TVS_Player {
                 }), DispatcherPriority.Send);
                 Thread.Sleep(2);
             }
+        }
+        private void ShowHideMenu(string Storyboard, Grid pnl) {
+            Storyboard sb = Resources[Storyboard] as Storyboard;
+            sb.Begin(pnl);
+
+        }
+        private void MediaEl_MouseMove(object sender, MouseEventArgs e) {
+            Dispatcher.Invoke(new Action(() => {
+                ShowHideMenu("StoryBoardShow", TopPanel);
+                ShowHideMenu("StoryBoardShow", BottomPanel);
+            }), DispatcherPriority.Send);
+            if (menuTimer != null) {
+                menuTimer.Stop();
+            }
+            menuTimer = new Timer();
+            menuTimer.Elapsed += (s,ea) => HideMenu();
+            menuTimer.Interval = 1500;
+            menuTimer.Start();
+        }
+        private void HideMenu() {
+            if (menuTimer != null) {
+                menuTimer.Stop();
+            }
+            Dispatcher.Invoke(new Action(() => {
+                ShowHideMenu("StoryBoardHide", TopPanel);
+                ShowHideMenu("StoryBoardHide", BottomPanel);
+            }), DispatcherPriority.Send);
         }
     }
 }
