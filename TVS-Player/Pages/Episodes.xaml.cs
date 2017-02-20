@@ -126,7 +126,7 @@ namespace TVS_Player {
             showPage.Focus();
         }
 
-        private string getEPOrder(Episode e) {
+        public static string getEPOrder(Episode e) {
             int season = e.season;
             int episode = e.episode;
             if(season < 10) {
