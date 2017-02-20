@@ -13,8 +13,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.DirectX.AudioVideoPlayback;
-using Microsoft.DirectX;
 using System.Timers;
 using System.Windows.Threading;
 using Cursor = System.Windows.Forms;

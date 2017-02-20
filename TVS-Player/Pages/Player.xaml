@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TVS_Player"
-      xmlns:ffme="clr-namespace:Unosquare.FFmpegMediaElement;assembly=Unosquare.FFmpegMediaElement"
       mc:Ignorable="d"
       x:Name="PlayerPage"
       d:DesignHeight="648" d:DesignWidth="1152"

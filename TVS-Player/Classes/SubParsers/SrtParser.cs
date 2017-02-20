@@ -9,13 +9,7 @@ namespace TVS_Player {
     class SrtParser {
         private static readonly string[] _delimiters = { "-->", "- >", "->" };
 
-
-        // Constructors --------------------------------------------------------------------
-
         public SrtParser() { }
-
-
-        // Methods -------------------------------------------------------------------------
 
         public static List<SubtitleItem> ParseStream(string file,Encoding encoding) {
             Stream srtStream = File.Open(file, FileMode.Open);
