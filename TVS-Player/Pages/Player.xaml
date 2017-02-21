@@ -30,7 +30,7 @@
             <Image x:Name="PlayPauseButton" Source="../Icons/pause.png" HorizontalAlignment="Left" Margin="10,10,0,10" Width="20" MouseLeftButtonUp="PlayPauseButton_MouseLeftButtonUp" />
             <Image x:Name="MuteImage" Source="../Icons/speaker.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="283,0" MouseLeftButtonUp="MuteImage_MouseLeftButtonUp"/>
             <Image x:Name="FullScreenImage" Source="../Icons/fullscreen.png" HorizontalAlignment="Right" Width="20" Grid.ColumnSpan="2" Margin="20,0" MouseLeftButtonUp="FullScreenImage_MouseLeftButtonUp"/>
-            <Slider x:Name="Progress" Margin="140,11,320,0" Thumb.DragStarted="Progress_DragStarted"  Thumb.DragCompleted="Progress_DragCompleted" IsMoveToPointEnabled="True" ValueChanged="Progress_ValueChanged" IsSelectionRangeEnabled="True"/>
+            <Slider x:Name="Progress" Margin="140,11,320,0" Thumb.DragStarted="Progress_DragStarted"  Thumb.DragCompleted="Progress_DragCompleted" IsMoveToPointEnabled="True" ValueChanged="Progress_ValueChanged" PreviewMouseUp="Progress_PreviewMouseUp" IsSelectionRangeEnabled="True"/>
             <Slider x:Name="SoundLevel" Maximum="1" Margin="0,11,60,0" ValueChanged="SoundLevel_ValueChanged" HorizontalAlignment="Right" Width="210" IsMoveToPointEnabled="True"/>
             <TextBlock x:Name="ClockText" Grid.Column="0" HorizontalAlignment="Left" Text="-:--:--/-:--:--" Foreground="White" Margin="40,9,0,9" FontSize="13"></TextBlock>
         </Grid>

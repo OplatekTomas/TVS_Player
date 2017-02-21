@@ -179,6 +179,9 @@ namespace TVS_Player {
             }
         }
         private void Quit() {
+            menuTimer.Stop();
+            progressMove.Stop();
+            MediaEl.Close();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
             //((MainWindow)main).KeyUp -= BackgroundGrid_KeyUp;
@@ -189,8 +192,10 @@ namespace TVS_Player {
             }
         }
         private void GetIndex() {
+            SubtitleItem s = subs.Aggregate((x, y) => Math.Abs(x.StartTime - MediaEl.Position.TotalMilliseconds) < Math.Abs(y.StartTime - MediaEl.Position.TotalMilliseconds) ? x : y);
+            subIndex = subs.IndexOf(s) + 1;
+         }
 
-        }
         private void PlayPauseButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             PlayPause();
         }
@@ -210,11 +215,19 @@ namespace TVS_Player {
         private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
             MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
             Progress.ValueChanged += Progress_ValueChanged;
+            Subtitles.Text = "";
             GetIndex();
         }
 
         private void Progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
+        }
+
+        private void Progress_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
+            MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
+            Progress.ValueChanged += Progress_ValueChanged;
+            Subtitles.Text = "";
+            GetIndex();
         }
 
         private void SoundLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -233,5 +246,6 @@ namespace TVS_Player {
         private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             Quit();
         }
+
     }
 }
