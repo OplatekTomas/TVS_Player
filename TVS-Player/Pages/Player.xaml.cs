@@ -78,8 +78,10 @@ namespace TVS_Player {
         }
 
         private void LoadSubs() {
-            subs = SrtParser.ParseStream(episode.locations[1], Encoding.Default);
-            Subs();
+            try {
+                subs = SrtParser.ParseStream(episode.locations[1], Encoding.Default);
+                Subs();
+            } catch (Exception) { }
         }
    
         private void Subs() {
