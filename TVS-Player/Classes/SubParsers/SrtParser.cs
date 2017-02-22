@@ -9,16 +9,10 @@ namespace TVS_Player {
     class SrtParser {
         private static readonly string[] _delimiters = { "-->", "- >", "->" };
 
-
-        // Constructors --------------------------------------------------------------------
-
         public SrtParser() { }
 
-
-        // Methods -------------------------------------------------------------------------
-
-        public static List<SubtitleItem> ParseStream(Encoding encoding) {
-            Stream srtStream = File.Open(@"E:\01Lib\Game of Thrones\Season 06\Game of Thrones - S06E01 - The Red Woman.srt", FileMode.Open);
+        public static List<SubtitleItem> ParseStream(string file,Encoding encoding) {
+            Stream srtStream = File.Open(file, FileMode.Open);
             // test if stream if readable and seekable (just a check, should be good)
             if (!srtStream.CanRead || !srtStream.CanSeek) {
                 var message = string.Format("Stream must be seekable and readable in a subtitles parser. " +
@@ -57,7 +51,11 @@ namespace TVS_Player {
                             item.TextStyle = t.Item1;
                             // we found the timecode, now we get the text
                             item.Lines.Add(t.Item2);
+                            item.CraeteTimes();
                         }
+                    }
+                    for (int i = 0; i < item.Lines.Count; i++) {
+                        item.line += item.Lines[i] + "\n";
                     }
 
                     if ((item.StartTime != 0 || item.EndTime != 0) && item.Lines.Any()) {

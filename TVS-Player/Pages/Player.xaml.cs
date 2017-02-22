@@ -13,8 +13,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.DirectX.AudioVideoPlayback;
-using Microsoft.DirectX;
 using System.Timers;
 using System.Windows.Threading;
 using Cursor = System.Windows.Forms;
@@ -22,6 +20,7 @@ using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using System.Threading;
+using System.Diagnostics;
 
 namespace TVS_Player {
     /// <summary>
@@ -29,208 +28,131 @@ namespace TVS_Player {
     /// </summary>
     public partial class Player : Page {
         string path;
-        DispatcherTimer hideMenu;
         Episode episode;
         Show selectedShow;
-        Timer subTimer;
-        public Player(string p, Episode e,Show ss) {
+        public Player(string p, Episode e, Show ss) {
             InitializeComponent();
-            ClickTimer = new Timer(300);
-            ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
             path = p;
-            hideMenu = new DispatcherTimer();
-            hideMenu.Interval = TimeSpan.FromSeconds(1);
-            hideMenu.Tick += OnTimedEvent;
             episode = e;
             selectedShow = ss;
+            progressMove = new Timer();
         }
-        Timer moveProgress;
-        bool isplaying = true;
-        bool maximized = false;
-        private Timer ClickTimer;
-        private int ClickCounter;
-        private double VolumeLevel;
-        List<SubtitleItem> allSubs;
-        HashSet<SubtitleItem> subs;
-        Thread subsThread;
+        List<SubtitleItem> subs;
+        Timer menuTimer;
+        Timer progressMove;
+        bool renderSubs = true;
+        int subIndex = 0;
+        private void MediaEl_Loaded(object sender, RoutedEventArgs e) {
+            MediaEl.Source = new Uri(path);
+            MediaEl.ScrubbingEnabled = true;   
+        }
 
-        private void ShowHideMenu(string Storyboard, StackPanel pnl) {
-            Storyboard sb = Resources[Storyboard] as Storyboard;
-            sb.Begin(pnl);
+        private void MediaEl_MediaOpened(object sender, RoutedEventArgs e) {
+            LoadSubs();
+            LoadInfo();
+            MoveProgress();
+            Progress.Maximum = MediaEl.NaturalDuration.TimeSpan.TotalSeconds;
         }
-        private void ShowHideMenu(string Storyboard, Grid pnl) {
-            Storyboard sb = Resources[Storyboard] as Storyboard;
-            sb.Begin(pnl);
+
+        private void MoveProgress() {
+            progressMove.Elapsed += (s, e) => RefreshProgress();
+            progressMove.Interval = 1000;
+            progressMove.Start();
         }
-        private void OnTimedEvent(object source, EventArgs e) {
-            BackgroundGrid.MouseMove += overlayTrigger_MouseEnter;
+
+        private void RefreshProgress() {
             Dispatcher.Invoke(new Action(() => {
-                ShowHideMenu("sbHideBottomMenu", panelMenu);
-                ShowHideMenu("sbHideTopMenu", topPanel);
-                System.Windows.Forms.Cursor.Hide();
-            }), DispatcherPriority.Send);
-            hideMenu.Stop();
-        }
-
-        private void overlayTrigger_MouseEnter(object sender, MouseEventArgs e) {
-            ShowHideMenu("sbShowBottomMenu", panelMenu);
-            ShowHideMenu("sbShowTopMenu", topPanel);
-            System.Windows.Forms.Cursor.Show();
-            BackgroundGrid.MouseMove -= overlayTrigger_MouseEnter;
-            hideMenu.Stop();
-            hideMenu.Start();
-        }
-            private void MediaElement_Loaded(object sender, RoutedEventArgs e) {
-            MediaElement.Source = new Uri(path);
-            MediaElement.LoadedBehavior = MediaState.Manual;
-            MediaElement.Play();
-            SoundLevel.Value = 0.5;
-        }
-
-        private void SoundLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            MediaElement.Volume = SoundLevel.Value;
-            if (MediaElement.Volume == 0) {
-                MediaElement.IsMuted = true;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
-                MuteImage.Source = img;
-            } else {
-                MediaElement.IsMuted = false;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
-                MuteImage.Source = img;
-            }
-        }
-        private void MoveBar() {
-            Dispatcher.Invoke(new Action(() => {
-                Progress.Value = MediaElement.Position.TotalSeconds;
+                Progress.Value = MediaEl.Position.TotalSeconds;
             }), DispatcherPriority.Send);
         }
 
-        private void Clock(TimeSpan videoLenght) {
-            Dispatcher.Invoke(new Action(() => {
-                if (videoLenght.Hours == 0) {
-                    ClockText.Text = MediaElement.Position.ToString(@"mm\:ss") +"/"+ videoLenght.ToString(@"mm\:ss");
-                } else {
-                    ClockText.Text = MediaElement.Position.ToString(@"h\:mm\:ss")+"/" + videoLenght.ToString(@"h\:mm\:ss");
-                }
-            }), DispatcherPriority.Send);
-        }
-
-        private void MediaElement_MediaOpened(object sender, RoutedEventArgs e) {
-            TimeSpan VideoLenght = MediaElement.NaturalDuration.TimeSpan;
-            Timer clock = new Timer();
-            clock.Interval = 1000;
-            clock.Elapsed += (s, ea) => Clock(VideoLenght);
-            Progress.Maximum = VideoLenght.TotalSeconds;
-            System.Windows.Forms.Cursor.Hide();
-            moveProgress = new Timer();
-            moveProgress.Interval = 1000;
-            moveProgress.Elapsed += (s, eb) => MoveBar();
-            clock.Start();
-            moveProgress.Start();
-            EPName.Text = episode.name;
-            ShowName.Text = selectedShow.name;
-            SeasonInfo.Text = getEPOrder(episode);
-            FileInfo.Text = getFileInfo();
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).KeyUp += BackgroundGrid_KeyUp;
-            allSubs = SrtParser.ParseStream(Encoding.Default);
-            foreach (SubtitleItem s in allSubs) {
-                s.CraeteTimes();
-            }
-            RenderSubs();
-        }
-
-        private void RenderSubs() {
-            subsThread = new Thread(nAction  => {
-                /*subTimer = new Timer();
-                subTimer.Elapsed += (s, e) => TimedSubs();
-                subTimer.Interval = 0.5;
-                subTimer.Start();*/
-                while (true) {
-                    Dispatcher.Invoke(new Action(() => {
-                        double position = Math.Ceiling(MediaElement.Position.TotalMilliseconds);
-                        for (int i = 0; i < 6; i++) {
-                            if (position == allSubs[0].StartTimes[i]) {
-                                if (allSubs[0].TextStyle == 'i') {
-                                    SubtitleBlock.FontStyle = FontStyles.Italic;
-                                    for (int x = 0; x < allSubs[0].Lines.Count; x++) {
-                                        if (x == allSubs[0].Lines.Count - 1) {
-                                            SubtitleBlock.Text = allSubs[0].Lines[x];
-                                        } else {
-                                            SubtitleBlock.Text = allSubs[0].Lines[x] + "\n";
-                                        }
-                                    }
-                                    allSubs.RemoveAt(0);
-                                }
-                            }
-                            /*if (position == allSubs[0].EndTimes[i]) {
-                                SubtitleBlock.FontStyle = FontStyles.Normal;
-                                SubtitleBlock.Text = "";
-                            }*/
-                        }
-                        Thread.Sleep(TimeSpan.FromMilliseconds(0.5));
-                    }), DispatcherPriority.Send);
-                }
-            });
-            subsThread.Name = "Subs render";
-            subsThread.Start();
-        }
-
-        private void TimedSubs() {
-
-        }
-
-
-        private string getFileInfo() {
-            int height = MediaElement.NaturalVideoHeight;
-            int width = MediaElement.NaturalVideoWidth;
+        private void LoadInfo() {
+            int height = MediaEl.NaturalVideoHeight;
+            int width = MediaEl.NaturalVideoWidth;
             var ffProbe = new NReco.VideoInfo.FFProbe();
             var videoInfo = ffProbe.GetMediaInfo(path);
             var res = videoInfo.Streams;
             string codec = res[0].CodecName.ToString();
-            return width + "x" + height + " " + codec;
+            Info.Text = width + "x" + height + " " + codec;
+            Name.Text = selectedShow.name + " - " + Episodes.getEPOrder(episode) + " - " + episode.name;
         }
 
-        private string getEPOrder(Episode e) {
-            int season = e.season;
-            int episode = e.episode;
-            if (season < 10) {
-                if (episode < 10) {
-                    return "S0" + season + "E0" + episode;
-                } else if (episode >= 10) {
-                    return "S0" + season + "E" + episode;
-                }
-            } else if (season >= 10) {
-                if (episode < 10) {
-                    return "S" + season + "E0" + episode;
-                } else if (episode >= 10) {
-                    return "S" + season + "E" + episode;
-                }
-            }
-            return null;
+        private void LoadSubs() {
+            try {
+                subs = SrtParser.ParseStream(episode.locations[1], Encoding.Default);
+                Subs();
+            } catch (Exception) { }
+        }
+   
+        private void Subs() {
+            Action rs = () => RenderSubs();
+            Thread t = new Thread(rs.Invoke);
+            t.IsBackground = true;           
+            t.Start();
         }
 
-        private void MediaElement_MouseUp(object sender, MouseButtonEventArgs e) {
-            ClickTimer.Stop();
-            ClickCounter++;
-            ClickTimer.Start();
-
-        }
-        private void EvaluateClicks(object source, ElapsedEventArgs e) {
-            ClickTimer.Stop();
-            if (ClickCounter == 2) {
+        private void RenderSubs() {
+            while (renderSubs) {
+                SubtitleItem sub = subs[subIndex];
                 Dispatcher.Invoke(new Action(() => {
-                    FullScreen();
+                    double position = Math.Ceiling(MediaEl.Position.TotalMilliseconds);
+                    for (int option = 0; option < 6; option++) {
+                        if (sub.StartTimes[option] == position) {
+                            Subtitles.Text = sub.line;
+                        }
+                        if (sub.EndTimes[option] == position) {
+                            Subtitles.Text = "";
+                            subIndex++;
+                        }
+                    }
                 }), DispatcherPriority.Send);
+                Thread.Sleep(2);
             }
-            if (ClickCounter == 1) {
-                Dispatcher.Invoke(new Action(() => {
-                    PlayPause();
-                }), DispatcherPriority.Send);
-            }
-            ClickCounter = 0;
         }
+        private void ShowHideMenu(string Storyboard, Grid pnl) {
+            Storyboard sb = Resources[Storyboard] as Storyboard;
+            sb.Begin(pnl);
 
+        }
+        private void MediaEl_MouseMove(object sender, MouseEventArgs e) {
+            ShowHideMenu("StoryBoardShow", TopPanel);
+            ShowHideMenu("StoryBoardShow", BottomPanel);
+            if (menuTimer != null) {
+                menuTimer.Stop();
+            }
+            Base.MouseMove -= MediaEl_MouseMove;
+            menuTimer = new Timer();
+            menuTimer.Elapsed += (s,ea) => HideMenu();
+            menuTimer.Interval = 1500;
+            menuTimer.Start();
+        }
+        private void HideMenu() {
+            Base.MouseMove += MediaEl_MouseMove;
+            if (menuTimer != null) {
+                menuTimer.Stop();
+            }
+            Dispatcher.Invoke(new Action(() => {
+                ShowHideMenu("StoryBoardHide", TopPanel);
+                ShowHideMenu("StoryBoardHide", BottomPanel);
+            }), DispatcherPriority.Send);
+        }
+        private double VolumeLevel;
+        private void Mute() {
+            if (MediaEl.IsMuted) {
+                SoundLevel.Value = VolumeLevel;
+                MediaEl.IsMuted = false;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
+                MuteImage.Source = img;
+            } else {
+                VolumeLevel = MediaEl.Volume;
+                SoundLevel.Value = 0;
+                MediaEl.IsMuted = true;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
+                MuteImage.Source = img;
+
+            }
+        }
+        private bool maximized = false;
         private void FullScreen() {
             if (!maximized) {
                 maximized = true;
@@ -244,102 +166,88 @@ namespace TVS_Player {
                 main.WindowState = WindowState.Normal;
             }
         }
-
-        private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            Quit();   
-        }
-
-        private void BackgroundGrid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
-            switch (e.Key) {
-                case Key.F:
-                    FullScreen();
-                    break;
-                case Key.Space:
-                    PlayPause();
-                    break;
-                case Key.Right:
-                    MediaElement.Position += new TimeSpan(0, 0, 10);
-                    break;
-                case Key.Left:
-                    MediaElement.Position -= new TimeSpan(0, 0, 10);
-                    break;
-                case Key.M:
-                    Mute();
-                    break;
-                case Key.Escape:
-                    Quit();
-                    break;
-                default:
-                    break;
+        private bool isplaying;
+        private void PlayPause() {
+            if (isplaying) {
+                isplaying = false;
+                MediaEl.Pause();
+                BitmapImage img = new BitmapImage(new Uri("../Icons/play-button.png", UriKind.Relative));
+                PlayPauseButton.Source = img;
+            } else {
+                isplaying = true;
+                MediaEl.Play();
+                BitmapImage img = new BitmapImage(new Uri("../Icons/pause.png", UriKind.Relative));
+                PlayPauseButton.Source = img;
             }
         }
-        
         private void Quit() {
+            menuTimer.Stop();
+            progressMove.Stop();
+            MediaEl.Close();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
-            ((MainWindow)main).KeyUp -= BackgroundGrid_KeyUp;
+            //((MainWindow)main).KeyUp -= BackgroundGrid_KeyUp;
             System.Windows.Forms.Cursor.Show();
             if (maximized) {
                 main.WindowStyle = WindowStyle.SingleBorderWindow;
                 main.WindowState = WindowState.Normal;
             }
         }
-
-        private void Progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
-        }
-
-        private void Progress_DragStarted(object sender, RoutedEventArgs e) {
-            Progress.ValueChanged -= Progress_ValueChanged;
-        }
-        private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-            MediaElement.Position = TimeSpan.FromSeconds(Progress.Value);
-            Progress.ValueChanged += Progress_ValueChanged;
-        }
-
-        private void PlayPause() {
-            if (isplaying) {
-                isplaying = false;
-                MediaElement.Pause();
-                moveProgress.Stop();
-                BitmapImage img = new BitmapImage(new Uri("../Icons/play-button.png", UriKind.Relative));
-                PlayPauseButton.Source = img;
-            } else {
-                isplaying = true;
-                MediaElement.Play();
-                moveProgress.Start();
-                BitmapImage img = new BitmapImage(new Uri("../Icons/pause.png", UriKind.Relative));
-                PlayPauseButton.Source = img;
-            }
-        }
-
-        private void Mute() {
-            if (MediaElement.IsMuted) {
-                SoundLevel.Value = VolumeLevel;
-                MediaElement.IsMuted = false;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
-                MuteImage.Source = img;
-            } else {
-                VolumeLevel = MediaElement.Volume;
-                SoundLevel.Value = 0;
-                MediaElement.IsMuted = true;
-                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
-                MuteImage.Source = img;
-
-            }
-
-        }
+        private void GetIndex() {
+            SubtitleItem s = subs.Aggregate((x, y) => Math.Abs(x.StartTime - MediaEl.Position.TotalMilliseconds) < Math.Abs(y.StartTime - MediaEl.Position.TotalMilliseconds) ? x : y);
+            subIndex = subs.IndexOf(s) + 1;
+         }
 
         private void PlayPauseButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             PlayPause();
+        }
+
+        private void MuteImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            Mute();
         }
 
         private void FullScreenImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             FullScreen();
         }
 
-        private void MuteImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            Mute();
+        private void Progress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+            Progress.ValueChanged -= Progress_ValueChanged;
         }
+
+        private void Progress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+            MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
+            Progress.ValueChanged += Progress_ValueChanged;
+            Subtitles.Text = "";
+            GetIndex();
+        }
+
+        private void Progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
+        }
+
+        private void Progress_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
+            MediaEl.Position = TimeSpan.FromSeconds(Progress.Value);
+            Progress.ValueChanged += Progress_ValueChanged;
+            Subtitles.Text = "";
+            GetIndex();
+        }
+
+        private void SoundLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            MediaEl.Volume = SoundLevel.Value;
+            if (MediaEl.Volume == 0) {
+                MediaEl.IsMuted = true;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/mute.png", UriKind.Relative));
+                MuteImage.Source = img;
+            } else {
+                MediaEl.IsMuted = false;
+                BitmapImage img = new BitmapImage(new Uri("../Icons/speaker.png", UriKind.Relative));
+                MuteImage.Source = img;
+            }
+        }
+
+        private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            Quit();
+        }
+
     }
 }

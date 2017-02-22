@@ -36,7 +36,8 @@ namespace TVS_Player {
         Thread CheckThread;
         Timer t = new Timer();
         public static List<Notification> notifications = new List<Notification>();
-        public static List<SearchItem> searchIndex = new List<SearchItem>();
+        public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
+        List<Tuple<string, SearchItem>> searchTuple = new List<Tuple<string, SearchItem>>();
 
         private void RunChecker() {
             Notification n = new Notification();
@@ -66,7 +67,8 @@ namespace TVS_Player {
             SearchIndexDB.SaveDB(CreateSearchIndex());
         }
         private void LoadSearch() {
-            searchIndex = SearchIndexDB.ReadDB();
+            searchIndex = new HashSet<SearchItem>(SearchIndexDB.ReadDB());
+            searchTuple = MergeName();
         }
 
         private List<SearchItem> CreateSearchIndex() {
@@ -219,12 +221,9 @@ namespace TVS_Player {
         }
 
         private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            /*foreach (Show s in DatabaseShows.ReadDb()) {
-                Checker.UpdateFull(s.id);
-            }*/
-            Stream s = File.Open(@"E:\01Lib\Game of Thrones\Season 06\Game of Thrones - S06E01 - The Red Woman.srt",FileMode.Open);
-            List <SubtitleItem> listofSubs = SrtParser.ParseStream(GetEncoding(s));
-            string test = listofSubs[0].ToString();
+            if (Frame.Content.GetType() != typeof(About)) {
+                Frame.Content = new About();
+            }
         }
 
         private Encoding GetEncoding(Stream fileName) {
@@ -276,8 +275,7 @@ namespace TVS_Player {
             if (SearchBar.Text.Length > 1) {
                 string text = SearchBar.Text.ToUpper();
                 List<SearchItem> ItemList = new List<SearchItem>();
-                List<Tuple<string, SearchItem>> crazytuple = MergeName();
-                foreach (Tuple<string, SearchItem> t in crazytuple) {
+                foreach (Tuple<string, SearchItem> t in searchTuple) {
                     if (t.Item1.Contains(text)) {
                         ItemList.Add(t.Item2);
                     }
