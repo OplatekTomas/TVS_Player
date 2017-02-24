@@ -20,6 +20,8 @@ namespace TVS_Player {
     public partial class About : Page {
         public About() {
             InitializeComponent();
+            Window m = Application.Current.MainWindow;
+            ((MainWindow)m).SetTitle("About");
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {

@@ -39,7 +39,15 @@ namespace TVS_Player {
             sdb.LibLocation = path;
             SaveDB(sdb);
         }
-
+        public static void SetBuildInPlayer(bool use) {
+            SettingsDB sdb = ReadDB();
+            sdb.BuildInPlayer = use;
+            SaveDB(sdb);
+        }
+        public static bool GetBuildInPlayer() {
+            SettingsDB sdb = ReadDB();
+            return sdb.BuildInPlayer;
+        }
     }
 
     public static class DatabaseShows {
@@ -264,6 +272,7 @@ namespace TVS_Player {
     }
     public class SettingsDB {
         public string LibLocation;
+        public bool BuildInPlayer { get; set; }
 
         public SettingsDB(string LibLocation) {
             this.LibLocation = LibLocation;

@@ -21,6 +21,7 @@ using Timer = System.Timers.Timer;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 
 namespace TVS_Player {
     /// <summary>
@@ -42,8 +43,10 @@ namespace TVS_Player {
         Timer progressMove;
         bool renderSubs = true;
         int subIndex = 0;
+        string length;
         private void MediaEl_Loaded(object sender, RoutedEventArgs e) {
             MediaEl.Source = new Uri(path);
+            MediaEl.Play();
             MediaEl.ScrubbingEnabled = true;   
         }
 
@@ -52,6 +55,9 @@ namespace TVS_Player {
             LoadInfo();
             MoveProgress();
             Progress.Maximum = MediaEl.NaturalDuration.TimeSpan.TotalSeconds;
+            Window main = System.Windows.Application.Current.MainWindow;
+            main.KeyDown += KeyboardShortucs;
+            SoundLevel.Value = MediaEl.Volume;
         }
 
         private void MoveProgress() {
@@ -61,13 +67,27 @@ namespace TVS_Player {
         }
 
         private void RefreshProgress() {
+            string text;
             Dispatcher.Invoke(new Action(() => {
+                if (MediaEl.NaturalDuration.TimeSpan.Hours > 0) {
+                    text = MediaEl.Position.ToString(@"h\:mm\:ss") + "/" + length;
+                } else {
+                    text = MediaEl.Position.ToString(@"mm\:ss") + "/" + length;
+                }
                 Progress.Value = MediaEl.Position.TotalSeconds;
+                ClockText.Text = text;
             }), DispatcherPriority.Send);
         }
 
         private void LoadInfo() {
             int height = MediaEl.NaturalVideoHeight;
+            if (MediaEl.NaturalDuration.TimeSpan.Hours > 0) {
+                length = MediaEl.NaturalDuration.TimeSpan.ToString(@"h\:mm\:ss");
+                ClockText.Text = "0:00:00/" + length;
+            } else {
+                length = MediaEl.NaturalDuration.TimeSpan.ToString(@"mm\:ss");
+                ClockText.Text = "00:00/" + length;
+            }
             int width = MediaEl.NaturalVideoWidth;
             var ffProbe = new NReco.VideoInfo.FFProbe();
             var videoInfo = ffProbe.GetMediaInfo(path);
@@ -78,10 +98,13 @@ namespace TVS_Player {
         }
 
         private void LoadSubs() {
-            try {
-                subs = SrtParser.ParseStream(episode.locations[1], Encoding.Default);
-                Subs();
-            } catch (Exception) { }
+            foreach (string file in episode.locations) {
+                if (System.IO.Path.GetExtension(file) == ".srt") {
+                    subs = SrtParser.ParseStream(file, Encoding.Default);
+                    Subs();
+                    break;
+                }
+            }
         }
    
         private void Subs() {
@@ -166,7 +189,7 @@ namespace TVS_Player {
                 main.WindowState = WindowState.Normal;
             }
         }
-        private bool isplaying;
+        private bool isplaying = true;
         private void PlayPause() {
             if (isplaying) {
                 isplaying = false;
@@ -186,7 +209,7 @@ namespace TVS_Player {
             MediaEl.Close();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
-            //((MainWindow)main).KeyUp -= BackgroundGrid_KeyUp;
+            ((MainWindow)main).KeyUp -= KeyboardShortucs;
             System.Windows.Forms.Cursor.Show();
             if (maximized) {
                 main.WindowStyle = WindowStyle.SingleBorderWindow;
@@ -194,8 +217,10 @@ namespace TVS_Player {
             }
         }
         private void GetIndex() {
-            SubtitleItem s = subs.Aggregate((x, y) => Math.Abs(x.StartTime - MediaEl.Position.TotalMilliseconds) < Math.Abs(y.StartTime - MediaEl.Position.TotalMilliseconds) ? x : y);
-            subIndex = subs.IndexOf(s) + 1;
+            try {
+                SubtitleItem s = subs.Aggregate((x, y) => Math.Abs(x.StartTime - MediaEl.Position.TotalMilliseconds) < Math.Abs(y.StartTime - MediaEl.Position.TotalMilliseconds) ? x : y);
+                subIndex = subs.IndexOf(s) + 1;
+            } catch (Exception) { }
          }
 
         private void PlayPauseButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -249,5 +274,66 @@ namespace TVS_Player {
             Quit();
         }
 
+        private void KeyboardShortucs(object sender, System.Windows.Input.KeyEventArgs e) {
+            switch (e.Key) {
+                case Key.M:
+                    Mute();
+                    break;
+                case Key.F:
+                    FullScreen();
+                    break;
+                case Key.Escape:
+                    Quit();
+                    break;
+                case Key.Right:
+                    MediaEl.Position = MediaEl.Position.Add(new TimeSpan(0, 0, 10));
+                    Subtitles.Text = "";
+                    GetIndex();
+                    break;
+                case Key.Left:
+                    MediaEl.Position = MediaEl.Position.Add(new TimeSpan(0, 0, -10));
+                    Subtitles.Text = "";
+                    GetIndex();
+                    break;
+                case Key.Space:
+                    PlayPause();
+                    break;
+                case Key.Up:
+                    SoundLevel.Value += 0.1;
+                    break;
+                case Key.Down:
+                    SoundLevel.Value -= 0.1;
+                    break;
+                case Key.MediaPlayPause:
+                    PlayPause();
+                    break;
+
+            }
+        }
+        private Timer ClickTimer;
+        private int ClickCounter;
+        private void MediaEl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (ClickTimer != null) { 
+                ClickTimer.Stop();
+            }
+            ClickTimer = new Timer(300);
+            ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
+            ClickCounter++;
+            ClickTimer.Start();
+        }
+        private void EvaluateClicks(object source, ElapsedEventArgs e) {
+            ClickTimer.Stop();
+            if (ClickCounter == 2) {
+                Dispatcher.Invoke(new Action(() => {
+                    FullScreen();
+                }), DispatcherPriority.Send);
+            }
+            if (ClickCounter == 1) {
+                Dispatcher.Invoke(new Action(() => {
+                    PlayPause();
+                }), DispatcherPriority.Send);
+            }
+            ClickCounter = 0;
+        }
     }
 }

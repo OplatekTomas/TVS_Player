@@ -29,6 +29,8 @@ namespace TVS_Player {
             InitializeComponent();
             selectedShow = ss;
             StartUp();
+            Window m = Application.Current.MainWindow;
+            ((MainWindow)m).SetTitle(ss.name);
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
