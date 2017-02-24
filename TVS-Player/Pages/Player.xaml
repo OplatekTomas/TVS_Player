@@ -17,7 +17,7 @@
         </Storyboard>
     </Page.Resources>
     <Grid Background="Black" x:Name="Base" MouseMove="MediaEl_MouseMove">
-        <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" LoadedBehavior="Play" MediaOpened="MediaEl_MediaOpened" UnloadedBehavior="Manual" />
+        <MediaElement x:Name="MediaEl" Loaded="MediaEl_Loaded" MediaOpened="MediaEl_MediaOpened" LoadedBehavior="Manual" UnloadedBehavior="Close" MouseLeftButtonUp="MediaEl_MouseLeftButtonUp"/>
         <TextBlock x:Name="Subtitles" VerticalAlignment="Bottom" Height="100" Margin="40,10" Foreground="White" FontSize="32" TextAlignment="Center" />
         <Grid x:Name="TopPanel" VerticalAlignment="Top" Height="40" Margin="0,-40" Panel.ZIndex="2" Background="{StaticResource BackgroundBrush}">
             <Grid x:Name="BackButton" Grid.Row="0" Panel.ZIndex="1" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5" MouseLeftButtonUp="BackButton_MouseLeftButtonUp">

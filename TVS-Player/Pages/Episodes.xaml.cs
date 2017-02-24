@@ -26,6 +26,8 @@ using Color = System.Drawing.Color;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Reflection;
+using Size = System.Windows.Size;
+using System.Diagnostics;
 
 namespace TVS_Player {
     /// <summary>
@@ -43,6 +45,8 @@ namespace TVS_Player {
             ss = s;
             ClickTimer = new Timer(300);
             ClickTimer.Elapsed += new ElapsedEventHandler(EvaluateClicks);
+            Window m = Application.Current.MainWindow;
+            ((MainWindow)m).SetTitle(s.name + " Season " + season);
         }
         public Episodes(Show s, int season,Episode e) {
             InitializeComponent();
@@ -93,7 +97,7 @@ namespace TVS_Player {
                         EPC.EpisodeName.Text = episode.name;
                         EPC.noEp.Text = getEPOrder(episode);
                         EPC.timerText.Text = text;
-                        EPC.PlayEP.MouseLeftButtonDown += (s, ev) => PlayEP(episode.locations[0], episode);
+                        EPC.PlayEP.MouseLeftButtonDown += (s, ev) => PlayEP(HighestRes(episode), episode);
                         List.Children.Add(EPC);
                     }), DispatcherPriority.Send);
                 } else {
@@ -116,14 +120,35 @@ namespace TVS_Player {
             }
       
         }
+
+        private string HighestRes(Episode e) {
+            string path = null;
+            int oldSize = 0;
+            int currentSize = 0;
+            var ffProbe = new NReco.VideoInfo.FFProbe();
+            foreach (string p in e.locations) {
+                var videoInfo = ffProbe.GetMediaInfo(p);
+                var res = videoInfo.Streams;
+                currentSize = res[0].Width;
+                if (oldSize<currentSize) {
+                    path = p;
+                }
+            }
+            return path;
+        }
+
         private System.Windows.Media.Color ToMediaColor(Color color) {
             return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
         private void PlayEP(string path,Episode e) {
-            Page showPage = new Player(path,e,ss);
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrameIndex(showPage);
-            showPage.Focus();
+            if (!AppSettings.GetBuildInPlayer()) {
+                Process.Start(path);
+            } else { 
+                Page showPage = new Player(path,e,ss);
+                Window main = Window.GetWindow(this);
+                ((MainWindow)main).AddTempFrameIndex(showPage);
+                showPage.Focus();
+            }
         }
 
         public static string getEPOrder(Episode e) {

@@ -25,6 +25,8 @@ namespace TVS_Player {
             Thread t = new Thread(load.Invoke);
             t.Name = "Populate library";
             t.Start();
+            Window m = Application.Current.MainWindow;
+            ((MainWindow)m).SetTitle("Library");
         }
 
         public void LoadShows() {

@@ -11,7 +11,9 @@
     <Grid>
         <ScrollViewer>
             <Grid>
-                
+                <StackPanel Margin="20,30">
+                    <CheckBox Foreground="White" x:Name="EPPlayer" Height="20" Content="Play episodes in system default player" Click="EPPlayer_Click" />
+                </StackPanel>
             </Grid>
         </ScrollViewer>
     </Grid>

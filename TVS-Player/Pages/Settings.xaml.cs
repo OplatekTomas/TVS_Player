@@ -20,6 +20,22 @@ namespace TVS_Player {
     public partial class Settings : Page {
         public Settings() {
             InitializeComponent();
+            Window m = Application.Current.MainWindow;
+            ((MainWindow)m).SetTitle("Settings");
+            LoadSettings();
+        }
+
+        private void LoadSettings() {
+            SettingsDB s =  AppSettings.ReadDB();
+            EPPlayer.IsChecked = !s.BuildInPlayer;
+        }
+
+        private void EPPlayer_Click(object sender, RoutedEventArgs e) {
+            if (EPPlayer.IsChecked == true) {
+                AppSettings.SetBuildInPlayer(false);
+            } else {
+                AppSettings.SetBuildInPlayer(true);
+            }
         }
     }
 }

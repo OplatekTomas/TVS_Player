@@ -182,6 +182,9 @@ namespace TVS_Player {
         public void CloseTempFrameIndex() {
             GridOnTop.Children.RemoveAt(GridOnTop.Children.Count - 1);
         }
+        public void SetTitle(string text) {
+            HeadingText.Text = text;
+        }
 
         private void SearchBar_GotFocus(object sender, RoutedEventArgs e) {
             SearchBar.Text = "";
@@ -221,16 +224,9 @@ namespace TVS_Player {
         }
 
         private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            HideMenu();
             if (Frame.Content.GetType() != typeof(About)) {
                 Frame.Content = new About();
-            }
-        }
-
-        private Encoding GetEncoding(Stream fileName) {
-            using (StreamReader reader = new StreamReader(fileName, Encoding.Default, true)) {
-                reader.Peek(); // you need this!
-                var encoding = reader.CurrentEncoding;
-                return encoding;
             }
         }
 
