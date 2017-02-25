@@ -68,6 +68,7 @@ namespace TVS_Player {
             foreach (FolderControl fc in panel.Children) {
                 if (!locs.Contains(fc.pathBox.Text)) { 
                     locs.Add(fc.pathBox.Text);
+                    AppSettings.AddLocation(fc.pathBox.Text);
                 }
             }
             if (!addDb) {             
@@ -86,6 +87,16 @@ namespace TVS_Player {
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
+        }
+
+        private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) {
+            foreach (string path in AppSettings.GetLocations()) {
+                FolderControl fc = new FolderControl();
+                fc.pathBox.Text = path;
+                fc.editLocation.Click += (se, ea) => editOption(fc);
+                fc.removeLocation.Click += (se, ea) => removeOption(fc);
+                panel.Children.Add(fc);
+            }
         }
     }
 }

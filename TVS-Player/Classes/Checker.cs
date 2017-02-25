@@ -14,12 +14,12 @@ using System.Windows.Threading;
 namespace TVS_Player {
     class Checker {
 
-        public static void RescanEP(int id, List<string> locations) {
+        public static void RescanEP(int id) {
             CheckExistence(id);
             List<string> showFiles = new List<string>();
             List<string> aliases = Api.GetAliases(id);
             List<string> files = new List<string>();
-            foreach (string location in locations) {
+            foreach (string location in AppSettings.GetLocations()) {
                 files.AddRange(Directory.GetFiles(location, "*.*", System.IO.SearchOption.AllDirectories));
             }
             foreach (string file in files) {
@@ -32,7 +32,7 @@ namespace TVS_Player {
             showFiles = Renamer.FilterExtensions(showFiles);
             string showName = DatabaseShows.FindShow(id).name;
             string lib = AppSettings.GetLibLocation();
-            AddFiles(files, lib + "\\" + showName, id, showName);
+            AddFiles(showFiles, lib + "\\" + showName, id, showName);
         }
 
         private static void CheckExistence(int id) {
