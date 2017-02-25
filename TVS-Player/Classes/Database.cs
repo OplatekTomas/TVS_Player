@@ -48,6 +48,25 @@ namespace TVS_Player {
             SettingsDB sdb = ReadDB();
             return sdb.BuildInPlayer;
         }
+        public static void AddLocation(string path) {
+            SettingsDB sdb = ReadDB();
+            sdb.ScanPaths.Add(path);
+            SaveDB(sdb);
+        }
+        public static List<string> GetLocations() {
+            SettingsDB sdb = ReadDB();
+            return sdb.ScanPaths;
+        }
+        public static void RemoveLocation(string path) {
+            SettingsDB sdb = ReadDB();
+            sdb.ScanPaths.Remove(path);
+            SaveDB(sdb);
+        }
+        public static void EditLocation(string originalpath,string newpath) {
+            SettingsDB sdb = ReadDB();
+            sdb.ScanPaths[sdb.ScanPaths.IndexOf(originalpath)] = newpath;
+            SaveDB(sdb);
+        }
     }
 
     public static class DatabaseShows {
@@ -273,6 +292,7 @@ namespace TVS_Player {
     public class SettingsDB {
         public string LibLocation;
         public bool BuildInPlayer { get; set; }
+        public List<string> ScanPaths = new List<string>();
 
         public SettingsDB(string LibLocation) {
             this.LibLocation = LibLocation;

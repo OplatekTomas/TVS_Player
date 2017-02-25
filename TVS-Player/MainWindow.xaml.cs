@@ -58,7 +58,7 @@ namespace TVS_Player {
                 Task t2 = new Task(() => LoadSearch());
                 t2.ContinueWith(t => RescanFilesAll(n));
                 t2.Start();
-                Thread.Sleep(TimeSpan.FromSeconds(30));
+                Thread.Sleep(TimeSpan.FromHours(1));
             }
         }
 
@@ -98,7 +98,7 @@ namespace TVS_Player {
                     int index = notifications.IndexOf(n);
                     notifications[index] = n;
                 }), DispatcherPriority.Send);
-                Checker.RescanEP(s.id, new List<string>());
+                Checker.RescanEP(s.id);
             }
             notifications.Remove(n);
             Dispatcher.Invoke(new Action(() => {

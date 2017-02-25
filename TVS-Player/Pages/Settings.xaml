@@ -13,6 +13,25 @@
             <Grid>
                 <StackPanel Margin="20,30">
                     <CheckBox Foreground="White" x:Name="EPPlayer" Height="20" Content="Play episodes in system default player" Click="EPPlayer_Click" />
+                    <Border Background="{StaticResource LighterBackgroundBrush}" MinWidth="300" CornerRadius="6">
+                        <Grid>
+                            <TextBlock Foreground="White" FontSize="20" Text="Autoscan locations" Margin="6,0"/>
+                            <StackPanel x:Name="ScanList" Margin="6,40,0,0">
+                                <!-- <local:FolderControl></local:FolderControl>
+                                <local:FolderControl></local:FolderControl>
+                                <local:FolderControl></local:FolderControl>
+                                <local:FolderControl></local:FolderControl>-->
+                            </StackPanel>
+                                <Grid x:Name="AddLoc" Height="30" Width="30" Panel.ZIndex="10" Margin="10,5" HorizontalAlignment="Right" VerticalAlignment="Top" MouseUp="AddLoc_MouseUp">
+                                <Ellipse Fill="{DynamicResource AccentColor}">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="6" Opacity="0.6"  />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <TextBlock Text="+" Background="{x:Null}" Foreground="White" TextAlignment="Center" FontSize="19"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
