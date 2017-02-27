@@ -21,7 +21,7 @@ namespace TVS_Player {
         public string ShowName = "NON";
         public bool Disabled = false;
         public string filename;
-        public Shows library;
+        public Library library;
         public Show selected;
         public ShowRectangle() {
             InitializeComponent();

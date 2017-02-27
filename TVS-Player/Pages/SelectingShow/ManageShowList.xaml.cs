@@ -87,7 +87,7 @@ namespace TVS_Player {
             foreach (DBScanOption fc in panel.Children) {
                 locs.Add(fc.showLocation.Text);
             }
-            Page page = new TVS_Player.Shows();
+            Page page = new Library();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrame();
             Renamer.RenameBatch(id,locs,AppSettings.GetLibLocation());

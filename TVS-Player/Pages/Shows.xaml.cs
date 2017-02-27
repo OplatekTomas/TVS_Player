@@ -17,8 +17,8 @@ namespace TVS_Player {
     /// <summary>
     /// Interaction logic for Shows.xaml
     /// </summary>
-    public partial class Shows : Page {
-        public Shows() {
+    public partial class Library : Page {
+        public Library() {
             InitializeComponent();
             Action load;
             load = () => LoadShows();
@@ -57,7 +57,7 @@ namespace TVS_Player {
             DatabaseShows.AddShowToDb(Int32.Parse(id),name);
             Page selectLoc = new ScanLocation(true);
             ((MainWindow)main).AddTempFrame(selectLoc);
-            Page refreshView = new Shows();
+            Page refreshView = new Library();
             ((MainWindow)main).SetFrameView(refreshView);
 
         }

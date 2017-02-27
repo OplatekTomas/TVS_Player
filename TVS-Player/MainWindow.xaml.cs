@@ -193,8 +193,8 @@ namespace TVS_Player {
 
         private void ShowLibraryButon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             HideMenu();
-            if (Frame.Content.GetType() != typeof(Shows)) {
-                Frame.Content = new Shows();
+            if (Frame.Content.GetType() != typeof(Library)) {
+                Frame.Content = new Library();
             }
         }
 

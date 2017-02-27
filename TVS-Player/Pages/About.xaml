@@ -12,16 +12,22 @@
         <ScrollViewer>
             <StackPanel Margin="15">
                 <TextBlock Foreground="White" FontSize="30" Text="TVS-Player by Kaharonus" VerticalAlignment="Top"/>
-                <TextBlock Foreground="White" FontSize="14" Text="C# and WPF based app for maintaining library of TV Shows, playing episodes, sharing between your devices and mainly automatic download via torrent. Be careful downloading via torrent might be illegal in your country please check the law - I am not responsible for you" VerticalAlignment="Top" Margin="0,5" TextWrapping="Wrap" />
+                <TextBlock Foreground="White" FontSize="14" Text="C# and WPF based app for maintaining library of TV Shows, playing episodes, sharing between your devices and mainly automatic download via torrent. Be careful downloading via torrent might be illegal in your country please check the law - I am not responsible for your actions" VerticalAlignment="Top" Margin="0,5" TextWrapping="Wrap" />
                 <TextBlock Foreground="White" FontSize="20" Text="Thank you:"/>
-                <TextBlock Foreground="White" FontSize="14" >
-                    -  <Hyperlink NavigateUri="www.thetvdb.com " RequestNavigate="Hyperlink_RequestNavigate">TheTVDB</Hyperlink> for their awesome database &amp; API (v2)
-                </TextBlock>
+                <Grid>
+                    <TextBlock Foreground="White" FontSize="14" >
+                    - <TextBlock x:Name="tvdb" MouseLeftButtonUp="tvdb_MouseLeftButtonUp" TextDecorations="Underline">TheTVDB</TextBlock> for their awesome database &amp; API (v2)
+                    </TextBlock>
+                </Grid>
+
                 <TextBlock Foreground="White" FontSize="14">
-                     - <Hyperlink NavigateUri="https://github.com/TheNumerus/" RequestNavigate="Hyperlink_RequestNavigate">TheNumerus</Hyperlink> for helping me at the begining
+                     - <TextBlock x:Name="petko" MouseLeftButtonUp="petko_MouseLeftButtonUp" TextDecorations="Underline">TheNumerus</TextBlock> for helping me at the begining
                 </TextBlock>
                 <TextBlock Foreground="White" FontSize="14" >
-                    - AlexPoint from GitHub for his <Hyperlink NavigateUri="https://github.com/AlexPoint/SubtitlesParser/" RequestNavigate="Hyperlink_RequestNavigate">Subtitle parser</Hyperlink>
+                    - AlexPoint from GitHub for his <TextBlock MouseLeftButtonDown="Subs_MouseLeftButtonDown" TextDecorations="Underline">Subtitle parser</TextBlock>.
+                </TextBlock>
+                <TextBlock Foreground="White" FontSize="14" >
+                    -  <TextBlock x:Name="icons" MouseLeftButtonDown="icons_MouseLeftButtonDown" TextDecorations="Underline">These</TextBlock> people for providing me with their icons from <TextBlock x:Name="flaticon" MouseLeftButtonDown="flaticon_MouseLeftButtonDown" TextDecorations="Underline">Flaticon</TextBlock>. Especially <TextBlock x:Name="oliver" MouseLeftButtonDown="oliver_MouseLeftButtonDown" TextDecorations="Underline">Madebyoliver</TextBlock> and <TextBlock x:Name="freepik" MouseLeftButtonDown="freepik_MouseLeftButtonDown" TextDecorations="Underline">Freepik</TextBlock>.
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>

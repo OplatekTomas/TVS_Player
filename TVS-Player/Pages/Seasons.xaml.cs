@@ -34,7 +34,7 @@ namespace TVS_Player {
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            Page showPage = new Shows();
+            Page showPage = new Library();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).SetFrameView(showPage);
         }
