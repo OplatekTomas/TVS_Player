@@ -98,6 +98,7 @@ namespace TVS_Player {
                         EPC.noEp.Text = getEPOrder(episode);
                         EPC.timerText.Text = text;
                         EPC.PlayEP.MouseLeftButtonDown += (s, ev) => PlayEP(HighestRes(episode), episode);
+                        EPC.DownloadButton.Visibility = Visibility.Hidden;
                         List.Children.Add(EPC);
                     }), DispatcherPriority.Send);
                 } else {
@@ -114,11 +115,21 @@ namespace TVS_Player {
                         EPC.timerText.Foreground = cb;
                         EPC.lenghtText.Foreground = cb;
                         EPC.PlayEP.Source = Convert(new Bitmap(Properties.Resources.play_button_dark));
+                        EPC.DownloadButton.MouseLeftButtonDown += (s, ev) => DownloadOptions(ss.name, episode.season, episode.episode);
                         List.Children.Add(EPC);
                     }), DispatcherPriority.Send);
                 }
             }
       
+        }
+
+        private void DownloadOptions(string name, int season, int episode) {
+            List<TorrentItem> t = FindTorrent.GetTorrents(name, season, episode);
+            string text = null;
+            foreach (TorrentItem ti in t) {
+                text += ti.name + "\n";
+            }
+            MessageBox.Show(text);
         }
 
         private string HighestRes(Episode e) {
