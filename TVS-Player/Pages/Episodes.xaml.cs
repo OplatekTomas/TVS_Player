@@ -98,7 +98,6 @@ namespace TVS_Player {
                         EPC.noEp.Text = getEPOrder(episode);
                         EPC.timerText.Text = text;
                         EPC.PlayEP.MouseLeftButtonDown += (s, ev) => PlayEP(HighestRes(episode), episode);
-                        EPC.DownloadButton.Visibility = Visibility.Hidden;
                         List.Children.Add(EPC);
                     }), DispatcherPriority.Send);
                 } else {
@@ -115,7 +114,12 @@ namespace TVS_Player {
                         EPC.timerText.Foreground = cb;
                         EPC.lenghtText.Foreground = cb;
                         EPC.PlayEP.Source = Convert(new Bitmap(Properties.Resources.play_button_dark));
-                        EPC.DownloadButton.MouseLeftButtonDown += (s, ev) => DownloadOptions(ss.name, episode.season, episode.episode);
+                        if (episode.release != "--.--.----") { 
+                            if (DateTime.ParseExact(episode.release, "dd.MM.yyyy", null) < DateTime.Now) {
+                                EPC.DownloadButton.Visibility = Visibility.Visible; 
+                                EPC.DownloadButton.MouseLeftButtonDown += (s, ev) => DownloadOptions(ss.name, episode.season, episode.episode);
+                            }
+                        }
                         List.Children.Add(EPC);
                     }), DispatcherPriority.Send);
                 }
