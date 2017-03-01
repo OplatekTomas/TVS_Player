@@ -56,7 +56,7 @@ namespace TVS_Player {
 
         private void CancelButton_Event(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
 
         private void SelectButton_Event(object sender, RoutedEventArgs e) {
@@ -70,7 +70,7 @@ namespace TVS_Player {
                 s.posterFilename = filename;
                 DatabaseShows.Edit(s);
                 Window main = Window.GetWindow(this);
-                ((MainWindow)main).CloseTempFrame();
+                ((MainWindow)main).CloseTempFrameIndex();
             }
         }
     }

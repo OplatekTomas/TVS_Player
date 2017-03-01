@@ -55,13 +55,14 @@ namespace TVS_Player {
             }
             return final;
         }
-        public static void RenameBatch(List<int> ids,List<string> scan,string lib) {
+        public static bool RenameBatch(List<int> ids,List<string> scan,string lib) {
             foreach (int id in ids) {
                 string showName = Api.getName(id);
                 List<string> files = ScanEpisodes(scan,id);
                 Directory.CreateDirectory(lib + "\\" +showName);
                 RenameFiles(files, lib+"\\"+showName, id, showName);
             }
+            return true;
         }
 
 

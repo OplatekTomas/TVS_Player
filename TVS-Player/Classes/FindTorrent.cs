@@ -12,7 +12,12 @@ namespace TVS_Player {
             string url = GetUrl(show, season, episode);
             HtmlWeb htmlWeb = new HtmlWeb();
             HtmlDocument htmlDocument = htmlWeb.Load(url);
-            List<HtmlNode> rows = htmlDocument.DocumentNode.SelectSingleNode("//table").ChildNodes[3].SelectNodes("//tr").ToList();
+            List<HtmlNode> rows = new List<HtmlNode>();
+            try {
+                rows = htmlDocument.DocumentNode.SelectSingleNode("//table").ChildNodes[3].SelectNodes("//tr").ToList();
+            } catch (Exception) {
+                return new List<TorrentItem>();
+            }
             rows.RemoveAt(0);
             List<TorrentItem> tList = new List<TorrentItem>();
             foreach (HtmlNode row in rows) {

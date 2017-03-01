@@ -20,7 +20,7 @@ namespace TVS_Player {
 
         private void Cancel_Event(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
 
         private void RenameShow_Event(object sender, RoutedEventArgs e) {

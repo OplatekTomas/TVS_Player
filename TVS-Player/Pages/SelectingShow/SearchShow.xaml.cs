@@ -102,7 +102,7 @@ namespace TVS_Player {
             string specific = Api.apiGet(Int32.Parse(id));
             Page showPage = new ShowInfoSmall(specific);
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
         private void nameTxt_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;

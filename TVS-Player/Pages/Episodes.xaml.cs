@@ -244,7 +244,7 @@ namespace TVS_Player {
                 if (jo["data"]["firstAired"].ToString() != "") {
                     DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     FirstAired.Text = dt.ToString("dd.MM.yyyy");
-                    if (dt >= DateTime.Now) {
+                    if (dt <= DateTime.Now) {
                         Director.Text = "-";
                         Writer.Text = "-";
                         Overview.Text = "-";

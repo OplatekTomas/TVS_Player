@@ -144,7 +144,7 @@ namespace TVS_Player {
 
         private void button_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
         private BitmapSource getImage(string url) {
             WebClient wc = new WebClient();
@@ -158,7 +158,7 @@ namespace TVS_Player {
         }
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
         private void setLeft(Actor actor) {
             string name = actor.name;

@@ -15,7 +15,7 @@
                     <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="6" Opacity="0.6"  />
                 </Ellipse.Effect>
             </Ellipse>
-            <TextBlock Text="+" Background="{x:Null}" Foreground="White" TextAlignment="Center" FontSize="31"/>
+            <TextBlock Text="+" Background="{x:Null}" Foreground="White" TextAlignment="Center" FontSize="32"/>
         </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <WrapPanel  x:Name="List" Margin="10,30,0,10">

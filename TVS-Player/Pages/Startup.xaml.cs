@@ -52,14 +52,14 @@ namespace TVS_Player {
         private void ImportShowBlock_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             Page showPage = new DbLocation("import");
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
 
         private void AddShowButton_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             Page showPage = new ShowList("createdb");
             //Page showPage = new ScanLocation();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
             //Renamer.RenameBatch(new List<int>() { 272644 }, new List<string>() { "D:\\Test\\S1" }, "D:\\Test\\DB");
             //Renamer.RenameBatch(new List<int>(){ 121361 },new List<string>() {"D:\\Test\\S1" }, "D:\\Test\\DB");
             //DatabaseEpisodes.readDb(121361);

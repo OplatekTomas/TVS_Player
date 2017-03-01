@@ -30,7 +30,8 @@ namespace TVS_Player {
         }
 
         public void LoadShows() {
-            List<Show> list = DatabaseShows.ReadDb(); 
+            List<Show> list = DatabaseShows.ReadDb();
+            list.Sort((x,y) => string.Compare(x.name,y.name)); 
             foreach(Show s in list) { 
                 Dispatcher.Invoke(new Action(() => {
                     GenerateRectangle(s);
@@ -50,16 +51,17 @@ namespace TVS_Player {
         private async void AddShowButton_MouseUp(object sender, MouseButtonEventArgs e) {
             Page showPage = new SelectShow();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
             var show = await Helpers.showSelector();
             string name = show.Item2;
             string id = show.Item1;
             DatabaseShows.AddShowToDb(Int32.Parse(id),name);
             Page selectLoc = new ScanLocation(true);
-            ((MainWindow)main).AddTempFrame(selectLoc);
+            ((MainWindow)main).AddTempFrameIndex(selectLoc);
             Page refreshView = new Library();
             ((MainWindow)main).SetFrameView(refreshView);
-
+            ((MainWindow)main).SaveSearch();
+            ((MainWindow)main).LoadSearch();
         }
     }
 }

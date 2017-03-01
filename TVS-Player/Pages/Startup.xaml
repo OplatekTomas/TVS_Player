@@ -9,7 +9,7 @@
       Title="Startup">
     <Grid>
 
-        <Grid>
+        <Grid Background="{StaticResource BackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*"/>
                 <RowDefinition Height="200"/>
@@ -30,6 +30,9 @@
             <DockPanel Grid.Column="1" Grid.Row="3">
                 <Grid x:Name="AddShowBlock" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="90" Height="90">
                     <Grid x:Name="AddShowButton" Height="60" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center"  MouseUp="AddShowButton_MouseUp">
+                        <Grid.Effect>
+                            <DropShadowEffect BlurRadius="15" Opacity="0.7" ShadowDepth="3" Direction="310"></DropShadowEffect>
+                        </Grid.Effect>
                         <Ellipse Fill="{StaticResource AccentColor}"/>
                         <Image Source="..\Icons\page-blank.png" Margin="12,10,8,10" />
                     </Grid>
@@ -37,6 +40,9 @@
                 </Grid>
                 <Grid x:Name="ImportShowBlock" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="90" Height="90" >
                     <Grid x:Name="ImportShowButton" Height="60" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center" MouseUp="ImportShowBlock_MouseUp">
+                        <Grid.Effect>
+                            <DropShadowEffect BlurRadius="15" Opacity="0.7" ShadowDepth="3" Direction="310"></DropShadowEffect>
+                        </Grid.Effect>
                         <Ellipse Fill="{StaticResource AccentColor}"/>
                         <Image Source="..\Icons\import.png" Margin="13,10,7,10" />
                     </Grid>

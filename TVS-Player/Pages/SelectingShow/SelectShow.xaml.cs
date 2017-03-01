@@ -83,7 +83,7 @@ namespace TVS_Player
         private void showInfo(string id) {
             Page showPage = new ShowInfoSmall(Api.apiGet(Int32.Parse(id)));
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
         private void nameTxt_GotFocus(object sender, RoutedEventArgs e) {
             TextBox tb = (TextBox)sender;
@@ -94,7 +94,7 @@ namespace TVS_Player
             Helpers.showID = id;
             Helpers.showName = showName;
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
             //nameTxt.Text = string.Empty;
             //panel.Children.Clear();
 

@@ -50,23 +50,23 @@ namespace TVS_Player {
                     SettingsDB s = new SettingsDB(dbLoc);
                     AppSettings.SaveDB(s);
                     Window main = Window.GetWindow(this);
-                    ((MainWindow)main).CloseTempFrame();
+                    ((MainWindow)main).CloseTempFrameIndex();
                     Page showPage = new ScanLocation(false);
-                    ((MainWindow)main).AddTempFrame(showPage);
+                    ((MainWindow)main).AddTempFrameIndex(showPage);
                 } else if(next == "import") {
                     SettingsDB s = new SettingsDB(dbLoc);
                     AppSettings.SaveDB(s);
                     Window main = Window.GetWindow(this);
-                    ((MainWindow)main).CloseTempFrame();
+                    ((MainWindow)main).CloseTempFrameIndex();
                     Page showPage = new ManageShowList(dbLoc);
-                    ((MainWindow)main).AddTempFrame(showPage);
+                    ((MainWindow)main).AddTempFrameIndex(showPage);
                 }
             } else { MessageBox.Show("Path "+ dbLoc + " doesn't exist!","Error!"); }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
     }
 }

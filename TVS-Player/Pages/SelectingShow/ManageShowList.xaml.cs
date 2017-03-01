@@ -89,19 +89,21 @@ namespace TVS_Player {
             }
             Page page = new Library();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
+
             Renamer.RenameBatch(id,locs,AppSettings.GetLibLocation());
             ((MainWindow)main).SetFrameView(page);
+            ((MainWindow)main).CloseTempFrameIndex();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
         private void showInfo(string specific) {
             Page showPage = new ShowInfoSmall(specific);
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
         private void removeShow(object sender, RoutedEventArgs e, int index, DBScanOption option) {
             shows.RemoveAt(index);
@@ -110,7 +112,7 @@ namespace TVS_Player {
         private async void editShow(int index, DBScanOption option) {
             Page showPage = new SelectShow();
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
             var show = await Helpers.showSelector();
             string name = show.Item2;
             string id = show.Item1;

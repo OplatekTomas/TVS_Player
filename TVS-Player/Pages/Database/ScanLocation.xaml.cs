@@ -21,9 +21,15 @@ namespace TVS_Player {
     /// </summary>
     public partial class ScanLocation : Page {
         bool addDb;
+        bool startup = false;
         public ScanLocation(bool addToDb) {
             InitializeComponent();
             addDb = addToDb;
+        }
+        public ScanLocation(bool addToDb,bool startup) {
+            InitializeComponent();
+            addDb = addToDb;
+            this.startup = startup;
         }
         private void textbox_GotFocus(object sender, RoutedEventArgs e) {
             textbox.Text = string.Empty;
@@ -81,12 +87,15 @@ namespace TVS_Player {
                 Renamer.RenameBatch(ids, locs, AppSettings.GetLibLocation());
             }
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
+            if (startup) {
+                ((MainWindow)main).CloseTempFrameIndex();
+            }
         }
         
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) {

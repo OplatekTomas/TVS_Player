@@ -31,13 +31,29 @@ namespace TVS_Player {
             LastLaunch = Properties.Settings.Default.LastLaunched;
             Properties.Settings.Default.LastLaunched = DateTime.Now;
             Properties.Settings.Default.Save();
-            RunChecker();
+            StartUp();
         }
         Thread CheckThread;
         Timer t = new Timer();
         public static List<Notification> notifications = new List<Notification>();
         public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
-        List<Tuple<string, SearchItem>> searchTuple = new List<Tuple<string, SearchItem>>();
+        HashSet<Tuple<string, SearchItem>> searchTuple = new HashSet<Tuple<string, SearchItem>>();
+
+        private bool Check() {
+            if (DatabaseShows.ReadDb().Count == 0) {
+                return true;
+            }
+            return false;
+        }
+
+        private void StartUp() {
+            if (!Check()) {
+                RunChecker();
+            } else {
+                Page p = new Startup();
+                AddTempFrameIndex(p);
+            }
+        }
 
         private void RunChecker() {
             Notification n = new Notification();
@@ -62,11 +78,10 @@ namespace TVS_Player {
             }
         }
 
-        private void SaveSearch() {
-            
+        public void SaveSearch() {          
             SearchIndexDB.SaveDB(CreateSearchIndex());
         }
-        private void LoadSearch() {
+        public void LoadSearch() {
             searchIndex = new HashSet<SearchItem>(SearchIndexDB.ReadDB());
             searchTuple = MergeName();
         }
@@ -149,10 +164,6 @@ namespace TVS_Player {
             Storyboard sb = Resources[Storyboard] as Storyboard;
             sb.Begin(pnl);
         }
-        /*
-         private void btnDownloadShow_Click(object sender, RoutedEventArgs e){
-          
-         }*/
 
         private void FrameLoaded_Handler(object sender, RoutedEventArgs e) {
             SearchBar.TextChanged += SearchBar_TextChanged;
@@ -170,10 +181,11 @@ namespace TVS_Player {
             fr.Content = page;
         }
         public void AddTempFrameIndex(Page page) {
-            Frame fr = new Frame();
-            GridOnTop.Children.Add(fr);
-            Panel.SetZIndex(fr, 1000);
-            fr.Content = page;
+            Frame frameOnTop = new Frame();
+            frameOnTop.Content = page;
+            GridOnTop.Children.Add(frameOnTop);
+            Panel.SetZIndex(frameOnTop, 1000);
+
         }
 
         public void CloseTempFrame() {
@@ -292,8 +304,8 @@ namespace TVS_Player {
             SetFrameView(new Episodes(s.show,s.episodeObject.season,s.episodeObject));
         }
 
-        private List<Tuple<string, SearchItem>> MergeName() {
-            List<Tuple<string, SearchItem>> list = new List<Tuple<string, SearchItem>>();
+        private HashSet<Tuple<string, SearchItem>> MergeName() {
+            HashSet<Tuple<string, SearchItem>> list = new HashSet<Tuple<string, SearchItem>>();
             foreach (SearchItem i in searchIndex) {
                 list.Add(new Tuple<string, SearchItem>(i.show.name.ToUpper() + " " + i.seasonNumber.ToUpper() + i.episodeNumber.ToUpper() + " " + i.episodeObject.name.ToUpper(), i));
             }

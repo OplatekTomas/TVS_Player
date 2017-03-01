@@ -36,13 +36,13 @@ namespace TVS_Player {
                         list.Add(new Show(s.getID(),s.getName()));
                     }
                     DatabaseShows.SaveDB(list);                 
-                    ((MainWindow)main).CloseTempFrame();
+                    ((MainWindow)main).CloseTempFrameIndex();
                     Page showPage = new DbLocation("nothing");
-                    ((MainWindow)main).AddTempFrame(showPage);
+                    ((MainWindow)main).AddTempFrameIndex(showPage);
                     break;
 
                 default:
-                    ((MainWindow)main).CloseTempFrame();
+                    ((MainWindow)main).CloseTempFrameIndex();
                     break;
             }
         }
@@ -50,7 +50,7 @@ namespace TVS_Player {
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).CloseTempFrame();
+            ((MainWindow)main).CloseTempFrameIndex();
         }
     }
 }

@@ -69,7 +69,7 @@ namespace TVS_Player {
         private void ChooseImage_Event(object sender, RoutedEventArgs e) {
             Page showPage = new SelectShowPoster(this);
             Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddTempFrame(showPage);
+            ((MainWindow)main).AddTempFrameIndex(showPage);
         }
         public void RegenerateInfo(bool onlyImage) {
             if (onlyImage) {
