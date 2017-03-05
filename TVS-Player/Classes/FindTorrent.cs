@@ -57,7 +57,9 @@ namespace TVS_Player {
             List<TorrentItem> orig = GetTorrents(show, season, episode);
             List<TorrentItem> newList = new List<TorrentItem>();
             foreach (TorrentItem t in orig) {
-                if (t.quality == quality) {
+                if (quality == "Any") {
+                    newList.Add(t);
+                } else if (t.quality == quality) {
                     newList.Add(t);
                 }
             }

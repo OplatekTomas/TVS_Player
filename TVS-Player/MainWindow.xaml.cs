@@ -35,7 +35,7 @@ namespace TVS_Player {
         }
         Thread CheckThread;
         Timer t = new Timer();
-        public static List<Notification> notifications = new List<Notification>();
+        public static volatile List<Notification> notifications = new List<Notification>();
         public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
         HashSet<Tuple<string, SearchItem>> searchTuple = new HashSet<Tuple<string, SearchItem>>();
 
@@ -48,7 +48,7 @@ namespace TVS_Player {
 
         private void StartUp() {
             if (!Check()) {
-                RunChecker();
+                //RunChecker();
             } else {
                 Page p = new Startup();
                 AddTempFrameIndex(p);
@@ -242,16 +242,31 @@ namespace TVS_Player {
             }
         }
 
+        public static Notification AddNotification(string MainText, string SecondaryText) {
+            Notification not = new Notification();
+            not.MainText.Text = MainText;
+            not.SecondText.Text = SecondaryText;
+            notifications.Add(not);
+            return not;
+        }
+        public static void EditNotification(Notification n,string MainText, string SecondaryText,int ProgressBarValue) {
+            int index = notifications.IndexOf(n);
+            notifications[index].MainText.Text = MainText;
+            notifications[index].SecondText.Text = SecondaryText;
+            notifications[index].ProgBar.Value = ProgressBarValue;
+        }
+
         private void RenderNotifications() {
             for (int i = 0; i < notifications.Count; i++) {
                 Dispatcher.Invoke(new Action(() => {
                     if (NotificationsList.Children.Count < notifications.Count) {
-                        while(NotificationsList.Children.Count < notifications.Count) {
-                            Notification n = new Notification();
-                            NotificationsList.Children.Add(n);
-                        }
+                    while (NotificationsList.Children.Count < notifications.Count) {
+                        Notification n = new Notification();
+                        NotificationsList.Children.Add(n);
                     }
-                    NotificationsList.Children[i] = notifications[i];
+                }
+                NotificationsList.Children.RemoveAt(i);
+                NotificationsList.Children.Insert(i,notifications[i]);
                 }), DispatcherPriority.Send);
             }
         }
@@ -259,7 +274,10 @@ namespace TVS_Player {
         private void NotificationButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (notifications.Count > 0) {
                 foreach (Notification n in notifications) {
-                    NotificationsList.Children.Add(n);
+                    try {
+                        NotificationsList.Children.Add(n);
+                    } catch (Exception) {
+                    }
                 }
                 t.Interval = 100;
                 t.Elapsed += (s, ea) => RenderNotifications();

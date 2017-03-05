@@ -29,6 +29,16 @@ namespace TVS_Player {
         private void LoadSettings() {
             SettingsDB s =  AppSettings.ReadDB();
             EPPlayer.IsChecked = !s.BuildInPlayer;
+            AutoDownload.IsChecked = s.AutoDownload;
+            OneClickDown.IsChecked = s.OneClickDownload;
+            OneClickQuality.SelectedValue = s.OneClickQuality;
+            AutoQuality.SelectedValue = s.AutoQuality;
+            if (!s.AutoDownload) {
+                AutoQuality.IsEnabled = false;
+            }
+            if (!s.OneClickDownload) {
+                AutoQuality.IsEnabled = false;
+            }
             List<string> scanpaths = AppSettings.GetLocations();
             foreach (string p in scanpaths) {
                 FolderControl fc = new FolderControl();
@@ -71,6 +81,38 @@ namespace TVS_Player {
                 fc.pathBox.Text = fbd.SelectedPath;
             }
 
+        }
+
+        private void AutoDownload_Click(object sender, RoutedEventArgs e) {
+            if (AutoDownload.IsChecked == true) {
+                AppSettings.SetAutoDownload(true);
+                AutoQuality.IsEnabled = true;
+            } else {
+                AppSettings.SetAutoDownload(false);
+                AutoQuality.IsEnabled = false;
+            }
+        }
+
+        private void OneClickDown_Click(object sender, RoutedEventArgs e) {
+            if (OneClickDown.IsChecked == true) {
+                AppSettings.SetOneClick(true);
+                OneClickQuality.IsEnabled = true;
+            } else {
+                AppSettings.SetOneClick(false);
+                OneClickQuality.IsEnabled = false;
+            }
+        }
+
+        private void AutoQuality_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (AutoQuality.SelectedValue != null) { 
+                AppSettings.SetAutoQuality(AutoQuality.SelectedValue.ToString());
+            }
+        }
+
+        private void OneClickQuality_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (OneClickQuality.SelectedValue != null) { 
+                AppSettings.SetOneClickQuality(OneClickQuality.SelectedValue.ToString());
+            }
         }
     }
 }

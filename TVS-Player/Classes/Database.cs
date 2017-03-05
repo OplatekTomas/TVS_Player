@@ -48,6 +48,42 @@ namespace TVS_Player {
             SettingsDB sdb = ReadDB();
             return sdb.BuildInPlayer;
         }
+        public static void SetAutoDownload(bool use) {
+            SettingsDB sdb = ReadDB();
+            sdb.AutoDownload = use;
+            SaveDB(sdb);
+        }
+        public static bool GetAutoDownload() {
+            SettingsDB sdb = ReadDB();
+            return sdb.AutoDownload;
+        }
+        public static void SetOneClick(bool use) {
+            SettingsDB sdb = ReadDB();
+            sdb.OneClickDownload = use;
+            SaveDB(sdb);
+        }
+        public static bool GetOneClick() {
+            SettingsDB sdb = ReadDB();
+            return sdb.OneClickDownload;
+        }
+        public static void SetOneClickQuality(string quality) {
+            SettingsDB sdb = ReadDB();
+            sdb.OneClickQuality = quality;
+            SaveDB(sdb);
+        }
+        public static string GetOneClickQuality() {
+            SettingsDB sdb = ReadDB();
+            return sdb.OneClickQuality;
+        }
+        public static void SetAutoQuality(string quality) {
+            SettingsDB sdb = ReadDB();
+            sdb.AutoQuality = quality;
+            SaveDB(sdb);
+        }
+        public static string GetAutoQuality() {
+            SettingsDB sdb = ReadDB();
+            return sdb.AutoQuality;
+        }
         public static void AddLocation(string path) {
             SettingsDB sdb = ReadDB();
             sdb.ScanPaths.Add(path);
@@ -291,7 +327,11 @@ namespace TVS_Player {
     }
     public class SettingsDB {
         public string LibLocation;
-        public bool BuildInPlayer { get; set; }
+        public bool BuildInPlayer;
+        public bool AutoDownload;
+        public bool OneClickDownload;
+        public string AutoQuality;
+        public string OneClickQuality;
         public List<string> ScanPaths = new List<string>();
 
         public SettingsDB(string LibLocation) {

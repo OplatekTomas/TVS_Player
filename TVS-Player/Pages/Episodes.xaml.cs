@@ -117,7 +117,7 @@ namespace TVS_Player {
                         if (episode.release != "--.--.----") { 
                             if (DateTime.ParseExact(episode.release, "dd.MM.yyyy", null) < DateTime.Now) {
                                 EPC.DownloadButton.Visibility = Visibility.Visible; 
-                                EPC.DownloadButton.MouseLeftButtonDown += (s, ev) => DownloadOptions(ss.name, episode.season, episode.episode);
+                                EPC.DownloadButton.MouseLeftButtonDown += (s, ev) => DownloadOptions(ss.name, episode);
                             }
                         }
                         List.Children.Add(EPC);
@@ -127,13 +127,19 @@ namespace TVS_Player {
       
         }
 
-        private void DownloadOptions(string name, int season, int episode) {
-            List<TorrentItem> t = FindTorrent.GetTorrents(name, season, episode);
-            string text = null;
-            foreach (TorrentItem ti in t) {
-                text += ti.name + "\n";
+        private void DownloadOptions(string name, Episode episode) {
+            if (AppSettings.GetOneClick()) {
+                TorrentItem torrent = FindTorrent.GetBestTorrent(name, episode.season, episode.episode, AppSettings.GetOneClickQuality());
+                TorrentDownloader t = new TorrentDownloader(torrent);
+                t.DownloadTorrent();
+            } else { 
+                List<TorrentItem> t = FindTorrent.GetTorrents(name, episode.season, episode.episode);
+                string text = null;
+                foreach (TorrentItem ti in t) {
+                    text += ti.name + "\n";
+                }
+                MessageBox.Show(text);
             }
-            MessageBox.Show(text);
         }
 
         private string HighestRes(Episode e) {
@@ -244,7 +250,7 @@ namespace TVS_Player {
                 if (jo["data"]["firstAired"].ToString() != "") {
                     DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     FirstAired.Text = dt.ToString("dd.MM.yyyy");
-                    if (dt <= DateTime.Now) {
+                    if (dt.AddDays(1) > DateTime.Now) {
                         Director.Text = "-";
                         Writer.Text = "-";
                         Overview.Text = "-";
