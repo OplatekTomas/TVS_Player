@@ -18,6 +18,7 @@ using System.Threading;
 using Timer = System.Timers.Timer;
 using System.Windows.Threading;
 using Newtonsoft.Json;
+using Ragnar;
 
 namespace TVS_Player {
     /// <summary>
@@ -38,6 +39,7 @@ namespace TVS_Player {
         public static volatile List<Notification> notifications = new List<Notification>();
         public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
         HashSet<Tuple<string, SearchItem>> searchTuple = new HashSet<Tuple<string, SearchItem>>();
+        public static List<TorrentHandle> torrents = new List<TorrentHandle>();
 
         private bool Check() {
             if (DatabaseShows.ReadDb().Count == 0) {
@@ -49,11 +51,57 @@ namespace TVS_Player {
         private void StartUp() {
             if (!Check()) {
                 //RunChecker();
+                DownloadCheckTimer();
             } else {
                 Page p = new Startup();
                 AddTempFrameIndex(p);
             }
         }
+
+        private void DownloadCheckTimer() {
+            Timer t = new Timer();
+            t.Interval = 1000;
+            Notification n = new Notification();
+            t.Elapsed += (s, e) => DownloadCheck(n);
+            t.Start();
+        }
+
+        private void DownloadCheck(Notification notification) {
+            foreach (TorrentHandle handle in torrents) {
+                Dispatcher.Invoke(new Action(() => {
+                    notification = new Notification();
+                    notifications.Add(notification);
+                }), DispatcherPriority.Send);
+                var status = handle.QueryStatus();
+                if (status.IsSeeding) {
+                    break;
+                }
+                int speed = status.DownloadRate;
+                if (handle.TorrentFile.Name != null) { 
+                notification.MainText.Text = handle.TorrentFile.Name;
+                }
+                notification.SecondText.Text = GetSpeed(speed);
+                notification.ProgBar.Value = status.Progress * 100;
+                Dispatcher.Invoke(new Action(() => {
+                    int index = MainWindow.notifications.IndexOf(notification);
+                    MainWindow.notifications[index] = notification;
+                }), DispatcherPriority.Send);
+            }
+        }
+        private string GetSpeed(int speed) {
+            string speedText = speed + " B/s";
+            if (speed > 1000) {
+                speedText = speed / 1000 + " kB/s";
+            }
+            if (speed > 1000000) {
+                speedText = speed / 1000000 + " MB/s";
+            }
+            if (speed > 1000000000) {
+                speedText = speed / 1000000000 + " GB/s";
+            }
+            return speedText;
+        }
+
 
         private void RunChecker() {
             Notification n = new Notification();

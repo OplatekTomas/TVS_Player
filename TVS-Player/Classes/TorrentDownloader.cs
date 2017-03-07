@@ -33,48 +33,18 @@ namespace TVS_Player {
             downloadThread.Start();
         }
         private void Down(bool sequential) {
-            Notification notification = null;
             using (var session = new Session()) {
                 session.ListenOn(6881, 6889);
                 var addParams = new AddTorrentParams();
-                addParams.SavePath = "D:\\";
+                addParams.SavePath = "C:\\";
                 addParams.Url = torrent.magnet;
                 handle = session.AddTorrent(addParams);
                 handle.SequentialDownload = sequential;
                 Dispatcher.CurrentDispatcher.Invoke(new Action(() => {
-                    notification = MainWindow.AddNotification("","");
+                    MainWindow.torrents.Add(handle);
                 }), DispatcherPriority.Send);
-                while (true) {
-                    var status = handle.QueryStatus();
-                    if (status.IsSeeding) {
-                        break;
-                    }
-                    int speed = status.DownloadRate;
-                    string speedText = GetSpeed(speed);
-                    string name = torrent.name;
-                    notification.MainText.Text = name;
-                    notification.SecondText.Text = speedText;
-                    notification.ProgBar.Value = status.Progress * 100;
-                    Dispatcher.CurrentDispatcher.Invoke(new Action(() => {
-                        int index = MainWindow.notifications.IndexOf(notification);
-                        MainWindow.notifications[index] = notification;
-                    }), DispatcherPriority.Send);
-                    Thread.Sleep(100000);
-                }
+                
             }
-        }
-        private string GetSpeed(int speed) {
-            string speedText = speed + " B/s";
-            if (speed > 1000) {
-                speedText = speed / 1000 + " kB/s";
-            }
-            if (speed > 1000000) {
-                speedText = speed / 1000000 + " MB/s";
-            }
-            if (speed > 1000000000) {
-                speedText = speed / 1000000000 + " GB/s";
-            }
-            return speedText;
         }
     }
 }
