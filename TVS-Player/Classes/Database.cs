@@ -84,6 +84,15 @@ namespace TVS_Player {
             SettingsDB sdb = ReadDB();
             return sdb.AutoQuality;
         }
+        public static void SetDownloadPath(string path) {
+            SettingsDB sdb = ReadDB();
+            sdb.DownloadFolder = path;
+            SaveDB(sdb);
+        }
+        public static string GetDownloadPath() {
+            SettingsDB sdb = ReadDB();
+            return sdb.DownloadFolder;
+        }
         public static void AddLocation(string path) {
             SettingsDB sdb = ReadDB();
             sdb.ScanPaths.Add(path);
@@ -333,7 +342,7 @@ namespace TVS_Player {
         public string AutoQuality;
         public string OneClickQuality;
         public List<string> ScanPaths = new List<string>();
-
+        public string DownloadFolder = KnownFolders.GetPath(KnownFolder.Downloads) + "\\TVS-P";
         public SettingsDB(string LibLocation) {
             this.LibLocation = LibLocation;
         }

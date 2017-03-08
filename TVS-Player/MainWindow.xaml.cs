@@ -39,7 +39,7 @@ namespace TVS_Player {
         public static volatile List<Notification> notifications = new List<Notification>();
         public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
         HashSet<Tuple<string, SearchItem>> searchTuple = new HashSet<Tuple<string, SearchItem>>();
-        public static List<TorrentHandle> torrents = new List<TorrentHandle>();
+        public static List<Tuple<TorrentHandle, Notification>> torrents = new List<Tuple<TorrentHandle, Notification>>();
 
         private bool Check() {
             if (DatabaseShows.ReadDb().Count == 0) {
@@ -62,42 +62,53 @@ namespace TVS_Player {
             Timer t = new Timer();
             t.Interval = 1000;
             Notification n = new Notification();
-            t.Elapsed += (s, e) => DownloadCheck(n);
+            t.Elapsed += (s, e) => DownloadCheckNotifications();
             t.Start();
         }
-
-        private void DownloadCheck(Notification notification) {
-            foreach (TorrentHandle handle in torrents) {
-                Dispatcher.Invoke(new Action(() => {
-                    notification = new Notification();
-                    notifications.Add(notification);
-                }), DispatcherPriority.Send);
+        private void DownloadCheckNotifications() {
+            for (int i = 0; i < torrents.Count;i++) {
+                if (torrents[i].Item2 == null) {
+                    Dispatcher.Invoke(new Action(() => {
+                        Notification n = new Notification();
+                        torrents[i] = new Tuple<TorrentHandle, Notification>(torrents[i].Item1, n);
+                        notifications.Add(n);
+                    }), DispatcherPriority.Send);
+                }
+            }
+            DownloadCheck();
+        }
+        private void DownloadCheck() {
+            foreach (Tuple < TorrentHandle, Notification > tuple in torrents) {
+                TorrentHandle handle = tuple.Item1;
+                Notification notification = tuple.Item2;
                 var status = handle.QueryStatus();
                 if (status.IsSeeding) {
                     break;
                 }
                 int speed = status.DownloadRate;
-                if (handle.TorrentFile.Name != null) { 
-                notification.MainText.Text = handle.TorrentFile.Name;
-                }
-                notification.SecondText.Text = GetSpeed(speed);
-                notification.ProgBar.Value = status.Progress * 100;
                 Dispatcher.Invoke(new Action(() => {
+                    try {
+                        notification.MainText.Text = handle.TorrentFile.Name;
+                    } catch (Exception) {
+                        notification.MainText.Text = "Getting metadata";
+                    }
+                    notification.SecondText.Text = GetSpeed(speed);
+                    notification.ProgBar.Value = status.Progress * 100;
                     int index = MainWindow.notifications.IndexOf(notification);
                     MainWindow.notifications[index] = notification;
                 }), DispatcherPriority.Send);
             }
         }
-        private string GetSpeed(int speed) {
+        private string GetSpeed(float speed) {
             string speedText = speed + " B/s";
             if (speed > 1000) {
-                speedText = speed / 1000 + " kB/s";
+                speedText = (speed / 1000).ToString("N0") + " kB/s";
             }
             if (speed > 1000000) {
-                speedText = speed / 1000000 + " MB/s";
+                speedText = (speed / 1000000).ToString("N1") + " MB/s";
             }
             if (speed > 1000000000) {
-                speedText = speed / 1000000000 + " GB/s";
+                speedText = (speed / 1000000000).ToString("N1") + " GB/s";
             }
             return speedText;
         }
@@ -303,9 +314,15 @@ namespace TVS_Player {
             notifications[index].SecondText.Text = SecondaryText;
             notifications[index].ProgBar.Value = ProgressBarValue;
         }
-
+        int prev = 0;
         private void RenderNotifications() {
             for (int i = 0; i < notifications.Count; i++) {
+                if (prev > notifications.Count) {
+                    Dispatcher.Invoke(new Action(() => {
+                        NotificationsList.Children.RemoveRange(0, NotificationsList.Children.Count);
+                    }), DispatcherPriority.Send);
+                }
+                prev = notifications.Count;
                 Dispatcher.Invoke(new Action(() => {
                     if (NotificationsList.Children.Count < notifications.Count) {
                     while (NotificationsList.Children.Count < notifications.Count) {
@@ -313,21 +330,16 @@ namespace TVS_Player {
                         NotificationsList.Children.Add(n);
                     }
                 }
-                NotificationsList.Children.RemoveAt(i);
-                NotificationsList.Children.Insert(i,notifications[i]);
+                    NotificationsList.Children.RemoveAt(i);
+                    NotificationsList.Children.Insert(i, notifications[i]);
                 }), DispatcherPriority.Send);
             }
         }
 
         private void NotificationButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (notifications.Count > 0) {
-                foreach (Notification n in notifications) {
-                    try {
-                        NotificationsList.Children.Add(n);
-                    } catch (Exception) {
-                    }
-                }
-                t.Interval = 100;
+                prev = notifications.Count;
+                t.Interval = 200;
                 t.Elapsed += (s, ea) => RenderNotifications();
                 t.Enabled = true;
                 NotificationPanel.Visibility = Visibility.Visible;

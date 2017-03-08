@@ -130,15 +130,22 @@ namespace TVS_Player {
         private void DownloadOptions(string name, Episode episode) {
             if (AppSettings.GetOneClick()) {
                 TorrentItem torrent = FindTorrent.GetBestTorrent(name, episode.season, episode.episode, AppSettings.GetOneClickQuality());
-                TorrentDownloader t = new TorrentDownloader(torrent);
-                t.DownloadTorrent();
-            } else { 
-                List<TorrentItem> t = FindTorrent.GetTorrents(name, episode.season, episode.episode);
-                string text = null;
-                foreach (TorrentItem ti in t) {
-                    text += ti.name + "\n";
+                if (torrent != null){
+                    TorrentDownloader t = new TorrentDownloader(torrent, episode, ss);
+                    t.DownloadTorrent();
+                }else {
+                    MessageBox.Show("No torrents were found");
                 }
-                MessageBox.Show(text);
+            } else {
+                List<TorrentItem> list = FindTorrent.GetTorrents(name, episode.season, episode.episode);
+                if (list != null){
+                    Page showPage = new SelectTorrent(list, ss, episode);
+                    Window main = Window.GetWindow(this);
+                    ((MainWindow)main).AddTempFrameIndex(showPage);
+                }
+                else{
+                    MessageBox.Show("No torrents were found");
+                }
             }
         }
 
@@ -230,45 +237,53 @@ namespace TVS_Player {
         }
 
         private void SetInfo(Episode episode) {
-            JObject jo = JObject.Parse(Api.EPInfo(episode.id));
-            string directors = "";
-            string writers = "";
-            Action p = () => CreatePic("http://thetvdb.com/banners/" + jo["data"]["filename"].ToString());
-            Thread setPicutre = new Thread(p.Invoke);
-            setPicutre.Start();
-            Dispatcher.Invoke(new Action(() => {
-                foreach (JToken JT in jo["data"]["directors"]) {
-                    directors += JT.ToString() + ", ";
-                }
-                System.Windows.GridLength gl = new GridLength(1,GridUnitType.Star);
-                Base.ColumnDefinitions[1].Width = gl;
-                foreach (JToken JT in jo["data"]["writers"]) {
-                    writers += JT.ToString() + ", ";
-                }
-                EPName.Text = episode.name;
-                ShowName.Text = ss.name;
-                if (jo["data"]["firstAired"].ToString() != "") {
-                    DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    FirstAired.Text = dt.ToString("dd.MM.yyyy");
-                    if (dt.AddDays(1) > DateTime.Now) {
+            string json = Api.EPInfo(episode.id);
+            if (json != null) {
+                JObject jo = JObject.Parse(json);
+                string directors = "";
+                string writers = "";
+                Action p = () => CreatePic("http://thetvdb.com/banners/" + jo["data"]["filename"].ToString());
+                Thread setPicutre = new Thread(p.Invoke);
+                setPicutre.Start();
+                Dispatcher.Invoke(new Action(() =>{
+                    foreach (JToken JT in jo["data"]["directors"]){
+                        directors += JT.ToString() + ", ";
+                    }
+                    System.Windows.GridLength gl = new GridLength(1, GridUnitType.Star);
+                    Base.ColumnDefinitions[1].Width = gl;
+                    foreach (JToken JT in jo["data"]["writers"]){
+                        writers += JT.ToString() + ", ";
+                    }
+                    EPName.Text = episode.name;
+                    ShowName.Text = ss.name;
+                    if (jo["data"]["firstAired"].ToString() != ""){
+                        DateTime dt = DateTime.ParseExact(jo["data"]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        FirstAired.Text = dt.ToString("dd.MM.yyyy");
+                        if (dt.AddDays(1) > DateTime.Now){
+                            Director.Text = "-";
+                            Writer.Text = "-";
+                            Overview.Text = "-";
+                        } else{
+                            Director.Text = directors.Remove(directors.Length - 2, 2);
+                            if (writers.Length > 0) {
+                                Writer.Text = writers.Remove(writers.Length - 2, 2);
+                            }
+                            Overview.Text = jo["data"]["overview"].ToString();
+                        }
+                    }else{
+                        FirstAired.Text = "--.--.----";
                         Director.Text = "-";
                         Writer.Text = "-";
                         Overview.Text = "-";
-                    } else {
-                       Director.Text = directors.Remove(directors.Length - 2, 2);
-                        if (writers.Length > 0) {
-                            Writer.Text = writers.Remove(writers.Length - 2, 2);
-                        }
-                        Overview.Text = jo["data"]["overview"].ToString();
                     }
-                } else {
-                    FirstAired.Text = "--.--.----";
-                    Director.Text = "-";
-                    Writer.Text = "-";
-                    Overview.Text = "-";
-                }
-                
-            }), DispatcherPriority.Send);
+
+                }), DispatcherPriority.Send);
+            }else {
+                Dispatcher.Invoke(new Action(() => {
+                    EPName.Text = "Info could not be downloaded";
+                    Overview.Text = "Either your internet or TVDb API has problems...";
+                }), DispatcherPriority.Send);
+            }
         }
 
         private void CreatePic(string url) {         

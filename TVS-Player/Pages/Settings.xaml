@@ -46,6 +46,12 @@
                             <ComboBoxItem Content="1080p"></ComboBoxItem>
                         </ComboBox>
                     </Grid>
+                    <Grid Margin="0,5">
+                        <TextBlock Text="Temporary location for downloaded files:" Foreground="White" FontSize="15" Margin="5,0" VerticalAlignment="Top"></TextBlock>
+                        <TextBox Margin="0,27,200,0" x:Name="DownLocation" Text="Kappa123" Foreground="White" IsEnabled="False" />
+                        <Button Style="{DynamicResource SideBarButton}" x:Name="DefaultLocation" Width="70" Content="Default" Margin="0,27,20,0" HorizontalAlignment="Right" Click="DefaultLocation_Click" ></Button>
+                        <Button Style="{DynamicResource SideBarButton}" x:Name="ChooseLocation" Width="70" Content="Select" Margin="0,27,105,0" HorizontalAlignment="Right" Click="ChooseLocation_Click"></Button>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

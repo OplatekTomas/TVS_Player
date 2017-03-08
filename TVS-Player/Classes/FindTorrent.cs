@@ -38,6 +38,7 @@ namespace TVS_Player {
                 List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
                 t.magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;
                 t.seeders = Int32.Parse(row.ChildNodes[3].InnerText);
+                t.leech = Int32.Parse(row.ChildNodes[5].InnerText);
                 t.size = row.ChildNodes[9].ChildNodes[0].InnerText;
                 tList.Add(t);
             }
@@ -114,6 +115,7 @@ namespace TVS_Player {
         public string name { get; set; }
         public string quality { get; set; }
         public int seeders { get; set; }
+        public int leech { get; set; }
         public string size { get; set; }
     }
 }

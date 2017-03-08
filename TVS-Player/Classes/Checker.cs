@@ -47,7 +47,7 @@ namespace TVS_Player {
             DatabaseEpisodes.CreateDB(id, list);
         }
 
-        private static void AddFiles(List<string> files, string path, int id, string showName) {
+        private static void AddFiles(List<string> files, string PathToShow, int id, string showName) {
             List<Episode> EPNames = DatabaseEpisodes.ReadDb(id);
             foreach (string file in files) {
                 Tuple<int, int> t = Renamer.GetInfo(file);
@@ -57,7 +57,7 @@ namespace TVS_Player {
                 if (selectedEP == null) {
                     MessageBox.Show("This TV Show doesnt have episode " + episode + " in season " + season + ".\nFile " + file + " won't be renamed", "Error");
                 } else {
-                    string output = Renamer.GetValidName(path, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
+                    string output = Renamer.GetValidName(PathToShow, Renamer.GetName(showName, selectedEP.season, selectedEP.episode, selectedEP.name), Path.GetExtension(file), file);
                     if (file != output) {
                         File.Move(file, output);
                         int ShowIndex = EPNames.FindIndex(e => e.season == season && e.episode == episode);

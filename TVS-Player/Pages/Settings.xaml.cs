@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ookii.Dialogs.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,7 @@ namespace TVS_Player {
                 fc.removeLocation.Click += (se, e) => removeOption(fc);
                 ScanList.Children.Add(fc);
             }
+            DownLocation.Text = s.DownloadFolder;
         }
 
         private void EPPlayer_Click(object sender, RoutedEventArgs e) {
@@ -112,6 +114,21 @@ namespace TVS_Player {
         private void OneClickQuality_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (OneClickQuality.SelectedValue != null) { 
                 AppSettings.SetOneClickQuality(OneClickQuality.SelectedValue.ToString());
+            }
+        }
+
+        private void DefaultLocation_Click(object sender, RoutedEventArgs e) {
+            string path = KnownFolders.GetPath(KnownFolder.Downloads);
+            AppSettings.SetDownloadPath( path + "\\TVS-P");
+            DownLocation.Text = path + "\\TVS-P";
+        }
+
+        private void ChooseLocation_Click(object sender, RoutedEventArgs e) {
+            VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
+            var check = fbd.ShowDialog();
+            if (check == true) {
+                AppSettings.SetDownloadPath(fbd.SelectedPath);
+                DownLocation.Text = fbd.SelectedPath;
             }
         }
     }

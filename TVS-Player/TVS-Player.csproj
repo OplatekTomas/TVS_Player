@@ -192,6 +192,12 @@
     <Compile Include="Pages\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Other\SelectTorrent.xaml.cs">
+      <DependentUpon>SelectTorrent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TorrentControl.xaml.cs">
+      <DependentUpon>TorrentControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="Pages\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -309,6 +315,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Other\SelectTorrent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Animations.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -342,6 +352,10 @@
     <Page Include="Themes\MetroDark\Theme.Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\TorrentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
