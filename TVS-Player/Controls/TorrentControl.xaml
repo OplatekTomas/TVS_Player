@@ -9,7 +9,7 @@
     <Grid  Margin="5">
         <Border Background="#343434" CornerRadius="2">
             <Grid>
-                <TextBlock x:Name="tName" Margin="0,0,225,0" FontSize="20" VerticalAlignment="Center" Foreground="White"><Run Text="Game of Thrones S01e10"/></TextBlock>
+                <TextBlock TextOptions.TextRenderingMode="Grayscale"  x:Name="tName" Margin="10,0,225,0" FontSize="20" VerticalAlignment="Center" Foreground="White"><Run Text="Game of Thrones S01e10"/></TextBlock>
                 <TextBlock x:Name="tSeed" Margin="0,3,145,0" FontSize="13" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="Se: 6157"/></TextBlock>
                 <TextBlock x:Name="tLeech" Margin="0,3,75,0" FontSize="13" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top"><Run Text="Le: 8499"/></TextBlock>
                 <TextBlock x:Name="tQual" Margin="0,7,145,3" FontSize="13" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Bottom"><Run Text="1080p"/></TextBlock>

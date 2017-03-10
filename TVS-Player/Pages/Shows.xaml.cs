@@ -53,9 +53,7 @@ namespace TVS_Player {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrameIndex(showPage);
             var show = await Helpers.showSelector();
-            string name = show.Item2;
-            string id = show.Item1;
-            DatabaseShows.AddShowToDb(Int32.Parse(id),name);
+            DatabaseShows.AddShowToDb(show);
             Page selectLoc = new ScanLocation(true);
             ((MainWindow)main).AddTempFrameIndex(selectLoc);
             Page refreshView = new Library();

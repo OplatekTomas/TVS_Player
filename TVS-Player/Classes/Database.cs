@@ -139,25 +139,24 @@ namespace TVS_Player {
             return false;
         }
 
-        public static void AddShowToDb(int id, string showname) {
+        public static void AddShowToDb(int id, string showname,string status) {
             List<Show> ss = ReadDb();
-            Show newShow = new Show(id, showname);
+            Show newShow = new Show(id, showname, status);
             if (!CheckIfExists(id)) {
                 ss.Add(newShow);
             } else {
                 DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Show already exists", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes) {
                     RemoveShowFromDb(id);
-                    AddShowToDb(id,showname);
+                    AddShowToDb(id,showname,status);
                 }
             }
             SaveDB(ss);
         }
         public static void AddShowToDb(Show s) {
             List<Show> ss = ReadDb();
-            Show newShow = new Show(s.id, s.name);
             if (!CheckIfExists(s.id)) {
-                ss.Add(newShow);
+                ss.Add(s);
             } else {
                 DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Show already exists", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes) {
@@ -310,9 +309,11 @@ namespace TVS_Player {
         public int id;
         public string name;
         public string posterFilename;
-        public Show(int id, string showname, string poster = null) {
+        public string status;
+        public Show(int id, string showname, string status ,string poster = null) {
             this.id = id;
             this.name = showname;
+            this.status = status;
             this.posterFilename = poster;
         }
     }

@@ -50,7 +50,7 @@ namespace TVS_Player {
 
         private void StartUp() {
             if (!Check()) {
-                //RunChecker();
+                RunChecker();
                 DownloadCheckTimer();
             } else {
                 Page p = new Startup();
@@ -172,7 +172,7 @@ namespace TVS_Player {
                     int index = notifications.IndexOf(n);
                     notifications[index] = n;
                 }), DispatcherPriority.Send);
-                Checker.RescanEP(s.id);
+                Checker.RescanEP(s);
             }
             notifications.Remove(n);
             Dispatcher.Invoke(new Action(() => {

@@ -264,7 +264,9 @@ namespace TVS_Player {
                             Writer.Text = "-";
                             Overview.Text = "-";
                         } else{
-                            Director.Text = directors.Remove(directors.Length - 2, 2);
+                            if (directors.Length > 0) { 
+                                Director.Text = directors.Remove(directors.Length - 2, 2);
+                            }
                             if (writers.Length > 0) {
                                 Writer.Text = writers.Remove(writers.Length - 2, 2);
                             }

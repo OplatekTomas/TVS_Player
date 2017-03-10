@@ -27,6 +27,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50px"/>
                     <RowDefinition/>
+                    <RowDefinition Height="35px"/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="Top" Grid.Row="0" Text="GoT S01E01" Foreground="White" Margin="10,0,200,0" FontSize="24" TextWrapping="Wrap" VerticalAlignment="Center" />
                 <TextBlock Grid.Row="0" Text="Quality:" Foreground="White" Margin="0,0,120,0" HorizontalAlignment="Right" FontSize="16" TextWrapping="Wrap" VerticalAlignment="Center" />
@@ -35,10 +36,11 @@
                     <ComboBoxItem Content="720p"></ComboBoxItem>
                     <ComboBoxItem Content="1080p"></ComboBoxItem>
                 </ComboBox>
-                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="panel">
                     </StackPanel>
                 </ScrollViewer>
+                <Button Style="{StaticResource SideBarButton}" x:Name="CancelButton" Grid.Row="2" Content="Cancel" HorizontalAlignment="Right" Margin="0,6,34.5,5" Width="60" Click="CancelButton_Click" />
             </Grid>
         </Border>
     </Grid>

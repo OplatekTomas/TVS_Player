@@ -27,24 +27,9 @@ namespace TVS_Player {
             InitializeComponent();
 
         }
-        public struct selShow {
-            private string selName;
-            private string selID;
-            public selShow(string name, string id) {
-                selName = name;
-                selID = id;
-            }
-            public string getName() {
-                return selName;
-            }
-            public int getID() {
-                return Int32.Parse(selID);
-            }
-
-        }
 
         string showNameTemp;
-        public static List<selShow> selectedShow = new List<selShow>();
+        public static List<Show> selectedShow = new List<Show>();
         private void nameTxt_TextChanged(object sender, TextChangedEventArgs e) {
             showNameTemp = nameTxt.Text;
             if (nameTxt.Text.Length >= 4 && nameTxt.Text != "Show name") {
@@ -57,10 +42,10 @@ namespace TVS_Player {
 
         }
         struct Shows {
-            public string specificInfo;
             public string showName;
             public DateTime date;
             public string id;
+            public string status;
         }
         private void listShows() {
             string info = Api.apiGet(showNameTemp);
@@ -77,24 +62,25 @@ namespace TVS_Player {
                         show[i].date = DateTime.ParseExact(parse["data"][i]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     }
                     show[i].id = parse["data"][i]["id"].ToString();
+                    show[i].status = parse["data"][i]["status"].ToString();
                 }
                 Array.Sort<Shows>(show, (x, y) => x.date.CompareTo(y.date));
                 Array.Reverse(show);
                 Dispatcher.Invoke(new Action(() => {
                     panel.Children.Clear();
                     for (int i = 0; i < numberOfShows; i++) {
-                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"));
+                        addOption(show[i].showName, show[i].id,show[i].date.ToString("dd.MM.yyyy"),show[i].status);
                     }
                 }), DispatcherPriority.Send);
             }
 
         }
-        private void addOption(string showName, string id, string date) {
+        private void addOption(string showName, string id, string date,string status) {
             tvShowControl option = new tvShowControl();
             option.showName.Text = showName;
             option.firstAir.Text = date;
             option.info.Click += (s, e) => { showInfo(id); };
-            option.confirm.Click += (s, e) => { selected(id, showName); };
+            option.confirm.Click += (s, e) => { selected(id, showName,status); };
             panel.Children.Add(option);
 
         }
@@ -109,8 +95,8 @@ namespace TVS_Player {
             tb.Text = string.Empty;
             tb.GotFocus -= nameTxt_GotFocus;
         }
-        private void selected(string id, string showName) {
-            selectedShow.Add(new selShow(showName, id));
+        private void selected(string id, string showName,string status) {
+            selectedShow.Add(new Show(Int32.Parse(id),showName,status));
             nameTxt.Text = string.Empty;
             panel.Children.Clear();
 

@@ -32,8 +32,8 @@ namespace TVS_Player {
             switch (next) {
                 case "createdb":
                     List <Show> list = new List<Show>();
-                    foreach(SearchShow.selShow s in SearchShow.selectedShow) {
-                        list.Add(new Show(s.getID(),s.getName()));
+                    foreach(Show s in SearchShow.selectedShow) {
+                        list.Add(s);
                     }
                     DatabaseShows.SaveDB(list);                 
                     ((MainWindow)main).CloseTempFrameIndex();

@@ -43,6 +43,7 @@ namespace TVS_Player
             public string showName;
             public DateTime date;
             public string id;
+            public string status;
         }
         private void listShows() {
             string info = Api.apiGet(showNameTemp);
@@ -59,29 +60,30 @@ namespace TVS_Player
                         show[i].date = DateTime.ParseExact(parse["data"][i]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
                     }
                     show[i].id = parse["data"][i]["id"].ToString();
+                    show[i].status = parse["data"][i]["status"].ToString();
                 }
                 Array.Sort<Shows>(show, (x, y) => x.date.CompareTo(y.date));
                 Array.Reverse(show);
                 Dispatcher.Invoke(new Action(() => {
                     panel.Children.Clear();
                     for (int i = 0; i < numberOfShows; i++) {
-                        addOption(show[i].showName, show[i].id, show[i].date.ToString("dd.MM.yyyy"));
+                        addOption(new Show(Int32.Parse(show[i].id), show[i].showName, show[i].status), show[i].date.ToString("dd.MM.yyyy"));
                     }
                 }), DispatcherPriority.Send);
             }
 
         }
-        private void addOption(string showName, string id, string date) {
+        private void addOption(Show sh, string date) {
             tvShowControl option = new tvShowControl();
-            option.showName.Text = showName;
+            option.showName.Text = sh.name;
             option.firstAir.Text = date;
-            option.info.Click += (s, e) => { showInfo(id); };
-            option.confirm.Click += (s, e) => { selected(id, showName); };
+            option.info.Click += (s, e) => { showInfo(sh.id); };
+            option.confirm.Click += (s, e) => { selected(sh); };
             panel.Children.Add(option);
 
         }
-        private void showInfo(string id) {
-            Page showPage = new ShowInfoSmall(Api.apiGet(Int32.Parse(id)));
+        private void showInfo(int id) {
+            Page showPage = new ShowInfoSmall(Api.apiGet(id));
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrameIndex(showPage);
         }
@@ -90,9 +92,8 @@ namespace TVS_Player
             tb.Text = string.Empty;
             tb.GotFocus -= nameTxt_GotFocus;
         }
-        private void selected(string id, string showName) {
-            Helpers.showID = id;
-            Helpers.showName = showName;
+        private void selected(Show show) {
+            Helpers.show = show;
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
             //nameTxt.Text = string.Empty;

@@ -42,9 +42,33 @@ namespace TVS_Player {
                 panel.Children.Add(tc);
             }
         }
+        private void Load(string quality){
+            panel.Children.RemoveRange(0, panel.Children.Count);
+            if (quality == "Any") {
+                Load();
+            } else { 
+                Top.Text = episode.name;
+                foreach (TorrentItem torrent in torrents) {
+                    if (torrent.quality == quality) { 
+                        TorrentControl tc = new TorrentControl();
+                        tc.tName.Text = torrent.name;
+                        tc.tSeed.Text = "Se: " + torrent.seeders;
+                        tc.tLeech.Text = "Le: " + torrent.leech;
+                        tc.tQual.Text = torrent.quality;
+                        tc.tSize.Text = torrent.size;
+                        tc.downloadThis.Click += (s, e) => DownloadClick(torrent);
+                        panel.Children.Add(tc);
+                    }
+                }
+            }
+        }
 
         private void qualityswitch_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
+            if (qualityswitch.SelectedValue != null) {
+                Load(qualityswitch.SelectedValue.ToString());
+            } else {
+                Load();
+            }
         }
 
         private void DownloadClick(TorrentItem t) {
@@ -54,5 +78,9 @@ namespace TVS_Player {
             ((MainWindow)main).CloseTempFrameIndex();
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e){
+            Window main = Window.GetWindow(this);
+            ((MainWindow)main).CloseTempFrameIndex();
+        }
     }
 }

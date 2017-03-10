@@ -42,34 +42,34 @@ namespace TVS_Player {
             thread.Start();
 
         }
-        private void addUI(string show, string folder,int index) {
-            JObject jo = JObject.Parse(show);
+        private void addUI(string json, string folder) {
+            JObject jo = JObject.Parse(json);
             DBScanOption option = new DBScanOption();
             string name = jo["data"][0]["seriesName"].ToString();
             string id = jo["data"][0]["id"].ToString();
+            string status = jo["data"][0]["status"].ToString();
+            Show show = new Show(Int32.Parse(id),name,status);
             option.showName.Text = name;
             option.showLocation.Text = folder;
             option.showInfo.Click += (s, e) => {              
                 showInfo(Api.apiGet(Int32.Parse(id))); 
             };
             option.editShow.Click += (s, e) => {
-                editShow(index,option);
+                editShow(show, option);
             };
             option.removeShow.Click += (s, e) => {
-                removeShow(s,e,index,option);
+                removeShow(show, option);
             };
-            shows.Add(new Show(Int32.Parse(id), name));
+            shows.Add(show);
             panel.Children.Add(option);
         }
 
         private void listFolders() {
-            int i = 0;
             foreach (string folder in subfolders) {           
                 string show = Api.apiGet(Path.GetFileName(folder));
                 if (show != null) {
-                    i++;
                     Dispatcher.Invoke(new Action(() => {
-                        addUI(show, folder,i);
+                        addUI(show, folder);
                     }), DispatcherPriority.Send);
                 }
             }
@@ -79,10 +79,8 @@ namespace TVS_Player {
             List<int> id = new List<int>();
             List<string> locs = new List<string>();
             foreach(Show s in shows) { 
-                if (s.id != null) {
                     DatabaseShows.AddShowToDb(s);
                     id.Add(s.id);
-                }
             }
             foreach (DBScanOption fc in panel.Children) {
                 locs.Add(fc.showLocation.Text);
@@ -105,19 +103,19 @@ namespace TVS_Player {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrameIndex(showPage);
         }
-        private void removeShow(object sender, RoutedEventArgs e, int index, DBScanOption option) {
+        private void removeShow(Show s, DBScanOption option) {
+            int index = shows.FindIndex(sh => sh.id == s.id);
             shows.RemoveAt(index);
             panel.Children.Remove(option);
         }
-        private async void editShow(int index, DBScanOption option) {
+        private async void editShow(Show s, DBScanOption option) {
             Page showPage = new SelectShow();
             Window main = Window.GetWindow(this);
             ((MainWindow)main).AddTempFrameIndex(showPage);
             var show = await Helpers.showSelector();
-            string name = show.Item2;
-            string id = show.Item1;
-            option.showName.Text = name;
-            shows[index-1] = new Show(Int32.Parse(id), name);
+            int index = shows.FindIndex(sh => sh.id == s.id);
+            option.showName.Text = show.name;
+            shows[index] = show;
 
         }
 
