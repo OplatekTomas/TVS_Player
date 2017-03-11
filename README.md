@@ -1,5 +1,5 @@
 # TVS-Player
-## Most of things are NOT fully stable. This is first alpha build.
+## Most things are NOT fully stable. This is first alpha build.
 ### For latest code check out "test-code" branch
 ### Info:
 TVS-Player is Windows only desktop app written in C# that maintains your library of TV Shows.
