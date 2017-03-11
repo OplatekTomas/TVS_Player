@@ -1,0 +1,60 @@
+﻿<Page x:Class="TVS_Player.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="648" d:DesignWidth="1152"
+      Title="Settings">
+
+    <Grid>
+        <ScrollViewer>
+            <Grid>
+                <StackPanel Margin="20,30">
+                    <CheckBox Foreground="White" x:Name="EPPlayer" Height="20" Content="Play episodes in system default player" Click="EPPlayer_Click" />
+                    <Border Background="{StaticResource LighterBackgroundBrush}" MinWidth="300" CornerRadius="6">
+                        <Grid>
+                            <TextBlock Foreground="White" FontSize="20" Text="Autoscan locations" Margin="6,0"/>
+                            <StackPanel x:Name="ScanList" Margin="6,40,0,0">
+                            </StackPanel>
+                                <Grid x:Name="AddLoc" Height="30" Width="30" Panel.ZIndex="10" Margin="10,5" HorizontalAlignment="Right" VerticalAlignment="Top" MouseUp="AddLoc_MouseUp">
+                                <Ellipse Fill="{DynamicResource AccentColor}">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="6" Opacity="0.6"  />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                                <TextBlock Text="+" Background="{x:Null}" Foreground="White" TextAlignment="Center" FontSize="19"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <CheckBox Foreground="White" x:Name="AutoDownload" Margin="0,5,0,0" Height="20" Content="Automaticly download new episodes" Click="AutoDownload_Click" />
+                    <Grid>
+                        <TextBlock Text="Automatic download quality:" Foreground="White" FontSize="15" Margin="5,0" VerticalAlignment="Center"></TextBlock>
+                        <ComboBox  x:Name="AutoQuality" SelectedValuePath="Content" HorizontalAlignment="Left" Margin="220,0" Width="90" SelectionChanged="AutoQuality_SelectionChanged">
+                            <ComboBoxItem Content="Any"></ComboBoxItem>
+                            <ComboBoxItem Content="720p"></ComboBoxItem>
+                            <ComboBoxItem Content="1080p"></ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                    <CheckBox Foreground="White" x:Name="OneClickDown" Margin="0,5,0,0" Height="20" Content="Download episodes with one click" Click="OneClickDown_Click" />
+                    <Grid>
+                        <TextBlock Text="One click download quliaty:" Foreground="White" FontSize="15" Margin="5,0" VerticalAlignment="Center"></TextBlock>
+                        <ComboBox x:Name="OneClickQuality" SelectedValuePath="Content" HorizontalAlignment="Left" Margin="220,0" Width="90" SelectionChanged="OneClickQuality_SelectionChanged">
+                            <ComboBoxItem Content="Any"></ComboBoxItem>
+                            <ComboBoxItem Content="720p"></ComboBoxItem>
+                            <ComboBoxItem Content="1080p"></ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Margin="0,5">
+                        <TextBlock Text="Temporary location for downloaded files:" Foreground="White" FontSize="15" Margin="5,0" VerticalAlignment="Top"></TextBlock>
+                        <TextBox Margin="0,27,200,0" x:Name="DownLocation" Text="Kappa123" Foreground="White" IsEnabled="False" />
+                        <Button Style="{DynamicResource SideBarButton}" x:Name="DefaultLocation" Width="70" Content="Default" Margin="0,27,20,0" HorizontalAlignment="Right" Click="DefaultLocation_Click" ></Button>
+                        <Button Style="{DynamicResource SideBarButton}" x:Name="ChooseLocation" Width="70" Content="Select" Margin="0,27,105,0" HorizontalAlignment="Right" Click="ChooseLocation_Click"></Button>
+                    </Grid>
+                    <CheckBox Foreground="White" x:Name="SeqDownload" Margin="0,5,0,0" Height="20" Content="Enable sequantial download (not recommended for old torrents, but you can watch after at least 10% has been downloaded)" Click="SeqDownload_Click" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

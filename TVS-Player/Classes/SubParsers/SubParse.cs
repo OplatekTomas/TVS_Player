@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TVS_Player {
+    public class SubtitleItem {
+
+        //Properties------------------------------------------------------------------
+
+        //StartTime and EndTime times are in milliseconds
+        public int StartTime { get; set; }
+        public int EndTime { get; set; }
+        public List<int> StartTimes = new List<int>();
+        public List<int> EndTimes = new List<int>();
+        public List<string> Lines { get; set; }
+        public string line { get; set; }
+        public char TextStyle { get; set; }
+
+
+        //Constructors-----------------------------------------------------------------
+
+        /// <summary>
+        /// The empty constructor
+        /// </summary>
+        public SubtitleItem() {
+            this.Lines = new List<string>();
+        }
+        public void CraeteTimes() {
+            for (int i = 0; i < 17; i++) {
+                StartTimes.Add(StartTime + i);
+                EndTimes.Add(EndTime + i);
+            }
+        }
+
+        // Methods --------------------------------------------------------------------------
+        public TimeSpan GetStart() {
+            return new TimeSpan(0, 0, 0, 0, StartTime);
+        }
+        public TimeSpan GetEnd() {
+            return new TimeSpan(0, 0, 0, 0, EndTime);
+        }
+
+        public override string ToString() {
+            var startTs = new TimeSpan(0, 0, 0, 0, StartTime);
+            var endTs = new TimeSpan(0, 0, 0, 0, EndTime);
+
+            var res = string.Format("{0} --> {1}: {2}", startTs.ToString("G"), endTs.ToString("G"), string.Join(Environment.NewLine, Lines));
+            return res;
+        }
+
+    }
+}

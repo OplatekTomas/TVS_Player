@@ -1,0 +1,41 @@
+﻿<Page x:Class="TVS_Player.ShowList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="648" d:DesignWidth="1152"
+      Title="ShowList">
+
+    <Grid Background="{DynamicResource TempBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="3*" MinHeight="250"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="2*" MinWidth="400"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Background="{Binding Mode=OneWay, Source={StaticResource BackgroundBrush}}" Grid.Column="1" Grid.Row="1" CornerRadius="4">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Direction="270" ShadowDepth="5" Opacity="1" BlurRadius="20"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition MinHeight="40" Height="40"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+                        <Button HorizontalAlignment="Right" Foreground="#FF969696" VerticalAlignment="Bottom" Margin="5,0" Height="25" Width="50" Content="Finish" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Button_Click" Grid.Row="2"/>
+                        <Button HorizontalAlignment="Right" Foreground="#FF969696" VerticalAlignment="Bottom" Margin="5,0" Height="25" Width="50" Content="Close" Style="{DynamicResource SideBarButton}" Background="#77303030" Click="Button_Click_1" Grid.Row="2"/>
+                    </StackPanel>
+                </StackPanel>
+                <Frame x:Name="frame" Grid.Row="0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
