@@ -41,7 +41,7 @@ namespace TVS_Player {
         public static HashSet<SearchItem> searchIndex = new HashSet<SearchItem>();
         HashSet<Tuple<string, SearchItem>> searchTuple = new HashSet<Tuple<string, SearchItem>>();
         public static List<Tuple<TorrentHandle, Notification>> torrents = new List<Tuple<TorrentHandle, Notification>>();
-
+        Timer downwloadTimer = new Timer();
         private bool Check() {
             if (DatabaseShows.ReadDb().Count == 0) {
                 return true;
@@ -61,50 +61,51 @@ namespace TVS_Player {
 
         private void AutoDownloader() {
             if (AppSettings.GetAutoDownload()) {
+                downwloadTimer.Interval = 10000;
                 List<Show> shows = DatabaseShows.ReadDb();
                 foreach (Show show in shows) {
                     List<Episode> e = DatabaseEpisodes.ReadDb(show.id);
                     foreach (Episode episode in e) {
-                        DateTime release = DateTime.ParseExact(episode.release, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                        if (release >= DateTime.Now.AddDays(-8) && release <= DateTime.Now.AddDays(-1)) {
-                            TorrentItem t = FindTorrent.GetBestTorrent(show.name,episode.season,episode.episode);
-                            if (t.HasMagnet()) {
-                                TorrentDownloader tdown = new TorrentDownloader(t, episode, show);
-                                tdown.DownloadTorrent();
+                        if (episode.release != "--.--.----") { 
+                            DateTime release = DateTime.ParseExact(episode.release, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                            if (release >= DateTime.Now.AddDays(-8) && release <= DateTime.Now.AddDays(-1)) {
+                                TorrentItem t = FindTorrent.GetBestTorrent(show.name,episode.season,episode.episode);
+                                if (t.HasMagnet()) {
+                                    TorrentDownloader tdown = new TorrentDownloader(t, episode, show);
+                                    tdown.DownloadTorrent();
+                                }
                             }
                         }
                     }
                 }
+                downwloadTimer.Interval = 1000;
             }
         }
 
         private void DownloadCheckTimer() {
-            Timer t = new Timer();
-            t.Interval = 1000;
+            downwloadTimer.Interval = 1000;
             Notification n = new Notification();
-            t.Elapsed += (s, e) => DownloadCheckNotifications();
-            t.Start();
+            downwloadTimer.Elapsed += (s, e) => DownloadCheckNotifications();
+            downwloadTimer.Start();
         }
         private void DownloadCheckNotifications() {
-            for (int i = 0; i < torrents.Count;i++) {
+            int triggered = torrents.Count;
+            for (int i = 0; i < triggered; i++) {
                 if (torrents[i].Item2 == null) {
                     Dispatcher.Invoke(new Action(() => {
                         Notification n = new Notification();
                         torrents[i] = new Tuple<TorrentHandle, Notification>(torrents[i].Item1, n);
-                        notifications.Add(n);
+                        notifications.Add(n);                        
                     }), DispatcherPriority.Send);
                 }
             }
-            DownloadCheck();
+            DownloadCheck(triggered);
         }
-        private void DownloadCheck() {
-            foreach (Tuple < TorrentHandle, Notification > tuple in torrents) {
-                TorrentHandle handle = tuple.Item1;
-                Notification notification = tuple.Item2;
+        private void DownloadCheck(int numberofTorrents) {
+            for (int i = 0; i < numberofTorrents; i++) {
+                TorrentHandle handle = torrents[i].Item1;
+                Notification notification = torrents[i].Item2;
                 var status = handle.QueryStatus();
-                if (status.IsSeeding) {
-                    break;
-                }
                 int speed = status.DownloadRate;
                 Dispatcher.Invoke(new Action(() => {
                     try {
@@ -146,12 +147,13 @@ namespace TVS_Player {
             while (true) {
                 if (LastLaunch < (DateTime.Now.AddDays(-1))) {
                     Task t1 = new Task(() => UpdateDBAll(n));
-                    var secondtask = t1.ContinueWith(t3 => SaveSearch());
-                    secondtask.ContinueWith(t4 => LoadSearch());
+                    t1.ContinueWith(t5 => AutoDownloader());
                     t1.Start();
                 }
-                Task t2 = new Task(() => LoadSearch());
-                t2.ContinueWith(t => RescanFilesAll(n));
+
+                Task t2 = new Task(() => SaveSearch());
+                var nextTask = t2.ContinueWith(t3 => LoadSearch());
+                nextTask.ContinueWith(t => RescanFilesAll(n));
                 t2.Start();
                 Thread.Sleep(TimeSpan.FromHours(1));
             }
@@ -315,6 +317,7 @@ namespace TVS_Player {
         }
 
         private void InfoButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            //AutoDownloader();
             HideMenu();
             if (Frame.Content.GetType() != typeof(About)) {
                 Frame.Content = new About();
