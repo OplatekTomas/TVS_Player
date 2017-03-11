@@ -170,6 +170,15 @@ namespace TVS_Player {
             }
             return filtered;
         }
-
+        public static List<string> FilterExtensionsVideo(List<string> files) {
+            string[] fileExtension = new string[7] { ".mkv",  ".m4v", ".avi", ".mp4", ".mov", ".wmv", ".flv" };
+            List<string> filtered = new List<string>();
+            foreach (string file in files) {
+                if (fileExtension.Any(file.Contains)) {
+                    filtered.Add(file);
+                }
+            }
+            return filtered;
+        }
     }
 }

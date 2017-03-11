@@ -22,29 +22,23 @@ namespace TVS_Player {
         Show show;
         public void DownloadTorrent() {
             Notification n = new Notification();
-            Action a = () => Down(false);
+            Action a = () => Down();
             downloadThread = new Thread(a.Invoke);
             downloadThread.IsBackground = true;
             downloadThread.Name = "Torrent download";
             downloadThread.Start();
         }
-        public void DownloadTorrent(bool sequential) {
-            Notification n = new Notification();
-            MainWindow.notifications.Add(n);
-            Action a = () => Down(sequential);
-            downloadThread = new Thread(a.Invoke);
-            downloadThread.IsBackground = true;
-            downloadThread.Name = "Torrent download";
-            downloadThread.Start();
-        }
-        private void Down(bool sequential) {
+
+        private void Down() {
+            string tempFile = null;
+            bool added = false;
             using (var session = new Session()) {
-                session.ListenOn(6881, 6889);
+                session.ListenOn(6881, 6889);               
                 var addParams = new AddTorrentParams();
                 addParams.SavePath = AppSettings.GetDownloadPath();
                 addParams.Url = torrent.magnet;
                 handle = session.AddTorrent(addParams);
-                handle.SequentialDownload = sequential;
+                handle.SequentialDownload = AppSettings.GetSeqDownload();
                 Dispatcher.CurrentDispatcher.Invoke(new Action(() => {
                     MainWindow.torrents.Add(new Tuple<TorrentHandle, Notification>(handle, null));
                 }), DispatcherPriority.Send);
@@ -57,18 +51,59 @@ namespace TVS_Player {
                         DownloadFinished(handle);
                         break;
                     }
+                    if (handle.SequentialDownload == true) {
+                        if (status.TotalDownload > 5 && !added) {
+                            //tempFile = getFile();
+                            //AddTempToDb(tempFile);
+                            added = true;
+                        }
+                    }
+
                     Thread.Sleep(2000);
                 }
             }
         }
-        private void DownloadFinished(TorrentHandle handle) {
-            Thread.Sleep(500);
+
+        private string getFile() {
+            string path = AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name;
+            if (Directory.Exists(path)) {
+                List<string> files = Renamer.FilterExtensionsVideo(Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories).ToList());
+                string biggest = files[0];
+                long length = new FileInfo(files[0]).Length;
+                if (files.Count > 1) { 
+                    for (int i = 0; i < files.Count;i++) {
+                        long lengthFirst = new FileInfo(files[i]).Length;
+                        if (lengthFirst > length) {
+                            biggest = files[i];
+                        }
+                    }
+                }
+                return biggest;
+            } else if (File.Exists(path)) {
+                return path;            
+            }
+            return null;
+        }
+
+        private void AddTempToDb(string path) {
+            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
+            int index = episodes.FindIndex(e => e.id == episode.id);
+            episodes[index].downloaded = true;
+            episodes[index].locations.Add(path);
+            DatabaseEpisodes.CreateDB(show.id, episodes);
+        }
+
+        private void DownloadFinished(TorrentHandle handle,string pathTemp = null) {
+            Thread.Sleep(3000);
+            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
+            int index = episodes.FindIndex(e => e.id == episode.id);
+            episodes[index].downloaded = true;
+            /*if (handle.SequentialDownload == true) {
+                episodes[index].locations.Remove(pathTemp);
+            }*/
             if (Directory.Exists(AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name)) {
                 string path = AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name;
                 List<string> files = Renamer.FilterExtensions(Directory.GetFiles(path, "*.*", System.IO.SearchOption.AllDirectories).ToList());
-                List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
-                int index = episodes.FindIndex(e => e.id == episode.id);
-                episodes[index].downloaded = true;
                 foreach (string file in files){
                     string output = Renamer.GetValidName(AppSettings.GetLibLocation()+"\\"+show.name, Renamer.GetName(show.name, episode.season, episode.episode, episode.name), Path.GetExtension(file), file);
                     File.Move(file, output);
@@ -78,9 +113,6 @@ namespace TVS_Player {
                 Directory.Delete(path,true);
             } else if (File.Exists(AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name)){
                 string path = AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name;
-                List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
-                int index = episodes.FindIndex(e => e.id == episode.id);
-                episodes[index].downloaded = true;
                 string output = Renamer.GetValidName(AppSettings.GetLibLocation() + "\\" + show.name, Renamer.GetName(show.name, episode.season, episode.episode, episode.name), Path.GetExtension(path), path);
                 File.Move(path, output);
                 episodes[index].locations.Add(output);

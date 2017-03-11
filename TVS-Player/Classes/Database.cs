@@ -66,6 +66,15 @@ namespace TVS_Player {
             SettingsDB sdb = ReadDB();
             return sdb.OneClickDownload;
         }
+        public static void SetSeqDownload(bool use) {
+            SettingsDB sdb = ReadDB();
+            sdb.SeqDown = use;
+            SaveDB(sdb);
+        }
+        public static bool GetSeqDownload() {
+            SettingsDB sdb = ReadDB();
+            return sdb.SeqDown;
+        }
         public static void SetOneClickQuality(string quality) {
             SettingsDB sdb = ReadDB();
             sdb.OneClickQuality = quality;
@@ -208,6 +217,16 @@ namespace TVS_Player {
             }
             File.WriteAllText(path, json);
         }
+
+        public static List<Episode> GetAll() {
+            List<Episode> all = new List<Episode>();
+            List<Show> shows = DatabaseShows.ReadDb();
+            foreach (Show show in shows) {
+                all.AddRange(ReadDb(show.id));
+            }
+            return all;
+        }
+
         public static void AddEPToDb(int id,Episode e) {
             List <Episode> list = ReadDb(id);
             list.Add(e);
@@ -342,6 +361,7 @@ namespace TVS_Player {
         public bool OneClickDownload;
         public string AutoQuality;
         public string OneClickQuality;
+        public bool SeqDown;
         public List<string> ScanPaths = new List<string>();
         public string DownloadFolder = KnownFolders.GetPath(KnownFolder.Downloads) + "\\TVS-P";
         public SettingsDB(string LibLocation) {

@@ -97,8 +97,13 @@ namespace TVS_Player {
                     time = "--.--.----";
                 }
                 int episode = Int32.Parse(jt["airedEpisodeNumber"].ToString());
-                int index = EPList.FindIndex(s =>s.season == season && s.episode == episode);            
-                EPList[index] = new Episode(jt["episodeName"].ToString(),season,episode, Int32.Parse(jt["id"].ToString()), time, EPList[index].downloaded, EPList[index].locations);
+                int index = EPList.FindIndex(s =>s.season == season && s.episode == episode);
+                if (index != -1) {
+                    EPList[index] = new Episode(jt["episodeName"].ToString(), season, episode, Int32.Parse(jt["id"].ToString()), time, EPList[index].downloaded, EPList[index].locations);
+                } else {
+                    EPList.Add(new Episode(jt["episodeName"].ToString(), season, episode, Int32.Parse(jt["id"].ToString()), time, EPList[index].downloaded, EPList[index].locations));
+                }
+
             }
             DatabaseEpisodes.CreateDB(id,EPList);
         }

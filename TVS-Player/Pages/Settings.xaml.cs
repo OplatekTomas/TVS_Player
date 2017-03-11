@@ -34,6 +34,7 @@ namespace TVS_Player {
             OneClickDown.IsChecked = s.OneClickDownload;
             OneClickQuality.SelectedValue = s.OneClickQuality;
             AutoQuality.SelectedValue = s.AutoQuality;
+            SeqDownload.IsChecked = s.SeqDown;
             if (!s.AutoDownload) {
                 AutoQuality.IsEnabled = false;
             }
@@ -129,6 +130,16 @@ namespace TVS_Player {
             if (check == true) {
                 AppSettings.SetDownloadPath(fbd.SelectedPath);
                 DownLocation.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void SeqDownload_Click(object sender, RoutedEventArgs e) {
+            if (SeqDownload.IsChecked == true) {
+                AppSettings.SetSeqDownload(true);
+                SeqDownload.IsEnabled = true;
+            } else {
+                AppSettings.SetSeqDownload(false);
+                SeqDownload.IsEnabled = false;
             }
         }
     }

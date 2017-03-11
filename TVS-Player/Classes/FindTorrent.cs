@@ -64,7 +64,8 @@ namespace TVS_Player {
                     newList.Add(t);
                 }
             }
-            TorrentItem torrent = newList[0];
+            TorrentItem torrent = new TorrentItem();
+            torrent.seeders = 0;
             for (int i = 0; i < newList.Count; i++) {
                 if (newList[i].seeders > torrent.seeders) {
                     torrent = newList[i];
@@ -117,5 +118,14 @@ namespace TVS_Player {
         public int seeders { get; set; }
         public int leech { get; set; }
         public string size { get; set; }
+
+        public bool HasMagnet() {
+            if (magnet == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
     }
 }

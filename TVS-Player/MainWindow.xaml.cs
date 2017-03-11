@@ -19,6 +19,7 @@ using Timer = System.Timers.Timer;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using Ragnar;
+using System.Globalization;
 
 namespace TVS_Player {
     /// <summary>
@@ -55,6 +56,25 @@ namespace TVS_Player {
             } else {
                 Page p = new Startup();
                 AddTempFrameIndex(p);
+            }
+        }
+
+        private void AutoDownloader() {
+            if (AppSettings.GetAutoDownload()) {
+                List<Show> shows = DatabaseShows.ReadDb();
+                foreach (Show show in shows) {
+                    List<Episode> e = DatabaseEpisodes.ReadDb(show.id);
+                    foreach (Episode episode in e) {
+                        DateTime release = DateTime.ParseExact(episode.release, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                        if (release >= DateTime.Now.AddDays(-8) && release <= DateTime.Now.AddDays(-1)) {
+                            TorrentItem t = FindTorrent.GetBestTorrent(show.name,episode.season,episode.episode);
+                            if (t.HasMagnet()) {
+                                TorrentDownloader tdown = new TorrentDownloader(t, episode, show);
+                                tdown.DownloadTorrent();
+                            }
+                        }
+                    }
+                }
             }
         }
 

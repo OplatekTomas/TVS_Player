@@ -52,6 +52,7 @@
                         <Button Style="{DynamicResource SideBarButton}" x:Name="DefaultLocation" Width="70" Content="Default" Margin="0,27,20,0" HorizontalAlignment="Right" Click="DefaultLocation_Click" ></Button>
                         <Button Style="{DynamicResource SideBarButton}" x:Name="ChooseLocation" Width="70" Content="Select" Margin="0,27,105,0" HorizontalAlignment="Right" Click="ChooseLocation_Click"></Button>
                     </Grid>
+                    <CheckBox Foreground="White" x:Name="SeqDownload" Margin="0,5,0,0" Height="20" Content="Enable sequantial download (not recommended for old torrents, but you can watch after at least 10% has been downloaded)" Click="SeqDownload_Click" />
                 </StackPanel>
             </Grid>
         </ScrollViewer>
