@@ -15,6 +15,8 @@ TVS-Player is Windows only desktop app written in C# that maintains your library
 - Episode streaming (using build in player and sequential download)
 - High quality, high speed background encoding to either lower quality or x265 for data saving
 - FTP or some other service for sharing episodes between devices
+- Desktop client (just FTP client)
+- Mobile client
 - More stuff...
 
 ### Dislcaimer:
