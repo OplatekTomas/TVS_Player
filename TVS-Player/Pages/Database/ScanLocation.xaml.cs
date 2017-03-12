@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TVS_Player {
     /// <summary>
@@ -68,31 +69,47 @@ namespace TVS_Player {
 
         }
 
-        private void scan_Click(object sender, RoutedEventArgs e) {
+        private async Task AddToDB(List<int> ids, List<string> locs, ProgressWindow pw) {
+            pw.MainText.Text = "Creating database";
+            int count = ids.Count;
+            await Task.Run(() => {
+                for (int i = 0; i < count; i++) {
+                    Dispatcher.Invoke(new Action(() => {
+                        pw.Progress.Value = i + 1;
+                        pw.SecondText.Text = i + 1 + "/" + count;
+                    }), DispatcherPriority.Send);
+                    Renamer.RenameBatch(new List<int>() { ids[i] }, locs, AppSettings.GetLibLocation());
+                }
+            });
+            pw.Close();
+        }
+
+        private async void scan_Click(object sender, RoutedEventArgs e) {
             List<string> locs = new List<string>();
-            List<int> ids = new List<int>(); 
+            List<int> ids = new List<int>();
             foreach (FolderControl fc in panel.Children) {
-                if (!locs.Contains(fc.pathBox.Text)) { 
+                if (!locs.Contains(fc.pathBox.Text)) {
                     locs.Add(fc.pathBox.Text);
                     AppSettings.AddLocation(fc.pathBox.Text);
                 }
             }
-            if (!addDb) {             
-                foreach(Show s in DatabaseShows.ReadDb()) { 
+            if (!addDb) {
+                foreach (Show s in DatabaseShows.ReadDb()) {
                     ids.Add(s.id);
                 }
-                Renamer.RenameBatch(ids, locs, AppSettings.GetLibLocation());
             } else {
                 ids.Add(DatabaseShows.ReadDb().Last().id);
-                Renamer.RenameBatch(ids, locs, AppSettings.GetLibLocation());
             }
+            ProgressWindow pw = new ProgressWindow(ids.Count);
+            pw.Show();
+            await AddToDB(ids, locs, pw);
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
             if (startup) {
                 ((MainWindow)main).CloseTempFrameIndex();
             }
         }
-        
+
         private void Cancel_Click(object sender, RoutedEventArgs e) {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();

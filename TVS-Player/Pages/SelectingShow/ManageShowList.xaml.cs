@@ -63,7 +63,7 @@ namespace TVS_Player {
             shows.Add(show);
             panel.Children.Add(option);
         }
-
+        
         private void listFolders() {
             foreach (string folder in subfolders) {           
                 string show = Api.apiGet(Path.GetFileName(folder));
@@ -74,8 +74,21 @@ namespace TVS_Player {
                 }
             }
         }
-
-        private void Ok_Click(object sender, RoutedEventArgs e) {
+        private async Task AddToDB(List<int> ids, List<string> locs, ProgressWindow pw) {
+            pw.MainText.Text = "Creating database";
+            int count = ids.Count;
+            await Task.Run(() => {
+                for (int i = 0; i < count; i++) {
+                    Dispatcher.Invoke(new Action(() => {
+                        pw.Progress.Value = i + 1;
+                        pw.SecondText.Text = i + 1 + "/" + count;
+                    }), DispatcherPriority.Send);
+                    Renamer.RenameBatch(new List<int>() { ids[i] }, locs, AppSettings.GetLibLocation());
+                }
+            });
+            pw.Close();
+        }
+        private async void Ok_Click(object sender, RoutedEventArgs e) {
             List<int> id = new List<int>();
             List<string> locs = new List<string>();
             foreach(Show s in shows) { 
@@ -87,9 +100,11 @@ namespace TVS_Player {
             }
             Page page = new Library();
             Window main = Window.GetWindow(this);
+            ProgressWindow pw = new ProgressWindow(id.Count);
+            pw.Show();
+            pw.Topmost = true;
+            await AddToDB(id,locs,pw);
             ((MainWindow)main).CloseTempFrameIndex();
-
-            Renamer.RenameBatch(id,locs,AppSettings.GetLibLocation());
             ((MainWindow)main).SetFrameView(page);
             ((MainWindow)main).CloseTempFrameIndex();
         }
