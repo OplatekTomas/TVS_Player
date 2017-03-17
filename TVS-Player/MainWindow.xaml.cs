@@ -29,7 +29,7 @@ namespace TVS_Player {
         DateTime LastLaunch;
         public MainWindow() {
             InitializeComponent();
-            Api.getToken();
+            Task.Run(() => Api.getToken());
             LastLaunch = Properties.Settings.Default.LastLaunched;
             Properties.Settings.Default.LastLaunched = DateTime.Now;
             Properties.Settings.Default.Save();

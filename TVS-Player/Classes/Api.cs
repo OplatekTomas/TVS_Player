@@ -12,168 +12,156 @@ using System.Windows;
 
 namespace TVS_Player {
     public static class Api {
-        public static void getToken() {
-            if (Properties.Settings.Default.tokenTime == null || DateTime.Now.Subtract(Properties.Settings.Default.tokenTime).TotalHours >= 23.5f) {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/login");
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.Accept = "application/json";
-                try {
-                    using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
-                        string data = "{\"apikey\": \"0E73922C4887576A\",\"username\": \"Kaharonus\",\"userkey\": \"28E2687478CA3B16\"}";
-                        streamWriter.Write(data);
-                    }
-                } catch (WebException) { MessageBox.Show("Make sure you are connected to the internet!"); }
-                string text;
+
+        //SHOWS
+
+        public static List<ActorInfo> apiGetActors(int id) {
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/actors");
+            try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    text = sr.ReadToEnd();
-                    text = text.Remove(text.IndexOf("\"token\""), "\"token\"".Length);
-                    text = text.Split('\"', '\"')[1];
-                    Properties.Settings.Default.token = text;
-                    Properties.Settings.Default.tokenTime = DateTime.Now;
-                    Properties.Settings.Default.Save();
+                    JObject jo = JObject.Parse(sr.ReadToEnd());
+                    return sr.ReadToEnd();
                 }
+            } catch (WebException) {
+                return null;
             }
         }
-        //získat možné názvy seriálu
-        public static List<string> GetAliases(int id) {
+        private static List<string> GetAliases(JToken jt, string sn) {
             List<string> aliases = new List<string>();
-            string info = apiGet(id);
-            JObject jo = JObject.Parse(info);
             Regex reg = new Regex(@"\([0-9]{4}\)");
-            string sn = jo["data"]["seriesName"].ToString();
             aliases.Add(sn);
             Match snMatch = reg.Match(sn);
             if (snMatch.Success) {
                 aliases.Add(reg.Replace(sn, ""));
             }
-            foreach (string alias in jo["data"]["aliases"]) {
+            foreach (string alias in jt) {
                 aliases.Add(alias);
                 Match regMatch = reg.Match(alias);
                 if (regMatch.Success) {
                     aliases.Add(reg.Replace(alias, ""));
                 }
             }
-            for (int i=0;i<aliases.Count();i++) {
+            for (int i = 0; i < aliases.Count(); i++) {
                 if (aliases[i].Contains(" ")) {
                     aliases.Add(aliases[i].Replace(" ", "."));
                 }
             }
             return aliases;
         }
-        //info o epizodě
-        public static string apiGet(int season, int episode, int id) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season + "airedEpisode=" + episode);
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
+
+        //List of TVShows fitting string
+        public static List<Show> apiGet(string showname) {
+            List<Show> sh = new List<Show>();
+            string json = null;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://api.tvmaze.com/search/shows?q=" + showname);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
+                    json = sr.ReadToEnd();
                 }
-            } catch (WebException) {
-                return null;
+            } catch (WebException) { }
+            if (json != null) {
+                JObject jo = JObject.Parse(json);
+                foreach (JToken j in (JToken)jo) {
+                    sh.Add(parseTVMaze(j));
+                }
+                return sh;
             }
+            return null;
         }
 
-        //Detailed info about EP
-        public static string EPInfo(int id) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/episodes/"+id);
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
-            try {
-                var response = request.GetResponse();
-                using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-                }
-            } catch (WebException) {
-                return null;
-            }
-        }
-        //Info o možných seriálech
-        public static string apiGet(string showname) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/search/series?name=" + showname.Replace(" ", "+"));
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
-            try {
-                var response = request.GetResponse();
-                using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-                }
-            } catch (WebException) {
-                return null;
-            }
-        }
         //info o specifickém seriálu
-        public static string apiGet(int id) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id);
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
+        public static Show apiGet(int id) {
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-
+                    return ParseTVDb(JObject.Parse(sr.ReadToEnd()));
                 }
             } catch (WebException) {
                 return null;
             }
 
         }
-        //seznam vsech serii
-        public static string apiGetSeasons(int id) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/summary");
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
+
+
+        //EPISODES
+
+        //Returns all episodes
+        public static List<Episode> apiGetEpisodes(int id) {
+            List<Episode> e = new List<Episode>();
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-
+                    JObject jo = JObject.Parse(sr.ReadToEnd());
+                    foreach (JToken jt in (JToken)jo) {
+                        e.Add(ParseEP(jt));
+                    }
                 }
             } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
-                return "error";
+                return null;
             }
+            return e;
         }
-        //seznam epizod v serii
-        public static string apiGetEpisodesBySeasons(int id, int season) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season);
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
+        public static Episode apiGet(int season, int episode, int id) {
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season + "airedEpisode=" + episode);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-
+                    JObject jo = JObject.Parse(sr.ReadToEnd());
+                    return ParseEP(jo);
                 }
             } catch (WebException) {
                 return null;
             }
         }
-        public static string getName(int id) {
-            string info = apiGet(id);
-            JObject jo = JObject.Parse(info);
-            return jo["data"]["seriesName"].ToString();
+        public static Episode apiGetEP(int id) {
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/episodes/" + id);
+            try { 
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    JObject jo = JObject.Parse(sr.ReadToEnd());
+                    return ParseEP(jo);
+                }
+            } catch (WebException) {
+                return null;
+            }
+        }
+
+
+        //OTHERS
+
+        private static Show parseTVMaze(JToken jo) {
+            JToken jt = jo["show"];
+            Show s = new Show();
+            s.name = jt["name"].ToString();
+            foreach (JToken j in jt["genre"]) {
+                s.genre.Add(j.ToString());
+            }
+            s.release = DateTime.ParseExact(jt["release"].ToString(), "yyyy-MM-dd", null).ToString("dd.MM.yyyy");
+            s.id.TVMaze = Int32.Parse(jt["id"].ToString());
+            s.id.TVDb = Int32.Parse(jt["externals"]["thetvdb"].ToString());
+            s.id.IMDb = jt["externals"]["thetvdb"].ToString();
+            s.overview = jt["summary"].ToString();
+            s.status = jt["status"].ToString();
+            s.airday = jt["schedule"]["days"][0].ToString();
+            s.airtime = jt["schedule"]["time"].ToString();
+            s.rating = jt["rating"]["average"].ToString();
+            return s;
+        }
+
+        private static Show ParseTVDb(JToken jo) {
+            Show s = new Show();
+
+            return s;
+        }
+
+        private static Episode ParseEP(JToken jo) {
+            Episode e = new Episode();
+
+            return e;
         }
 
         //ziska standartni poster s moznou volbou miniatury
@@ -187,13 +175,8 @@ namespace TVS_Player {
                 }
                 path += id.ToString() + "\\Thumbnails\\" + id.ToString() + ".jpg";
             }
-            string token = Properties.Settings.Default.token;
             if (!File.Exists(path)) {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
-                request.Method = "GET";
-                request.Accept = "application/json";
-                request.Headers.Add("Accept-Language", "en");
-                request.Headers.Add("Authorization", "Bearer " + token);
+                HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
 
                 try {
                     var response = request.GetResponse();
@@ -252,12 +235,7 @@ namespace TVS_Player {
         public static string apiGetAllPosters(int id) {
             String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             path += "\\TVS-Player\\" + id.ToString() + "\\" + id.ToString() + ".jpg";
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
-            request.Method = "GET";
-            request.Accept = "application/json";
-            request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
@@ -268,22 +246,39 @@ namespace TVS_Player {
                 return "FUCK YOU";
             }
         }
-        public static string apiGetActors(int id) {
-            string token = Properties.Settings.Default.token;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/series/" + id+"/actors");
+        //Gets Token for API access
+        public static void getToken() {
+            if (Properties.Settings.Default.tokenTime == null || DateTime.Now.Subtract(Properties.Settings.Default.tokenTime).TotalHours >= 23.5f) {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/login");
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.Accept = "application/json";
+                try {
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
+                        string data = "{\"apikey\": \"0E73922C4887576A\",\"username\": \"Kaharonus\",\"userkey\": \"28E2687478CA3B16\"}";
+                        streamWriter.Write(data);
+                    }
+                } catch (WebException) { MessageBox.Show("Make sure you are connected to the internet!"); }
+                string text;
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    text = sr.ReadToEnd();
+                    text = text.Remove(text.IndexOf("\"token\""), "\"token\"".Length);
+                    text = text.Split('\"', '\"')[1];
+                    Properties.Settings.Default.token = text;
+                    Properties.Settings.Default.tokenTime = DateTime.Now;
+                    Properties.Settings.Default.Save();
+                }
+            }
+        }
+
+        private static HttpWebRequest getRequest(string link) {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(link);
             request.Method = "GET";
             request.Accept = "application/json";
             request.Headers.Add("Accept-Language", "en");
-            request.Headers.Add("Authorization", "Bearer " + token);
-            try {
-                var response = request.GetResponse();
-                using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return sr.ReadToEnd();
-                }
-            } catch (WebException) {
-                MessageBox.Show("ERROR! Are ya sure that you are connected to the internet?", "Error");
-                return "error";
-            }
+            request.Headers.Add("Authorization", "Bearer " + Properties.Settings.Default.token);
+            return request;
         }
-    }
+    }   
 }

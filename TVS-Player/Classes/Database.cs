@@ -141,35 +141,20 @@ namespace TVS_Player {
 
         public static bool CheckIfExists(int id) {
             foreach (Show ss in ReadDb()) {
-                if (ss.id == id) {
+                if (ss.id.TVDb == id) {
                     return true;
                 }
             }
             return false;
         }
-
-        public static void AddShowToDb(int id, string showname,string status) {
-            List<Show> ss = ReadDb();
-            Show newShow = new Show(id, showname, status);
-            if (!CheckIfExists(id)) {
-                ss.Add(newShow);
-            } else {
-                DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Show already exists", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes) {
-                    RemoveShowFromDb(id);
-                    AddShowToDb(id,showname,status);
-                }
-            }
-            SaveDB(ss);
-        }
         public static void AddShowToDb(Show s) {
             List<Show> ss = ReadDb();
-            if (!CheckIfExists(s.id)) {
+            if (!CheckIfExists(s.id.TVDb)) {
                 ss.Add(s);
             } else {
                 DialogResult dialogResult = MessageBox.Show("TV Show is already in database do you want to rewrite it?", "TV Show already exists", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes) {
-                    RemoveShowFromDb(s.id);
+                    RemoveShowFromDb(s.id.TVDb);
                     AddShowToDb(s);
                 }
             }
@@ -177,7 +162,7 @@ namespace TVS_Player {
         }
         public static void RemoveShowFromDb(int id) {
             List<Show> ss = ReadDb();
-            Show sel = ss.Find(s=> s.id == id);
+            Show sel = ss.Find(s=> s.id.TVDb == id);
             ss.Remove(sel);
             SaveDB(ss);
         }
@@ -192,7 +177,7 @@ namespace TVS_Player {
         public static Show FindShow(int ID) {
             Show foundShow = null;
             foreach (Show ss in ReadDb()) {
-                if (ss.id == ID) {
+                if (ss.id.TVDb == ID) {
                     foundShow = ss;
                 }
             }
@@ -222,7 +207,7 @@ namespace TVS_Player {
             List<Episode> all = new List<Episode>();
             List<Show> shows = DatabaseShows.ReadDb();
             foreach (Show show in shows) {
-                all.AddRange(ReadDb(show.id));
+                all.AddRange(ReadDb(show.id.TVDb));
             }
             return all;
         }
@@ -307,7 +292,6 @@ namespace TVS_Player {
             this.seasonNumber = seasonNumber;
             this.episodeNumber = episodeNumber;
         }
-
         private string EP(int number) {
             if (number < 10) {
                 return "E0" + number;
@@ -324,16 +308,31 @@ namespace TVS_Player {
         }
     }
         
-        public class Show {
-        public int id;
+    public class Show {
         public string name;
+        public IDs id;
         public string posterFilename;
         public string status;
-        public Show(int id, string showname, string status ,string poster = null) {
-            this.id = id;
-            this.name = showname;
-            this.status = status;
-            this.posterFilename = poster;
+        public List<string> aliases;
+        public string bannerLink;
+        public string release;
+        public List<string> genre;
+        public string overview;
+        public string airday;
+        public string airtime;
+        public string rating;
+        public List<ActorInfo> actors;
+        public Show() {
+        }
+        public class IDs{
+            public int TVMaze;
+            public int TVDb;
+            public string IMDb;
+        }
+        public class ActorInfo {
+            public string name;
+            public string character;
+            public string link;
         }
     }
     public class Episode {
@@ -343,16 +342,12 @@ namespace TVS_Player {
         public int id;
         public string release;
         public bool downloaded;
+        public bool finished;
         public List<string> locations;
-        public Episode(string name, int season, int episode, int id, string releaseDate, bool downloaded, List<string> l) {
-            this.name = name;
-            this.season = season;
-            this.episode = episode;
-            release = releaseDate;
-            this.id = id;
-            this.downloaded = downloaded;
-            locations = l;
+        public string link;
+        public Episode() {
         }
+        
     }
     public class SettingsDB {
         public string LibLocation;
