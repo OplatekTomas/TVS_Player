@@ -333,6 +333,7 @@ namespace TVS_Player {
             public string name;
             public string character;
             public string link;
+            public int roleImportance;
         }
     }
     public class Episode {
@@ -345,6 +346,7 @@ namespace TVS_Player {
         public bool finished;
         public List<string> locations;
         public string link;
+        public string overview;
         public Episode() {
         }
         

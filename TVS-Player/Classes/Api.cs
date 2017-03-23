@@ -15,13 +15,13 @@ namespace TVS_Player {
 
         //SHOWS
 
-        public static List<ActorInfo> apiGetActors(int id) {
+        public static List<Show.ActorInfo> apiGetActors(int id) {
             HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/actors");
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                     JObject jo = JObject.Parse(sr.ReadToEnd());
-                    return sr.ReadToEnd();
+                    return ParseActors(sr.ReadToEnd());
                 }
             } catch (WebException) {
                 return null;
@@ -77,7 +77,8 @@ namespace TVS_Player {
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    return ParseTVDb(JObject.Parse(sr.ReadToEnd()));
+                    Show s =DatabaseShows.FindShow(id);
+                    return ParseTVDb(JObject.Parse(sr.ReadToEnd()),s);
                 }
             } catch (WebException) {
                 return null;
@@ -85,23 +86,46 @@ namespace TVS_Player {
 
         }
 
+        // Returns number of seasons
 
-        //EPISODES
-
-        //Returns all episodes
-        public static List<Episode> apiGetEpisodes(int id) {
-            List<Episode> e = new List<Episode>();
-            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + season);
+        public static int CountSeasons(int id) {
+            HttpWebRequest request = getRequest("https://api.thetvdb.com/series/+"+id+"+/episodes/summary");
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                     JObject jo = JObject.Parse(sr.ReadToEnd());
-                    foreach (JToken jt in (JToken)jo) {
-                        e.Add(ParseEP(jt));
+                    List < int > i = new List<int>();
+                    foreach (JToken jt in jo["data"]["airedSeasons"]) {
+                        i.Add(Int32.Parse(jt.ToString()));
                     }
+                    return i.Max();
                 }
             } catch (WebException) {
-                return null;
+                return 0;
+            }
+        }
+
+        //EPISODES
+
+        //Returns all episodes
+        public static List<Episode> apiGetEpisodes(int id, int season = -1) {
+            if (season == -1) {
+                season = CountSeasons(id);
+            }
+            List<Episode> e = new List<Episode>();
+            for (int i = 1; i <= season; i++) { 
+                HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id + "/episodes/query?airedSeason=" + i);
+                try {
+                    var response = request.GetResponse();
+                    using (var sr = new StreamReader(response.GetResponseStream())) {
+                        JObject jo = JObject.Parse(sr.ReadToEnd());
+                        foreach (JToken jt in (JToken)jo) {
+                            e.Add(ParseEP(jt));
+                        }
+                    }
+                } catch (WebException) {
+                    return null;
+                }
             }
             return e;
         }
@@ -123,7 +147,7 @@ namespace TVS_Player {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                     JObject jo = JObject.Parse(sr.ReadToEnd());
-                    return ParseEP(jo);
+                    return ParseEPDetail(jo);
                 }
             } catch (WebException) {
                 return null;
@@ -132,6 +156,34 @@ namespace TVS_Player {
 
 
         //OTHERS
+
+        private static List<Show.ActorInfo> ParseActors(JToken jo) {
+            List<Show.ActorInfo> actors = new List<Show.ActorInfo>();
+            JToken acs = jo["data"];
+            foreach (JToken jt in acs) {
+                Show.ActorInfo ai = new Show.ActorInfo();
+                ai.character = jt["role"].ToString();
+                ai.name = jt["name"].ToString();
+                ai.link = jt["image"].ToString();
+                ai.roleImportance = Int32.Parse(jt["sortOrder"].ToString());
+                actors.Add(ai);
+            }
+            actors = actors.OrderBy(o => o.roleImportance).ToList();
+            return actors;
+        }
+
+        private static Episode ParseEPDetail(JToken jt) {
+            JToken jo = jt["data"];
+            Episode e = new Episode();
+            e.episode = Int32.Parse(jo["airedEpisodeNumber"].ToString());
+            e.id = Int32.Parse(jo["id"].ToString());
+            e.name = jo["episodeName"].ToString();
+            e.release = DateTime.ParseExact(jo["firstAired"].ToString(), "yyyy-MM-dd", null).ToString("dd.MM.yyyy");
+            e.season = Int32.Parse(jo["airedSeason"].ToString());
+            e.overview = jo["overview"].ToString();
+            e.link = jo["filename"].ToString();          
+            return e;
+        }
 
         private static Show parseTVMaze(JToken jo) {
             JToken jt = jo["show"];
@@ -152,15 +204,23 @@ namespace TVS_Player {
             return s;
         }
 
-        private static Show ParseTVDb(JToken jo) {
-            Show s = new Show();
-
+        private static Show ParseTVDb(JToken jo, Show s) {
+            foreach (JToken j in jo["data"]["aliases"]) {
+                s.aliases.Add(j.ToString());
+            }
+            s.actors = apiGetActors(s.id.TVDb);
+            s.bannerLink = jo["data"]["banner"].ToString();           
             return s;
         }
 
         private static Episode ParseEP(JToken jo) {
             Episode e = new Episode();
-
+            e.episode = Int32.Parse(jo["airedEpisodeNumber"].ToString());
+            e.id = Int32.Parse(jo["id"].ToString());
+            e.name = jo["episodeName"].ToString();
+            e.release = DateTime.ParseExact(jo["firstAired"].ToString(), "yyyy-MM-dd", null).ToString("dd.MM.yyyy");
+            e.season = Int32.Parse(jo["airedSeason"].ToString());
+            e.overview = jo["overview"].ToString();
             return e;
         }
 
