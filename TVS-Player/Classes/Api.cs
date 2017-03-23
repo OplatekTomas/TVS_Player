@@ -72,12 +72,11 @@ namespace TVS_Player {
         }
 
         //info o specifickém seriálu
-        public static Show apiGet(int id) {
+        public static Show apiGet(int id, Show s) {
             HttpWebRequest request = getRequest("https://api.thetvdb.com/series/" + id);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
-                    Show s =DatabaseShows.FindShow(id);
                     return ParseTVDb(JObject.Parse(sr.ReadToEnd()),s);
                 }
             } catch (WebException) {
@@ -209,7 +208,8 @@ namespace TVS_Player {
                 s.aliases.Add(j.ToString());
             }
             s.actors = apiGetActors(s.id.TVDb);
-            s.bannerLink = jo["data"]["banner"].ToString();           
+            s.bannerLink = jo["data"]["banner"].ToString();
+            s.EPlenght = Int32.Parse(jo["data"]["runtime"].ToString());
             return s;
         }
 

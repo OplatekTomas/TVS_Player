@@ -39,49 +39,21 @@ namespace TVS_Player
             }
 
         }
-        struct Shows {
-            public string showName;
-            public DateTime date;
-            public string id;
-            public string status;
-        }
         private void listShows() {
-            string info = Api.apiGet(showNameTemp);
-            int numberOfShows = 0;
-            if (info != null) {
-                JObject parse = JObject.Parse(info);
-                numberOfShows = parse["data"].Count();
-                Shows[] show = new Shows[numberOfShows];
-                for (int i = 0; i < numberOfShows; i++) {
-                    show[i].showName = parse["data"][i]["seriesName"].ToString();
-                    if (parse["data"][i]["firstAired"].ToString() == "") {
-                        show[i].date = DateTime.ParseExact("1900-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture); ;
-                    } else {
-                        show[i].date = DateTime.ParseExact(parse["data"][i]["firstAired"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    }
-                    show[i].id = parse["data"][i]["id"].ToString();
-                    show[i].status = parse["data"][i]["status"].ToString();
-                }
-                Array.Sort<Shows>(show, (x, y) => x.date.CompareTo(y.date));
-                Array.Reverse(show);
-                Dispatcher.Invoke(new Action(() => {
-                    panel.Children.Clear();
-                    for (int i = 0; i < numberOfShows; i++) {
-                        addOption(new Show(Int32.Parse(show[i].id), show[i].showName, show[i].status), show[i].date.ToString("dd.MM.yyyy"));
+            List<Show> s = Api.apiGet(showNameTemp);
+            Dispatcher.Invoke(new Action(() => {
+                panel.Children.Clear();
+                foreach(Show show in s) { 
+                    tvShowControl option = new tvShowControl();
+                    option.showName.Text = show.name;
+                    option.firstAir.Text = show.release;
+                    option.info.Click += (se, e) => { showInfo(show.id.TVDb); };
+                    option.confirm.Click += (se, e) => { selected(show); };
+                    panel.Children.Add(option);
                     }
                 }), DispatcherPriority.Send);
-            }
+            }        
 
-        }
-        private void addOption(Show sh, string date) {
-            tvShowControl option = new tvShowControl();
-            option.showName.Text = sh.name;
-            option.firstAir.Text = date;
-            option.info.Click += (s, e) => { showInfo(sh.id); };
-            option.confirm.Click += (s, e) => { selected(sh); };
-            panel.Children.Add(option);
-
-        }
         private void showInfo(int id) {
             Page showPage = new ShowInfoSmall(Api.apiGet(id));
             Window main = Window.GetWindow(this);

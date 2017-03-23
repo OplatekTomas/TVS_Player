@@ -86,16 +86,16 @@ namespace TVS_Player {
         }
 
         private void AddTempToDb(string path) {
-            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
+            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id.TVDb);
             int index = episodes.FindIndex(e => e.id == episode.id);
             episodes[index].downloaded = true;
             episodes[index].locations.Add(path);
-            DatabaseEpisodes.CreateDB(show.id, episodes);
+            DatabaseEpisodes.CreateDB(show.id.TVDb, episodes);
         }
 
         private void DownloadFinished(TorrentHandle handle,string pathTemp = null) {
             Thread.Sleep(3000);
-            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id);
+            List<Episode> episodes = DatabaseEpisodes.ReadDb(show.id.TVDb);
             int index = episodes.FindIndex(e => e.id == episode.id);
             episodes[index].downloaded = true;
             /*if (handle.SequentialDownload == true) {
@@ -109,14 +109,14 @@ namespace TVS_Player {
                     File.Move(file, output);
                     episodes[index].locations.Add(output);
                 }
-                DatabaseEpisodes.CreateDB(show.id, episodes);
+                DatabaseEpisodes.CreateDB(show.id.TVDb, episodes);
                 Directory.Delete(path,true);
             } else if (File.Exists(AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name)){
                 string path = AppSettings.GetDownloadPath() + "\\" + handle.TorrentFile.Name;
                 string output = Renamer.GetValidName(AppSettings.GetLibLocation() + "\\" + show.name, Renamer.GetName(show.name, episode.season, episode.episode, episode.name), Path.GetExtension(path), path);
                 File.Move(path, output);
                 episodes[index].locations.Add(output);
-                DatabaseEpisodes.CreateDB(show.id, episodes);
+                DatabaseEpisodes.CreateDB(show.id.TVDb, episodes);
             }
         }
     }

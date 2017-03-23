@@ -322,6 +322,7 @@ namespace TVS_Player {
         public string airtime;
         public string rating;
         public List<ActorInfo> actors;
+        public int EPlenght;
         public Show() {
         }
         public class IDs{

@@ -44,14 +44,12 @@
                     <TextBlock x:Name="firstAir" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,67,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
                     <Label Content="Status" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,80,0,0" Grid.Row="0" Foreground="White"/>
                     <TextBlock x:Name="status" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,87,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
-                    <Label Content="Network:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,100,0,0" Grid.Row="0" Foreground="White"/>
-                    <TextBlock x:Name="network" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,107,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
-                    <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,120,0,0" Grid.Row="0" Foreground="White"/>
-                    <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,127,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
-                    <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140,0,0" Grid.Row="0" Foreground="White"/>
-                    <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,147,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
-                    <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,160,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0" Foreground="White"/>
-                    <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,185,0,0" Grid.Row="0" Foreground="White"/>
+                    <Label Content="EP Lenght:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,100,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="epLenght" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,107,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Air time:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,120,0,0" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="airTime" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="75,127,0,0" Text="12.03.2016" Grid.Row="0" Foreground="White"/>
+                    <Label Content="Overview:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,140,0,0" FontWeight="Bold" FontSize="14" Grid.Row="0" Foreground="White"/>
+                    <TextBlock x:Name="overview" VerticalAlignment="Top" Text="12.03.2016" Height="auto" TextWrapping="Wrap" Margin="10,165,0,0" Grid.Row="0" Foreground="White"/>
                     <Grid Grid.Row="1">
                         <Grid>
                             <Grid.RowDefinitions>

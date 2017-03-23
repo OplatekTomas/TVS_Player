@@ -24,95 +24,34 @@ namespace TVS_Player {
     /// Interaction logic for ShowInfoSmall.xaml
     /// </summary>
     public partial class ShowInfoSmall : Page {
-        string info;
-        public ShowInfoSmall(string inf) {
+        Show show;
+        public ShowInfoSmall(Show s) {
             InitializeComponent();
-            info = inf;
-            JObject jo = JObject.Parse(info);
+            show = s;
             fillLayout();
         }
         private void fillLayout() {
-            Action setB;
-            setB = () => inThread();
+            Action setB = () => inThread();
             Thread banner = new Thread(setB.Invoke);
             banner.Start();
-            JObject parse = JObject.Parse(info);
-            for (int i = 0; i < parse["data"]["genre"].Count(); i++) {
-                if (i == 0) {
-                    genre.Text += parse["data"]["genre"][i].ToString();
-                } else {
-                    genre.Text += ", "+ parse["data"]["genre"][i].ToString();
-                }
+            foreach (string genreText in show.genre) {
+                genre.Text += genreText;
             }
-            showName.Text = parse["data"]["seriesName"].ToString();
-            status.Text = parse["data"]["status"].ToString();
-            network.Text = parse["data"]["network"].ToString();
-            epLenght.Text = parse["data"]["runtime"].ToString();
-            airTime.Text = parse["data"]["airsDayOfWeek"].ToString() + " at " + parse["data"]["airsTime"].ToString();
-            overview.Text = parse["data"]["overview"].ToString();
-            rating.Text = parse["data"]["siteRating"].ToString()+"/10";
-            try {
-                DateTime dt = DateTime.ParseExact(parse["data"]["firstAired"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                firstAir.Text = dt.ToString("dd.MM.yyyy");
-            } catch (Exception e) {
-                firstAir.Text = ("");
-            }
+            showName.Text = show.name;
+            status.Text = show.status;
+            epLenght.Text = show.EPlenght.ToString();
+            airTime.Text = show.airtime;
+            overview.Text = show.overview;
+            rating.Text = show.rating+"/10";
         }
         private void inThread() {
-            JObject jo = JObject.Parse(info);
-            setBanner(jo);
-            string actorInfo = Api.apiGetActors(Int32.Parse(jo["data"]["id"].ToString()));
-            JObject actorInfoJ = JObject.Parse(actorInfo);
-            chooseActors(actorInfoJ);
-        }
-        struct Actor {
-            public string name;
-            public string character;
-            public string url;
-            public int role;
-            public Actor(string nameI,string characterI, string urlI,int roleI) {
-                name = nameI;
-                character = characterI;
-                url = urlI;
-                role = roleI;
-
-            }
-        }
-        private void chooseActors(JObject info) {
-            List<Actor> actors = new List<Actor>();
-            List<Actor> selectedAc = new List<Actor>();
-            for (int i = 0; i < info["data"].Count(); i++) {
-                actors.Add(new Actor(info["data"][i]["name"].ToString(), info["data"][i]["role"].ToString(), info["data"][i]["image"].ToString(), Int32.Parse(info["data"][i]["sortOrder"].ToString())));
-            }
-            for (int i = 0; i < actors.Count(); i++) {
-                if (actors[i].role == 0) {
-                    selectedAc.Add(actors[i]);
-                }
-            }
-            if (selectedAc.Count() < 3) {
-                int role = 1;
-                do {
-                    for (int i = 0; i < actors.Count(); i++) {
-                        if (actors[i].role == role) {
-                            if (selectedAc.Count() == 3) {
-                                break;
-                            }
-                            selectedAc.Add(actors[i]);
-                        }
-                    }
-                    role++;
-                    if (role >= 4) {
-                        selectedAc.Add(new Actor(null,null,null,0));
-                    }
-                } while (selectedAc.Count<3);
-            }
             try {
-                setLeft(selectedAc[0]);
-                setRight(selectedAc[2]);
-                setMiddle(selectedAc[1]);
-            } catch (ArgumentNullException) { }
-
+                setLeft(show.actors[0]);
+                setRight(show.actors[2]);
+                setMiddle(show.actors[1]);
+            } catch (Exception) { }
         }
+        
 
 
         private void setBanner(JObject banner) {
@@ -160,10 +99,10 @@ namespace TVS_Player {
             Window main = Window.GetWindow(this);
             ((MainWindow)main).CloseTempFrameIndex();
         }
-        private void setLeft(Actor actor) {
+        private void setLeft(Show.ActorInfo actor) {
             string name = actor.name;
             string character = actor.character;
-            string url = actor.url;
+            string url = actor.link;
             Dispatcher.Invoke(new Action(() => {
                 f.Visibility = Visibility.Visible;
                 f.actorPic.Source = getImage(url);
@@ -173,10 +112,10 @@ namespace TVS_Player {
 
             }));
         }
-        private void setRight(Actor actor) {
+        private void setRight(Show.ActorInfo actor) {
             string name = actor.name;
             string character = actor.character;
-            string url = actor.url;
+            string url = actor.link;
             Dispatcher.Invoke(new Action(() => {
                 t.Visibility = Visibility.Visible;
                 t.actorPic.Source = getImage(url);
@@ -186,10 +125,10 @@ namespace TVS_Player {
 
             }));
         }
-        private void setMiddle(Actor actor) {
+        private void setMiddle(Show.ActorInfo actor) {
             string name = actor.name;
             string character = actor.character;
-            string url = actor.url;
+            string url = actor.link;
             Dispatcher.Invoke(new Action(() => {
                 s.Visibility = Visibility.Visible;
                 s.actorPic.Source = getImage(url);
