@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2593B221-CAAE-4DCB-B7EA-842175AED6B8}</ProjectGuid>
+    <ProjectGuid>{00FCA159-063E-4E3F-96B3-FCAE31F8318F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TVS_Player2._0</RootNamespace>
-    <AssemblyName>TVS-Player2.0</AssemblyName>
+    <RootNamespace>TVSPlayer</RootNamespace>
+    <AssemblyName>TVSPlayer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TVS_Player2._0.Properties {
+namespace TVSPlayer.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

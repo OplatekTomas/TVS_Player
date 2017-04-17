@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TVS_Player2._0 {
+namespace TVSPlayer {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
