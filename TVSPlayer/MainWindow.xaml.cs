@@ -25,27 +25,40 @@ namespace TVSPlayer {
             InitializeComponent();
         }
 
-        private void SideButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            
-        }
-
-        private void MoreButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            ThemeSwitcher.SwitchTheme();
-        }
-
-        private void SearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            StartAnimation("ShowSearch", SearchBar);
-            StartAnimation("MoveSearchLeft", SearchButton);
-            SearchBox.Focus();
-        }
+        //Starts Storyboard animation of a grid
         private void StartAnimation(string Storyboard, Grid pnl) {
             Storyboard sb = Resources[Storyboard] as Storyboard;
             sb.Begin(pnl);
         }
+        //Shows side bar
+        private void SideButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            HiderGrid.Visibility = Visibility.Visible;
+            StartAnimation("ShowSideMenu", SideMenu);
+            StartAnimation("OpacityUp", HiderGrid);
+        }
+        //Hides side bar
+        private void HiderGrid_MouseUp(object sender, MouseButtonEventArgs e) {
+            StartAnimation("HideSideMenu", SideMenu);
+            StartAnimation("OpacityDown", HiderGrid);
+            HiderGrid.Visibility = Visibility.Hidden;
+        }
+        //Shows search bar
+        private void SearchButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            StartAnimation("ShowSearch", SearchBar);
+            StartAnimation("OpacityUp", SearchBar);
+            StartAnimation("MoveSearchLeft", SearchButton);
 
+            SearchBox.Focus();
+        }
+        //Hides search bar
         private void TextBox_LostFocus(object sender, RoutedEventArgs e) {
             StartAnimation("HideSearch", SearchBar);
+            StartAnimation("OpacityDown", SearchBar);
             StartAnimation("MoveSearchRight", SearchButton);
+        }
+        //Switches theme
+        private void MoreButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            ThemeSwitcher.SwitchTheme();
         }
     }
 }

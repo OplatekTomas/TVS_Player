@@ -19,10 +19,40 @@
         <Storyboard x:Key="MoveSearchRight" >
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="55,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
+        <Storyboard x:Key="ShowSideMenu" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-250,0" To="0" DecelerationRatio=".5" Duration="0:0:0.15" />
+        </Storyboard>
+        <Storyboard x:Key="HideSideMenu" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-250,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Key="OpacityUp" >
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.15" />
+        </Storyboard>
+        <Storyboard x:Key="OpacityDown" >
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
 
     </Window.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
+        
         <Button  Width="60" Height="20" Content="Testing"/>
+        <Grid x:Name="SideMenu" Margin="-250,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80px"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Image Source="Icons/LogoWide.png" Margin="10"></Image>
+            <StackPanel Grid.Row="2">
+                <Grid>
+                    <Grid Height="45">
+                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" />
+                        <Image Source="{DynamicResource LibIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource ReverseBG}" FontSize="20" />
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="HiderGrid" Background="#88000000" Panel.ZIndex="9" MouseUp="HiderGrid_MouseUp" Opacity="0" Visibility="Hidden" />
         <Grid Panel.ZIndex="5" Height="40" VerticalAlignment="Top" x:Name="TopBar">
             <Grid x:Name="SideButton" Margin="10,0" HorizontalAlignment="Left" Height="20" MouseLeftButtonDown="SideButton_MouseLeftButtonDown">
                 <Image Source="{DynamicResource ResourceKey=MenuIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>

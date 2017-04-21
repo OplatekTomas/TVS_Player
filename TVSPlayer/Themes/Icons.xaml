@@ -4,4 +4,6 @@
     <BitmapImage x:Key="MenuIcon" UriSource="pack://application:,,,/Icons/ico-menu-light.png" />
     <BitmapImage x:Key="MoreIcon" UriSource="pack://application:,,,/Icons/ico-more-light.png" />
     <BitmapImage x:Key="SearchIcon" UriSource="pack://application:,,,/Icons/ico-search-light.png" />
+    <BitmapImage x:Key="LibIcon" UriSource="pack://application:,,,/Icons/ico-library-light.png" />
+
 </ResourceDictionary>

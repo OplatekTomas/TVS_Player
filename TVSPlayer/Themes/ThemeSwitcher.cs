@@ -45,11 +45,14 @@ namespace TVSPlayer {
             Application.Current.Resources["MenuIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-menu-dark.png", UriKind.Absolute));
             Application.Current.Resources["MoreIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-more-dark.png", UriKind.Absolute));
             Application.Current.Resources["SearchIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-search-dark.png", UriKind.Absolute));
+            Application.Current.Resources["LibIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-library-dark.png", UriKind.Absolute));
         }
         private static void LightIcons() {
             Application.Current.Resources["MenuIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-menu-light.png", UriKind.Absolute));
             Application.Current.Resources["MoreIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-more-light.png", UriKind.Absolute));
             Application.Current.Resources["SearchIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-search-light.png", UriKind.Absolute));
+            Application.Current.Resources["LibIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-library-light.png", UriKind.Absolute));
+
 
         }
 
