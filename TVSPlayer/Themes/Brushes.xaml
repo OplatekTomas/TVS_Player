@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TVSPlayer">
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#FF232323"/>
-    <SolidColorBrush x:Key="TempBackgroundBrush" Color="#99000000"/>
-    <SolidColorBrush x:Key="AccentDarkColor" Color="#1976D2"/>
-    <SolidColorBrush x:Key="AccentColor" Color="#2196F3"/>
-    <SolidColorBrush x:Key="LighterBackgroundBrush" Color="#343434"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FF242424"/>
+    <SolidColorBrush x:Key="LightestBG" Color="#484848" />
+    <SolidColorBrush x:Key="LighterBG" Color="#323232" />
+    <SolidColorBrush x:Key="ReverseBG" Color="#F5F5F5" />
+
 </ResourceDictionary>

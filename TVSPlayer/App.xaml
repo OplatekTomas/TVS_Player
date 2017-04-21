@@ -7,6 +7,8 @@
         <ResourceDictionary p4:Name="Dictionaries" xmlns:p4="http://schemas.microsoft.com/winfx/2006/xaml">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/TVSPlayer;component/Themes/Brushes.xaml" />
+                <ResourceDictionary Source="/TVSPlayer;component/Themes/Icons.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -7,103 +7,39 @@
         mc:Ignorable="d"
         Title="TVS Player" Height="720" Width="1280" MinWidth="640" MinHeight="360">
     <Window.Resources>
-        <Storyboard x:Key="sbShowLeftMenu" >
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-200,0,0,0" To="0,0,0,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        <Storyboard x:Key="ShowSearch" >
+            <DoubleAnimation Storyboard.TargetProperty="Width" From="0" To="400" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="sbHideLeftMenu">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="-200,0,0,0" AccelerationRatio=".5" Duration="0:0:0.15" />
+        <Storyboard x:Key="MoveSearchLeft" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="55,0" To="455,0" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="sbShowBackground" >
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.25" />
+        <Storyboard x:Key="HideSearch" >
+            <DoubleAnimation Storyboard.TargetProperty="Width" From="400" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="sbHideBackground">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" AccelerationRatio=".5" Duration="0:0:0.15" />
+        <Storyboard x:Key="MoveSearchRight" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="55,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
+
     </Window.Resources>
-    <Grid x:Name="GridOnTop">
-        <Grid x:Name="Sidebar" Width="200" Margin="-200,0,0,0" HorizontalAlignment="Left" Panel.ZIndex="5" Background="{DynamicResource BackgroundBrush}">
-            <StackPanel VerticalAlignment="Top">
-                <Grid Height="60" x:Name="MenuHideButton" >
-                    <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
-                        <!--   <Image Source="/Icons/menu.png" Margin="10"/> -->
-                    </Grid>
-                    <Image Source="Icons/LogoWide.png" Margin="10,5,10,5"/>
-                    <TextBlock Foreground="White" Text="" FontSize="18"/>
-                </Grid>
-                <Grid Height="40" x:Name="ShowLibraryButon" >
-                    <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0" >
-                        <Image Source="/Icons/play-button.png" Margin="10"/>
-                    </Grid>
-                    <TextBlock Foreground="White" Text="Library" FontSize="18" Margin="45,7,0,0"/>
-                </Grid>
-                <Grid Height="40" x:Name="DownloadPageButton">
-                    <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
-                        <Image Source="/Icons/download.png" Margin="10"/>
-                    </Grid>
-                    <TextBlock Foreground="White" Text="Download" FontSize="18" Margin="45,7,0,0"/>
-                </Grid>
-            </StackPanel>
-            <StackPanel VerticalAlignment="Bottom">
-                <Grid Height="40" x:Name="SettingsButton">
-                    <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
-                        <Image Source="/Icons/settings.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </Grid>
-                    <TextBlock Foreground="White" Text="Settings" FontSize="18" Margin="45,7,0,0"/>
-                </Grid>
-                <Grid Height="40" x:Name="InfoButton">
-                    <Grid Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
-                        <Image Source="/Icons/info.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
-                    </Grid>
-                    <TextBlock Foreground="White" Text="About" FontSize="18" Margin="45,7,0,0"/>
-                </Grid>
-            </StackPanel>
-        </Grid>
-        <Grid Height="40" VerticalAlignment="Top" Background="{DynamicResource AccentColor}" Panel.ZIndex="2">
-            <Grid.BitmapEffect>
-                <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
-            </Grid.BitmapEffect>
-            <TextBlock x:Name="HeadingText" HorizontalAlignment="Left" Text="Library" Foreground="White" FontSize="20" Margin="50,5,0,0" TextWrapping="Wrap"/>
-            <Grid x:Name="MenuButton" Width="40" Height="40" HorizontalAlignment="Left" Margin="5,0,0,0">
-                <Image Source="/Icons/menu.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
+    <Grid Background="{DynamicResource BackgroundBrush}">
+        <Button  Width="60" Height="20" Content="Testing"/>
+        <Grid Panel.ZIndex="5" Height="40" VerticalAlignment="Top" x:Name="TopBar">
+            <Grid x:Name="SideButton" Margin="10,0" HorizontalAlignment="Left" Height="20" MouseLeftButtonDown="SideButton_MouseLeftButtonDown">
+                <Image Source="{DynamicResource ResourceKey=MenuIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
             </Grid>
-            <Grid x:Name="NotificationButton" Width="40" Height="40" HorizontalAlignment="Right" Margin="5,0,5,0">
-                <Image Source="/Icons/ShowMore.png" Margin="10" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Grid x:Name="MoreButton" Margin="10,0" HorizontalAlignment="Right" Height="30" MouseLeftButtonDown="MoreButton_MouseLeftButtonDown">
+                <Image Source="{DynamicResource ResourceKey=MoreIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
             </Grid>
-            <Grid Background="#1565C0" HorizontalAlignment="Center" Width="400" Margin="5" MaxWidth="600">
-                <TextBox x:Name="SearchBar" FontSize="18" Panel.ZIndex="2" Margin="27,3,0,5" Text="Search" Foreground="#55FFFFFF" BorderThickness="0">
-                    <TextBox.Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Background" Value="#00000000"/>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-                <Image Source="Icons/search.png" Margin="7" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Grid x:Name="SearchButton" Margin="55,0" HorizontalAlignment="Right" Height="20" MouseLeftButtonDown="SearchButton_MouseLeftButtonDown">
+                <Image Source="{DynamicResource ResourceKey=SearchIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
             </Grid>
-        </Grid>
-        <Grid x:Name="BaseGrid" Background="{DynamicResource BackgroundBrush}" Margin="0,40,0,0">
-            <Frame x:Name="Frame" NavigationUIVisibility="Hidden" />
-        </Grid>
-        <Grid Panel.ZIndex="4" x:Name="MenuBackground" Margin="0,0,0,0" Background="#AA000000" Opacity="0" Visibility="Hidden"/>
-        <Grid Panel.ZIndex="3" x:Name="SearchPanel" Background="{DynamicResource BackgroundBrush}" Width="400" Margin="0,35" VerticalAlignment="Top"  MaxHeight="400" Visibility="Hidden">
-            <Grid.BitmapEffect>
-                <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
-            </Grid.BitmapEffect>
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel  x:Name="SearchList" Margin="0,3,0,0">
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
-        <Grid Panel.ZIndex="3" x:Name="NotificationPanel" Background="{DynamicResource LighterBackgroundBrush}" Width="450" HorizontalAlignment="Right" Margin="25,6" VerticalAlignment="Top"  MaxHeight="400" Visibility="Hidden">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40px" />
-            </Grid.RowDefinitions>
-            <Grid.BitmapEffect>
-                <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="5" Softness="1" Opacity="0.5"/>
-            </Grid.BitmapEffect>
-            <ScrollViewer VerticalScrollBarVisibility="Auto" >
-                <StackPanel  x:Name="NotificationsList" Margin="0,3,0,5">
-                </StackPanel>
-            </ScrollViewer>
+            <Grid x:Name="SearchBar" HorizontalAlignment="Right" Margin="50,5" Width="0">
+                <Border Background="{DynamicResource LightestBG}" CornerRadius="3">
+                    <Border Margin="3" Background="{DynamicResource LighterBG}" CornerRadius="2">
+                        <TextBox x:Name="SearchBox" BorderThickness="0" Background="#00000000" Foreground="{DynamicResource ReverseBG}" FontSize="17" LostFocus="TextBox_LostFocus"></TextBox>
+                    </Border>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

@@ -36,6 +36,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +70,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Themes\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,28 +105,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\back.png" />
-    <Resource Include="Icons\checked.png" />
-    <Resource Include="Icons\delete.png" />
-    <Resource Include="Icons\download.png" />
-    <Resource Include="Icons\edit.png" />
-    <Resource Include="Icons\fullscreen.png" />
-    <Resource Include="Icons\import.png" />
-    <Resource Include="Icons\info.png" />
+    <Resource Include="Icons\ico-search-light.png" />
     <Resource Include="Icons\Logo.png" />
     <Resource Include="Icons\LogoWide.png" />
-    <Resource Include="Icons\menu.png" />
-    <Resource Include="Icons\mute.png" />
-    <Resource Include="Icons\page-blank.png" />
-    <Resource Include="Icons\pause.png" />
-    <Resource Include="Icons\play-button-dark.png" />
-    <Resource Include="Icons\play-button.png" />
-    <Resource Include="Icons\question.png" />
-    <Resource Include="Icons\search.png" />
-    <Resource Include="Icons\server.png" />
-    <Resource Include="Icons\settings.png" />
-    <Resource Include="Icons\ShowMore.png" />
-    <Resource Include="Icons\speaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-menu-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-menu-dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-more-dark.png" />
+    <Resource Include="Icons\ico-more-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-search-dark.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
