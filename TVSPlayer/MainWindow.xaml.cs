@@ -60,5 +60,14 @@ namespace TVSPlayer {
         private void MoreButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             ThemeSwitcher.SwitchTheme();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            List<TVShow> s = TVShow.Search("Lost");
+            string test = null;
+            foreach (TVShow show in s) {
+                test += show.Name + "\n";
+            }
+            MessageBox.Show(test);
+        }
     }
 }

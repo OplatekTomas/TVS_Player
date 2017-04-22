@@ -34,8 +34,7 @@
 
     </Window.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
-        
-        <Button  Width="60" Height="20" Content="Testing"/>
+        <Button  Width="60" Height="20" Content="Testing" Click="Button_Click"/>
         <Grid x:Name="SideMenu" Margin="-250,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px"/>
@@ -46,7 +45,7 @@
                 <Grid>
                     <Grid Height="45">
                         <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" />
-                        <Image Source="{DynamicResource LibIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <Image Source="{DynamicResource PlayIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
                         <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource ReverseBG}" FontSize="20" />
                     </Grid>
                 </Grid>
