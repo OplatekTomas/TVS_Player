@@ -10,28 +10,69 @@ using System.Threading.Tasks;
 
 namespace TVSPlayer {
     public class TVShow {
-        public int TVDbID { get; set; }
-        public int Id { get; set; }
-        public string IMDbId { get; set; }
-        public string Name { get; set; }
-        public float Rating { get; set; }
-        public string Poster { get; set; }
-        public string Network { get; set; }
-        public string NetworkCountry { get; set; }
-        public string Overview { get; set; }
-        public string ReleaseDate { get; set; }
-        public string AirTime { get; set; }
-        public List<string> Genres = new List<string>();
-        public List<string> PosterLinks = new List<string>();
-        public List<string> AirDays = new List<string>();
+        public class Schedule {
+            public string time { get; set; }
+            public List<object> days { get; set; }
+        }
+
+        public class Rating {
+            public double? average { get; set; }
+        }
+
+        public class Country {
+            public string name { get; set; }
+            public string code { get; set; }
+            public string timezone { get; set; }
+        }
+
+        public class Network {
+            public int id { get; set; }
+            public string name { get; set; }
+            public Country country { get; set; }
+        }
+
+        public class WebChannel {
+            public int id { get; set; }
+            public string name { get; set; }
+            public Country country { get; set; }
+        }
+
+        public class Externals {
+            public int? thetvdb { get; set; }
+            public string imdb { get; set; }
+        }
+
+        public class Image {
+            public string original { get; set; }
+        }
+
+        public int id { get; set; }
+        public string name { get; set; }
+        public string type { get; set; }
+        public string language { get; set; }
+        public List<object> genres { get; set; }
+        public string status { get; set; }
+        public int runtime { get; set; }
+        public string premiered { get; set; }
+        public Schedule schedule { get; set; }
+        public Rating rating { get; set; }
+        public Network network { get; set; }
+        public WebChannel webChannel { get; set; }
+        public Externals externals { get; set; }
+        public Image image { get; set; }
+        public string summary { get; set; }
+        public List<string> alias = new List<string>();
+        public List<string> posters = new List<string>();
+        public string poster { get; set; }
 
 
         //Searches for a TV Show and returns list of TV Shows
         public static List<TVShow> Search(string name, bool local = false) {
             if (!local) {
                 return searchApi(name);
-            } return null;
-            
+            }
+            return null;
+
         }
 
         //Searches TVMaze API for TV Shows and returns list of TV Shows
@@ -49,13 +90,16 @@ namespace TVSPlayer {
             StreamReader reader = new StreamReader(dataStream);
             string responseFromServer = reader.ReadToEnd();
             JArray test = JArray.Parse(responseFromServer);
-            foreach (JToken jt in (JToken)test) {                                
-                if (jt["show"]["externals"]["thetvdb"].ToString() != "") {
-                    list.Add(ParseTVMaze(jt["show"]));
-                }
+            foreach (JToken jt in (JToken)test) {
+                TVShow s = new TVShow();
+                s = jt["show"].ToObject<TVShow>();
+                s.summary = RemoveStyle(s.summary);
+                list.Add(s);
             }
             return list;
         }
+
+        //Function that removes style from overview text
         private static string RemoveStyle(string line) {
             string[] separator = { "</?p>", "</?em>", "</?strong>", "</?b>", "</?i>", "</?span>" };
             string text = line;
@@ -71,23 +115,25 @@ namespace TVSPlayer {
             }
             return text;
         }
+
+        //Gets liases from TVDb API for a TV show
         public List<string> GetAliases() {
             List<string> aliases = new List<string>();
             Regex reg = new Regex(@"\([0-9]{4}\)");
             Regex reg2 = new Regex(@"\.");
-            aliases.Add(Name);
-            string temp = Name;
+            aliases.Add(name);
+            string temp = name;
             Match m = reg2.Match(temp);
             while (m.Success) {
                 temp = temp.Remove(m.Index, 1);
-                aliases.Add(Name.Remove(m.Index, 1));
+                aliases.Add(name.Remove(m.Index, 1));
                 m = reg2.Match(temp);
             }
-            Match snMatch = reg.Match(Name);
+            Match snMatch = reg.Match(name);
             if (snMatch.Success) {
-                aliases.Add(reg.Replace(Name, ""));
+                aliases.Add(reg.Replace(name, ""));
             }
-            foreach (string alias in getAliasToken(TVDbID)) {
+            foreach (string alias in getAliasToken()) {
                 aliases.Add(alias);
                 Match regMatch = reg.Match(alias);
                 if (regMatch.Success) {
@@ -101,8 +147,10 @@ namespace TVSPlayer {
             }
             return aliases;
         }
-        private static JToken getAliasToken(int id) {
-            HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + id);
+
+        // Returns JToken that contains info about aliases
+        private JToken getAliasToken() {
+            HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + externals.imdb);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
@@ -112,46 +160,6 @@ namespace TVSPlayer {
             } catch (WebException) {
                 return null;
             }
-        }
-
-        private static TVShow ParseTVMaze(JToken value) {
-            TVShow s = new TVShow();
-            s.TVDbID = Int32.Parse(value["externals"]["thetvdb"].ToString());
-            s.Id = Int32.Parse(value["id"].ToString());
-            s.Name = value["name"].ToString();
-            if (value["rating"]["average"].ToString() != "") {
-                s.Rating = float.Parse(value["rating"]["average"].ToString());
-            } else {
-                s.Rating = 0;
-            }
-            s.IMDbId = "www.imdb.com/title/" + value["externals"]["imdb"].ToString() + "/?ref_=nv_sr_1";
-            if (value["image"].ToString() != "") {
-                s.PosterLinks.Add(value["image"]["original"].ToString());
-            }
-            if (value["network"].ToString() != "") {
-                s.Network = value["network"]["name"].ToString();
-            }
-            if (value["network"]["country"]["name"].ToString() != "") {
-                s.NetworkCountry = value["network"]["country"]["name"].ToString();
-            }
-            if (value["summary"].ToString() != "") {
-                s.Overview = RemoveStyle(value["summary"].ToString());
-            }
-            foreach (JToken genres in value["genres"]) {
-                s.Genres.Add(genres.ToString());
-            }
-            try {
-                s.ReleaseDate = DateTime.ParseExact(value["premiered"].ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).ToString("dd.MM.yyyy");
-            } catch (Exception) {
-                s.ReleaseDate = "";
-            }
-            if (value["schedule"]["time"].ToString() != "") {
-                s.AirTime = value["schedule"]["time"].ToString();
-            }
-            foreach (JToken day in value["schedule"]["days"]) {
-                s.AirDays.Add(day.ToString());
-            }
-            return s;
         }
 
     }

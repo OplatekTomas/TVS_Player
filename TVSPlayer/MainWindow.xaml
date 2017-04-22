@@ -20,10 +20,10 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="55,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="ShowSideMenu" >
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-250,0" To="0" DecelerationRatio=".5" Duration="0:0:0.15" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-225,0" To="0" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
         <Storyboard x:Key="HideSideMenu" >
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-250,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="OpacityUp" >
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.15" />
@@ -35,7 +35,7 @@
     </Window.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
         <Button  Width="60" Height="20" Content="Testing" Click="Button_Click"/>
-        <Grid x:Name="SideMenu" Margin="-250,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="10">
+        <Grid x:Name="SideMenu" Margin="-225,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px"/>
                 <RowDefinition />

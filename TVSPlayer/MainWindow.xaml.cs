@@ -65,7 +65,7 @@ namespace TVSPlayer {
             List<TVShow> s = TVShow.Search("Lost");
             string test = null;
             foreach (TVShow show in s) {
-                test += show.Name + "\n";
+                test += show.name + "\n";
             }
             MessageBox.Show(test);
         }
