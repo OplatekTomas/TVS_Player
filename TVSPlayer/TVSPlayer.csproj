@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -125,7 +126,9 @@
   <ItemGroup>
     <Resource Include="Icons\ico-menu-dark.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\280619-4.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\ico-more-dark.png" />
     <Resource Include="Icons\ico-more-light.png" />

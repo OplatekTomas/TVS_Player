@@ -7,37 +7,36 @@
         mc:Ignorable="d"
         Title="TVS Player" Height="720" Width="1280" MinWidth="640" MinHeight="360">
     <Window.Resources>
-        <Storyboard x:Key="ShowSearch" >
+        <Storyboard x:Key="ShowSearch">
             <DoubleAnimation Storyboard.TargetProperty="Width" From="0" To="400" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="MoveSearchLeft" >
+        <Storyboard x:Key="MoveSearchLeft">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="55,0" To="455,0" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="HideSearch" >
+        <Storyboard x:Key="HideSearch">
             <DoubleAnimation Storyboard.TargetProperty="Width" From="400" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="MoveSearchRight" >
+        <Storyboard x:Key="MoveSearchRight">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="55,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="ShowSideMenu" >
+        <Storyboard x:Key="ShowSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-225,0" To="0" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="HideSideMenu" >
+        <Storyboard x:Key="HideSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="OpacityUp" >
+        <Storyboard x:Key="OpacityUp">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.15" />
         </Storyboard>
-        <Storyboard x:Key="OpacityDown" >
+        <Storyboard x:Key="OpacityDown">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-
     </Window.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
-        <Button  Width="60" Height="20" Content="Testing" Click="Button_Click"/>
+        <Button  Width="60" Height="20" Content="Testing" Click="Button_Click" />
         <Grid x:Name="SideMenu" Margin="-225,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="80px"/>
+                <RowDefinition Height="80px" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Image Source="Icons/LogoWide.png" Margin="10"></Image>
