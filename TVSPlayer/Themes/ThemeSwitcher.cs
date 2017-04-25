@@ -23,7 +23,7 @@ namespace TVSPlayer {
                 Application.Current.Resources["ReverseBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F5F5"));
                 Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#323232"));
                 Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#484848"));
-
+                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DD101010"));
                 LightIcons();
                 theme = false;
             } else {
@@ -31,6 +31,7 @@ namespace TVSPlayer {
                 Application.Current.Resources["ReverseBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#242424"));
                 Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C8C8C8"));
                 Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#dcdcdc"));
+                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DDE1E1E1"));
 
                 DarkIcons();
                 theme = true;

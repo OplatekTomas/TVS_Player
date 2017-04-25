@@ -127,9 +127,6 @@
     <Resource Include="Icons\ico-menu-dark.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\280619-4.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\ico-more-dark.png" />
     <Resource Include="Icons\ico-more-light.png" />
   </ItemGroup>

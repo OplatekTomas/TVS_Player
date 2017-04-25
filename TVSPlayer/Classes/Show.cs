@@ -7,64 +7,31 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TVSPlayer {
     public class TVShow {
-        public class Schedule {
-            public string time { get; set; }
-            public List<object> days { get; set; }
-        }
-
-        public class Rating {
-            public double? average { get; set; }
-        }
-
-        public class Country {
-            public string name { get; set; }
-            public string code { get; set; }
-            public string timezone { get; set; }
-        }
-
-        public class Network {
-            public int id { get; set; }
-            public string name { get; set; }
-            public Country country { get; set; }
-        }
-
-        public class WebChannel {
-            public int id { get; set; }
-            public string name { get; set; }
-            public Country country { get; set; }
-        }
-
-        public class Externals {
-            public int? thetvdb { get; set; }
-            public string imdb { get; set; }
-        }
-
-        public class Image {
-            public string original { get; set; }
-        }
-
+        public string added { get; set; }
+        public string airsDayOfWeek { get; set; }
+        public string airsTime { get; set; }
+        public IList<string> aliases { get; set; }
+        public string firstAired { get; set; }
+        public IList<string> genre { get; set; }
         public int id { get; set; }
-        public string name { get; set; }
-        public string type { get; set; }
-        public string language { get; set; }
-        public List<object> genres { get; set; }
+        public string imdbId { get; set; }
+        public int lastUpdated { get; set; }
+        public string network { get; set; }
+        public string networkId { get; set; }
+        public string overview { get; set; }
+        public string rating { get; set; }
+        public string runtime { get; set; }
+        public string seriesName { get; set; }
+        public int siteRating { get; set; }
+        public int siteRatingCount { get; set; }
         public string status { get; set; }
-        public int runtime { get; set; }
-        public string premiered { get; set; }
-        public Schedule schedule { get; set; }
-        public Rating rating { get; set; }
-        public Network network { get; set; }
-        public WebChannel webChannel { get; set; }
-        public Externals externals { get; set; }
-        public Image image { get; set; }
-        public string summary { get; set; }
-        public List<string> alias = new List<string>();
         public List<string> posters = new List<string>();
         public string poster { get; set; }
-
+        public int tvmazeId { get; set; }
 
         //Searches for a TV Show and returns list of TV Shows
         public static List<TVShow> Search(string name, bool local = false) {
@@ -75,7 +42,7 @@ namespace TVSPlayer {
 
         }
 
-        //Searches TVMaze API for TV Shows and returns list of TV Shows
+        //Searches TVMaze API for TV Shows and returns list of TV Shows with 
         private static List<TVShow> searchApi(string name) {
             List<TVShow> list = new List<TVShow>();
             name = name.Replace(" ", "+");
@@ -91,10 +58,13 @@ namespace TVSPlayer {
             string responseFromServer = reader.ReadToEnd();
             JArray test = JArray.Parse(responseFromServer);
             foreach (JToken jt in (JToken)test) {
-                TVShow s = new TVShow();
-                s = jt["show"].ToObject<TVShow>();
-                s.summary = RemoveStyle(s.summary);
-                list.Add(s);
+                if (jt["show"]["externals"]["thetvdb"].ToString() != "") { 
+                    TVShow s = new TVShow();
+                    s.seriesName = jt["show"]["name"].ToString();
+                    s.id = Int32.Parse(jt["show"]["externals"]["thetvdb"].ToString());
+                    s.tvmazeId = Int32.Parse(jt["show"]["id"].ToString());
+                    list.Add(s);
+                }
             }
             return list;
         }
@@ -117,27 +87,29 @@ namespace TVSPlayer {
         }
 
         //Gets liases from TVDb API for a TV show
-        public List<string> GetAliases() {
+        public List<string> GetAliases(IList<string> DBAliases) {
             List<string> aliases = new List<string>();
             Regex reg = new Regex(@"\([0-9]{4}\)");
             Regex reg2 = new Regex(@"\.");
-            aliases.Add(name);
-            string temp = name;
+            aliases.Add(seriesName);
+            string temp = seriesName;
             Match m = reg2.Match(temp);
             while (m.Success) {
                 temp = temp.Remove(m.Index, 1);
-                aliases.Add(name.Remove(m.Index, 1));
+                aliases.Add(seriesName.Remove(m.Index, 1));
                 m = reg2.Match(temp);
             }
-            Match snMatch = reg.Match(name);
+            Match snMatch = reg.Match(seriesName);
             if (snMatch.Success) {
-                aliases.Add(reg.Replace(name, ""));
+                aliases.Add(reg.Replace(seriesName, ""));
             }
-            foreach (string alias in getAliasToken()) {
-                aliases.Add(alias);
-                Match regMatch = reg.Match(alias);
-                if (regMatch.Success) {
-                    aliases.Add(reg.Replace(alias, ""));
+            if (DBAliases != null) { 
+                foreach (string alias in DBAliases) {
+                    aliases.Add(alias);
+                    Match regMatch = reg.Match(alias);
+                    if (regMatch.Success) {
+                        aliases.Add(reg.Replace(alias, ""));
+                    }
                 }
             }
             for (int i = 0; i < aliases.Count(); i++) {
@@ -147,19 +119,45 @@ namespace TVSPlayer {
             }
             return aliases;
         }
-
-        // Returns JToken that contains info about aliases
-        private JToken getAliasToken() {
-            HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + externals.imdb);
+        public void GetInfo() {
+            HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + id);
             try {
                 var response = request.GetResponse();
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                     JObject jo = JObject.Parse(sr.ReadToEnd());
-                    return jo["data"]["aliases"];
+                    TVShow s = jo["data"].ToObject<TVShow>();
+                    s.aliases = GetAliases(s.aliases);
+                    Copy(s);
+                    
                 }
-            } catch (WebException) {
-                return null;
+            } catch (WebException e) {
+                MessageBox.Show(e.Message);
             }
+        }
+
+        //Function that copies all properties from another tv show to this one
+        private void Copy( TVShow s ) {
+            this.added = s.added;
+            this.airsDayOfWeek = s.airsDayOfWeek;
+            this.airsTime = s.airsTime;
+            this.aliases = s.aliases;
+            this.firstAired = s.firstAired;
+            this.genre = s.genre;
+            this.id = s.id;
+            this.imdbId = s.imdbId;
+            this.lastUpdated = s.lastUpdated;
+            this.network = s.network;
+            this.networkId = s.networkId;
+            this.overview = s.overview;
+            this.rating = s.rating;
+            this.runtime = s.runtime;
+            this.seriesName = s.seriesName;
+            this.siteRating = s.siteRating;
+            this.siteRatingCount = s.siteRatingCount;
+            this.status = s.status;
+            this.posters = s.posters;
+            this.poster = s.poster;
+            this.tvmazeId = this.tvmazeId;
         }
 
     }

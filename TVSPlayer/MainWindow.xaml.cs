@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -56,12 +57,17 @@ namespace TVSPlayer {
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             List<TVShow> s = TVShow.Search("Lost");
-            string test = null;
+            sw.Stop();
+            string test = sw.ElapsedMilliseconds + "\n";
             foreach (TVShow show in s) {
-                test += show.name + "\n";
+                test += show.seriesName + "\n";
             }
             MessageBox.Show(test);
+            s[0].GetInfo();
+            MessageBox.Show(s[0].overview);
         }
     }
 }
