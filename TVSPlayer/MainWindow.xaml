@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVSPlayer"
         mc:Ignorable="d"
-        Title="TVS Player" Height="720" Width="1280" MinWidth="640" MinHeight="360">
+        Title="TVS Player" Height="720" Width="1280" MinWidth="640" MinHeight="360" x:Name="Main">
     <Window.Resources>
         <Storyboard x:Key="ShowSearch">
             <DoubleAnimation Storyboard.TargetProperty="Width" From="0" To="400" DecelerationRatio=".5" Duration="0:0:0.15" />
@@ -25,20 +25,14 @@
         <Storyboard x:Key="HideSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="OpacityUp">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.15" />
-        </Storyboard>
-        <Storyboard x:Key="OpacityDown">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
-        </Storyboard>
     </Window.Resources>
-    <Grid Background="{DynamicResource BackgroundBrush}">
+    <Grid x:Name="BaseGrid" Background="{DynamicResource BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button  Width="60" Height="20" Content="Testing" Click="Button_Click"  Grid.Row="0" Panel.ZIndex="100" />
-        <Frame x:Name="ActiveContent" Grid.Row="1"></Frame>
+        <Frame x:Name="ActiveContent" Grid.Row="1" ></Frame>
         <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="10" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px" />
@@ -52,7 +46,7 @@
                     <Grid Height="45">
                         <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" />
                         <Image Source="{DynamicResource PlayIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
-                        <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource ReverseBG}" FontSize="20" />
+                        <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource TextColor}" FontSize="20" />
                     </Grid>
                 </Grid>
             </StackPanel>
@@ -70,7 +64,7 @@
             </Grid>
             <Grid x:Name="SearchBar" HorizontalAlignment="Right" Width="0" Margin="50,8" >
                 <Border Background="{DynamicResource BackgroundBrush}" CornerRadius="2">
-                    <TextBox x:Name="SearchBox" BorderThickness="0" Background="#00000000" Foreground="{DynamicResource ReverseBG}" FontSize="17" LostFocus="TextBox_LostFocus"></TextBox>
+                    <TextBox x:Name="SearchBox" BorderThickness="0" Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="17" LostFocus="TextBox_LostFocus"></TextBox>
                 </Border>
             </Grid>
         </Grid>

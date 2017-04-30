@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,12 +15,13 @@ namespace TVSPlayer {
 
         public MainWindow() {
             InitializeComponent();
+
         }
 
         //Starts Storyboard animation of a grid
-        private void StartAnimation(string Storyboard, Grid pnl) {
-            Storyboard sb = Resources[Storyboard] as Storyboard;
-            sb.Begin(pnl);
+        private void StartAnimation(string storyboard, Grid grid) {
+            Storyboard sb = this.FindResource(storyboard) as Storyboard;
+            sb.Begin(grid);
         }
 
         //Shows side bar
@@ -56,8 +58,9 @@ namespace TVSPlayer {
             ThemeSwitcher.SwitchTheme();
         }
 
+        //Code for "Test" button
         private void Button_Click(object sender, RoutedEventArgs e) {
-            Stopwatch sw = new Stopwatch();
+            /*Stopwatch sw = new Stopwatch();
             sw.Start();
             List<TVShow> s = TVShow.Search("Lost");
             sw.Stop();
@@ -67,7 +70,29 @@ namespace TVSPlayer {
             }
             MessageBox.Show(test);
             s[0].GetInfo();
-            MessageBox.Show(s[0].overview);
+            MessageBox.Show(s[0].overview);*/
+            Page p = new ImportScanFolder();
+            AddPage(p);
         }
+
+        public void AddPage(Page page) {
+            Frame fr = new Frame();
+            Grid.SetRowSpan(fr , 2);
+            BaseGrid.Children.Add(fr);           
+            Panel.SetZIndex(fr , 1000);
+            fr.Content = page;
+        }
+        public void RemovePage() {
+            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as Frame;
+            Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
+            Storyboard sbLoad = sb.Clone();
+            sbLoad.Completed += (s, e) => FinishedRemove();
+            sbLoad.Begin(p);
+        }
+        public void FinishedRemove() {
+            BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        }
+
     }
+
 }

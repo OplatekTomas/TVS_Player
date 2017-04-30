@@ -4,7 +4,7 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="#FF242424" />
     <SolidColorBrush x:Key="LightestBG" Color="#484848" />
     <SolidColorBrush x:Key="LighterBG" Color="#323232" />
-    <SolidColorBrush x:Key="ReverseBG" Color="#F5F5F5" />
+    <SolidColorBrush x:Key="TextColor" Color="#F5F5F5" />
     <SolidColorBrush x:Key="AccentColor" Color="#2196F3" />
     <SolidColorBrush x:Key="TransparentBG" Color="#CC101010" />
 </ResourceDictionary>

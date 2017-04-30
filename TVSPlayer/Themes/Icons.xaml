@@ -5,4 +5,7 @@
     <BitmapImage x:Key="MoreIcon" UriSource="pack://application:,,,/Icons/ico-more-light.png" />
     <BitmapImage x:Key="SearchIcon" UriSource="pack://application:,,,/Icons/ico-search-light.png" />
     <BitmapImage x:Key="PlayIcon" UriSource="pack://application:,,,/Icons/ico-play-light.png" />
+    <BitmapImage x:Key="ImportIcon" UriSource="pack://application:,,,/Icons/ico-import-light.png" />
+    <BitmapImage x:Key="NewFileIcon" UriSource="pack://application:,,,/Icons/ico-newfile-light.png" />
+
 </ResourceDictionary>
