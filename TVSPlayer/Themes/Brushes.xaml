@@ -7,4 +7,6 @@
     <SolidColorBrush x:Key="TextColor" Color="#F5F5F5" />
     <SolidColorBrush x:Key="AccentColor" Color="#2196F3" />
     <SolidColorBrush x:Key="TransparentBG" Color="#CC101010" />
+    <SolidColorBrush x:Key="TransparentStaticBG" Color="#CC101010" />
+
 </ResourceDictionary>

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +21,7 @@ namespace TVSPlayer {
         }
 
         //Starts Storyboard animation of a grid
-        private void StartAnimation(string storyboard, Grid grid) {
+        private void StartAnimation(string storyboard, FrameworkElement grid) {
             Storyboard sb = this.FindResource(storyboard) as Storyboard;
             sb.Begin(grid);
         }
@@ -59,22 +61,16 @@ namespace TVSPlayer {
         }
 
         //Code for "Test" button
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            /*Stopwatch sw = new Stopwatch();
-            sw.Start();
-            List<TVShow> s = TVShow.Search("Lost");
-            sw.Stop();
-            string test = sw.ElapsedMilliseconds + "\n";
-            foreach (TVShow show in s) {
-                test += show.seriesName + "\n";
-            }
-            MessageBox.Show(test);
-            s[0].GetInfo();
-            MessageBox.Show(s[0].overview);*/
-            Page p = new ImportScanFolder();
-            AddPage(p);
+        private async void Button_Click(object sender, RoutedEventArgs e) {
+            TVShow s = new TVShow();
+            s.tvmazeId = 82;
+            s.GetInfoTVMaze();
+            //Page p = new ImportScanFolder();
+            //AddPage(p);
+            //await SearchShowAsync();
         }
 
+        //Simple functoin that render new frame and page on top of existing content
         public void AddPage(Page page) {
             Frame fr = new Frame();
             Grid.SetRowSpan(fr , 2);
@@ -82,6 +78,27 @@ namespace TVSPlayer {
             Panel.SetZIndex(fr , 1000);
             fr.Content = page;
         }
+
+        //Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
+        public async Task<TVShow> SearchShowAsync() {
+            Page page = new SearchAPIPage();
+            Frame fr = new Frame();
+            fr.Opacity = 0;
+            StartAnimation("OpacityUp", fr);
+            Grid.SetRowSpan(fr, 2);
+            BaseGrid.Children.Add(fr);
+            Panel.SetZIndex(fr, 1000);
+            fr.Content = page;
+            TVShow s = await Helper.ReturnTVShowWhenNotNull();
+            RemovePage();
+            Helper.show = null;
+            if (s == new TVShow()) {
+                return null;
+            }
+            return s;
+        }
+
+        //Removes last page added
         public void RemovePage() {
             var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as Frame;
             Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
@@ -89,7 +106,8 @@ namespace TVSPlayer {
             sbLoad.Completed += (s, e) => FinishedRemove();
             sbLoad.Begin(p);
         }
-        public void FinishedRemove() {
+        // Event that is called after animation of removing page is done - actualy removes the page
+        private void FinishedRemove() {
             BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
         }
 

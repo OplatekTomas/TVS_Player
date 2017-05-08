@@ -7,5 +7,11 @@
     <BitmapImage x:Key="PlayIcon" UriSource="pack://application:,,,/Icons/ico-play-light.png" />
     <BitmapImage x:Key="ImportIcon" UriSource="pack://application:,,,/Icons/ico-import-light.png" />
     <BitmapImage x:Key="NewFileIcon" UriSource="pack://application:,,,/Icons/ico-newfile-light.png" />
+    <BitmapImage x:Key="RemoveIcon" UriSource="pack://application:,,,/Icons/ico-remove-light.png" />
+    <BitmapImage x:Key="QuestionIcon" UriSource="pack://application:,,,/Icons/ico-question-light.png" />
+    <BitmapImage x:Key="CheckSquareIcon" UriSource="pack://application:,,,/Icons/ico-checksquare-light.png" />
+    <BitmapImage x:Key="CheckIcon" UriSource="pack://application:,,,/Icons/ico-checked-light.png" />
+
+
 
 </ResourceDictionary>

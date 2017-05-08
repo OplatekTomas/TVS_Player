@@ -41,6 +41,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -66,17 +69,31 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Episode.cs" />
     <Compile Include="Classes\GeneralAPI.cs" />
+    <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\Show.cs" />
-    <Compile Include="Pages\ImportScanFolder.xaml.cs">
+    <Compile Include="Pages\ShowDetails.xaml.cs">
+      <DependentUpon>ShowDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CreatingDB\ImportScanFolder.xaml.cs">
       <DependentUpon>ImportScanFolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SearchAPIPage.xaml.cs">
+      <DependentUpon>SearchAPIPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Welcome.xaml.cs">
       <DependentUpon>Welcome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SingleShowSearchAPI.xaml.cs">
-      <DependentUpon>SingleShowSearchAPI.xaml</DependentUpon>
+    <Compile Include="Controls\ScannedShow.xaml.cs">
+      <DependentUpon>ScannedShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShowSearchResult.xaml.cs">
+      <DependentUpon>ShowSearchResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Page Include="Pages\ShowDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -89,7 +106,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\ImportScanFolder.xaml">
+    <Page Include="Pages\CreatingDB\ImportScanFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchAPIPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,7 +118,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SingleShowSearchAPI.xaml">
+    <Page Include="Controls\ScannedShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ShowSearchResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -110,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -174,6 +203,22 @@
   <ItemGroup>
     <Resource Include="Icons\ico-import-dark.png" />
     <Resource Include="Icons\ico-newfile-dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-remove-dark.png" />
+    <Resource Include="Icons\ico-remove-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-question-dark.png" />
+    <Resource Include="Icons\ico-question-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-checksquare-dark.png" />
+    <Resource Include="Icons\ico-checksquare-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-checked-dark.png" />
+    <Resource Include="Icons\ico-checked-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

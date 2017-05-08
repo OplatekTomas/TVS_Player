@@ -45,6 +45,10 @@ namespace TVSPlayer {
             Application.Current.Resources["PlayIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-play-dark.png", UriKind.Absolute));
             Application.Current.Resources["ImportIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-import-dark.png" , UriKind.Absolute));
             Application.Current.Resources["NewFileIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-newfile-dark.png" , UriKind.Absolute));
+            Application.Current.Resources["RemoveIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-remove-dark.png", UriKind.Absolute));
+            Application.Current.Resources["QuestionIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-question-dark.png", UriKind.Absolute));
+            Application.Current.Resources["CheckSquareIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checksquare-dark.png", UriKind.Absolute));
+            Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-dark.png", UriKind.Absolute));
 
 
         }
@@ -56,6 +60,10 @@ namespace TVSPlayer {
             Application.Current.Resources["PlayIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-play-light.png", UriKind.Absolute));
             Application.Current.Resources["ImportIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-import-light.png" , UriKind.Absolute));
             Application.Current.Resources["NewFileIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-newfile-light.png" , UriKind.Absolute));
+            Application.Current.Resources["RemoveIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-remove-light.png", UriKind.Absolute));
+            Application.Current.Resources["QuestionIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-question-light.png", UriKind.Absolute));
+            Application.Current.Resources["CheckSquareIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checksquare-light.png", UriKind.Absolute));
+            Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-light.png", UriKind.Absolute));
 
 
         }

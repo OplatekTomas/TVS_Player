@@ -13,12 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TVSPlayer {
+namespace TVSPlayer
+{
     /// <summary>
-    /// Interaction logic for SearchAPI.xaml
+    /// Interaction logic for ScannedShow.xaml
     /// </summary>
-    public partial class SearchAPI : Page {
-        public SearchAPI() {
+    public partial class ScannedShow : UserControl
+    {
+        public ScannedShow()
+        {
             InitializeComponent();
         }
     }
