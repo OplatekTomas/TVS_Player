@@ -5,11 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="748" Margin="5">
-    <Grid>
-        <Grid Background="{DynamicResource BackgroundBrush}">
-            <TextBlock x:Name="ShowName" Foreground="{DynamicResource TextColor}" Text="Kappa123" VerticalAlignment="Top" FontSize="22" Margin="10,0,100,0" />
-            <TextBlock x:Name="FolderName" Foreground="{DynamicResource TextColor}" Text="Kappa123" VerticalAlignment="Bottom" FontSize="12" Margin="11,0,100,3" />
+             d:DesignHeight="60" d:DesignWidth="748">
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"></Setter>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource LighterBG}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <Grid Margin="0,5">
+        <Grid>
+            <TextBlock x:Name="ShowName" Foreground="{DynamicResource TextColor}" Text="Kappa123" VerticalAlignment="Top" FontSize="22" Margin="5,0,100,0" />
+            <TextBlock x:Name="FolderName" Foreground="{DynamicResource TextColor}" Text="Kappa123" VerticalAlignment="Bottom" FontSize="12" Margin="6,0,100,3" />
             <Image x:Name="RemoveIcon" Source="{DynamicResource RemoveIcon}" Width="20" Height="20" HorizontalAlignment="Right" Margin="10" />
             <Image x:Name="EditIcon" Source="{DynamicResource NewFileIcon}" Width="21" Height="21" HorizontalAlignment="Right" Margin="40,0" />
             <Image x:Name="DetailsIcon" Source="{DynamicResource QuestionIcon}" Width="20" Height="20" HorizontalAlignment="Right" Margin="70,0" />

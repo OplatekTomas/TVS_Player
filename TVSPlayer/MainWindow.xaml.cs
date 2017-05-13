@@ -62,11 +62,12 @@ namespace TVSPlayer {
 
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
-            TVShow s = new TVShow();
-            s.tvmazeId = 82;
-            s.GetInfoTVMaze();
-            //Page p = new ImportScanFolder();
-            //AddPage(p);
+            //TVShow s = new TVShow();
+            //s.tvmazeId = 82;
+            //s.seriesName = "Game of Thrones";
+            //s.GetInfoTVMaze();
+            Page p = new ImportScanFolder();
+            AddPage(p);
             //await SearchShowAsync();
         }
 

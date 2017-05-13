@@ -37,9 +37,9 @@
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="1">
-                    <ScrollViewer   Background="{DynamicResource LighterBG}" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto"  Margin="5,5,5,3" Focusable="False">
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Visible"  Margin="5,5,5,3" Focusable="False">
                         <ScrollViewer.Resources>
-                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource LighterScrollBar}" ></Style>
+                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                         </ScrollViewer.Resources>
                         <StackPanel  x:Name="ShowList" Margin="0,5" Focusable="False">
 
@@ -52,7 +52,7 @@
                             <TextBlock  Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="12" TextAlignment="Center" VerticalAlignment="Center">Next</TextBlock>
                         </Border>
                     </Grid>
-                    <Grid Width="70" HorizontalAlignment="Right" Margin="85,5">
+                    <Grid x:Name="AddShow" Width="70" HorizontalAlignment="Right" Margin="85,5" MouseUp="AddShow_MouseUp">
                         <Border Background="{DynamicResource LighterBG}">
                             <TextBlock  Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="12" TextAlignment="Center" VerticalAlignment="Center">Add</TextBlock>
                         </Border>

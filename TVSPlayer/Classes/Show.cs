@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -56,6 +57,7 @@ namespace TVSPlayer {
             TVShow s = new TVShow();
             name = name.Replace(" ", "+");
             WebRequest wr = WebRequest.Create("http://api.tvmaze.com/singlesearch/shows?q=" + name);
+            wr.Timeout = 2000;
             HttpWebResponse response = null;
             try {
                 response = (HttpWebResponse)wr.GetResponse();
@@ -78,10 +80,12 @@ namespace TVSPlayer {
             List<TVShow> list = new List<TVShow>();
             name = name.Replace(" ", "+");
             WebRequest wr = WebRequest.Create("http://api.tvmaze.com/search/shows?q=" + name);
+            wr.Timeout = 2000;
             HttpWebResponse response = null;
             try {
                 response = (HttpWebResponse)wr.GetResponse();
-            } catch (Exception e) {
+            } catch (WebException e) {
+                MessageBox.Show(e.Message + "\nIf request has timed out it PROBABLY means that you exceeded limit TVMaze servers can take. Please wait around 10 seconds and try again.\n We are sorry for the inconvenience");
                 return list;
             }
             Stream dataStream = response.GetResponseStream();
@@ -171,6 +175,7 @@ namespace TVSPlayer {
 
         public bool GetInfoTVMaze() {           
             WebRequest wr = WebRequest.Create("http://api.tvmaze.com/shows/" + tvmazeId);
+            wr.Timeout = 2000;
             HttpWebResponse response = null;
             try {
                 response = (HttpWebResponse)wr.GetResponse();
@@ -188,7 +193,7 @@ namespace TVSPlayer {
             if (value["rating"]["average"].ToString() != "") {
                 rating = value["rating"]["average"].ToString();
             } else {
-                rating = "0";
+                rating = "-";
             }
             imdbId = value["externals"]["imdb"].ToString();
             if (value["image"].ToString() != "") {
@@ -212,7 +217,7 @@ namespace TVSPlayer {
             if (value["schedule"]["time"].ToString() != "") {
                 airsTime = value["schedule"]["time"].ToString();
             }
-            if (value["schedule"]["days"][0].ToString() != "") {
+            if (value["schedule"]["days"].Count() > 0) {
                 airsDayOfWeek = value["schedule"]["days"][0].ToString();
             }
             if (value["status"].ToString() != "") {
