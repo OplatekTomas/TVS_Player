@@ -33,8 +33,14 @@ namespace TVSPlayer {
         public List<string> posters = new List<string>();
         public string poster { get; set; }
         public int tvmazeId { get; set; }
+        private string pathToPoster { get; set; }
 
-        //Searches for a TV Show and returns list of possible TV Shows
+        /// <summary>
+        /// Searches for a TV Show and returns list of possible TV Shows
+        /// </summary>
+        /// <param name="name">String to search for</param>
+        /// <param name="local">Default is set to false. If set to true wont search API but local DB</param>
+        /// <returns>List of TVShows</returns>
         public static List<TVShow> Search(string name, bool local = false) {
             if (!local) {
                 return searchApi(name);
@@ -43,7 +49,12 @@ namespace TVSPlayer {
 
         }
 
-        //Searches for a TV Show and returns most probable result
+        /// <summary>
+        /// Searches for a TV Show and returns most probable result
+        /// </summary>
+        /// <param name="name">String to search for</param>
+        /// <param name="local">Default is set to false. If set to true wont search API but local DB</param>
+        /// <returns>Closest TVShow</returns>
         public static TVShow SearchSingle(string name, bool local = false) {
             if (!local) {
                 return searchApiSingle(name);
@@ -52,7 +63,11 @@ namespace TVSPlayer {
 
         }
 
-        //Request TV Show from TVMaze API - API returns show with highest probability of a match
+        /// <summary>
+        /// Request TV Show from TVMaze API - API returns show with highest probability of a match
+        /// </summary>
+        /// <param name="name">>Almost anything. Searches api for this</param>
+        /// <returns>Closest result</returns>
         private static TVShow searchApiSingle(string name) {
             TVShow s = new TVShow();
             name = name.Replace(" ", "+");
@@ -75,7 +90,12 @@ namespace TVSPlayer {
             }
             return s;
         }
-        //Searches TVMaze API for TV Shows and returns list of TV Shows with 
+
+        /// <summary>
+        /// Searches TVMaze API for TV Shows and returns list of TV Shows with 
+        /// </summary>
+        /// <param name="name">Almost anything. Searches api for this</param>
+        /// <returns>List of results</returns>
         private static List<TVShow> searchApi(string name) {
             List<TVShow> list = new List<TVShow>();
             name = name.Replace(" ", "+");
@@ -104,7 +124,9 @@ namespace TVSPlayer {
             return list;
         }
 
-        //Function that removes style from overview text
+        /// <summary>
+        /// Function that removes style from overview text from TVMaze
+        /// </summary>
         private static string RemoveStyle(string line) {
             string[] separator = { "</?p>", "</?em>", "</?strong>", "</?b>", "</?i>", "</?span>" };
             string text = line;
@@ -121,7 +143,9 @@ namespace TVSPlayer {
             return text;
         }
 
-        //Gets liases from TVDb API for a TV show
+        /// <summary>
+        /// Returns aliases from TVDb API and adds some custom ones.
+        /// </summary>
         public List<string> GetAliases(IList<string> DBAliases) {
             List<string> aliases = new List<string>();
             Regex reg = new Regex(@"\([0-9]{4}\)");
@@ -155,7 +179,9 @@ namespace TVSPlayer {
             return aliases;
         }
 
-        //Fills this instance of TVShow with data from TheTVDb
+        /// <summary>
+        /// Gets info from TVDb
+        /// </summary>
         public bool GetInfo() {
             HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + id);
             try {
@@ -163,8 +189,9 @@ namespace TVSPlayer {
                 using (var sr = new StreamReader(response.GetResponseStream())) {
                     JObject jo = JObject.Parse(sr.ReadToEnd());
                     TVShow s = jo["data"].ToObject<TVShow>();
-                    s.aliases = GetAliases(s.aliases);
+                    
                     Copy(s);
+                    aliases = GetAliases(s.aliases);
                     return true;
                 }
             } catch (WebException e) {
@@ -173,6 +200,9 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// Gets info from TVMaze instead of TVDb. Not all arguments are filled
+        /// </summary>
         public bool GetInfoTVMaze() {           
             WebRequest wr = WebRequest.Create("http://api.tvmaze.com/shows/" + tvmazeId);
             wr.Timeout = 2000;
@@ -189,6 +219,9 @@ namespace TVSPlayer {
             return true;
         }
 
+        /// <summary>
+        /// Parses information from TVMaze to TVDb TVShow. Not all parameters are filled
+        /// </summary>
         private void ParseTVMaze(JObject value) {         
             if (value["rating"]["average"].ToString() != "") {
                 rating = value["rating"]["average"].ToString();
@@ -227,7 +260,9 @@ namespace TVSPlayer {
         }
 
 
-        //Operator == - compares id
+        /// <summary>
+        /// Compares ids
+        /// </summary>
         public static bool operator ==(TVShow first, TVShow second) {
             if (object.ReferenceEquals(first, null)) {
                 return object.ReferenceEquals(second, null);
@@ -235,10 +270,12 @@ namespace TVSPlayer {
             if (object.ReferenceEquals(second , null)) {
                 return object.ReferenceEquals(first, null);
             }
-            return first.Equals(second);
+            return first.CompareID(second);
         }
 
-        //Operator != - compares id
+        /// <summary>
+        /// Compares ids
+        /// </summary>
         public static bool operator !=(TVShow first, TVShow second) {
             if (object.ReferenceEquals(first, null)) {
                 return !object.ReferenceEquals(second, null);
@@ -246,22 +283,25 @@ namespace TVSPlayer {
             if (object.ReferenceEquals(second, null)) {
                 return !object.ReferenceEquals(first, null);
             }
-            return !first.Equals(second);
+            return !first.CompareID(second);
         }
 
-        //Override of function Equals - compares id
-        public override bool Equals(object obj) {
-            var show = obj as TVShow;
+        /// <summary>
+        /// compares id returns true/false if they are same/different
+        /// </summary>
+        public bool CompareID(TVShow show) {
             if (id == show.id) {
                 return true;
             } else {
                 return false;
             }
-
         }
 
-        //Function that copies all properties from another tv show to this one
-        private void Copy( TVShow s ) {
+        
+        /// <summary>
+        ///  Function that copies all properties from another tv show to this one
+        /// </summary>
+        private void Copy(TVShow s) {
             this.added = s.added;
             this.airsDayOfWeek = s.airsDayOfWeek;
             this.airsTime = s.airsTime;

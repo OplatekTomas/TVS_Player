@@ -20,9 +20,11 @@ namespace TVSPlayer
     /// </summary>
     public partial class ScannedShow : UserControl
     {
-        public ScannedShow()
+        public TVShow show;
+        public ScannedShow(TVShow show)
         {
             InitializeComponent();
+            this.show = show;
         }
     }
 }

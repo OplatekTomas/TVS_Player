@@ -62,8 +62,7 @@ namespace TVSPlayer {
 
         //Opens Page with details about specific TV Show
         private void Details(TVShow s) {
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddPage(new Details(s));
+            MainWindow.AddPage(new Details(s));
         }
 
         //Confirms and "returns" selected tv show

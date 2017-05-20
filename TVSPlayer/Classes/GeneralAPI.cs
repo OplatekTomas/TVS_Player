@@ -10,7 +10,10 @@ using System.Windows;
 namespace TVSPlayer {
     class GeneralAPI {
 
-        //Function that returns valid token for TVDB API
+        /// <summary>
+        /// Function that returns valid token for TVDb API
+        /// </summary>
+        /// <returns></returns>
         private static string getToken() {
             string token;
             if (Properties.Settings.Default.TokenTime.AddDays(1) < DateTime.Now) {
@@ -46,7 +49,11 @@ namespace TVSPlayer {
             return token;
         }
 
-        //Function that returns HTTP Web request for TVDB Api
+        /// <summary>
+        /// Returns HttpWebRequest for TVDb API
+        /// </summary>
+        /// <param name="link">Link to TVDb API</param>
+        /// <returns></returns>
         public static HttpWebRequest getRequest(string link) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(link);
             request.Method = "GET";

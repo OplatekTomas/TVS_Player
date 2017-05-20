@@ -78,8 +78,7 @@ namespace TVSPlayer
         }
 
         private void BackgroundGrid_MouseUp(object sender, MouseButtonEventArgs e) {
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).RemovePage();
+            MainWindow.RemovePage();
         }
     }
 }

@@ -44,8 +44,7 @@ namespace TVSPlayer {
 
         //Closes this page
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).RemovePage();
+            MainWindow.RemovePage();
         }
 
         //Removes default text from bar with location
@@ -76,7 +75,7 @@ namespace TVSPlayer {
                     TVShow show = TVShow.SearchSingle(Path.GetFileName(folder));
                     if (show.seriesName != null) {
                     Dispatcher.Invoke(new Action(() => {
-                        ScannedShow sh = new ScannedShow();
+                        ScannedShow sh = new ScannedShow(show);
                         sh.Height = 60;
                         sh.ShowName.Text = show.seriesName;
                         sh.FolderName.Text = folder;
@@ -109,8 +108,7 @@ namespace TVSPlayer {
 
         //shows you details about specific show (At least show name and show id from TVMaze are requiered)
         private void ShowDetails(TVShow show) {
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).AddPage(new Details(show));
+            MainWindow.AddPage(new Details(show));
         }
 
         //Enables you to select folder instead of manualy writing it in the bar with location
@@ -126,8 +124,7 @@ namespace TVSPlayer {
 
         //Closes this page
         private void CloseButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            Window main = Window.GetWindow(this);
-            ((MainWindow)main).RemovePage();
+            MainWindow.RemovePage();
         }
 
         //Adds show to the list
@@ -139,7 +136,7 @@ namespace TVSPlayer {
                     Window main = Window.GetWindow(this);
                     TVShow show = await ((MainWindow)main).SearchShowAsync();
                     if (show != null) {
-                        ScannedShow sh = new ScannedShow();
+                        ScannedShow sh = new ScannedShow(show);
                         sh.Height = 60;
                         sh.ShowName.Text = show.seriesName;
                         sh.FolderName.Text = fbd.SelectedPath;
@@ -161,6 +158,15 @@ namespace TVSPlayer {
                 }
             }
             return false;
+        }
+
+        private void Next_MouseUp(object sender, MouseButtonEventArgs e) {
+            List<TVShow> list = new List<TVShow>();
+            foreach (UIElement ue in ShowList.Children) {
+                ScannedShow sh = ue as ScannedShow;
+                list.Add(sh.show);
+            }
+            Database.SaveTVShows(list);
         }
     }
 }

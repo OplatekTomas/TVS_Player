@@ -42,7 +42,6 @@
             </GradientStopCollection>
         </GradientBrush.GradientStops>
     </LinearGradientBrush>
-
     <!-- Everything around LIGHTER scrollbar style -->
 
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">

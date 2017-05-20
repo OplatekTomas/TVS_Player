@@ -47,7 +47,7 @@
                     </ScrollViewer>
                 </Grid>
                 <Grid Grid.Row="2">
-                    <Grid Width="70" HorizontalAlignment="Right" Margin="5,5">
+                    <Grid x:Name="Next" MouseUp="Next_MouseUp" Width="70" HorizontalAlignment="Right" Margin="5,5">
                         <Border Background="{DynamicResource LighterBG}">
                             <TextBlock  Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="12" TextAlignment="Center" VerticalAlignment="Center">Next</TextBlock>
                         </Border>

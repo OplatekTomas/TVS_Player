@@ -20,6 +20,8 @@ namespace TVSPlayer {
 
         }
 
+        #region Animations
+
         //Starts Storyboard animation of a grid
         private void StartAnimation(string storyboard, FrameworkElement grid) {
             Storyboard sb = this.FindResource(storyboard) as Storyboard;
@@ -60,27 +62,45 @@ namespace TVSPlayer {
             ThemeSwitcher.SwitchTheme();
         }
 
-        //Code for "Test" button
-        private async void Button_Click(object sender, RoutedEventArgs e) {
-            //TVShow s = new TVShow();
-            //s.tvmazeId = 82;
-            //s.seriesName = "Game of Thrones";
-            //s.GetInfoTVMaze();
-            Page p = new ImportScanFolder();
-            AddPage(p);
-            //await SearchShowAsync();
-        }
+        #endregion
 
-        //Simple functoin that render new frame and page on top of existing content
-        public void AddPage(Page page) {
+        #region Page handling
+        /// <summary>
+        /// Function that renders new frame and page on top of existing content
+        /// </summary>
+        /// <param name="page">Page you want to show</param>
+        public static void AddPage(Page page) {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageCreator(page);
+            
+        }
+        //Adds new page
+        private void PageCreator(Page page) {
             Frame fr = new Frame();
-            Grid.SetRowSpan(fr , 2);
-            BaseGrid.Children.Add(fr);           
-            Panel.SetZIndex(fr , 1000);
+            Grid.SetRowSpan(fr, 2);
+            BaseGrid.Children.Add(fr);
+            Panel.SetZIndex(fr, 100);
             fr.Content = page;
         }
+        /// <summary>
+        /// Removes last page added
+        /// </summary>
+        public static void RemovePage() {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageRemover();
+        }
+        //Removes last page
+        private void PageRemover() {
+            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as Frame;
+            Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
+            Storyboard sbLoad = sb.Clone();
+            sbLoad.Completed += (s, e) => FinishedRemove();
+            sbLoad.Begin(p);
+        }
 
-        //Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
+        /// <summary>
+        /// Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
+        /// </summary>
         public async Task<TVShow> SearchShowAsync() {
             Page page = new SearchAPIPage();
             Frame fr = new Frame();
@@ -98,20 +118,32 @@ namespace TVSPlayer {
             }
             return s;
         }
-
-        //Removes last page added
-        public void RemovePage() {
-            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as Frame;
-            Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
-            Storyboard sbLoad = sb.Clone();
-            sbLoad.Completed += (s, e) => FinishedRemove();
-            sbLoad.Begin(p);
-        }
         // Event that is called after animation of removing page is done - actualy removes the page
         private void FinishedRemove() {
             BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
         }
+        #endregion
 
+        int test = 0;
+        //Code for "Test" button
+        private async void Button_Click(object sender, RoutedEventArgs e) {
+
+            //Page p = new ImportScanFolder();
+            //AddPage(p);
+
+           TVShow s = new TVShow();
+            s.id = 121361;
+            //s.GetInfo();
+            List<Episode> list = Episode.getAllEPDetailed(s);
+            Database.SaveEpisodes(s, list);
+            //Episode.getAllEP(s);
+            List<Episode> l = Database.GetEpisodes(s);
+            
+            
+            //List<Episode> li = Database.GetEpisodes(s);
+            //await SearchShowAsync();
+          
+        }
     }
 
 }
