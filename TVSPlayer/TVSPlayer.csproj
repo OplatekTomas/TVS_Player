@@ -72,6 +72,9 @@
     <Compile Include="Classes\GeneralAPI.cs" />
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\Show.cs" />
+    <Compile Include="Pages\CreatingDB\DBCreationProgress.xaml.cs">
+      <DependentUpon>DBCreationProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ShowDetails.xaml.cs">
       <DependentUpon>ShowDetails.xaml</DependentUpon>
     </Compile>
@@ -91,6 +94,10 @@
       <DependentUpon>ShowSearchResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Page Include="Pages\CreatingDB\DBCreationProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ShowDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

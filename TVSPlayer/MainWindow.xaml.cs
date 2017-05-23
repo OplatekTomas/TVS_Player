@@ -128,17 +128,17 @@ namespace TVSPlayer {
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
-            //Page p = new ImportScanFolder();
-            //AddPage(p);
+            Page p = new ImportScanFolder();
+            AddPage(p);
 
            TVShow s = new TVShow();
+            s.tvmazeId = 82;
             s.id = 121361;
             //s.GetInfo();
-            List<Episode> list = Episode.getAllEPDetailed(s);
-            Database.SaveEpisodes(s, list);
+            //List<Episode> list = Episode.getAllEP(s);
+            //Database.SaveEpisodes(s, list);
             //Episode.getAllEP(s);
-            List<Episode> l = Database.GetEpisodes(s);
-            
+            //List<Episode> l = Database.GetEpisodes(s);
             
             //List<Episode> li = Database.GetEpisodes(s);
             //await SearchShowAsync();

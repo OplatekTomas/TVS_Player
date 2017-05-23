@@ -17,6 +17,8 @@ using Ookii.Dialogs.Wpf;
 using System.IO;
 using System.Threading;
 using Path = System.IO.Path;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace TVSPlayer {
     /// <summary>
@@ -161,12 +163,25 @@ namespace TVSPlayer {
         }
 
         private void Next_MouseUp(object sender, MouseButtonEventArgs e) {
-            List<TVShow> list = new List<TVShow>();
+            HashSet<TVShow> list = new HashSet<TVShow>();
             foreach (UIElement ue in ShowList.Children) {
                 ScannedShow sh = ue as ScannedShow;
-                list.Add(sh.show);
+                TVShow t = sh.show;
+                t.GetInfo();
+                list.Add(t);
+            }          
+            Database.SaveTVShows(list.ToList());
+            int test = 0;
+            foreach (TVShow s in list) {
+                Action a = () => { 
+                    List<Episode> lst = Episode.getAllEP(s);
+                    Database.SaveEpisodes(s, lst);
+                };
+                Task t = new Task(a.Invoke);
+                t.Start();
+                t.ContinueWith((t2) => test++);
             }
-            Database.SaveTVShows(list);
+            while (test != list.Count) { Thread.Sleep(50); }
         }
     }
 }

@@ -67,18 +67,25 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="show">TVShow at least "id" must not be null</param>
         /// <param name="list">List of Episodes</param>
-        public static void SaveEpisodes(TVShow show,List<Episode> list) {
-            string file = Helper.PathToSettings + "Data\\"+show.id+".TVSPackage";
+        public static void SaveEpisodes(TVShow show, List<Episode> list) {
+            if (!Directory.Exists(Helper.PathToSettings + "Data\\")) {
+                Directory.CreateDirectory(Helper.PathToSettings + "Data\\");
+            }
+            string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
             List<Tuple<Stream, Episode>> ls = new List<Tuple<Stream, Episode>>();
             foreach (Episode e in list) {
-                if (!e.hasImage) {
-                    string internalPath = e.getNaming();
-                    if (e.filename != null && e.filename != "") {
-                        Stream str = GetStreamFromUrl("http://thetvdb.com/banners/"+e.filename);
-                        ls.Add(new Tuple<Stream,Episode>(str,e));                      
-                        e.hasImage = true;
+                if (e.image != null && !e.image.hasImage) {
+                    if (e.image.medium != null) {
+                        Stream str = GetStreamFromUrl(e.image.medium);
+                        ls.Add(new Tuple<Stream, Episode>(str, e));
+                        e.image.hasImage = true;
+                    } else {
+                        Stream str = GetStreamFromUrl(e.image.original);
+                        ls.Add(new Tuple<Stream, Episode>(str, e));
+                        e.image.hasImage = true;
                     }
-                }
+                }             
+
             }
             foreach (Tuple<Stream, Episode> t in ls) {
                 AddToPackage(t.Item1, t.Item2.getNaming() + "\\image.jpg", file);
@@ -87,7 +94,6 @@ namespace TVSPlayer {
             AddToPackage(StringToStream(json), "Episodes.TVSData", file);
         }
 
-        
         public static List<Episode> GetEpisodes(TVShow show) {
             List<Episode> list = new List<Episode>();
             string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
