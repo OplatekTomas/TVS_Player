@@ -63,6 +63,12 @@ namespace TVSPlayer {
 
         }
 
+
+        public static void CreateDatabase(List<TVShow> ls) {
+            Database.SaveTVShows(ls);
+        }
+
+
         /// <summary>
         /// Request TV Show from TVMaze API - API returns show with highest probability of a match
         /// </summary>

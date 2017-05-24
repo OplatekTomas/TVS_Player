@@ -58,6 +58,10 @@ namespace TVSPlayer {
         }
 
 
+        public static void CreateDatabase(List<Episode> list, TVShow show) {
+            Database.SaveEpisodes(show, list);
+        }
+
         /// <summary>
         /// Fills current instance of episode with detailed info about episode
         /// </summary>

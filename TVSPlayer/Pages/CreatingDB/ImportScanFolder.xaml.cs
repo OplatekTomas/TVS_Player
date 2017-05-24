@@ -167,21 +167,12 @@ namespace TVSPlayer {
             foreach (UIElement ue in ShowList.Children) {
                 ScannedShow sh = ue as ScannedShow;
                 TVShow t = sh.show;
-                t.GetInfo();
                 list.Add(t);
-            }          
-            Database.SaveTVShows(list.ToList());
-            int test = 0;
-            foreach (TVShow s in list) {
-                Action a = () => { 
-                    List<Episode> lst = Episode.getAllEP(s);
-                    Database.SaveEpisodes(s, lst);
-                };
-                Task t = new Task(a.Invoke);
-                t.Start();
-                t.ContinueWith((t2) => test++);
             }
-            while (test != list.Count) { Thread.Sleep(50); }
+            MainWindow.RemovePage();
+            DBCreationProgress dbp = new DBCreationProgress(list.ToList());
+            MainWindow.AddPage(dbp);
+           
         }
     }
 }
