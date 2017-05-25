@@ -91,10 +91,10 @@ namespace TVSPlayer {
         }
         //Removes last page
         private void PageRemover() {
-            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as Frame;
+            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as FrameworkElement;
             Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
             Storyboard sbLoad = sb.Clone();
-            sbLoad.Completed += (s, e) => FinishedRemove();
+            sbLoad.Completed += (s, e) => FinishedRemove(p);
             sbLoad.Begin(p);
         }
 
@@ -119,8 +119,8 @@ namespace TVSPlayer {
             return s;
         }
         // Event that is called after animation of removing page is done - actualy removes the page
-        private void FinishedRemove() {
-            BaseGrid.Children.RemoveAt(BaseGrid.Children.Count - 1);
+        private void FinishedRemove(UIElement ue) {
+            BaseGrid.Children.Remove(ue);
         }
         #endregion
 
@@ -128,12 +128,14 @@ namespace TVSPlayer {
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
-            Page p = new ImportScanFolder();
-            AddPage(p);
+            //Page p = new ImportScanFolder();
+            //AddPage(p);
 
-           TVShow s = new TVShow();
+            TVShow s = new TVShow();
             s.tvmazeId = 82;
             s.id = 121361;
+
+            Database.GetEpisodesWithImages(s);
             //s.GetInfo();
             //List<Episode> list = Episode.getAllEP(s);
             //Database.SaveEpisodes(s, list);

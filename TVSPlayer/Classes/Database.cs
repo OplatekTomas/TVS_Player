@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Packaging;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace TVSPlayer {
     class Database {
@@ -62,6 +64,7 @@ namespace TVSPlayer {
         }
         #endregion
 
+#region Episodes
         /// <summary>
         /// Saves episodes in package. If hasImage is false it tries to search for image
         /// </summary>
@@ -94,6 +97,11 @@ namespace TVSPlayer {
             AddToPackage(StringToStream(json), "Episodes.TVSData", file);
         }
 
+        /// <summary>
+        /// Reads and returns list of episodes from database
+        /// </summary>
+        /// <param name="show">TVShow from which you want to return episodes</param>
+        /// <returns></returns>
         public static List<Episode> GetEpisodes(TVShow show) {
             List<Episode> list = new List<Episode>();
             string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
@@ -110,8 +118,32 @@ namespace TVSPlayer {
                 list.Add(jt.ToObject<Episode>());
             }
             return list;
-        }       
-      
+        }
+
+
+        /// <summary>
+        /// Reads and returns list of tupples which contain Episode info and bitmap image
+        /// </summary>
+        /// <param name="s">TVShow from which you want to return eps and Images</param>
+        /// <returns>List of Tuples. Item1 is Episode Item2 is BitmapIamge</returns>
+        public static List<Tuple<Episode, BitmapImage>> GetEpisodesWithImages(TVShow show) {
+            List<Tuple<Episode, BitmapImage>> list = new List<Tuple<Episode, BitmapImage>>();
+            List<Episode> listEP = GetEpisodes(show);
+            foreach (Episode ep in listEP) {
+                if (ep.image != null && ep.image.hasImage) {
+                    string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
+                    MemoryStream str = ReadPackage(file, ep.getNaming()+"\\image.jpg");
+                    BitmapImage bmp = new BitmapImage();
+                    bmp.StreamSource = str;
+                    str.Close();
+                    list.Add(new Tuple<Episode, BitmapImage>(ep, bmp));
+                }
+            }
+            return list;
+        }
+
+
+#endregion
         /// <summary>
         /// Adds stream to package. Uncompressed.
         /// </summary>
@@ -131,6 +163,30 @@ namespace TVSPlayer {
                 }
             }
         }
+
+
+        /// <summary>
+        /// Converts memory stream that contains some bitmap to BitmapImage
+        /// </summary>
+        /// <param name="s">Stream that will be converted to BitmapImage</param>
+        /// <returns>BitmapImage created from stream</returns>
+        private static BitmapImage GetBitmapFromStream(MemoryStream s) {
+            try
+            {
+                using (MemoryStream memoryStream = s)
+                {
+                    BitmapImage imageSource = new BitmapImage();
+                    imageSource.BeginInit();
+                    imageSource.StreamSource = memoryStream;
+                    imageSource.EndInit();
+                    return imageSource;
+                }
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Reads package and returns Stream of data
