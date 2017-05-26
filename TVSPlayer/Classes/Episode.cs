@@ -26,6 +26,7 @@ namespace TVSPlayer {
             public string medium { get; set; }
             public string original { get; set; }
             public bool hasImage { get; set; }
+            public BitmapImage bmp { get; set; }
         }
         /// <summary>
         /// Returns preview image of episode. 

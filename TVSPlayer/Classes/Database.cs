@@ -9,10 +9,20 @@ using System.Threading.Tasks;
 using System.IO.Packaging;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace TVSPlayer {
     class Database {
-#region Shows
+
+        private static ObservableCollection<Action> collection = new ObservableCollection<Action>(); 
+
+    private static void HandleChange(object sender, NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        #region Shows
 
         /// <summary>
         /// Saves list of TVShows
@@ -64,7 +74,7 @@ namespace TVSPlayer {
         }
         #endregion
 
-#region Episodes
+        #region Episodes
         /// <summary>
         /// Saves episodes in package. If hasImage is false it tries to search for image
         /// </summary>
@@ -101,21 +111,29 @@ namespace TVSPlayer {
         /// Reads and returns list of episodes from database
         /// </summary>
         /// <param name="show">TVShow from which you want to return episodes</param>
+        ///<param name="withImage">If you want to include images from database</param>
+
         /// <returns></returns>
-        public static List<Episode> GetEpisodes(TVShow show) {
+        public static List<Episode> GetEpisodes(TVShow show, bool withImage = false) {
             List<Episode> list = new List<Episode>();
             string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
             MemoryStream s = ReadPackage(file, "Episodes.TVSData");
             StreamReader sr = new StreamReader(s);
             string json = sr.ReadToEnd();
-            JArray jo = new JArray();
+            JArray ja = new JArray();
             try {
-                jo = JArray.Parse(json);
+                ja = JArray.Parse(json);
             } catch {
 
             }
-            foreach (JToken jt in jo) {
+            foreach (JToken jt in ja) {
                 list.Add(jt.ToObject<Episode>());
+            }
+            if (withImage) {
+                List<Tuple<Episode, BitmapImage>> ltp = GetEpisodesWithImages(show);
+                foreach (Tuple<Episode, BitmapImage> tp in ltp) {
+                    tp.Item1.image.bmp = tp.Item2;
+                }
             }
             return list;
         }
@@ -126,7 +144,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="s">TVShow from which you want to return eps and Images</param>
         /// <returns>List of Tuples. Item1 is Episode Item2 is BitmapIamge</returns>
-        public static List<Tuple<Episode, BitmapImage>> GetEpisodesWithImages(TVShow show) {
+        private static List<Tuple<Episode, BitmapImage>> GetEpisodesWithImages(TVShow show) {
             List<Tuple<Episode, BitmapImage>> list = new List<Tuple<Episode, BitmapImage>>();
             List<Episode> listEP = GetEpisodes(show);
             foreach (Episode ep in listEP) {

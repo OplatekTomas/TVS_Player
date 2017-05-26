@@ -135,7 +135,11 @@ namespace TVSPlayer {
             s.tvmazeId = 82;
             s.id = 121361;
 
-            Database.GetEpisodesWithImages(s);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Database.GetEpisodes(s, true);
+            sw.Stop();
+            MessageBox.Show(sw.ElapsedMilliseconds.ToString());
             //s.GetInfo();
             //List<Episode> list = Episode.getAllEP(s);
             //Database.SaveEpisodes(s, list);
