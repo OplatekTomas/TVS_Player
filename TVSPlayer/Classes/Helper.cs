@@ -6,8 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace TVSPlayer {
-    class Helper {
-
+    static class Helper {
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+            (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector) {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source) {
+                if (seenKeys.Add(keySelector(element))) {
+                    yield return element;
+                }
+            }
+        }
         // DO NOT USE THIS VARIABLE OUTSIDE FUNCTION SearchShowAsync() (MainWindow) OR FROM FUNCTION ReturnTVShowWhenNotNull() THAT IS RIGHT F*CKING HERE!
         public static TVShow show = null;
 
@@ -31,5 +39,7 @@ namespace TVSPlayer {
             show = null;
             return s;
         }
+
     }
+
 }

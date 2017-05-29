@@ -114,7 +114,7 @@ namespace TVSPlayer {
             try {
                 response = (HttpWebResponse)wr.GetResponse();
             } catch (Exception x) {
-                return null;
+                return list;
             }
             Stream dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);

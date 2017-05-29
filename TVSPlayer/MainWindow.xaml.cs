@@ -13,12 +13,18 @@ namespace TVSPlayer {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
+
+
     public partial class MainWindow : Window {
 
         public MainWindow() {
             InitializeComponent();
 
         }
+
+
 
         #region Animations
 
@@ -124,7 +130,6 @@ namespace TVSPlayer {
         }
         #endregion
 
-        int test = 0;
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
@@ -134,12 +139,16 @@ namespace TVSPlayer {
             TVShow s = new TVShow();
             s.tvmazeId = 82;
             s.id = 121361;
+            //List<Actor> la = Actor.getActors(s);
+            //Database.SaveActors(la, s);
+            s.GetInfo();
+            TVShow.CreateDatabase(new List<TVShow>() { s });
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            Database.GetEpisodes(s, true);
-            sw.Stop();
-            MessageBox.Show(sw.ElapsedMilliseconds.ToString());
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            //Database.GetEpisodes(s, true);
+            //sw.Stop();
+            //MessageBox.Show(sw.ElapsedMilliseconds.ToString());
             //s.GetInfo();
             //List<Episode> list = Episode.getAllEP(s);
             //Database.SaveEpisodes(s, list);

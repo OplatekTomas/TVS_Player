@@ -11,16 +11,13 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Threading;
+using System.Windows;
+using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace TVSPlayer {
     class Database {
-
-        private static ObservableCollection<Action> collection = new ObservableCollection<Action>(); 
-
-    private static void HandleChange(object sender, NotifyCollectionChangedEventArgs e)
-        {
-
-        }
 
         #region Shows
 
@@ -33,6 +30,25 @@ namespace TVSPlayer {
             string json = JsonConvert.SerializeObject(list);
             if (!Directory.Exists(Helper.PathToSettings + "Data\\")) {
                 Directory.CreateDirectory(Helper.PathToSettings + "Data\\");
+            }
+            foreach (TVShow show in list) { 
+                string dataFile = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
+                if (!File.Exists(dataFile)) { 
+                    List<Tuple<Stream, Actor>> ls = new List<Tuple<Stream, Actor>>();
+                    foreach (Actor e in show.actors) {
+                        if (e.image != null && !e.hasImage) {
+                            Stream str = GetStreamFromUrl("http://thetvdb.com/banners/" + e.image);
+                            ls.Add(new Tuple<Stream, Actor>(str, e));
+                            e.hasImage = true;
+                        }
+                    }
+                    foreach (Tuple<Stream, Actor> t in ls) {
+                        AddToPackage(t.Item1, "Actors\\" + t.Item2.name + ".jpg", dataFile);
+                    }
+                    if(show.poster.Count() > 0){ 
+                        AddToPackage(GetStreamFromUrl(show.posters[0]), "Posters\\Default.jpg", dataFile);
+                    }
+                }
             }
             File.WriteAllText(file, json);
         }
@@ -161,25 +177,51 @@ namespace TVSPlayer {
         }
 
 
-#endregion
+        #endregion
+
+        #region Actors
+
+
+        #endregion
+
+        
+
+
         /// <summary>
         /// Adds stream to package. Uncompressed.
         /// </summary>
         /// <param name="fileStream">Stream that will be added</param>
         /// <param name="PathInPackage">Path in package e.g.(Images\\image.jpg)</param>
         /// <param name="PathToPackage">Where to save package</param>
-        private static void AddToPackage(Stream fileStream, string PathInPackage, string PathToPackage) {
-            using (Package zip = Package.Open(PathToPackage, FileMode.OpenOrCreate)) {
-                string destFilename = ".\\" + PathInPackage;
-                Uri uri = PackUriHelper.CreatePartUri(new Uri(destFilename, UriKind.Relative));
-                if (zip.PartExists(uri)) {
-                    zip.DeletePart(uri);
-                }
-                PackagePart part = zip.CreatePart(uri, "", CompressionOption.NotCompressed);
-                using (Stream dest = part.GetStream()) {
-                    fileStream.CopyTo(dest);
+        private static bool AddToPackage(Stream fileStream, string PathInPackage, string PathToPackage) {
+            bool success = false;
+            int counter = 0;
+            while (!success) { 
+                try{
+                    using (Package zip = Package.Open(PathToPackage, FileMode.OpenOrCreate)){
+                        string destFilename = ".\\" + PathInPackage;
+                        Uri uri = PackUriHelper.CreatePartUri(new Uri(destFilename, UriKind.Relative));
+                        if (zip.PartExists(uri)){
+                            zip.DeletePart(uri);
+                        }
+                        PackagePart part = zip.CreatePart(uri, "", CompressionOption.NotCompressed);
+                        using (Stream dest = part.GetStream()){
+                            fileStream.CopyTo(dest);
+                        }
+                        success = true;
+                    }
+                } catch(IOException e) {
+                    counter++;
+                    Thread.Sleep(25);
+                    if (counter >= 400) {
+                        DialogResult dr = MessageBox.Show(e.Message + "\n\nTry again?", "Read/Write Error", MessageBoxButtons.YesNo);
+                        if (dr != DialogResult.Yes) {
+                            success = true;
+                        }
+                    }
                 }
             }
+            return success;
         }
 
 
@@ -189,18 +231,15 @@ namespace TVSPlayer {
         /// <param name="s">Stream that will be converted to BitmapImage</param>
         /// <returns>BitmapImage created from stream</returns>
         private static BitmapImage GetBitmapFromStream(MemoryStream s) {
-            try
-            {
-                using (MemoryStream memoryStream = s)
-                {
+            try{
+                using (MemoryStream memoryStream = s){
                     BitmapImage imageSource = new BitmapImage();
                     imageSource.BeginInit();
                     imageSource.StreamSource = memoryStream;
                     imageSource.EndInit();
                     return imageSource;
                 }
-            }
-            catch (Exception e) {
+            }catch (Exception e) {
                 return null;
             }
         }
@@ -213,16 +252,32 @@ namespace TVSPlayer {
         /// <param name="PathInPackage">Path INSIDE package</param>
         /// <returns></returns>
         private static MemoryStream ReadPackage(string PackageName, string PathInPackage) {
-            using (Package zip = Package.Open(PackageName, FileMode.OpenOrCreate)) { 
-                string destFilename = ".\\" + PathInPackage;
-                Uri uri = PackUriHelper.CreatePartUri(new Uri(destFilename, UriKind.Relative));
-                PackagePart part = zip.GetPart(uri);
-                Stream s = part.GetStream();
-                MemoryStream ms = new MemoryStream();
-                s.CopyTo(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                return ms;
-            }                 
+            bool success = false;
+            int counter = 0;
+            MemoryStream ms = new MemoryStream();
+            while(!success) { 
+                try {
+                    using (Package zip = Package.Open(PackageName, FileMode.OpenOrCreate)) {
+                        string destFilename = ".\\" + PathInPackage;
+                        Uri uri = PackUriHelper.CreatePartUri(new Uri(destFilename, UriKind.Relative));
+                        PackagePart part = zip.GetPart(uri);
+                        Stream s = part.GetStream();
+                        s.CopyTo(ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+                        success = true;
+                    }
+                } catch (IOException e) {
+                    counter++;
+                    Thread.Sleep(25);
+                    if (counter >= 400) {
+                        DialogResult dr = MessageBox.Show(e.Message +"\n\nTry again?","Read/Write Error",MessageBoxButtons.YesNo);
+                        if (dr != DialogResult.Yes) {
+                            success = true;
+                        }
+                    }
+                }
+            }
+            return ms;
         }
         
         /// <summary>

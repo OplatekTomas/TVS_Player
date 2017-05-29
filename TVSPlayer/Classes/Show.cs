@@ -33,7 +33,7 @@ namespace TVSPlayer {
         public List<string> posters = new List<string>();
         public string poster { get; set; }
         public int tvmazeId { get; set; }
-        private string pathToPoster { get; set; }
+        public List<Actor> actors = new List<Actor>();
 
         /// <summary>
         /// Searches for a TV Show and returns list of possible TV Shows
@@ -198,6 +198,8 @@ namespace TVSPlayer {
                     
                     Copy(s);
                     aliases = GetAliases(s.aliases);
+                    getPosters();
+                    actors = Actor.GetActors(this);
                     return true;
                 }
             } catch (WebException e) {
@@ -330,6 +332,37 @@ namespace TVSPlayer {
             this.poster = s.poster;
             this.tvmazeId = this.tvmazeId;
         }
+        private struct Poster {
+            public double rating;
+            public string url;
+            public int id;
+
+        }
+        public void getPosters() {
+            List<string> urls = new List<string>();
+            List<Poster> lp = new List<Poster>();
+            HttpWebRequest request = GeneralAPI.getRequest("https://api.thetvdb.com/series/" + id + "/images/query?keyType=poster");
+            try {
+                var response = request.GetResponse();
+                using (var sr = new StreamReader(response.GetResponseStream())) {
+                    JObject jo = JObject.Parse(sr.ReadToEnd());
+                    foreach (JToken jt in jo["data"]) {
+                        //string s = jt[...];
+                        Poster p = new Poster();
+                        p.id = Int32.Parse(jt["id"].ToString());
+                        p.url = jt["fileName"].ToString();
+                        p.rating = Double.Parse(jt["ratingsInfo"]["average"].ToString());
+                        lp.Add(p);
+                    }
+                }
+            } catch (WebException e) { }
+            lp = lp.DistinctBy(p => p.id).ToList();
+            lp = lp.OrderByDescending(p => p.rating).ToList();
+            foreach (Poster p in lp) {
+                posters.Add(p.url);
+            }
+        }
+
 
     }
 }
