@@ -22,27 +22,38 @@ namespace TVSPlayer {
         public int runtime { get; set; }
         public Image image { get; set; }
         public string summary { get; set; }
+        public List<ScannedFile> files = new List<ScannedFile>();
+
         public class Image {
             public string medium { get; set; }
             public string original { get; set; }
             public bool hasImage { get; set; }
             public BitmapImage bmp { get; set; }
         }
-        /// <summary>
-        /// Returns preview image of episode. 
-        /// If it doesn't exist returns null
-        /// </summary>
-        public BitmapImage getImage() {
-            if (image.hasImage) { 
-            return new BitmapImage();
+        public class ScannedFile {
+            public enum FileType {
+                Video,
+                Subtitle
             }
-            return null;
+            public string origPath;
+            public string path;
+            public FileType type;
         }
+
+        /// <summary>
+        /// Returns string in format showName - SseasonEepisode - episodeName 
+        /// </summary>
+        /// <param name="show"></param>
+        /// <returns>Returns showName - SxxExx - episodeName</returns>
+        public string GetName(TVShow show) {
+            return show.seriesName + " - " + GetName() + " - " + name; 
+        }
+
         /// <summary>
         /// Returns string in format S+season+E+eiredEpisodeNumber
         /// </summary>
-        /// <returns></returns>
-        public string getNaming() {
+        /// <returns>Returns SxxExx</returns>
+        public string GetName() {
             if (season >= 10) {
                 if (number >= 10) {
                     return "S" + season + "E" + number;

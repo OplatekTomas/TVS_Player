@@ -73,6 +73,7 @@
     <Compile Include="Classes\Episode.cs" />
     <Compile Include="Classes\GeneralAPI.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Show.cs" />
     <Compile Include="Pages\CreatingDB\DBCreationProgress.xaml.cs">
       <DependentUpon>DBCreationProgress.xaml</DependentUpon>

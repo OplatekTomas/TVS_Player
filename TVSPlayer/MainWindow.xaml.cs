@@ -139,10 +139,13 @@ namespace TVSPlayer {
             TVShow s = new TVShow();
             s.tvmazeId = 82;
             s.id = 121361;
+            s.GetInfo();
+            Renamer.RenameBatch(new List<string>() { "E:\\01SRC" }, "E:\\01TGT",s,Episode.getAllEP(s));
+
             //List<Actor> la = Actor.getActors(s);
             //Database.SaveActors(la, s);
-            s.GetInfo();
-            TVShow.CreateDatabase(new List<TVShow>() { s });
+            //s.GetInfo();
+            //TVShow.CreateDatabase(new List<TVShow>() { s });
 
             //Stopwatch sw = new Stopwatch();
             //sw.Start();

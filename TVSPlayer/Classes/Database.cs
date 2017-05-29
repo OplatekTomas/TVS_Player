@@ -117,7 +117,7 @@ namespace TVSPlayer {
 
             }
             foreach (Tuple<Stream, Episode> t in ls) {
-                AddToPackage(t.Item1, t.Item2.getNaming() + "\\image.jpg", file);
+                AddToPackage(t.Item1, t.Item2.GetName() + "\\image.jpg", file);
             }
             string json = JsonConvert.SerializeObject(list);
             AddToPackage(StringToStream(json), "Episodes.TVSData", file);
@@ -166,7 +166,7 @@ namespace TVSPlayer {
             foreach (Episode ep in listEP) {
                 if (ep.image != null && ep.image.hasImage) {
                     string file = Helper.PathToSettings + "Data\\" + show.id + ".TVSPackage";
-                    MemoryStream str = ReadPackage(file, ep.getNaming()+"\\image.jpg");
+                    MemoryStream str = ReadPackage(file, ep.GetName()+"\\image.jpg");
                     BitmapImage bmp = new BitmapImage();
                     bmp.StreamSource = str;
                     str.Close();
