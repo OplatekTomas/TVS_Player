@@ -45,7 +45,7 @@ namespace TVSPlayer {
                     foreach (Tuple<Stream, Actor> t in ls) {
                         AddToPackage(t.Item1, "Actors\\" + t.Item2.name + ".jpg", dataFile);
                     }
-                    if(show.poster.Count() > 0){ 
+                    if(show.poster != null && show.poster.Count() > 0){ 
                         AddToPackage(GetStreamFromUrl(show.posters[0]), "Posters\\Default.jpg", dataFile);
                     }
                 }

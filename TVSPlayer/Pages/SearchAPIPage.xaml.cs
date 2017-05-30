@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,6 +22,11 @@ namespace TVSPlayer {
     public partial class SearchAPIPage : Page {
         public SearchAPIPage() {
             InitializeComponent();
+        }
+
+        private void StartAnimation(string storyboard, FrameworkElement grid) {
+            Storyboard sb = this.FindResource(storyboard) as Storyboard;
+            sb.Begin(grid);
         }
 
         //Removes default text from search bar and starts search after text in search bar has changed
@@ -49,6 +55,7 @@ namespace TVSPlayer {
         private void Search(string text) {
             List<TVShow> shows = TVShow.Search(text);
             foreach (TVShow show in shows) {
+                Thread.Sleep(33);
                 Dispatcher.Invoke(new Action(() => {
                     ShowSearchResult sh = new ShowSearchResult();
                     sh.Height = 55;
@@ -56,6 +63,7 @@ namespace TVSPlayer {
                     sh.ConfirmButton.MouseUp += (s,e) => Confirm(show);
                     sh.DetailsButton.MouseUp += (s, e) => Details(show);
                     ShowList.Children.Add(sh);
+                    StartAnimation("OpacityUp", sh);
                 }));
             }
         }

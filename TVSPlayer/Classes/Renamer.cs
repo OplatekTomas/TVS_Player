@@ -18,7 +18,7 @@ namespace TVSPlayer {
         /// <param name="show">Yeah you need that.</param>
         /// <param name="episodes">Important. if episode is not supplied it won't find anything</param>
         /// <returns>Original list of episodes, but ScannedFile</returns>
-        public static List<Episode> RenameBatch(List<string> locations, string databaseLocation, TVShow show,List<Episode> episodes) {
+        public static List<Episode> RenameBatch (TVShow show,List<Episode> episodes,List<string> locations, string databaseLocation) {
             locations.Insert(0, databaseLocation);
             List<string> videos = new List<string>() { ".mkv",  ".m4v" ,".avi", ".mp4", ".mov",  ".wmv", ".flv" };
             List<string> subs = new List<string>() { ".sub", ".srt", ".idx" };
@@ -31,7 +31,7 @@ namespace TVSPlayer {
             }
             List<string> files = ScanEpisodes(locations, show);
             foreach (string file in files) {
-                Tuple<int, int> t = GetInfo(file);
+                Tuple<int, int> t = GetSeasonEpisode(file);
                 if (t != null) {
                     int season = t.Item1;
                     int episode = t.Item2;
@@ -93,7 +93,13 @@ namespace TVSPlayer {
             }
             return FilterExtensions(showFiles);
         }
-        private static Tuple<int, int> GetInfo(string file) {
+
+        /// <summary>
+        /// Give it file, it returns information about season and episode.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>Tuple. Item1 is Season, Item2 is episode number</returns>
+        private static Tuple<int, int> GetSeasonEpisode(string file) {
             file = Path.GetFileName(file);
             Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
             Match episode = new Regex("[e][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
@@ -118,9 +124,6 @@ namespace TVSPlayer {
                 }
             }
             return filtered;
-        }
-        private static long GetDirectorySize(string parentDirectory) {
-            return new DirectoryInfo(parentDirectory).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
         }
         private static ScannedFile RenameFile(string file, string path, TVShow show, Episode epi) {
             ScannedFile sf = new ScannedFile();

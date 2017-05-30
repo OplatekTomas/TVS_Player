@@ -133,14 +133,14 @@ namespace TVSPlayer {
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
-            //Page p = new ImportScanFolder();
-            //AddPage(p);
+            Page p = new ImportScanFolder();
+            AddPage(p);
 
             TVShow s = new TVShow();
             s.tvmazeId = 82;
             s.id = 121361;
-            s.GetInfo();
-            Renamer.RenameBatch(new List<string>() { "E:\\01SRC" }, "E:\\01TGT",s,Episode.getAllEP(s));
+            //s.GetInfo();
+            //Renamer.RenameBatch(new List<string>() { "E:\\01SRC" }, "E:\\01TGT",s,Episode.getAllEP(s));
 
             //List<Actor> la = Actor.getActors(s);
             //Database.SaveActors(la, s);

@@ -85,10 +85,16 @@ namespace TVSPlayer {
                         sh.EditIcon.MouseUp += (s, e) => EditShow(sh, show);
                         sh.DetailsIcon.MouseUp += (s, e) => ShowDetails(show);
                         ShowList.Children.Add(sh);
+                        StartAnimation("OpacityUp",sh);
                     }));
                     }
                 }
             }
+        }
+
+        private void StartAnimation(string storyboard, FrameworkElement grid) {
+            Storyboard sb = this.FindResource(storyboard) as Storyboard;
+            sb.Begin(grid);
         }
 
         //Removes show from a list of foumd shows
