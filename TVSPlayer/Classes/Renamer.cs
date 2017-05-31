@@ -10,95 +10,47 @@ using static TVSPlayer.Episode;
 
 namespace TVSPlayer {
     class Renamer {
-        /// <summary>
-        /// Scans and renames all episodes it finds in parameter locations then moves them to databaseLocation
-        /// </summary>
-        /// <param name="locations">Locations that will be scanned for episodes</param>
-        /// <param name="databaseLocation">Location where episodes are saved (seriesName is added)</param>
-        /// <param name="show">Yeah you need that.</param>
-        /// <param name="episodes">Important. if episode is not supplied it won't find anything</param>
-        /// <returns>Original list of episodes, but ScannedFile</returns>
-        public static List<Episode> RenameBatch (TVShow show,List<Episode> episodes,List<string> locations, string databaseLocation) {
-            locations.Insert(0, databaseLocation);
-            List<string> videos = new List<string>() { ".mkv",  ".m4v" ,".avi", ".mp4", ".mov",  ".wmv", ".flv" };
-            List<string> subs = new List<string>() { ".sub", ".srt", ".idx" };
-            string databaseL = databaseLocation;
-            databaseLocation = databaseLocation + "\\" + show.seriesName;
-            foreach (string alias in show.aliases) {
-                if (Directory.Exists(databaseLocation + "\\"+alias)) {
-                    databaseLocation = databaseL + "\\"+alias;
-                }
+        public List<Episode> FindEpisodes(TVShow show, List<Episode> episodes, string library, List<string> locations) {
+            library = GetLibrary(library, show);
+            List<string> allLocations = locations;
+            allLocations.Add(library);
+            List<string> files = new List<string>();
+            
+            foreach (string location in allLocations) {
+                files.AddRange(SearchForFiles(location, show));
             }
-            List<string> files = ScanEpisodes(locations, show);
             foreach (string file in files) {
-                Tuple<int, int> t = GetSeasonEpisode(file);
-                if (t != null) {
-                    int season = t.Item1;
-                    int episode = t.Item2;
-                    Episode selectedEP = episodes.FirstOrDefault(o => o.season == season && o.number == episode);
-                    int index = episodes.FindIndex(o => o.season == season && o.number == episode);
-                    if (selectedEP != null) {
-                        ScannedFile sf = RenameFile(file, databaseLocation, show, selectedEP);
-                        string ext = Path.GetExtension(file);
-                        if (videos.Contains(ext)) { sf.type = ScannedFile.FileType.Video; } else if(subs.Contains(ext)) { sf.type = ScannedFile.FileType.Subtitle; }
-                        int idx = selectedEP.files.FindIndex(s => s.origPath == sf.path);
-                        if (idx == -1) {
-                            selectedEP.files.Add(sf);
-                        }
-
+                Tuple<int, int> info = GetSeasonEpisode(file);
+                if (info != null) {
+                    Episode episode = episodes.FirstOrDefault(e => e.season == info.Item1 && e.number == info.Item2);
+                    if (episode != null) {
+                        ScannedFile sf = Rename(file, library, show, episode);
+                        
                     }
                 }
             }
             return episodes;
         }
 
+        public ScannedFile Rename(string file, string library,TVShow show, Episode episode) {
+            ScannedFile sf = new ScannedFile();
+            
 
-        private static string GetValidName(string path, string name, string extension, string original, int s) {
-            int filenumber = 1;
-            string final;
-            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-            foreach (char c in invalid) {
-                name = name.Replace(c.ToString(), "");
-            }
-            if (s < 10) {
-                path += "\\Season 0" + s;
-                Directory.CreateDirectory(path);
-            } else if (s >= 10) {
-                path += "\\Season " + s;
-                Directory.CreateDirectory(path);
-            }
-            final = path + "\\" + name + extension;
-            if (original != final) {
-                while (File.Exists(final)) {
-                    final = path + "\\" + name + "_" + filenumber + extension;
-                    filenumber++;
-                }
-            }
-            return final;
-        }
-        private static List<string> ScanEpisodes(List<string> locations, TVShow s) {
-            List<string> showFiles = new List<string>();
-            List<string> files = new List<string>();
-            foreach (string location in locations) {
-                if (Directory.Exists(location)) {
-                    files.AddRange(Directory.GetFiles(location, "*.*", System.IO.SearchOption.AllDirectories));
-                }
-            }
-            foreach (string file in files) {
-                foreach (string alias in s.aliases) {
-                    if (Path.GetFileName(file).IndexOf(alias, StringComparison.OrdinalIgnoreCase) >= 0 && !showFiles.Contains(file)) {
-                        showFiles.Add(file);
-                    }
-                }
-            }
-            return FilterExtensions(showFiles);
         }
 
-        /// <summary>
-        /// Give it file, it returns information about season and episode.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns>Tuple. Item1 is Season, Item2 is episode number</returns>
+
+
+        private string GetLibrary(string library, TVShow show) {
+            string libraryTemp = library;
+            library = library + "\\" + show.seriesName;
+            foreach (string alias in show.aliases) {
+                if (Directory.Exists(library + "\\"+alias)) {
+                    library = libraryTemp + "\\"+alias;
+                }
+            }
+            return library;
+        }
+
         private static Tuple<int, int> GetSeasonEpisode(string file) {
             file = Path.GetFileName(file);
             Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
@@ -115,8 +67,32 @@ namespace TVSPlayer {
             }
             return null;
         }
+
+        /// <summary>
+        /// Searches for files that are probably associated with a TV Show
+        /// </summary>
+        /// <param name="location">Where to scan</param>
+        /// <param name="show">What to scan</param>
+        /// <returns>list of strings that contain full path</returns>
+        private static List<string> SearchForFiles(string location,TVShow show) {
+            List<string> files = Directory.GetFiles(location, "*", SearchOption.AllDirectories).ToList();
+            List<string> showFiles = new List<string>();
+            foreach (string file in files) {
+                foreach (string alias in show.aliases) {
+                    if (Path.GetFileName(file).IndexOf(alias, StringComparison.OrdinalIgnoreCase) >= 0 && !showFiles.Contains(file)) {
+                        showFiles.Add(file);
+                    }
+                }
+            }
+            return FilterExtensions(showFiles);
+        }
+        /// <summary>
+        /// Tries to filter extensions from list of files
+        /// </summary>
+        /// <param name="files">list of files</param>
+        /// <returns>filtered list of filess</returns>
         private static List<string> FilterExtensions(List<string> files) {
-            string[] fileExtension = new string[10] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv",".idx" };
+            string[] fileExtension = new string[10] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv", ".idx" };
             List<string> filtered = new List<string>();
             foreach (string file in files) {
                 if (fileExtension.Any(file.Contains)) {
@@ -125,29 +101,9 @@ namespace TVSPlayer {
             }
             return filtered;
         }
-        private static ScannedFile RenameFile(string file, string path, TVShow show, Episode epi) {
-            ScannedFile sf = new ScannedFile();
-            string output = GetValidName(path, epi.GetName(show), Path.GetExtension(file), file, epi.season);
-            sf.path = output;
-            
-            if (file != output) {
-                sf.origPath = file.Split('\\').Last();
-                bool moved = false;
-                do {
-                    try {
-                        File.Move(file, output);
-                        moved = true;
-                    } catch (Exception e) {
-                        DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("File " + file + " couldn't be renamed.\nClose apps that might be using it.\n\nTry again?", "Error", MessageBoxButtons.YesNo);
-                        System.Windows.Forms.MessageBox.Show(e.Message);
-                        if (dialogResult == DialogResult.No) {
-                            moved = true;
-                        }
-                    }
-                } while (moved != true);
-            }
-            return sf;
-        }
-       
+
+
+
+
     }
 }
