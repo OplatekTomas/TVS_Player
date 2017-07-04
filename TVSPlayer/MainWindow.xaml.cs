@@ -133,12 +133,19 @@ namespace TVSPlayer {
         //Code for "Test" button
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
-            Page p = new ImportScanFolder();
-            AddPage(p);
+            //Page p = new ImportScanFolder();
+            //AddPage(p);
 
             TVShow s = new TVShow();
             s.tvmazeId = 82;
             s.id = 121361;
+            s.seriesName = "Game of Thrones";
+            List<Episode> list = Episode.getAllEP(s);
+            Episode.ScannedFile sf = new Episode.ScannedFile();
+            sf.origPath = @"D:\TVSTests\Lib\Game.of.thrones.s01e01.mkv";
+            sf.path = @"D:\TVSTests\Season 01\Game of Thrones - S01E01 - Winter is Coming_1.mkv";
+            list[0].files.Add(sf);
+            Renamer.Rename(@"D:\TVSTests\Season 01\Game of Thrones - S01E01 - Winter is Coming_1.mkv", @"D:\TVSTests",s,list[0]);
             //s.GetInfo();
             //Renamer.RenameBatch(new List<string>() { "E:\\01SRC" }, "E:\\01TGT",s,Episode.getAllEP(s));
 

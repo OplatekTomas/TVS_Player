@@ -37,7 +37,7 @@ namespace TVSPlayer {
             }
             public string origPath;
             public string path;
-            public FileType type;
+            public FileType? type;
         }
 
         /// <summary>

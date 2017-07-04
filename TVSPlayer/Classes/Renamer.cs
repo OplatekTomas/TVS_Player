@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ using static TVSPlayer.Episode;
 
 namespace TVSPlayer {
     class Renamer {
-        public List<Episode> FindEpisodes(TVShow show, List<Episode> episodes, string library, List<string> locations) {
+        public static List<Episode> FindAndMoveEpisodes(TVShow show, List<Episode> episodes, string library, List<string> locations) {
             library = GetLibrary(library, show);
             List<string> allLocations = locations;
             allLocations.Add(library);
@@ -32,15 +33,110 @@ namespace TVSPlayer {
             return episodes;
         }
 
-        public ScannedFile Rename(string file, string library,TVShow show, Episode episode) {
+        /// <summary>
+        /// Moves file from somewhere to library + Season XX
+        /// </summary>
+        /// <param name="file">What file to move</param>
+        /// <param name="library">Where to move the file</param>
+        /// <param name="show">What TVShow is the file</param>
+        /// <param name="episode">What episode is the file</param>
+        /// <returns>ScannedFile. Everything is filled. If this file already is in database it will return edited instance of the original</returns>
+        public static ScannedFile Rename(string file, string library,TVShow show, Episode episode) {
             ScannedFile sf = new ScannedFile();
-            
+            bool moved = false;
+            string newFile = getNewFileName(file, library, show, episode);
+            string defaultName = getDefaultNewFileName(file, library, show, episode);
+            //Check if file is already one of correctly named files in library
+            bool check = false;
+            for (int counter = 1; counter < 10; counter++) {
+                if (file == Path.ChangeExtension(defaultName, null) + "_"+ counter + Path.GetExtension(defaultName)) {
+                    check = true;
+                }
+            }
+            if (check || file == defaultName) {
+                if (episode.files != null && episode.files.Count > 0) {
+                    ScannedFile search = episode.files.FirstOrDefault(f => f.path == file);
+                    if (search == null) {
+                        sf.origPath = null;
+                        sf.path = newFile;
+                        sf.type = GetFileType(file);
+                    } else {
+                        sf.origPath = search.origPath;
+                        sf.path = newFile;
+                        sf.type = search.type;
+                    }
+                } else {
+                    sf.origPath = file;
+                    sf.path = newFile;
+                    sf.type = GetFileType(file);
+                }
+            } else {
+                sf.origPath = file;
+                sf.path = newFile;
+                sf.type = GetFileType(file);               
+            }
+            while (!moved) {
+                try {
+                    File.Move(file, newFile);
+                    moved = true;
+                } catch (Exception e) {
+                    MessageBox.Show(e.Message);
+                }
+            }
+            return sf;
+        }
+
+        private static ScannedFile.FileType? GetFileType(string file) {
+            string[] video = new string[7] { ".mkv", ".m4v", ".avi", ".mp4", ".mov", ".wmv", ".flv"};
+            string[] subs = new string[3] {".srt", ".sub", ".idx" };
+            string ext = Path.GetExtension(file);
+            if (video.Contains(ext,StringComparer.CurrentCultureIgnoreCase)) {
+                return ScannedFile.FileType.Video;
+            }
+            if (subs.Contains(ext, StringComparer.CurrentCultureIgnoreCase)) {
+                return ScannedFile.FileType.Subtitle;
+            }
+            return null;
 
         }
 
+        private static string getDefaultNewFileName(string file, string library, TVShow show, Episode episode) {
+            if (episode.season >= 10) {
+                library += "\\Season " + episode.season;
+            } else {
+                library += "\\Season 0" + episode.season;
+            }
+            if (!Directory.Exists(library)) {
+                Directory.CreateDirectory(library);
+            }
+            return library + "\\" + episode.GetName(show) + Path.GetExtension(file);
+        }
+
+        private static string getNewFileName(string file,string library, TVShow show, Episode episode) {
+            if (episode.season >= 10) {
+                library += "\\Season " + episode.season; 
+            } else {
+                library += "\\Season 0" + episode.season;
+            }
+            if (!Directory.Exists(library)) {
+                Directory.CreateDirectory(library);
+            }
+            bool passed = false;
+            int counter = 1;
+            string newFile = library + "\\" + episode.GetName(show) + Path.GetExtension(file);
+            while (!passed) {
+                if (!File.Exists(newFile)) {
+                    passed = true;
+                } else {
+                    newFile = library + "\\" + episode.GetName(show) + "_" + counter + Path.GetExtension(file);
+                    counter++;
+                }
+            }
+            return newFile;
+        }
 
 
-        private string GetLibrary(string library, TVShow show) {
+        private static string GetLibrary(string library, TVShow show) {
             string libraryTemp = library;
             library = library + "\\" + show.seriesName;
             foreach (string alias in show.aliases) {
