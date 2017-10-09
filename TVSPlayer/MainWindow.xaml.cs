@@ -107,7 +107,7 @@ namespace TVSPlayer {
         /// <summary>
         /// Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
         /// </summary>
-        public async Task<TVShow> SearchShowAsync() {
+       /* public async Task<TVShow> SearchShowAsync() {
             Page page = new SearchAPIPage();
             Frame fr = new Frame();
             fr.Opacity = 0;
@@ -123,7 +123,7 @@ namespace TVSPlayer {
                 return null;
             }
             return s;
-        }
+        }*/
         // Event that is called after animation of removing page is done - actualy removes the page
         private void FinishedRemove(UIElement ue) {
             BaseGrid.Children.Remove(ue);
@@ -131,42 +131,8 @@ namespace TVSPlayer {
         #endregion
 
         //Code for "Test" button
-        private async void Button_Click(object sender, RoutedEventArgs e) {
+        private void Button_Click(object sender, RoutedEventArgs e) {
 
-            //Page p = new ImportScanFolder();
-            //AddPage(p);
-
-            TVShow s = new TVShow();
-            s.tvmazeId = 82;
-            s.id = 121361;
-            s.seriesName = "Game of Thrones";
-            List<Episode> list = Episode.getAllEP(s);
-            Episode.ScannedFile sf = new Episode.ScannedFile();
-            sf.origPath = @"D:\TVSTests\Lib\Game.of.thrones.s01e01.mkv";
-            sf.path = @"D:\TVSTests\Season 01\Game of Thrones - S01E01 - Winter is Coming_1.mkv";
-            list[0].files.Add(sf);
-            Renamer.Rename(@"D:\TVSTests\Season 01\Game of Thrones - S01E01 - Winter is Coming_1.mkv", @"D:\TVSTests",s,list[0]);
-            //s.GetInfo();
-            //Renamer.RenameBatch(new List<string>() { "E:\\01SRC" }, "E:\\01TGT",s,Episode.getAllEP(s));
-
-            //List<Actor> la = Actor.getActors(s);
-            //Database.SaveActors(la, s);
-            //s.GetInfo();
-            //TVShow.CreateDatabase(new List<TVShow>() { s });
-
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
-            //Database.GetEpisodes(s, true);
-            //sw.Stop();
-            //MessageBox.Show(sw.ElapsedMilliseconds.ToString());
-            //s.GetInfo();
-            //List<Episode> list = Episode.getAllEP(s);
-            //Database.SaveEpisodes(s, list);
-            //Episode.getAllEP(s);
-            //List<Episode> l = Database.GetEpisodes(s);
-            
-            //List<Episode> li = Database.GetEpisodes(s);
-            //await SearchShowAsync();
           
         }
     }

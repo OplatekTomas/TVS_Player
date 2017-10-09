@@ -68,43 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Actor.cs" />
-    <Compile Include="Classes\Database.cs" />
-    <Compile Include="Classes\Episode.cs" />
-    <Compile Include="Classes\GeneralAPI.cs" />
-    <Compile Include="Classes\Helper.cs" />
-    <Compile Include="Classes\Renamer.cs" />
-    <Compile Include="Classes\Show.cs" />
-    <Compile Include="Pages\CreatingDB\DBCreationProgress.xaml.cs">
-      <DependentUpon>DBCreationProgress.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ShowDetails.xaml.cs">
-      <DependentUpon>ShowDetails.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\CreatingDB\ImportScanFolder.xaml.cs">
-      <DependentUpon>ImportScanFolder.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\SearchAPIPage.xaml.cs">
-      <DependentUpon>SearchAPIPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Welcome.xaml.cs">
-      <DependentUpon>Welcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ScannedShow.xaml.cs">
-      <DependentUpon>ScannedShow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ShowSearchResult.xaml.cs">
-      <DependentUpon>ShowSearchResult.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
-    <Page Include="Pages\CreatingDB\DBCreationProgress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ShowDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,26 +81,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\CreatingDB\ImportScanFolder.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\SearchAPIPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Welcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ScannedShow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ShowSearchResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Animations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -230,6 +174,11 @@
   <ItemGroup>
     <Resource Include="Icons\ico-checked-dark.png" />
     <Resource Include="Icons\ico-checked-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\" />
+    <Folder Include="Controls\" />
+    <Folder Include="Pages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
