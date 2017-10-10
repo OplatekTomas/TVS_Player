@@ -11,6 +11,8 @@
     <BitmapImage x:Key="QuestionIcon" UriSource="pack://application:,,,/Icons/ico-question-light.png" />
     <BitmapImage x:Key="CheckSquareIcon" UriSource="pack://application:,,,/Icons/ico-checksquare-light.png" />
     <BitmapImage x:Key="CheckIcon" UriSource="pack://application:,,,/Icons/ico-checked-light.png" />
+    <BitmapImage x:Key="ForwardIcon" UriSource="pack://application:,,,/Icons/ico-forward-light.png" />
+    <BitmapImage x:Key="ReloadIcon" UriSource="pack://application:,,,/Icons/ico-reload-light.png" />
 
 
 

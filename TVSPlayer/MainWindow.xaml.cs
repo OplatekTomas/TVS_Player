@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,8 +16,6 @@ namespace TVSPlayer {
     /// </summary>
     /// 
 
-
-
     public partial class MainWindow : Window {
 
         public MainWindow() {
@@ -28,20 +27,17 @@ namespace TVSPlayer {
 
         #region Animations
 
-        //Starts Storyboard animation of a grid
         private void StartAnimation(string storyboard, FrameworkElement grid) {
             Storyboard sb = this.FindResource(storyboard) as Storyboard;
             sb.Begin(grid);
         }
 
-        //Shows side bar
         private void SideButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             HiderGrid.Visibility = Visibility.Visible;
             StartAnimation("ShowSideMenu", SideMenu);
             StartAnimation("OpacityUp", HiderGrid);
         }
 
-        //Hides side bar
         private void HiderGrid_MouseUp(object sender, MouseButtonEventArgs e) {
             StartAnimation("HideSideMenu", SideMenu);
             StartAnimation("OpacityDown", HiderGrid);
@@ -134,6 +130,25 @@ namespace TVSPlayer {
         private void Button_Click(object sender, RoutedEventArgs e) {
 
           
+        }
+
+        public static bool checkConnection() {
+            var ping = new System.Net.NetworkInformation.Ping();
+            try {
+                var tvdb = ping.Send("api.thetvdb.com");
+                var tvmaze = ping.Send("api.tvmaze.com");
+                var google = ping.Send("www.google.com");
+                return true;
+            } catch (PingException ex) {
+                return false;
+            }
+
+        }
+        private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
+            if (!checkConnection()) {
+                AddPage(new StartupInternetError());
+            }
+
         }
     }
 

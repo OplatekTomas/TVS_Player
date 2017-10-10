@@ -19,19 +19,19 @@ namespace TVSPlayer {
 
         private static void Elapsed() {
             if (theme) {
-                Application.Current.Resources["BackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#242424"));
+                Application.Current.Resources["BackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
                 Application.Current.Resources["TextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F5F5"));
-                Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#323232"));
-                Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#484848"));
-                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DD101010"));
+                Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444444"));
+                Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555"));
+                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CC202020"));
                 LightIcons();
                 theme = false;
             } else {
-                Application.Current.Resources["BackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F5F5"));
+                Application.Current.Resources["BackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DDDDDD"));
                 Application.Current.Resources["TextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#242424"));
-                Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C8C8C8"));
-                Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#dcdcdc"));
-                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DDE1E1E1"));
+                Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
+                Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#BBBBBB"));
+                Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCBBBBBB"));
 
                 DarkIcons();
                 theme = true;
@@ -49,7 +49,8 @@ namespace TVSPlayer {
             Application.Current.Resources["QuestionIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-question-dark.png", UriKind.Absolute));
             Application.Current.Resources["CheckSquareIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checksquare-dark.png", UriKind.Absolute));
             Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-dark.png", UriKind.Absolute));
-
+            Application.Current.Resources["ForwardIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-dark.png", UriKind.Absolute));
+            Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-dark.png", UriKind.Absolute));
 
         }
 
@@ -64,7 +65,8 @@ namespace TVSPlayer {
             Application.Current.Resources["QuestionIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-question-light.png", UriKind.Absolute));
             Application.Current.Resources["CheckSquareIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checksquare-light.png", UriKind.Absolute));
             Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-light.png", UriKind.Absolute));
-
+            Application.Current.Resources["ForwardIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-light.png", UriKind.Absolute));
+            Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-light.png", UriKind.Absolute));
 
         }
     }
