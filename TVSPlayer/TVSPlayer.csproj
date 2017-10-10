@@ -59,6 +59,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TVS.API">
+      <HintPath>DLL\TVS.API.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -68,11 +71,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Pages\StartUp.xaml.cs">
-      <DependentUpon>StartUp.xaml</DependentUpon>
+    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Pages\Introduction\Intro.xaml.cs">
+      <DependentUpon>Intro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Introduction\LibraryImport.xaml.cs">
+      <DependentUpon>LibraryImport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Introduction\SelectThemeStartUp.xaml.cs">
+      <DependentUpon>SelectThemeStartUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Introduction\ImportOrCreateStartUp.xaml.cs">
+      <DependentUpon>ImportOrCreateStartUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartupInternetError.xaml.cs">
       <DependentUpon>StartupInternetError.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SeriesWithFolder.xaml.cs">
+      <DependentUpon>SeriesWithFolder.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="MainWindow.xaml">
@@ -87,11 +103,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\StartUp.xaml">
+    <Page Include="Pages\Introduction\Intro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Introduction\LibraryImport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Introduction\SelectThemeStartUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Introduction\ImportOrCreateStartUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\StartupInternetError.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SeriesWithFolder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,10 +221,7 @@
     <Resource Include="Icons\ico-checked-dark.png" />
     <Resource Include="Icons\ico-checked-light.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\" />
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Icons\ico-forward-dark.png" />
     <Resource Include="Icons\ico-forward-light.png" />
@@ -200,6 +229,14 @@
   <ItemGroup>
     <Resource Include="Icons\ico-reload-dark.png" />
     <Resource Include="Icons\ico-reload-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-forward-dark-hq.png" />
+    <Resource Include="Icons\ico-forward-light-hq.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-folder-dark.png" />
+    <Resource Include="Icons\ico-folder-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

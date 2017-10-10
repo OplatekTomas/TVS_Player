@@ -28,7 +28,7 @@ namespace TVSPlayer {
                 theme = false;
             } else {
                 Application.Current.Resources["BackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DDDDDD"));
-                Application.Current.Resources["TextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#242424"));
+                Application.Current.Resources["TextColor"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#202020"));
                 Application.Current.Resources["LighterBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
                 Application.Current.Resources["LightestBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#BBBBBB"));
                 Application.Current.Resources["TransparentBG"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCBBBBBB"));
@@ -51,6 +51,8 @@ namespace TVSPlayer {
             Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-dark.png", UriKind.Absolute));
             Application.Current.Resources["ForwardIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-dark.png", UriKind.Absolute));
             Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-dark.png", UriKind.Absolute));
+            Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-dark-hq.png", UriKind.Absolute));
+            Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-dark.png", UriKind.Absolute));
 
         }
 
@@ -67,6 +69,8 @@ namespace TVSPlayer {
             Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-light.png", UriKind.Absolute));
             Application.Current.Resources["ForwardIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-light.png", UriKind.Absolute));
             Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-light.png", UriKind.Absolute));
+            Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-hq.png", UriKind.Absolute));
+            Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-light.png", UriKind.Absolute));
 
         }
     }

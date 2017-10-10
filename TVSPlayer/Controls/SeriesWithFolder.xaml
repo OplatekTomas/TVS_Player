@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="TVSPlayer.SeriesWithFolder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="65" d:DesignWidth="1248">
+    <Grid>
+        <Grid.Style>
+            <Style>
+                <Setter Property="Grid.Background" Value="#00000000" />
+                <Style.Triggers>
+                    <Trigger Property="Grid.IsMouseOver" Value="True">
+                        <Setter Property="Grid.Background" Value="{DynamicResource LighterBG}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid Width="5" Background="{DynamicResource LighterBG}" HorizontalAlignment="Left" />
+        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="Game of thrones" FontSize="26" Margin="10,1" />
+        <TextBlock x:Name="FolderLocation" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,3" Text="C:KappaKAPPAKAPPAKAPPAKAPPA" FontSize="16" />
+    </Grid>
+</UserControl>

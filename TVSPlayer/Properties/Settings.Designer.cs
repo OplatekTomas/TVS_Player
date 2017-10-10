@@ -25,24 +25,13 @@ namespace TVSPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Token {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Theme {
             get {
-                return ((string)(this["Token"]));
+                return ((bool)(this["Theme"]));
             }
             set {
-                this["Token"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.DateTime TokenTime {
-            get {
-                return ((global::System.DateTime)(this["TokenTime"]));
-            }
-            set {
-                this["TokenTime"] = value;
+                this["Theme"] = value;
             }
         }
     }

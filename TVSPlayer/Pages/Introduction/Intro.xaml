@@ -1,0 +1,22 @@
+﻿<Page x:Class="TVSPlayer.Intro"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="Intro">
+    <Page.Resources>
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:1" BeginTime="0:0:0.5" Timeline.DesiredFrameRate="60" />
+        </Storyboard>
+    </Page.Resources>
+    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
+        <Grid x:Name="FadeIn" Opacity="0" MouseUp="FadeIn_MouseUp">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="49" Foreground="{DynamicResource TextColor}" Margin="0,0,150,100" Text="Welcome to TVS-Player" />
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Foreground="{DynamicResource TextColor}" Margin="0,100,185,0" Text="First you need to go through simple setup" />
+            <Image Source="pack://application:,,,/Icons/ico-forward-light-hq.png" Height="120" HorizontalAlignment="Right" Margin="0,0,50,0" />
+        </Grid>
+    </Grid>
+</Page>

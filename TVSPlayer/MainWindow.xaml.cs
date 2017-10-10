@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace TVSPlayer {
             InitializeComponent();
 
         }
-
+        private bool theme;
 
 
         #region Animations
@@ -80,9 +81,13 @@ namespace TVSPlayer {
         private void PageCreator(Page page) {
             Frame fr = new Frame();
             Grid.SetRowSpan(fr, 2);
-            BaseGrid.Children.Add(fr);
+            fr.Opacity = 0;
             Panel.SetZIndex(fr, 100);
             fr.Content = page;
+            Storyboard sb = this.FindResource("OpacityUp") as Storyboard;
+            Storyboard sbLoad = sb.Clone();
+            BaseGrid.Children.Add(fr);
+            sbLoad.Begin(fr);
         }
         /// <summary>
         /// Removes last page added
@@ -99,7 +104,9 @@ namespace TVSPlayer {
             sbLoad.Completed += (s, e) => FinishedRemove(p);
             sbLoad.Begin(p);
         }
-
+        private void FinishedRemove(UIElement ue) {
+            BaseGrid.Children.Remove(ue);
+        }
         /// <summary>
         /// Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
         /// </summary>
@@ -121,9 +128,6 @@ namespace TVSPlayer {
             return s;
         }*/
         // Event that is called after animation of removing page is done - actualy removes the page
-        private void FinishedRemove(UIElement ue) {
-            BaseGrid.Children.Remove(ue);
-        }
         #endregion
 
         //Code for "Test" button
@@ -133,11 +137,11 @@ namespace TVSPlayer {
         }
 
         public static bool checkConnection() {
-            var ping = new System.Net.NetworkInformation.Ping();
+            Ping ping = new Ping();
             try {
-                var tvdb = ping.Send("api.thetvdb.com");
-                var tvmaze = ping.Send("api.tvmaze.com");
-                var google = ping.Send("www.google.com");
+                PingReply tvdb = ping.Send("api.thetvdb.com");
+                PingReply tvmaze = ping.Send("api.tvmaze.com");
+                PingReply google = ping.Send("www.google.com");
                 return true;
             } catch (PingException ex) {
                 return false;
@@ -145,10 +149,15 @@ namespace TVSPlayer {
 
         }
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
+            if (!Directory.Exists(Helper.data)) {
+                AddPage(new Intro());
+            } else {
+                
+            }
+
             if (!checkConnection()) {
                 AddPage(new StartupInternetError());
             }
-
         }
     }
 

@@ -15,11 +15,15 @@ using System.Windows.Shapes;
 
 namespace TVSPlayer {
     /// <summary>
-    /// Interaction logic for StartUp.xaml
+    /// Interaction logic for SeriesWithFolder.xaml
     /// </summary>
-    public partial class StartUp : Page {
-        public StartUp() {
+    public partial class SeriesWithFolder : UserControl {
+        public SeriesWithFolder() {
             InitializeComponent();
+        }
+
+        private void Trigger_MouseEnter(object sender, MouseEventArgs e) {
+
         }
     }
 }

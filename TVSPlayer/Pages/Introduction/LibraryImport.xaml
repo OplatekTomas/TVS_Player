@@ -1,0 +1,34 @@
+﻿<Page x:Class="TVSPlayer.LibraryImport"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="LibraryImport">
+
+    <Grid Background="{DynamicResource BackgroundBrush}">
+        <Grid Height="47" VerticalAlignment="Top">
+            <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="10,0,84,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
+            <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
+                <Image Source="{DynamicResource CheckIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
+            </Grid>
+            <Grid x:Name="SelectFolder" Height="27" Width="27" HorizontalAlignment="Right" Margin="47,0" VerticalAlignment="Center" MouseUp="SelectFolder_MouseUp">
+                <Image Source="{DynamicResource FolderIcon}" Margin="0" />
+            </Grid>
+        </Grid>
+        <Grid Margin="10,47,10,10">
+            <ScrollViewer>
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
+                </ScrollViewer.Resources>
+                <StackPanel x:Name="panel">
+
+
+                </StackPanel>
+            </ScrollViewer>
+            
+        </Grid>
+    </Grid>
+</Page>

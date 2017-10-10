@@ -15,7 +15,11 @@
             <Image Source="{DynamicResource ForwardIcon}"></Image>
         </Grid>
         <Grid HorizontalAlignment="Left" MouseUp="Reload_MouseUp" x:Name="Reload" VerticalAlignment="Bottom" Height="30" Width="30" Margin="15"  >
-            <Image Source="{DynamicResource ReloadIcon}"></Image>
+            <Image  Source="{DynamicResource ReloadIcon}" x:Name="ReloadImage" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <RotateTransform Angle="1" />
+                </Image.RenderTransform>
+            </Image>
         </Grid>
     </Grid>
 </Page>

@@ -11,8 +11,6 @@
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.Y)" To="0" DecelerationRatio="1"  Duration="0:0:0.2" Timeline.DesiredFrameRate="60"/>
     </Storyboard>
     <Storyboard x:Key="Rotate">
-        <DoubleAnimation
-            Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-            To="-360" Duration="0:0:1"/>
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" FillBehavior="Stop" DecelerationRatio="0.5" AccelerationRatio="0.5" To="361" Duration="0:0:0.75"/>
     </Storyboard>
 </ResourceDictionary>

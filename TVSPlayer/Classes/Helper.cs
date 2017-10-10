@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TVSPlayer
+{
+    class Helper {
+        public static string data = @"C:\Users\Public\Documents\TVS-Player";
+    }
+}
