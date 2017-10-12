@@ -54,6 +54,9 @@ namespace TVSPlayer {
             Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-dark-hq.png", UriKind.Absolute));
             Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-dark.png", UriKind.Absolute));
             Application.Current.Resources["BackIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-back-dark.png", UriKind.Absolute));
+            Application.Current.Resources["PlusIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-add-dark.png", UriKind.Absolute));
+            Application.Current.Resources["EditIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-edit-dark.png", UriKind.Absolute));
+            Application.Current.Resources["NoPoster"] = new BitmapImage(new Uri("pack://application:,,,/Icons/poster-dark.png", UriKind.Absolute));
 
         }
 
@@ -73,6 +76,9 @@ namespace TVSPlayer {
             Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-hq.png", UriKind.Absolute));
             Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-light.png", UriKind.Absolute));
             Application.Current.Resources["BackIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-back-light.png", UriKind.Absolute));
+            Application.Current.Resources["NoPoster"] = new BitmapImage(new Uri("pack://application:,,,/Icons/poster-light.png", UriKind.Absolute));
+            Application.Current.Resources["PlusIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-add-light.png", UriKind.Absolute));
+            Application.Current.Resources["EditIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-edit-light.png", UriKind.Absolute));
 
         }
     }

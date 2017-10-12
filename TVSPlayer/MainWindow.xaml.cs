@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using TVS.API;
 
 namespace TVSPlayer {
 
@@ -108,25 +109,19 @@ namespace TVSPlayer {
             BaseGrid.Children.Remove(ue);
         }
         /// <summary>
-        /// Call this function (and this function only) when you need to search API (returns either basic info about TV Show or null)
+        /// Call this function (and this function only) when you need to search API (returns either basic info about Series or null)
         /// </summary>
-       /* public async Task<TVShow> SearchShowAsync() {
-            Page page = new SearchAPIPage();
-            Frame fr = new Frame();
-            fr.Opacity = 0;
-            StartAnimation("OpacityUp", fr);
-            Grid.SetRowSpan(fr, 2);
-            BaseGrid.Children.Add(fr);
-            Panel.SetZIndex(fr, 1000);
-            fr.Content = page;
-            TVShow s = await Helper.ReturnTVShowWhenNotNull();
+       public async Task<Series> SearchShowAsync() {
+
+            AddPage(new SearchSingleShow());
+            Series s = await Helper.ReturnTVShowWhenNotNull();
             RemovePage();
             Helper.show = null;
-            if (s == new TVShow()) {
+            if (s == new Series()) {
                 return null;
             }
             return s;
-        }*/
+        }
         // Event that is called after animation of removing page is done - actualy removes the page
         #endregion
 

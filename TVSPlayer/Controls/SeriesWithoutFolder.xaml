@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="TVSPlayer.SeriesWithFolder"
+﻿<UserControl x:Class="TVSPlayer.SearchShowResult"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="65" d:DesignWidth="1248" x:Name="MainPart">
+             d:DesignHeight="50" d:DesignWidth="1280" x:Name="MainPart">
     <UserControl.Resources>
         <Storyboard x:Key="OpenDetails">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,400" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
@@ -25,16 +25,13 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="Game of thrones" FontSize="26" Margin="5,1" />
-        <TextBlock x:Name="FolderLocation" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,3" Text="C:KappaKAPPAKAPPAKAPPAKAPPA" FontSize="16" />
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,62,0" x:Name="Edit" >
-            <Image Source="{DynamicResource EditIcon}" />
+        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="26" Margin="5,-1,0,0" />
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Height="30" x:Name="Confirm" >
+            <Image Source="{DynamicResource ForwardIcon}" />
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,15,0" x:Name="Remove" >
-            <Image Source="{DynamicResource RemoveIcon}" />
-        </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,110,0" x:Name="Detail" >
-            <Image Source="{DynamicResource QuestionIcon}"/>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,45,0" x:Name="Detail" >
+            <Image Source="{DynamicResource QuestionIcon}" />
+
 
         </Grid>
         <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden"></Grid>

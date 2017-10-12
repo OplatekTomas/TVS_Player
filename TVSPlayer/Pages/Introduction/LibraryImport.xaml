@@ -7,22 +7,26 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="LibraryImport">
-
+    <Page.Resources>
+        <Storyboard x:Key="BarUp">
+            <ThicknessAnimation To="0,0,0,0" Storyboard.TargetProperty="Margin" DecelerationRatio="0.5" Duration="0:0:0.30"  />
+        </Storyboard>
+        <Storyboard x:Key="BarDown">
+            <ThicknessAnimation To="0,0,0,-47" Storyboard.TargetProperty="Margin" AccelerationRatio="0.5" Duration="0:0:0.30"  />
+        </Storyboard>
+    </Page.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
         <Grid Height="47" VerticalAlignment="Top">
             <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center">
                 <Image Source="{DynamicResource BackIcon}" Margin="0" x:Name="Back" />
             </Grid>
-            <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="47,0,84,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
-            <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
-                <Image Source="{DynamicResource CheckIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
-            </Grid>
-            <Grid x:Name="SelectFolder" Height="27" Width="27" HorizontalAlignment="Right" Margin="47,0" VerticalAlignment="Center" MouseUp="SelectFolder_MouseUp">
+            <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="47,0,47,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
+            <Grid x:Name="SelectFolder" Height="27" Width="27" HorizontalAlignment="Right" Margin="10,0" VerticalAlignment="Center" MouseUp="SelectFolder_MouseUp">
                 <Image Source="{DynamicResource FolderIcon}" Margin="0" />
             </Grid>
         </Grid>
-        <Grid Margin="10,47,10,10">
-            <ScrollViewer>
+        <Grid Margin="10,47,10,47">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                 </ScrollViewer.Resources>
@@ -31,7 +35,15 @@
 
                 </StackPanel>
             </ScrollViewer>
-            
+        </Grid>
+        <Grid VerticalAlignment="Bottom" Height="47" x:Name="BottomBar" Margin="0,0,0,-47" Background="{DynamicResource BackgroundBrush}" >
+            <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
+                <Image Source="{DynamicResource ForwardIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
+            </Grid>
+            <Grid Height="27" Width="90" HorizontalAlignment="Right" Margin="10,0,47,0" VerticalAlignment="Center" x:Name="AddSeries" MouseUp="AddSeries_MouseUp">
+                <Image Source="{DynamicResource PlusIcon}" Margin="0" HorizontalAlignment="Left"  />
+                <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Right" Margin="0,-1,0,0"  Text="Add Series" VerticalAlignment="Center" />
+            </Grid>
         </Grid>
     </Grid>
 </Page>

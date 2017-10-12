@@ -90,6 +90,12 @@
     <Compile Include="Controls\SeriesWithFolder.xaml.cs">
       <DependentUpon>SeriesWithFolder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SearchSingleShow.xaml.cs">
+      <DependentUpon>SearchSingleShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SeriesWithoutFolder.xaml.cs">
+      <DependentUpon>SeriesWithoutFolder.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +130,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SeriesWithFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchSingleShow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SeriesWithoutFolder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,6 +254,20 @@
   <ItemGroup>
     <Resource Include="Icons\ico-folder-dark.png" />
     <Resource Include="Icons\ico-folder-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-add-dark.png" />
+    <Resource Include="Icons\ico-add-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-edit-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-edit-dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\poster-dark.png" />
+    <Resource Include="Icons\poster-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
