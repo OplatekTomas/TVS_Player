@@ -53,6 +53,7 @@ namespace TVSPlayer {
             Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-dark.png", UriKind.Absolute));
             Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-dark-hq.png", UriKind.Absolute));
             Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-dark.png", UriKind.Absolute));
+            Application.Current.Resources["BackIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-back-dark.png", UriKind.Absolute));
 
         }
 
@@ -71,6 +72,7 @@ namespace TVSPlayer {
             Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-light.png", UriKind.Absolute));
             Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-hq.png", UriKind.Absolute));
             Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-light.png", UriKind.Absolute));
+            Application.Current.Resources["BackIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-back-light.png", UriKind.Absolute));
 
         }
     }

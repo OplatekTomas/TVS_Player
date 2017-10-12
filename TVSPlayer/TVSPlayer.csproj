@@ -221,7 +221,10 @@
     <Resource Include="Icons\ico-checked-dark.png" />
     <Resource Include="Icons\ico-checked-light.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\ico-back-dark.png" />
+    <Resource Include="Icons\ico-back-light.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\ico-forward-dark.png" />
     <Resource Include="Icons\ico-forward-light.png" />

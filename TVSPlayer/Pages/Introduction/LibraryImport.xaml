@@ -10,7 +10,10 @@
 
     <Grid Background="{DynamicResource BackgroundBrush}">
         <Grid Height="47" VerticalAlignment="Top">
-            <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="10,0,84,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
+            <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center">
+                <Image Source="{DynamicResource BackIcon}" Margin="0" x:Name="Back" />
+            </Grid>
+            <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="47,0,84,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
             <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
                 <Image Source="{DynamicResource CheckIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
             </Grid>

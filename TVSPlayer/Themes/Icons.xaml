@@ -15,5 +15,5 @@
     <BitmapImage x:Key="ReloadIcon" UriSource="pack://application:,,,/Icons/ico-reload-light.png" />
     <BitmapImage x:Key="ForwardIconHQ" UriSource="pack://application:,,,/Icons/ico-forward-light-hq.png" />
     <BitmapImage x:Key="FolderIcon" UriSource="pack://application:,,,/Icons/ico-folder-light.png" />
-
+    <BitmapImage x:Key="BackIcon" UriSource="pack://application:,,,/Icons/ico-folder-light.png" />
 </ResourceDictionary>

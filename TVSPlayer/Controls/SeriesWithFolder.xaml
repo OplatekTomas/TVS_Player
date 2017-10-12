@@ -17,8 +17,8 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <Grid Width="5" Background="{DynamicResource LighterBG}" HorizontalAlignment="Left" />
-        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="Game of thrones" FontSize="26" Margin="10,1" />
+        <!--<Grid Width="5" Background="{DynamicResource LighterBG}" HorizontalAlignment="Left" />-->
+        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="Game of thrones" FontSize="26" Margin="5,1" />
         <TextBlock x:Name="FolderLocation" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,3" Text="C:KappaKAPPAKAPPAKAPPAKAPPA" FontSize="16" />
     </Grid>
 </UserControl>
