@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 
 namespace TVSPlayer {
@@ -42,19 +43,30 @@ namespace TVSPlayer {
             List<Poster> list = Poster.GetPosters(id);
             if (list.Count > 0) {
                 Poster poster = list[0];
-                MessageBox.Show("poster");
+                Dispatcher.Invoke(new Action(() => {
+                    BitmapImage bmp = new BitmapImage(new Uri(Helper.posterLink + poster.fileName));
+                    PosterImage.Source = bmp;
+                    Storyboard sb = (Storyboard)FindResource("OpacityUp");
+                    Storyboard temp = sb.Clone();
+                    temp.FillBehavior = FillBehavior.Stop;
+                    temp.Begin(PosterImage);
+                    PosterImage.Opacity = 1;
+                }), DispatcherPriority.Send);
+
             } else {
 
             }
         }
+        
         private void GetInfo(int id) {
             Series series = Series.GetSeries(id);
-            MessageBox.Show("show");
+           
 
         }
 
         private void DetailsPart_MouseLeave(object sender, MouseEventArgs e) {
             DetailsPart.Visibility = Visibility.Hidden;
+            PosterImage.Opacity = 0;
             Storyboard close = FindResource("CloseDetails") as Storyboard;
             close.Begin(MainPart);
         }

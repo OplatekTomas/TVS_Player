@@ -18,7 +18,7 @@
     <BitmapImage x:Key="BackIcon" UriSource="pack://application:,,,/Icons/ico-back-light.png" />
     <BitmapImage x:Key="PlusIcon" UriSource="pack://application:,,,/Icons/ico-add-light.png" />
     <BitmapImage x:Key="EditIcon" UriSource="pack://application:,,,/Icons/ico-edit-light.png" />
-    <BitmapImage x:Key="NoPoster" UriSource="pack://application:,,,/Icons/poster-light.png" />
+    <BitmapImage x:Key="NoPoster" UriSource="pack://application:,,,/Icons/poster-dark.png" />
 
 
 </ResourceDictionary>

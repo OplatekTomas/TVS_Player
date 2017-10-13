@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="65" d:DesignWidth="1248" x:Name="MainPart">
+             d:DesignHeight="65" d:DesignWidth="1248" x:Name="MainPart" MouseLeave="DetailsPart_MouseLeave">
     <UserControl.Resources>
         <Storyboard x:Key="OpenDetails">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,400" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
@@ -14,7 +14,7 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
         </Storyboard>
     </UserControl.Resources>
-    <Grid  MouseLeave="DetailsPart_MouseLeave">
+    <Grid x:Name="BGGrid">
         <Grid.Style>
             <Style>
                 <Setter Property="Grid.Background" Value="#00000000" />
@@ -37,6 +37,47 @@
             <Image Source="{DynamicResource QuestionIcon}"/>
 
         </Grid>
-        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden"></Grid>
+        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
+            <Grid  HorizontalAlignment="Left" Margin="10" Width="259"  Background="{DynamicResource BackgroundBrush}">
+                <Image Source="{DynamicResource NoPoster}" Opacity="0"  x:Name="posterImage" RenderOptions.BitmapScalingMode="HighQuality" />
+            </Grid>
+            <TextBlock x:Name="LoadingText" Margin="280,0,0,0" Text="Loading..." FontSize="30" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextAlignment="Center"></TextBlock>
+            <Grid Margin="280,10,0,0" x:Name="DataPart" Opacity="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="showName" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <TextBlock x:Name="rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <StackPanel>
+                    <TextBlock  Text="Schedule:" Margin="0,75,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock  Text="Network:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock  Text="Status:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock  Text="Premiered:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock  Text="Episode Length:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock  Text="Rating:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock x:Name="schedule" Margin="0,75,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock x:Name="network" Text="HBO" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock x:Name="stat" Text="Running" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock x:Name="prem" Text="12.01.0354" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock x:Name="len" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <TextBlock x:Name="agerating" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+
+                </StackPanel>
+                <Grid Grid.Column="2">
+                    <TextBlock  Text="Summary:" Margin="0,75,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    <ScrollViewer Margin="0,94,15,0" VerticalScrollBarVisibility="Visible">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource LighterScrollBar}" ></Style>
+                        </ScrollViewer.Resources>
+                        <TextBlock x:Name="summary" TextWrapping="Wrap" Text="Summary:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" Margin="0,0,5,0" />
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

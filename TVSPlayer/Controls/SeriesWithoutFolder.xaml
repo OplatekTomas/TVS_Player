@@ -34,6 +34,10 @@
 
 
         </Grid>
-        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden"></Grid>
+        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Visible">
+            <Grid  HorizontalAlignment="Left" Margin="10" Background="{DynamicResource BackgroundBrush}">
+                <Image Source="{DynamicResource NoPoster}" Opacity="0" x:Name="PosterImage"/>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

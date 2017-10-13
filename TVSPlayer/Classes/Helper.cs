@@ -10,7 +10,8 @@ namespace TVSPlayer
 {
     class Helper {
         public static string data = @"C:\Users\Public\Documents\TVS-Player";
-       
+        public static string posterLink = "https://www.thetvdb.com/banners/";
+
         /// <summary>
         /// DO NOT USE THIS VARIABLE OUTSIDE FUNCTION SearchShowAsync() (MainWindow) OR FROM FUNCTION ReturnTVShowWhenNotNull().
         /// </summary>
