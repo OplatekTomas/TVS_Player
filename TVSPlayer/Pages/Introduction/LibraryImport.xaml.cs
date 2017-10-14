@@ -79,6 +79,7 @@ namespace TVSPlayer
             if (show.seriesName != null) { 
                 swf.SeriesName.Text = show.seriesName;
                 swf.id = show.id;
+                swf.ForceRedraw();
             }
         }
 

@@ -25,13 +25,12 @@ namespace TVSPlayer {
 
         private void Import_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.RemovePage();
-            Thread.Sleep(50);
             MainWindow.AddPage(new LibraryImport());
         }
 
         private void Create_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.RemovePage();
-
+            MainWindow.AddPage(new LibraryCreate());
         }
     }
 }

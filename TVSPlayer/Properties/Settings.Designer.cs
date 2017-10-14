@@ -34,5 +34,41 @@ namespace TVSPlayer.Properties {
                 this["Theme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FirstScan {
+            get {
+                return ((string)(this["FirstScan"]));
+            }
+            set {
+                this["FirstScan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SecondScan {
+            get {
+                return ((string)(this["SecondScan"]));
+            }
+            set {
+                this["SecondScan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ThirdScan {
+            get {
+                return ((string)(this["ThirdScan"]));
+            }
+            set {
+                this["ThirdScan"] = value;
+            }
+        }
     }
 }

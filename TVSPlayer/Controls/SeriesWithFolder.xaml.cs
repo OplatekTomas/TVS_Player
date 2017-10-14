@@ -27,23 +27,17 @@ namespace TVSPlayer {
             this.id = id;
         }
         public int id;
+        bool hasBeenUpdated = false;
         Series series;
         BitmapImage poster;
-        bool hasBeenUpdated = false;
         bool showingDetails = false;
         private void Detail_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (!showingDetails) {
                 Storyboard open = FindResource("OpenDetails") as Storyboard;
                 open.Completed += (se, ev) => { DetailsPart.Visibility = Visibility.Visible; };
                 open.Begin(MainPart);
-                int id = this.id;
-                Action posterAction = () => GetPoster(id);
-                Action informationAction = () => GetInfo(id);
-                Task informationTask = new Task(informationAction);
-                Task posterTask = new Task(posterAction);
-                informationTask.Start();
-                posterTask.Start();
                 showingDetails = true;
+                StartTasks();
                 BGGrid.Background = (Brush)FindResource("LighterBG");
             } else {
                 DetailsPart.Visibility = Visibility.Hidden;
@@ -56,6 +50,30 @@ namespace TVSPlayer {
                 BGGrid.Background = new BrushConverter().ConvertFromString("#00000000") as SolidColorBrush;
             }
         }
+
+        /// <summary>
+        /// Forces redraw of details if details have already been drawn at least once
+        /// </summary>
+        public void ForceRedraw() {
+            if (hasBeenUpdated) {
+                hasBeenUpdated = false;
+                series = null;
+                poster = null;
+                StartTasks();
+            }
+
+        }
+
+        private void StartTasks() {
+            int id = this.id;
+            Action posterAction = () => GetPoster(id);
+            Action informationAction = () => GetInfo(id);
+            Task informationTask = new Task(informationAction);
+            Task posterTask = new Task(posterAction);
+            informationTask.Start();
+            posterTask.Start();
+        }
+
         private void GetPoster(int id) {
             if (poster == null) {
                 List<Poster> list = Poster.GetPosters(id);
@@ -105,7 +123,7 @@ namespace TVSPlayer {
                     }
                 }
                 showName.Text = series.seriesName;
-                showName.MouseUp += (s, e) => { Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1"); };
+                
                 schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
                 network.Text = series.network;
                 stat.Text = series.status;
@@ -128,13 +146,9 @@ namespace TVSPlayer {
                 temp.Begin(LoadingText);
             }), DispatcherPriority.Send);
         }
-        private void DetailsPart_MouseLeave(object sender, MouseEventArgs e) {
-            /* DetailsPart.Visibility = Visibility.Hidden;
-            posterImage.Opacity = 0;
-            LoadingText.Opacity = 1;
-            DataPart.Opacity = 0;
-            Storyboard close = FindResource("CloseDetails") as Storyboard;
-            close.Begin(MainPart);*/
+
+        private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
+            Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1");
         }
     }
 }

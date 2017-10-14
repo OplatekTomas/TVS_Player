@@ -19,10 +19,10 @@ using TVS.API;
 
 namespace TVSPlayer {
     /// <summary>
-    /// Interaction logic for SearchShowResult.xaml
+    /// Interaction logic for SeriesWithoutFolderLibCreation.xaml
     /// </summary>
-    public partial class SearchShowResult : UserControl {
-        public SearchShowResult(int id) {
+    public partial class SeriesWithoutFolderLibCreation : UserControl {
+        public SeriesWithoutFolderLibCreation(int id) {
             InitializeComponent();
             this.id = id;
         }
@@ -94,6 +94,10 @@ namespace TVSPlayer {
             SetInfo();
         }
 
+        private void OpenWeb(object sender, MouseButtonEventArgs e) {
+            Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1");
+        }
+
         private void SetInfo() {
             Dispatcher.Invoke(new Action(() => {
                 genres.Text = "";
@@ -128,8 +132,5 @@ namespace TVSPlayer {
             }), DispatcherPriority.Send);
         }
 
-        private void SeriesName_MouseUp(object sender, MouseButtonEventArgs e) {
-            Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1");
-        }
     }
 }

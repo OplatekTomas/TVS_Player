@@ -71,9 +71,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Pages\Introduction\Intro.xaml.cs">
       <DependentUpon>Intro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Introduction\LibraryCreate.xaml.cs">
+      <DependentUpon>LibraryCreate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Introduction\LibraryImport.xaml.cs">
       <DependentUpon>LibraryImport.xaml</DependentUpon>
@@ -96,6 +100,9 @@
     <Compile Include="Controls\SeriesWithoutFolder.xaml.cs">
       <DependentUpon>SeriesWithoutFolder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SeriesWithoutFolderLibCreation.xaml.cs">
+      <DependentUpon>SeriesWithoutFolderLibCreation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +117,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\Introduction\Intro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Introduction\LibraryCreate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SeriesWithoutFolder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SeriesWithoutFolderLibCreation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

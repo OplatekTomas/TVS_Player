@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="TVSPlayer.SearchShowResult"
+﻿<UserControl x:Class="TVSPlayer.SeriesWithoutFolderLibCreation"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="1280" x:Name="MainPart">
+             d:DesignHeight="50" d:DesignWidth="1000" x:Name="MainPart">
     <UserControl.Resources>
         <Storyboard x:Key="OpenDetails">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,400" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
@@ -26,13 +26,11 @@
             </Style>
         </Grid.Style>
         <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="26" Margin="5,-1,0,0" />
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Height="30" x:Name="Confirm" >
-            <Image Source="{DynamicResource ForwardIcon}" />
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="22" Margin="0,0,10,0" Height="22" x:Name="Remove" >
+            <Image Source="{DynamicResource RemoveIcon}" />
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,45,0" x:Name="Detail" >
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,55,0" x:Name="Detail" >
             <Image Source="{DynamicResource QuestionIcon}" />
-
-
         </Grid>
         <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
             <Grid  HorizontalAlignment="Left" Margin="10" Width="259"  Background="{DynamicResource BackgroundBrush}">
@@ -43,13 +41,13 @@
                 </Image>
             </Grid>
             <TextBlock x:Name="LoadingText" Margin="280,0,0,0" Text="Loading..." FontSize="30" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextAlignment="Center"></TextBlock>
-            <Grid Margin="280,10,0,0" x:Name="DataPart" Opacity="0"  Visibility="Visible">
+            <Grid Margin="280,10,0,0" x:Name="DataPart" Opacity="0" Visibility="Visible" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="180"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="showName"  MouseUp="SeriesName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <TextBlock x:Name="showName" MouseUp="OpenWeb" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <StackPanel>

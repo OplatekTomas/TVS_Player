@@ -36,10 +36,8 @@ namespace TVSPlayer {
         Task<List<Series>> task;
         private void SelectFolderText_TextChanged(object sender, TextChangedEventArgs e) {
             string name = SelectFolderText.Text;
-            if (task != null) {
-                if (task.Status == TaskStatus.Running) {
-                    task.ContinueWith((t) => { });
-                }
+            if (task != null && task.Status != TaskStatus.RanToCompletion && task.Status == TaskStatus.Running) {
+                task.ContinueWith((t) => { });
             }
             task = new Task<List<Series>>(() => Series.Search(name));
             task.ContinueWith((t) => {
@@ -49,7 +47,7 @@ namespace TVSPlayer {
         }
         private void FillUI(List<Series> list) {
             ClearList();
-            Task t = new Task(() => {
+            Task.Run(() => {
                 foreach (Series show in list) {
                     Dispatcher.Invoke(new Action(() => {
                         SearchShowResult sr = new SearchShowResult(show.id);
@@ -58,13 +56,14 @@ namespace TVSPlayer {
                         Storyboard MoveUp = FindResource("OpacityUp") as Storyboard;
                         MoveUp.Begin(sr);
                         sr.SeriesName.Text = show.seriesName;
-                        sr.Confirm.MouseLeftButtonUp += (se, e) => { Helper.show = show; };
+                        sr.Confirm.MouseLeftButtonUp += (se, e) => {
+                            Helper.show = show; };
                         panel.Children.Add(sr);
                     }), DispatcherPriority.Send);
                     Thread.Sleep(7);
                 }
+
             });
-            t.Start();
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -82,5 +81,10 @@ namespace TVSPlayer {
 
             }), DispatcherPriority.Send);
         }
+
+        private void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
+            Helper.show = new Series();
+        }
+
     }
 }

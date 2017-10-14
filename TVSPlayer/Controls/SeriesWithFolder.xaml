@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="65" d:DesignWidth="1248" x:Name="MainPart" MouseLeave="DetailsPart_MouseLeave">
+             d:DesignHeight="65" d:DesignWidth="1248" x:Name="MainPart">
     <UserControl.Resources>
         <Storyboard x:Key="OpenDetails">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,400" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
@@ -39,16 +39,20 @@
         </Grid>
         <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
             <Grid  HorizontalAlignment="Left" Margin="10" Width="259"  Background="{DynamicResource BackgroundBrush}">
-                <Image Source="{DynamicResource NoPoster}" Opacity="0"  x:Name="posterImage" RenderOptions.BitmapScalingMode="HighQuality" />
+                <Image Source="{DynamicResource NoPoster}" Opacity="0"  x:Name="posterImage" RenderOptions.BitmapScalingMode="HighQuality" >
+                    <Image.BitmapEffect>
+                        <DropShadowBitmapEffect ShadowDepth="3" />
+                    </Image.BitmapEffect>
+                </Image>
             </Grid>
             <TextBlock x:Name="LoadingText" Margin="280,0,0,0" Text="Loading..." FontSize="30" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" TextAlignment="Center"></TextBlock>
-            <Grid Margin="280,10,0,0" x:Name="DataPart" Opacity="0" >
+            <Grid Margin="280,10,0,0" x:Name="DataPart" Opacity="0" Visibility="Visible" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="showName" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <TextBlock x:Name="showName" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <StackPanel>
