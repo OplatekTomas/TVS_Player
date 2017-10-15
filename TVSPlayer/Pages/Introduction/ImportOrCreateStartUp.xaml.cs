@@ -32,5 +32,10 @@ namespace TVSPlayer {
             MainWindow.RemovePage();
             MainWindow.AddPage(new LibraryCreate());
         }
+
+        private void Back_MouseUp(object sender, MouseButtonEventArgs e) {
+            MainWindow.RemovePage();
+            MainWindow.AddPage(new InitialSettings());
+        }
     }
 }

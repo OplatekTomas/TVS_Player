@@ -14,30 +14,17 @@
     </Page.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.4*" x:Name="TopRow"/>
+            <RowDefinition Height="1.1*" x:Name="TopRow"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid x:Name="Back" MouseUp="Back_MouseUp">
                 <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
             </Grid>
-            <Grid Margin="10,0,10,80" x:Name="Optionals">
-                <TextBlock VerticalAlignment="Bottom" Margin="0,0,0,111" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directories that will be scanned for episodes (optional)" FontSize="20" />
-                <TextBox Height="27" VerticalAlignment="Bottom" Margin="0,30,42,74" x:Name="FirstScan" GotFocus="FirstScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="FirstFolder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,74" MouseUp="FirstFolder_MouseUp">
-                    <Image Source="{DynamicResource FolderIcon}"/>
-                </Grid>
-                <TextBox Height="27" VerticalAlignment="Bottom" Margin="0,30,42,37" x:Name="SecondScan" GotFocus="SecondScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="SecondFolder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,37" MouseUp="SecondFolder_MouseUp">
-                    <Image Source="{DynamicResource FolderIcon}"/>
-                </Grid>
-                <TextBox Height="27" VerticalAlignment="Bottom" Margin="0,30,42,0" x:Name="ThirdScan" GotFocus="ThirdScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="ThirdFolder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,0" MouseUp="ThirdFolder_MouseUp">
-                    <Image Source="{DynamicResource FolderIcon}"/>
-                </Grid>
-            </Grid>
+            <TextBlock FontSize="25" Text="Create library" x:Name="TopText" Margin="40,5" Foreground="{DynamicResource TextColor}" />
+
             <Grid x:Name="TextBoxGrid"  Margin="10,0,10,0" VerticalAlignment="Bottom" >
-                <TextBlock x:Name="Header" VerticalAlignment="Top" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directory where your library with TV shows will be located" FontSize="20" />
+                <TextBlock x:Name="Header" VerticalAlignment="Top" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directory where your library with TV shows will be located" FontSize="16" />
                 <TextBox Height="27" VerticalAlignment="Bottom" Margin="0,35,42,0" x:Name="FolderLocation" GotFocus="FolderLocation_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
                 <Grid  Height="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,0" MouseUp="SelectFolder_MouseUp">
                     <Image Source="{DynamicResource FolderIcon}"/>

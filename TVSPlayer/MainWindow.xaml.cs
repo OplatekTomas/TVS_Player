@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,10 +23,20 @@ namespace TVSPlayer {
 
         public MainWindow() {
             InitializeComponent();
-
+            SetDimensions();
         }
         private bool theme;
 
+        private void SetDimensions() {
+            if (Properties.Settings.Default.Maximized) {
+                this.WindowState = WindowState.Maximized;
+            } else { 
+                string height = Properties.Settings.Default.Resolution;
+                List<string> dimensions = height.Split('x').ToList();
+                Application.Current.MainWindow.Width = Int32.Parse(dimensions[0]);
+                Application.Current.MainWindow.Height = Int32.Parse(dimensions[1]);
+            }
+        }
 
         #region Animations
 
@@ -153,6 +164,16 @@ namespace TVSPlayer {
             if (!checkConnection()) {
                 AddPage(new StartupInternetError());
             }
+        }
+
+        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (this.WindowState == WindowState.Maximized) {
+                Properties.Settings.Default.Maximized = true;
+            } else {
+                Properties.Settings.Default.Maximized = false;
+            }
+            Properties.Settings.Default.Resolution = Math.Ceiling(this.ActualWidth) + "x" + Math.Ceiling(this.ActualHeight);
+            Properties.Settings.Default.Save();
         }
     }
 

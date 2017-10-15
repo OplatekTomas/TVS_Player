@@ -73,6 +73,9 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Pages\Introduction\InitialSettings.xaml.cs">
+      <DependentUpon>InitialSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Introduction\Intro.xaml.cs">
       <DependentUpon>Intro.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
       <DependentUpon>SeriesWithoutFolderLibCreation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Page Include="Pages\Introduction\InitialSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -46,7 +46,7 @@ namespace TVSPlayer
         }
 
         private void SelectFolder_MouseUp(object sender, MouseButtonEventArgs e) {
-            VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
+            var fbd = new VistaFolderBrowserDialog();
             if ((bool)fbd.ShowDialog()) {
                 if (!gotEvents) {
                     SetEvents();

@@ -47,23 +47,25 @@ namespace TVSPlayer {
         }
         private void FillUI(List<Series> list) {
             ClearList();
-            Task.Run(() => {
-                foreach (Series show in list) {
-                    Dispatcher.Invoke(new Action(() => {
-                        SearchShowResult sr = new SearchShowResult(show.id);
-                        sr.Height = 50;
-                        sr.Opacity = 0;
-                        Storyboard MoveUp = FindResource("OpacityUp") as Storyboard;
-                        MoveUp.Begin(sr);
-                        sr.SeriesName.Text = show.seriesName;
-                        sr.Confirm.MouseLeftButtonUp += (se, e) => {
-                            Helper.show = show; };
-                        panel.Children.Add(sr);
-                    }), DispatcherPriority.Send);
-                    Thread.Sleep(7);
-                }
+            if (list != null) { 
+                Task.Run(() => {
+                    foreach (Series show in list) {
+                        Dispatcher.Invoke(new Action(() => {
+                            SearchShowResult sr = new SearchShowResult(show.id);
+                            sr.Height = 50;
+                            sr.Opacity = 0;
+                            Storyboard MoveUp = FindResource("OpacityUp") as Storyboard;
+                            MoveUp.Begin(sr);
+                            sr.SeriesName.Text = show.seriesName;
+                            sr.Confirm.MouseLeftButtonUp += (se, e) => {
+                                Helper.show = show; };
+                            panel.Children.Add(sr);
+                        }), DispatcherPriority.Send);
+                        Thread.Sleep(7);
+                    }
 
-            });
+                });
+            }
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {

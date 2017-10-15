@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVSPlayer"
         mc:Ignorable="d"
-        Title="TVS Player" Height="720" Width="1280" MinWidth="800" MinHeight="480" x:Name="Main">
+        Title="TVS Player" Height="720" Width="1280" MinWidth="800" MinHeight="480" x:Name="Main" Closing="Main_Closing">
     <Window.Resources>
         <Storyboard x:Key="ShowSearch">
             <DoubleAnimation Storyboard.TargetProperty="Width" From="0" To="400" DecelerationRatio=".5" Duration="0:0:0.25" />

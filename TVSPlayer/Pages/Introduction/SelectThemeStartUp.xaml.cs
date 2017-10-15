@@ -30,7 +30,7 @@ namespace TVSPlayer
             Properties.Settings.Default.Theme = false;
             Properties.Settings.Default.Save();
             MainWindow.RemovePage();
-            MainWindow.AddPage(new StartUp());
+            MainWindow.AddPage(new InitialSettings());
         }
 
         private void Light_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -38,7 +38,7 @@ namespace TVSPlayer
             Properties.Settings.Default.Save();
             ThemeSwitcher.SwitchTheme();
             MainWindow.RemovePage();
-            MainWindow.AddPage(new StartUp());
+            MainWindow.AddPage(new InitialSettings());
         }
     }
 }
