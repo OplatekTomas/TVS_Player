@@ -106,6 +106,9 @@
     <Compile Include="Controls\SeriesWithoutFolderLibCreation.xaml.cs">
       <DependentUpon>SeriesWithoutFolderLibCreation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ProgressBarPage.xaml.cs">
+      <DependentUpon>ProgressBarPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="Pages\Introduction\InitialSettings.xaml">
       <SubType>Designer</SubType>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SeriesWithoutFolderLibCreation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ProgressBarPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
