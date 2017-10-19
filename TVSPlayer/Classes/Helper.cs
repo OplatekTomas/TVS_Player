@@ -9,7 +9,7 @@ using TVS.API;
 namespace TVSPlayer
 {
     class Helper {
-        public static string data = @"C:\Users\Public\Documents\TVS-Player";
+        public static string data = @"C:\Users\Public\Documents\TVS-Player\";
         public static string posterLink = "https://www.thetvdb.com/banners/";
 
         /// <summary>

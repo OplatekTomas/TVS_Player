@@ -156,7 +156,7 @@ namespace TVSPlayer {
         }
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (!Directory.Exists(Helper.data)) {
-                AddPage(new ProgressBarPage(20));
+                AddPage(new LibraryImport());
                 //AddPage(new Intro());
             } else {
                 

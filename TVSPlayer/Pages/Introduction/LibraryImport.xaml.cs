@@ -73,15 +73,6 @@ namespace TVSPlayer
             thread.Start();
         }
 
-        private async void ResetInfo(SeriesWithFolder swf) {
-            Window main = Window.GetWindow(this);
-            Series show = await ((MainWindow)main).SearchShowAsync();
-            if (show.seriesName != null) { 
-                swf.SeriesName.Text = show.seriesName;
-                swf.id = show.id;
-                swf.ForceRedraw();
-            }
-        }
 
         /// <summary>
         /// Searches for Series by directory name and renders the result
@@ -104,7 +95,6 @@ namespace TVSPlayer
                                 swf.SeriesName.Text = s.seriesName;
                                 swf.Opacity = 0;
                                 swf.Remove.MouseUp += (sen, ev) => RemoveResult(swf);
-                                swf.Edit.MouseUp += (sen, ev) => ResetInfo(swf);
                                 swf.FolderLocation.Text = directory;
                                 panel.Children.Add(swf);
                                 sb.Begin(swf);
@@ -163,7 +153,6 @@ namespace TVSPlayer
                         swf.SeriesName.Text = show.seriesName;
                         swf.Opacity = 0;
                         swf.Remove.MouseUp += (sen, ev) => { panel.Children.Remove(swf); };
-                        swf.Edit.MouseUp += (sen, ev) => ResetInfo(swf);
                         swf.FolderLocation.Text = fbd.SelectedPath;
                         panel.Children.Add(swf);
                         sb.Begin(swf);

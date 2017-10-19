@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 using TVS.API;
+using Newtonsoft.Json.Linq;
 
 namespace TVSPlayer {
     class Database {
@@ -34,14 +36,26 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="series">Which Series to add</param>
         public static void AddSeries(List<Series> series) {
-
+            List<Series> list = SeriesAdder(series);
+            string json = JsonConvert.SerializeObject(list);
+            WriteToFile(Helper.data + "Series.tvsp", json);
         }
         /// <summary>
         /// Adds single Series to database
         /// </summary>
         /// <param name="series">Which Series to add</param>
         public static void AddSeries(Series series) {
+            List<Series> list = SeriesAdder(new List<Series>() { series });
+            string json = JsonConvert.SerializeObject(list);
+            WriteToFile(Helper.data + "Series.tvsp", json);
+        }
 
+        private static List<Series> SeriesAdder(List<Series> series) {
+            string original = ReadFromFile(Helper.data + "Series.tvsp");
+            JObject jo = JObject.Parse(original);
+            List<Series> list = jo.ToObject<List<Series>>();
+            list.AddRange(series);
+            return list;
         }
 
         #endregion
