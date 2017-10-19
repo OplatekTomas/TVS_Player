@@ -27,9 +27,6 @@ namespace TVSPlayer {
             this.id = id;
         }
         public int id;
-        bool hasBeenUpdated = false;
-        Series series;
-        BitmapImage poster;
         bool showingDetails = false;
         private void Detail_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             if (!showingDetails) {

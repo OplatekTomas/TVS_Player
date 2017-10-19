@@ -154,9 +154,16 @@ namespace TVSPlayer {
             }
 
         }
+
+        private void TestFunctions() {
+            List<Episode> le=  Episode.GetAllEpisodes(121361);
+            Episode e = Episode.GetEpisode(4245772);
+            List<Series> s = Series.Search("game");
+
+        }
+
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (!Directory.Exists(Helper.data)) {
-                AddPage(new LibraryImport());
                 //AddPage(new Intro());
             } else {
                 
@@ -165,6 +172,7 @@ namespace TVSPlayer {
             if (!checkConnection()) {
                 AddPage(new StartupInternetError());
             }
+            TestFunctions();
         }
 
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
