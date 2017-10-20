@@ -58,9 +58,6 @@ namespace TVSPlayer
         private void SelectFolderText_TextChanged(object sender, TextChangedEventArgs e) {
             ScanAndRenderDirs();
         }
-
-        private void Confirm_MouseUp(object sender, MouseButtonEventArgs e) {
-        }
         Thread thread;
         private void ScanAndRenderDirs() {
             if (thread != null) {
@@ -162,5 +159,16 @@ namespace TVSPlayer
                 }
             }
         }
+
+        private async void Confirm_MouseUp(object sender, MouseButtonEventArgs e) {
+            List<int> ids = new List<int>();
+            foreach (var element in panel.Children) {
+                SeriesWithFolder swf = (SeriesWithFolder)element;
+                ids.Add(swf.id);
+            }
+            await MainWindow.CreateDatabase(ids);
+        }
+       
+        
     }
 }

@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Pages\Introduction\InitialSettings.xaml.cs">
       <DependentUpon>InitialSettings.xaml</DependentUpon>
     </Compile>

@@ -33,8 +33,7 @@
                     </Image.RenderTransform>
                 </Image>
                 <TextBlock Foreground="{DynamicResource TextColor}" x:Name="MainText" Text="Please wait..." VerticalAlignment="Center" Margin="60,0" FontSize="20" />
-                <TextBlock Foreground="{DynamicResource TextColor}" x:Name="Count" Text="-" HorizontalAlignment="Right" TextAlignment="Right" VerticalAlignment="Bottom" Margin="32,0" FontSize="14" />
-                <TextBlock Foreground="{DynamicResource TextColor}" x:Name="MaxValue" Text="/10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0" FontSize="14" />
+                <TextBlock Foreground="{DynamicResource TextColor}" x:Name="Count" Text="-" HorizontalAlignment="Right" TextAlignment="Right" VerticalAlignment="Bottom" Margin="20,0" FontSize="14" />
 
             </Grid>
             <ProgressBar x:Name="ProgBar" ValueChanged="ProgBar_ValueChanged" VerticalAlignment="Bottom" Loaded="ProgressBar_Loaded" Height="10" Margin="5,0,5,5" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource AccentColor}" BorderThickness="0" Maximum="15" Grid.Row="1"  />

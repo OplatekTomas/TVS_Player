@@ -26,6 +26,23 @@ namespace TVSPlayer {
             InitializeComponent();
         }
 
+        public Series show = null;
+        /// <summary>
+        /// Asynchronous task that waits until variable show is not null and then returns this variable
+        /// </summary>
+        public async Task<Series> ReturnTVShowWhenNotNull() {
+            Series s = null;
+            await Task.Run(() => {
+                do {
+                    s = show;
+                    Thread.Sleep(100);
+                } while (show == null);
+                s = show;
+            });
+            show = null;
+            return s;
+        }
+
         private void SelectFolderText_GotFocus(object sender, RoutedEventArgs e) {
             SelectFolderText.Text = "";
             SelectFolderText.TextAlignment = TextAlignment.Left;
@@ -49,16 +66,16 @@ namespace TVSPlayer {
             ClearList();
             if (list != null) { 
                 Task.Run(() => {
-                    foreach (Series show in list) {
+                    foreach (Series sh in list) {
                         Dispatcher.Invoke(new Action(() => {
-                            SearchShowResult sr = new SearchShowResult(show.id);
+                            SearchShowResult sr = new SearchShowResult(sh.id);
                             sr.Height = 50;
                             sr.Opacity = 0;
                             Storyboard MoveUp = FindResource("OpacityUp") as Storyboard;
                             MoveUp.Begin(sr);
-                            sr.SeriesName.Text = show.seriesName;
+                            sr.SeriesName.Text = sh.seriesName;
                             sr.Confirm.MouseLeftButtonUp += (se, e) => {
-                                Helper.show = show; };
+                                show = sh; };
                             panel.Children.Add(sr);
                         }), DispatcherPriority.Send);
                         Thread.Sleep(7);
@@ -69,7 +86,7 @@ namespace TVSPlayer {
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            Helper.show = new Series();
+            show = new Series();
         }
         private void ClearList() {
             Dispatcher.Invoke(new Action(() => {
@@ -85,7 +102,9 @@ namespace TVSPlayer {
         }
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
-            Helper.show = new Series();
+            Series s = new Series();
+            s.imdbId = "kua";
+            show = s;
         }
 
     }

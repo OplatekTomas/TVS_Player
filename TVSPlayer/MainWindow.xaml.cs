@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using TVS.API;
 
 namespace TVSPlayer {
@@ -123,17 +124,16 @@ namespace TVSPlayer {
         /// Call this function (and this function only) when you need to search API (returns either basic info about Series or null)
         /// </summary>
        public async Task<Series> SearchShowAsync() {
-
-            AddPage(new SearchSingleShow());
-            Series s = await Helper.ReturnTVShowWhenNotNull();
+            SearchSingleShow singleSearch = new SearchSingleShow();
+            AddPage(singleSearch);
+            Series s = await singleSearch.ReturnTVShowWhenNotNull();
             RemovePage();
-            Helper.show = null;
-            if (s == new Series()) {
+            singleSearch.show = null;
+            if (s.imdbId == "kua") {
                 return null;
             }
             return s;
         }
-        // Event that is called after animation of removing page is done - actualy removes the page
         #endregion
 
         //Code for "Test" button
@@ -155,16 +155,55 @@ namespace TVSPlayer {
 
         }
 
-        private void TestFunctions() {
-            List<Episode> le=  Episode.GetAllEpisodes(121361);
-            Episode e = Episode.GetEpisode(4245772);
-            List<Series> s = Series.Search("game");
+        /// <summary>
+        /// Creates database from ids provided USAGE: await CreateDatabase(...)
+        /// </summary>
+        /// <param name="ids">List of TVDb ids</param>     
+        /// <returns></returns>
+        public async static Task CreateDatabase(List<int> ids) {
+            Window main = Application.Current.MainWindow;
+            await ((MainWindow)main).GetFullShows(ids);
+        }
 
+        /// <summary>
+        /// Creates database from ids provided USAGE: await CreateDatabase(...)
+        /// </summary>
+        /// <param name="ids">List of TVDb ids</param>     
+        /// <returns></returns>
+        public async Task GetFullShows(List<int> ids) {
+            ProgressBarPage pbar = new ProgressBarPage(ids.Count);
+            int total = 0;
+            AddPage(pbar);
+            await Task.Run(() => {
+                List<Task> tasks = new List<Task>();
+                foreach (int id in ids) {                                   
+                    tasks.Add(Task.Run(() => {
+                        Task[] secondTasks = new Task[4];
+                        secondTasks[0] = Task.Run(() => Database.AddSeries(Series.GetSeries(id)));
+                        secondTasks[1] = Task.Run(() => Database.AddActor(id, Actor.GetActors(id)));
+                        secondTasks[2] = Task.Run(() => Database.AddPoster(id, Poster.GetPosters(id)));
+                        secondTasks[3] = Task.Run(() => Database.AddEpisode(id, Episode.GetAllEpisodes(id)));
+                        Task.WaitAll(secondTasks);
+                        Dispatcher.Invoke(new Action(() => {
+                            total++;
+                            pbar.SetValue(total);
+                        }), DispatcherPriority.Send);
+                    }));
+                }
+                tasks.WaitAll();
+            });
+            //This code runs after all API calls are done
+            RemovePage();
+        }
+
+        private async void TestFunctions() {
+            List<int> ids = new List<int>() { 121361, 247808, 281662, 176941, 153021 };
+            await GetFullShows(ids);
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (!Directory.Exists(Helper.data)) {
-                //AddPage(new Intro());
+                AddPage(new Intro());
             } else {
                 
             }

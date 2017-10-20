@@ -21,44 +21,41 @@ namespace TVSPlayer {
     /// Interaction logic for ProgressBarPage.xaml
     /// </summary>
     public partial class ProgressBarPage : Page {
-        public ProgressBarPage(double maximum) {
+        public ProgressBarPage(int maximum) {
             InitializeComponent();
             ProgBar.Maximum = maximum;
-            MaxValue.Text = "/" + maximum;
+            Count.Text = "/" + maximum;
+            Maximum = maximum;
         }
-        public ProgressBarPage(double maximum, string text) {
+        public int Maximum { get; set; }
+        public ProgressBarPage(int maximum, string text) {
             InitializeComponent();
             ProgBar.Maximum = maximum;
-            MaxValue.Text = "/" + maximum;
+            Count.Text = "/" + maximum;
             MainText.Text = text;
+            Maximum = maximum;
         }
-        public void SetValue(double value) {
-            AnimateNumber(value);
-            DoubleAnimation animation = new DoubleAnimation(GetValue(value), new TimeSpan(0,0,0,0,350));
+        public void SetValue(int value) {
+            Count.Text = value+"/"+ Maximum;
+            DoubleAnimation animation = new DoubleAnimation(GetValue(value), new TimeSpan(0,0,0,0,200));
             animation.AccelerationRatio = .5;
             animation.DecelerationRatio = .5;
             ProgBar.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
-        private void AnimateNumber(double value) {
-            DoubleAnimation anim = new DoubleAnimation(0.5, new TimeSpan(0, 0, 0, 0, 250));
-            anim.Completed += (s, e) => {
-                Count.Text = value.ToString();
-                DoubleAnimation second = new DoubleAnimation(1, new TimeSpan(0, 0, 0, 0, 250));
-                Count.BeginAnimation(TextBlock.OpacityProperty, second);
-            };
-            Count.BeginAnimation(TextBlock.OpacityProperty, anim);
+        public void AddValue(int value) {
+            SetValue(Convert.ToInt32(ProgBar.Value) + value);
         }
 
-        private double GetValue(double value) {
+
+        private double GetValue(int value) {
             if (value > ProgBar.Maximum) return ProgBar.Maximum;
             if (value < 0) return 0;
             return value;
         }
 
         private void ProgressBar_Loaded(object sender, RoutedEventArgs e) {
-            test();
-
+            //test();
             Animate();
 
         }

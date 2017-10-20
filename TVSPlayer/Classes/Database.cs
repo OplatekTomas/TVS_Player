@@ -14,7 +14,6 @@ using System.Net;
 
 namespace TVSPlayer {
     class Database {
-        static List<string> filesUsed = new List<string>();
         static string db = Helper.data;
 
         #region Series
@@ -539,26 +538,18 @@ namespace TVSPlayer {
         /// <param name="path">where to read from</param>
         /// <returns>read string</returns>
         private static string ReadFromFile(string path) {
-            int i = 0;
-            while (i < filesUsed.Count) {
-                if (filesUsed[i] == path) {
-                    i = 0;
-                    Thread.Sleep(5);
-                } else {
-                    i++;
-                }
-            }
-            string text;
-            filesUsed.Add(path);
-            if (!Directory.Exists(Path.GetDirectoryName(path))) {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-            }
-            using (FileStream fs = File.Open(path,FileMode.OpenOrCreate)) {
-                StreamReader sr = new StreamReader(fs);
-                text = sr.ReadToEnd();
-            }
-            filesUsed.Remove(path);
-            return text;
+            do {
+                try {
+                    if (!Directory.Exists(Path.GetDirectoryName(path))) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    }
+                    StreamReader sr = new StreamReader(path);
+                    string text = sr.ReadToEnd();
+                    sr.Close();
+                    return text;
+                } catch (IOException) { }
+                Thread.Sleep(10);
+            } while (true);
         }
 
         /// <summary>
@@ -576,23 +567,18 @@ namespace TVSPlayer {
         /// <param name="path">where to write</param>
         /// <param name="json">what to write</param>
         private static void WriteToFile(string path, string json) {
-            int i = 0;
-            while (i < filesUsed.Count) {
-                if (filesUsed[i] == path) {
-                    i = 0;
-                    Thread.Sleep(5);
-                } else {
-                    i++;
-                }
-            }
-            if (!Directory.Exists(Path.GetDirectoryName(path))) {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-            }
-            filesUsed.Add(path);
-            StreamWriter sw = new StreamWriter(path);
-            sw.Write(json);
-            sw.Close();
-            filesUsed.Remove(path);
+            do {
+                try {
+                    if (!Directory.Exists(Path.GetDirectoryName(path))) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    }
+                    StreamWriter sw = new StreamWriter(path);
+                    sw.Write(json);
+                    sw.Close();
+                } catch (IOException) { }
+                Thread.Sleep(10);
+
+            } while (true);
         }
 
        
