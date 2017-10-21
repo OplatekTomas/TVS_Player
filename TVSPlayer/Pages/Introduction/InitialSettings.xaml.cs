@@ -90,22 +90,17 @@ namespace TVSPlayer {
 
         private void SaveLocations() {
             if (Directory.Exists(FirstScan.Text)) {
-                Properties.Settings.Default.FirstScan = FirstScan.Text;
-                Properties.Settings.Default.Save();
+                Settings.FirstScanLocation = FirstScan.Text;
             }
             if (Directory.Exists(SecondScan.Text)) {
-                Properties.Settings.Default.SecondScan = SecondScan.Text;
-                Properties.Settings.Default.Save();
+                Settings.SecondScanLocation = SecondScan.Text;
             }
             if (Directory.Exists(ThirdScan.Text)) {
-                Properties.Settings.Default.ThirdScan = ThirdScan.Text;
-                Properties.Settings.Default.Save();
+                Settings.ThirdScanLocation = ThirdScan.Text;
             }
             if ((bool)AutoDownload.IsChecked) {
-                Properties.Settings.Default.CacheLocation = CacheFolder.Text;
-                Properties.Settings.Default.Save();
-                Properties.Settings.Default.AutoDownload = true;
-                Properties.Settings.Default.Save();
+                Settings.DownloadCacheLocation = CacheFolder.Text;
+                Settings.AutoDownload = true;
             }
         }
 

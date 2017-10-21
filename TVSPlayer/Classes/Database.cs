@@ -532,12 +532,14 @@ namespace TVSPlayer {
         }
         #endregion
 
+
+
         /// <summary>
         /// Reads from file, is safe - waits for file not to be used if it is used
         /// </summary>
         /// <param name="path">where to read from</param>
         /// <returns>read string</returns>
-        private static string ReadFromFile(string path) {
+        public static string ReadFromFile(string path) {
             do {
                 try {
                     if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -566,7 +568,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="path">where to write</param>
         /// <param name="json">what to write</param>
-        private static void WriteToFile(string path, string json) {
+        public static void WriteToFile(string path, string json) {
             do {
                 try {
                     if (!Directory.Exists(Path.GetDirectoryName(path))) {

@@ -161,12 +161,16 @@ namespace TVSPlayer
         }
 
         private async void Confirm_MouseUp(object sender, MouseButtonEventArgs e) {
-            List<int> ids = new List<int>();
+            List<Tuple<int, string>> ids = new List<Tuple<int, string>>();
             foreach (var element in panel.Children) {
                 SeriesWithFolder swf = (SeriesWithFolder)element;
-                ids.Add(swf.id);
+                ids.Add(new Tuple<int, string>(swf.id,swf.FolderLocation.Text));                
             }
+            Settings.Library = SelectFolderText.Text;
             await MainWindow.CreateDatabase(ids);
+            List<Series> all = Database.GetSeries();
+
+            MainWindow.RemovePage();
         }
        
         

@@ -158,9 +158,9 @@ namespace TVSPlayer {
         /// <summary>
         /// Creates database from ids provided USAGE: await CreateDatabase(...)
         /// </summary>
-        /// <param name="ids">List of TVDb ids</param>     
+        /// <param name="ids">Item1: TVDb ids, Item2: Path in library </param>     
         /// <returns></returns>
-        public async static Task CreateDatabase(List<int> ids) {
+        public async static Task CreateDatabase(List<Tuple<int,string>> ids) {
             Window main = Application.Current.MainWindow;
             await ((MainWindow)main).GetFullShows(ids);
         }
@@ -170,16 +170,23 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="ids">List of TVDb ids</param>     
         /// <returns></returns>
-        public async Task GetFullShows(List<int> ids) {
+        public async Task GetFullShows(List<Tuple<int, string>> ids) {
             ProgressBarPage pbar = new ProgressBarPage(ids.Count);
             int total = 0;
             AddPage(pbar);
+            //Wait for this task to complete without blocking main thread
             await Task.Run(() => {
                 List<Task> tasks = new List<Task>();
-                foreach (int id in ids) {                                   
+                foreach (Tuple<int,string> combination in ids) {                                   
                     tasks.Add(Task.Run(() => {
+                        int id = combination.Item1;
+                        //Create 4 tasks, wait for them to complete and then set value of ProgressBar
                         Task[] secondTasks = new Task[4];
-                        secondTasks[0] = Task.Run(() => Database.AddSeries(Series.GetSeries(id)));
+                        secondTasks[0] = Task.Run(() => {
+                            Series s = Series.GetSeries(id);
+                            s.libraryPath = combination.Item2;
+                            Database.AddSeries(s);
+                        });
                         secondTasks[1] = Task.Run(() => Database.AddActor(id, Actor.GetActors(id)));
                         secondTasks[2] = Task.Run(() => Database.AddPoster(id, Poster.GetPosters(id)));
                         secondTasks[3] = Task.Run(() => Database.AddEpisode(id, Episode.GetAllEpisodes(id)));
@@ -190,28 +197,34 @@ namespace TVSPlayer {
                         }), DispatcherPriority.Send);
                     }));
                 }
+                //Wait for all tasks created in foreach to complete
                 tasks.WaitAll();
             });
-            //This code runs after all API calls are done
+            //This code runs after all API calls are done and stuff is saved
             RemovePage();
         }
 
         private async void TestFunctions() {
-            List<int> ids = new List<int>() { 121361, 247808, 281662, 176941, 153021 };
-            await GetFullShows(ids);
+            //Settings.SaveSettings();
+            Settings.Library = "test";
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (!Directory.Exists(Helper.data)) {
-                AddPage(new Intro());
+            Settings.Load();
+            if (false) {
+                if (!Directory.Exists(Helper.data)) {
+                    //AddPage(new Intro());
+                } else {
+
+                }
+
+                if (!checkConnection()) {
+                    AddPage(new StartupInternetError());
+                }
             } else {
-                
+                TestFunctions();
             }
 
-            if (!checkConnection()) {
-                AddPage(new StartupInternetError());
-            }
-            TestFunctions();
         }
 
         private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {

@@ -27,15 +27,13 @@ namespace TVSPlayer
 
 
         private void Dark_MouseUp(object sender, MouseButtonEventArgs e) {
-            Properties.Settings.Default.Theme = false;
-            Properties.Settings.Default.Save();
+            Settings.Theme = false;
             MainWindow.RemovePage();
             MainWindow.AddPage(new InitialSettings());
         }
 
         private void Light_MouseUp(object sender, MouseButtonEventArgs e) {
-            Properties.Settings.Default.Theme = true;
-            Properties.Settings.Default.Save();
+            Settings.Theme = true;
             ThemeSwitcher.SwitchTheme();
             MainWindow.RemovePage();
             MainWindow.AddPage(new InitialSettings());

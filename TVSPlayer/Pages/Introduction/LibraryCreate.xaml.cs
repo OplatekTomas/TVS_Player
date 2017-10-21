@@ -89,6 +89,12 @@ namespace TVSPlayer {
         }
 
         private void Later_MouseUp(object sender, MouseButtonEventArgs e) {
+            if (Directory.Exists(FolderLocation.Text)) {
+                Settings.Library = FolderLocation.Text;
+                MainWindow.RemovePage();
+            } else {
+                MessageBox.Show("Directory does not exist");
+            }
 
         }
 
@@ -97,8 +103,19 @@ namespace TVSPlayer {
             MainWindow.AddPage(new StartUp());
         }
 
-        private void Confirm_MouseUp(object sender, MouseButtonEventArgs e) {
-
+        private async void Confirm_MouseUp(object sender, MouseButtonEventArgs e) {
+            if (Directory.Exists(FolderLocation.Text)) {
+                List<Tuple<int, string>> ids = new List<Tuple<int, string>>();
+                foreach (UIElement ui in panel.Children) {
+                    var series = (SeriesWithoutFolderLibCreation)ui;
+                    ids.Add(new Tuple<int,string>(series.id, null));
+                }
+                Settings.Library = FolderLocation.Text;
+                await MainWindow.CreateDatabase(ids);
+                MainWindow.RemovePage();
+            } else {
+                MessageBox.Show("Directory does not exist");
+            }
         }
 
         private void AddSeries_MouseUp(object sender, MouseButtonEventArgs e) {
