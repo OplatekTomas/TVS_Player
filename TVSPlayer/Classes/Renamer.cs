@@ -11,23 +11,103 @@ using static TVS.API.Episode;
 namespace TVSPlayer {
     class Renamer {
 
+
         public static List<ScannedFile> FindAndRename(Series series) {
             List<ScannedFile> files = new List<ScannedFile>();
-            files.AddRange(FindAndRenameLibrary(series));
+            files.AddRange(FindAndRenameInLibrary(series));
             return files;
         }
-        private static List<ScannedFile> FindAndRenameLibrary(Series series) {
+
+
+        private static List<ScannedFile> FindAndRenameInLibrary(Series series) {
             if (series.libraryPath == null) {
                 CreateDirectoryForSeries(series);
                 return new List<ScannedFile>();
             } else {
                 List<Episode> allepisodes = Episode.GetAllEpisodes(series.id);
                 ScannedFile sf = new ScannedFile();
-                
+                List<ScannedFileInfo> files = GetSeriesFilesInfo(series, series.libraryPath);
                 return new List<ScannedFile>();
             }
         }
 
+        private static List<ScannedFileInfo> GetSeriesFilesInfo(Series series, string path) {
+            List<ScannedFileInfo> sfiList = ScanAndFilterFiles(series, path);
+            foreach (ScannedFileInfo sfi in sfiList) {
+                sfi.extension = Path.GetExtension(sfi.origFile);
+                
+            }
+            
+            return sfiList;
+        }
+
+        #region File filtering
+
+        private static List<ScannedFileInfo> ScanAndFilterFiles(Series series, string path) {
+            List<ScannedFileInfo> sfiList = new List<ScannedFileInfo>();
+            List<string> files = FilterSeries(series,FilterExtensions(Directory.GetFiles(path, "*", SearchOption.AllDirectories).ToList()));
+            foreach (string file in files) {
+                ScannedFileInfo sfi = new ScannedFileInfo();
+                sfi.origFile = file;
+                sfiList.Add(sfi);
+            }
+            return sfiList;
+
+        }
+
+        private static List<string> FilterSeries(Series series, List<string> files) {
+            List<string> newFiles = new List<string>();
+            foreach (string file in files) {
+                if (CheckAliases(file,series) || CheckAliasesParentDir(file,series)) {
+                    files.Add(file);
+                }
+
+            }
+            return newFiles;
+        }
+
+        private static bool CheckAliasesParentDir(string path, Series series) {
+            string pathDir = Path.GetFileName(Path.GetDirectoryName(path.ToUpper()));
+            foreach (string alias in series.aliases) {
+                string temp = alias.ToUpper();
+                if ((pathDir.StartsWith(temp) || (pathDir.Contains("SEASON") && Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path.ToUpper()))).StartsWith(temp))) && IsMatchToIdentifiers(path)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool IsMatchToIdentifiers(string file) {
+            Match season = new Regex("[s][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
+            Match episode = new Regex("[e][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
+            Match special = new Regex("[0-5][0-9][x][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
+            if ((season.Success && episode.Success && (episode.Index - season.Index) < 5) || special.Success) {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAliases(string file,Series series) {
+            foreach (string alias in series.aliases) {
+                if (Path.GetFileName(file.ToUpper()).StartsWith(alias.ToUpper())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static List<string> FilterExtensions(List<string> files) {
+            string[] fileExtension = new string[9] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv" };
+            List<string> filtered = new List<string>();
+            foreach (string file in files) {
+                if (fileExtension.Any(file.Contains)) {
+                    filtered.Add(file);
+                }
+            }
+            return filtered;
+        }
+
+#endregion
         /// <summary>
         /// Creates directory for series. If directory exists it just adds _number
         /// </summary>
@@ -41,8 +121,11 @@ namespace TVSPlayer {
             }
             Directory.CreateDirectory(path);
             series.libraryPath = path;
-            Database.EditSeries(series.id, series); 
+            Database.EditSeries(series.id, series);
         }
+
+
+
 
         /// <summary>
         /// Returns name of an episode in format Series - SxxExx - Episode
@@ -89,7 +172,7 @@ namespace TVSPlayer {
         private static string GetPath(string path, string name, string extension) {
             int filenumber = 1;
             string final;
-            Match m = new Regex("s[0-5][0-9]", RegexOptions.IgnoreCase).Match(name);
+            Match m = new Regex("s[0-9][0-9]", RegexOptions.IgnoreCase).Match(name);
             int s = Int32.Parse(m.Value.Remove(0, 1));
             if (s < 10) {
                 path += "\\Season 0" + s;
@@ -105,6 +188,9 @@ namespace TVSPlayer {
             }
             return final;
         }
+
+
+
         private static Tuple<int, int> GetInfo(string file) {
             Match season = new Regex("[s][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
             Match episode = new Regex("[e][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);
@@ -121,15 +207,13 @@ namespace TVSPlayer {
             return null;
         }
 
-        private static List<string> FilterExtensions(List<string> files) {
-            string[] fileExtension = new string[9] { ".mkv", ".srt", ".m4v", ".avi", ".mp4", ".mov", ".sub", ".wmv", ".flv" };
-            List<string> filtered = new List<string>();
-            foreach (string file in files) {
-                if (fileExtension.Any(file.Contains)) {
-                    filtered.Add(file);
-                }
-            }
-            return filtered;
+        private class ScannedFileInfo{
+            public string origFile;
+            public string newFile;
+            public string extension;
+            public Episode episode;
+            public Series series;
         }
+
     }
 }
