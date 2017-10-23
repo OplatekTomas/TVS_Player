@@ -205,8 +205,16 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
+            Series s = Series.GetSeries(121361);
+            //Database.AddEpisode(121361,Episode.GetAllEpisodes(121361));
+            s.libraryPath = @"D:\TVSTests\Game of Thrones";
+            Settings.FirstScanLocation = @"D:\TVSTests\zFirst";
+            Settings.SecondScanLocation = @"D:\TVSTests\zSecond";
+            Settings.ThirdScanLocation = @"D:\TVSTests\zThird";
+
+
             //Settings.SaveSettings();
-            Settings.Library = "test";
+            Renamer.FindAndRename(s);
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {

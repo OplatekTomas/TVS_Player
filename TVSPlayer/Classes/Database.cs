@@ -540,6 +540,8 @@ namespace TVSPlayer {
         /// <param name="path">where to read from</param>
         /// <returns>read string</returns>
         public static string ReadFromFile(string path) {
+            if (!Directory.Exists(Path.GetDirectoryName(path))) Directory.CreateDirectory(Path.GetDirectoryName(path));
+            if (!File.Exists(path)) File.Create(path).Dispose();         
             do {
                 try {
                     if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -549,7 +551,7 @@ namespace TVSPlayer {
                     string text = sr.ReadToEnd();
                     sr.Close();
                     return text;
-                } catch (IOException) { }
+                } catch (IOException e) { }
                 Thread.Sleep(10);
             } while (true);
         }
@@ -569,6 +571,8 @@ namespace TVSPlayer {
         /// <param name="path">where to write</param>
         /// <param name="json">what to write</param>
         public static void WriteToFile(string path, string json) {
+            if (!Directory.Exists(Path.GetDirectoryName(path))) Directory.CreateDirectory(Path.GetDirectoryName(path));
+            if (!File.Exists(path)) File.Create(path).Dispose();
             do {
                 try {
                     if (!Directory.Exists(Path.GetDirectoryName(path))) {
@@ -577,7 +581,8 @@ namespace TVSPlayer {
                     StreamWriter sw = new StreamWriter(path);
                     sw.Write(json);
                     sw.Close();
-                } catch (IOException) { }
+                    return;
+                } catch (IOException e) { }
                 Thread.Sleep(10);
 
             } while (true);

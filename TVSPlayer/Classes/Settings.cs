@@ -32,6 +32,9 @@ namespace TVSPlayer {
             // Library = "test";
             // Test = Library;
             CreateDir();
+            if (!File.Exists(filename)) {
+                File.Create(filename).Dispose();
+            }
             do {
                 try {
                     FieldInfo[] properties = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
@@ -67,6 +70,9 @@ namespace TVSPlayer {
             // Library = "";
             // Test = Library;
             CreateDir();
+            if (!File.Exists(filename)) {
+                File.Create(filename).Dispose();
+            }
             do {
                 try {
                     FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
