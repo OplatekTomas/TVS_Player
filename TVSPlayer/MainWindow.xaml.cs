@@ -206,9 +206,9 @@ namespace TVSPlayer {
 
         private async void TestFunctions() {
             Series s = Series.GetSeries(121361);
-            Database.AddEpisode(121361,Episode.GetAllEpisodes(121361));
-            s.libraryPath = @"D:\TVSTests\Game of Thrones";
-            Settings.FirstScanLocation = @"";
+            //Database.AddEpisode(121361,Episode.GetAllEpisodes(121361));
+            s.libraryPath = @"C:\Users\tomas\TVSTests\Game of Thrones";
+            Settings.FirstScanLocation = @"C:\Users\tomas\TVSTests\FirstTest";
             Settings.SecondScanLocation = @"";
             Settings.ThirdScanLocation = @"";
 

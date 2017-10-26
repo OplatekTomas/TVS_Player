@@ -170,7 +170,7 @@ namespace TVSPlayer {
 
         private static List<ScannedFileInfo> GetSeriesFilesInfo(Series series, string path) {
             List<ScannedFileInfo> toRemove = new List<ScannedFileInfo>();
-            List<Episode> allepisodes = Episode.GetAllEpisodes(series.id);
+            List<Episode> allepisodes = Database.GetEpisodes(series.id);
             List<ScannedFileInfo> sfiList = ScanAndFilterFiles(series, path);
             foreach (ScannedFileInfo sfi in sfiList) {
                 sfi.series = series;

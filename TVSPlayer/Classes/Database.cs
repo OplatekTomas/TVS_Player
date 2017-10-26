@@ -557,15 +557,6 @@ namespace TVSPlayer {
         }
 
         /// <summary>
-        /// Converts any object to json
-        /// </summary>
-        /// <param name="obj">object to convert</param>
-        /// <returns>string formated as json</returns>
-        private static string ObjectToJson(object obj) {
-             return JsonConvert.SerializeObject(obj);
-        }
-
-        /// <summary>
         /// Writes to file, is safe - if file is already used it waits for a bit
         /// </summary>
         /// <param name="path">where to write</param>
@@ -587,7 +578,14 @@ namespace TVSPlayer {
 
             } while (true);
         }
+        /// <summary>
+        /// Converts any object to json
+        /// </summary>
+        /// <param name="obj">object to convert</param>
+        /// <returns>string formated as json</returns>
+        private static string ObjectToJson(object obj) {
+            return JsonConvert.SerializeObject(obj);
+        }
 
-       
     }
 }
