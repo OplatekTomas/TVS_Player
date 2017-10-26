@@ -184,13 +184,13 @@ namespace TVSPlayer {
         /// <param name="epId">TVDB id of Episode</param>
         /// <returns>true if remove was successful or false if it was not</returns>
         public static bool RemoveEpisode(int id, int epId) {
-            List<Episode> eps = GetEpisodes(id, epId);
+            List<Episode> eps = GetEpisodes(id);
             try {
                 eps.Remove(eps.Single(se => se.id == epId));
                 string json = JsonConvert.SerializeObject(eps);
-                WriteToFile(db + id + "\\Episode.tvsp", json);
+                WriteToFile(db + id + "\\Episodes.tvsp", json);
                 return true;
-            } catch (Exception) {
+            } catch (Exception e) {
                 return false;
             }
         }

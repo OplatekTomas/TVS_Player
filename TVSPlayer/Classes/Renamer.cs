@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using TVS.API;
 using static TVS.API.Episode;
 
@@ -13,15 +14,13 @@ namespace TVSPlayer {
     class Renamer {
 
 
-        public static List<ScannedFile> FindAndRename(Series series) {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            List<ScannedFile> result = new List<ScannedFile>();
+        public static void FindAndRename(Series series) {
             List<ScannedFileInfo> temp = new List<ScannedFileInfo>();
             temp.AddRange(FindAndRenameInLibrary(series));
             temp.AddRange(FindAndRenameInOthers(series));
-            sw.Stop();
-            return result;
+            foreach (ScannedFileInfo sfi in temp) {
+                Database.EditEpisode(series.id, sfi.episode.id, sfi.episode);
+            }
         }
 
 
@@ -32,54 +31,115 @@ namespace TVSPlayer {
             } else {
                 ScannedFile sf = new ScannedFile();
                 List<ScannedFileInfo> files = GetSeriesFilesInfo(series, series.libraryPath);
-                files = GenerateNewPaths(files);
-                return files;
+                //files = GenerateNewPaths(files);
+                return Rename(files);
             }
         }
 
-        private static List<ScannedFileInfo> GenerateNewPaths(List<ScannedFileInfo> list) {
-            foreach (ScannedFileInfo item in list) {
-                item.newFile = GetPath(item, GetName(item));
-            }
-            return list;
+        private static List<ScannedFileInfo> FindAndRenameInOthers(Series series) {
+            List<ScannedFileInfo> files = new List<ScannedFileInfo>();
+            if (Directory.Exists(Settings.FirstScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.FirstScanLocation));
+            if (Directory.Exists(Settings.SecondScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.SecondScanLocation));
+            if (Directory.Exists(Settings.ThirdScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.ThirdScanLocation));
+            return Rename(files);
         }
 
-        private static string GetPath(ScannedFileInfo info, string name) {
+
+        private static List<ScannedFileInfo> Rename(List<ScannedFileInfo> list) {
+            List<ScannedFileInfo> newList = new List<ScannedFileInfo>();
+            foreach (ScannedFileInfo sfi in list) {
+                newList.Add(Rename(sfi));
+            }
+            return newList;
+        }
+
+        private static ScannedFileInfo Rename(ScannedFileInfo info) {
+            info.newFile = GetPath(info);
+            if (info.newFile != info.origFile) {
+                try {
+                    File.Move(info.origFile, info.newFile);
+                } catch (IOException) {
+                    MessageBoxResult result = MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Errror", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                    if (result == MessageBoxResult.Yes) {
+                        return Rename(info);
+                    }
+                }
+                bool add = true;
+                if (info.episode.files.Count > 0) {
+                    foreach (ScannedFile sf in info.episode.files) {
+                        if (sf.NewName == info.origFile) {
+                            sf.NewName = info.newFile;
+                            add = false;
+                        } 
+                    }
+                }
+                if (add) {
+                    info.episode.files.Add(Convert(info));
+                }
+            }
+            return info;
+        }
+
+        private static ScannedFile Convert(ScannedFileInfo info) {
+            string[] subtitleTypes = new string[]{ ".srt", ".sub" };
+            ScannedFile sf = new ScannedFile();
+            sf.OriginalName = info.origFile;
+            sf.NewName = info.newFile;
+            sf.Type = ScannedFile.FileType.Video;
+            foreach(string type in subtitleTypes) {
+                if (info.extension == type) {
+                    sf.Type = ScannedFile.FileType.Subtitles;
+                }
+            }
+            return sf;
+        }
+
+        private static string GetPath(ScannedFileInfo info) {
+            string name = GetName(info);
             string directory = null;
             int? season = info.episode.airedSeason;
-            int filenumber = 1;
             if (season < 10) {
-                directory = info.series.libraryPath + @"\Season 0" + season;
+                directory = info.series.libraryPath + @"\Season 0" + season+"\\";
                 Directory.CreateDirectory(directory);
             } else if (season >= 10) {
-                directory = info.series.libraryPath + @"\Season " + season;
+                directory = info.series.libraryPath + @"\Season " + season+"\\";
                 Directory.CreateDirectory(directory);
             }
             if (info.origFile == directory + name + info.extension) {
                 return info.origFile;
             }
             string old = Path.GetFileNameWithoutExtension(info.origFile);
-            Match match = new Regex(GetName(info) + "_[0-9]?[0-9]").Match(old);
+            Match match = new Regex(name + "_[0-9]?[0-9]").Match(old);
             if (match.Success) {
-                if (!LowerAvailable()) {
-
+                if (!LowerAvailable(info.origFile, name)) {
+                    return info.origFile;
                 }
             }
-
-            final = path + "\\" + name + extension;
+            int filenumber = 1;
+            string final = directory + name + info.extension;
             while (File.Exists(final)) {
-                final = path + "\\" + name + "_" + filenumber + extension;
+                final = directory + name + "_" + filenumber + info.extension;
                 filenumber++;
             }
             return final;
         }
 
-        private bool LowerAvailable(string file,string defaultNew) {
+        private static bool LowerAvailable(string file,string defaultNew) {
             int counter = 1;
-            if(File.Exists())
-            while
+            string path = Path.GetDirectoryName(file);
+            string extension = Path.GetExtension(file);
+            file = Path.GetFileNameWithoutExtension(file);
+            string newFile = defaultNew;
+            while (file != newFile) {
+                if (!File.Exists(path + "\\" + newFile+"\\" + extension)) {
+                    return true;
+                }
+                counter++;
+                newFile = defaultNew + "_" + counter;
+            }
+            return false;
+            
         }
-
 
         private static string GetName(ScannedFileInfo sfi) {
             string name = null;
@@ -108,16 +168,6 @@ namespace TVSPlayer {
             return name;
         }
 
-
-
-        private static List<ScannedFileInfo> FindAndRenameInOthers(Series series) {
-            List<ScannedFileInfo> files = new List<ScannedFileInfo>();
-            if(Directory.Exists(Settings.FirstScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.FirstScanLocation));
-            if (Directory.Exists(Settings.SecondScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.SecondScanLocation));
-            if (Directory.Exists(Settings.ThirdScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.ThirdScanLocation));
-            return files;
-        }
-
         private static List<ScannedFileInfo> GetSeriesFilesInfo(Series series, string path) {
             List<ScannedFileInfo> toRemove = new List<ScannedFileInfo>();
             List<Episode> allepisodes = Episode.GetAllEpisodes(series.id);
@@ -139,7 +189,6 @@ namespace TVSPlayer {
             return sfiList;
         }
 
-
         private static Tuple<int, int> GetInfo(string file) {
             Match season = new Regex("[s][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
             Match episode = new Regex("[e][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
@@ -154,6 +203,18 @@ namespace TVSPlayer {
                 return new Tuple<int, int>(s, e);
             }
             return null;
+        }
+
+        private static void CreateDirectoryForSeries(Series series) {
+            int i = 1;
+            string path = Settings.Library + "\\" + series.seriesName;
+            while (Directory.Exists(path)) {
+                path = Settings.Library + "\\" + series.seriesName + "_" + i;
+                i++;
+            }
+            Directory.CreateDirectory(path);
+            series.libraryPath = path;
+            Database.EditSeries(series.id, series);
         }
 
         #region File filtering
@@ -224,20 +285,6 @@ namespace TVSPlayer {
 
 #endregion
        
-
-        private static void CreateDirectoryForSeries(Series series) {
-            int i = 1;
-            string path = Settings.Library + "\\" + series.seriesName;
-            while (Directory.Exists(path)) {
-                path = Settings.Library + "\\" + series.seriesName + "_" + i;
-                i++;
-            }
-            Directory.CreateDirectory(path);
-            series.libraryPath = path;
-            Database.EditSeries(series.id, series);
-        }
-
-
         private class ScannedFileInfo{
             public string origFile;
             public string newFile;
