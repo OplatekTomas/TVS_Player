@@ -444,10 +444,11 @@ namespace TVSPlayer {
                     return App.Current.Resources["NoPoster"] as BitmapImage;
                 }
             }
-            string file = db + id + "\\Posters" + s.defaultPoster.fileName;
+            string file = db + id + "\\Posters\\" + s.defaultPoster.fileName;
             if (File.Exists(file)) {
                 return LoadImage(file);
             } else {
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
                 WebClient webClient = new WebClient();
                 webClient.DownloadFile("https://www.thetvdb.com/banners/"+s.defaultPoster.fileName, file);
                 return LoadImage(file);

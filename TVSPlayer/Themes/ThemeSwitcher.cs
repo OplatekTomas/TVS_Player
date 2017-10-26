@@ -57,7 +57,12 @@ namespace TVSPlayer {
             Application.Current.Resources["PlusIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-add-dark.png", UriKind.Absolute));
             Application.Current.Resources["EditIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-edit-dark.png", UriKind.Absolute));
             Application.Current.Resources["NoPoster"] = new BitmapImage(new Uri("pack://application:,,,/Icons/poster-light.png", UriKind.Absolute));
-
+            Application.Current.Resources["ThemeIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-theme-dark.png", UriKind.Absolute));
+            Application.Current.Resources["PosterIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-poster-dark.png", UriKind.Absolute));
+            Application.Current.Resources["ListIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-list-dark.png", UriKind.Absolute));
+            Application.Current.Resources["CalendarIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-calendar-dark.png", UriKind.Absolute));
+            Application.Current.Resources["AlphabeticalIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alpha-dark.png", UriKind.Absolute));
+            Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-dark.png", UriKind.Absolute));
         }
 
         private static void LightIcons() {
@@ -73,12 +78,18 @@ namespace TVSPlayer {
             Application.Current.Resources["CheckIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-checked-light.png", UriKind.Absolute));
             Application.Current.Resources["ForwardIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-light.png", UriKind.Absolute));
             Application.Current.Resources["ReloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-reload-light.png", UriKind.Absolute));
-            Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-hq.png", UriKind.Absolute));
+            Application.Current.Resources["ForwardIconHQ"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-forward-light-hq.png", UriKind.Absolute));
             Application.Current.Resources["FolderIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-folder-light.png", UriKind.Absolute));
             Application.Current.Resources["BackIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-back-light.png", UriKind.Absolute));
             Application.Current.Resources["NoPoster"] = new BitmapImage(new Uri("pack://application:,,,/Icons/poster-light.png", UriKind.Absolute));
             Application.Current.Resources["PlusIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-add-light.png", UriKind.Absolute));
             Application.Current.Resources["EditIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-edit-dark.png", UriKind.Absolute));
+            Application.Current.Resources["ThemeIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-theme-light.png", UriKind.Absolute));
+            Application.Current.Resources["PosterIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-poster-light.png", UriKind.Absolute));
+            Application.Current.Resources["ListIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-list-light.png", UriKind.Absolute));
+            Application.Current.Resources["CalendarIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-calendar-light.png", UriKind.Absolute));
+            Application.Current.Resources["AlphabeticalIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alpha-light.png", UriKind.Absolute));
+            Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-light.png", UriKind.Absolute));
 
         }
     }

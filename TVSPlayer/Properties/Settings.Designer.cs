@@ -46,5 +46,17 @@ namespace TVSPlayer.Properties {
                 this["Maximized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double LibrarySize {
+            get {
+                return ((double)(this["LibrarySize"]));
+            }
+            set {
+                this["LibrarySize"] = value;
+            }
+        }
     }
 }

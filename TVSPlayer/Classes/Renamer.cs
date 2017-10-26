@@ -64,18 +64,18 @@ namespace TVSPlayer {
                         return Rename(info);
                     }
                 }
-                bool add = true;
-                if (info.episode.files.Count > 0) {
-                    foreach (ScannedFile sf in info.episode.files) {
-                        if (sf.NewName == info.origFile) {
-                            sf.NewName = info.newFile;
-                            add = false;
-                        } 
+            }
+            bool add = true;
+            if (info.episode.files.Count > 0) {
+                foreach (ScannedFile sf in info.episode.files) {
+                    if (sf.NewName == info.origFile) {
+                        sf.NewName = info.newFile;
+                        add = false;
                     }
                 }
-                if (add) {
-                    info.episode.files.Add(Convert(info));
-                }
+            }
+            if (add) {
+                info.episode.files.Add(Convert(info));
             }
             return info;
         }

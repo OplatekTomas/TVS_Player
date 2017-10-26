@@ -73,8 +73,15 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Controls\CustomButtons\LibraryButtons.xaml.cs">
+      <DependentUpon>LibraryButtons.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Library\Library.xaml.cs">
+      <DependentUpon>Library.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Introduction\InitialSettings.xaml.cs">
       <DependentUpon>InitialSettings.xaml</DependentUpon>
     </Compile>
@@ -93,7 +100,7 @@
     <Compile Include="Pages\Introduction\ImportOrCreateStartUp.xaml.cs">
       <DependentUpon>ImportOrCreateStartUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\StartupInternetError.xaml.cs">
+    <Compile Include="Pages\Introduction\StartupInternetError.xaml.cs">
       <DependentUpon>StartupInternetError.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SeriesWithFolder.xaml.cs">
@@ -114,7 +121,18 @@
     <Compile Include="Controls\ShowDetailsFromApi.xaml.cs">
       <DependentUpon>ShowDetailsFromApi.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SeriesInLibrary.xaml.cs">
+      <DependentUpon>SeriesInLibrary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Page Include="Controls\CustomButtons\LibraryButtons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Library\Library.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Introduction\InitialSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -151,7 +169,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\StartupInternetError.xaml">
+    <Page Include="Pages\Introduction\StartupInternetError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShowDetailsFromApi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SeriesInLibrary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -306,6 +328,33 @@
   <ItemGroup>
     <Resource Include="Icons\poster-dark.png" />
     <Resource Include="Icons\poster-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-theme-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-theme-dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Other\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-poster-dark.png" />
+    <Resource Include="Icons\ico-poster-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-list-dark.png" />
+    <Resource Include="Icons\ico-list-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-alpha-dark.png" />
+    <Resource Include="Icons\ico-alpha-light.png" />
+    <Resource Include="Icons\ico-alphareverse-dark.png" />
+    <Resource Include="Icons\ico-alphareverse-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-calendar-dark.png" />
+    <Resource Include="Icons\ico-calendar-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

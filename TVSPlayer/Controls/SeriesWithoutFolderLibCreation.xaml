@@ -32,7 +32,7 @@
         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,55,0" x:Name="Detail" >
             <Image Source="{DynamicResource QuestionIcon}" />
         </Grid>
-        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Visible">
+        <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
             <local:ShowDetailsFromApi x:Name="Details" />
         </Grid>
     </Grid>

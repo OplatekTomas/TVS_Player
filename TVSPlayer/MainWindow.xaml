@@ -11,13 +11,13 @@
             <DoubleAnimation Storyboard.TargetProperty="Width" From="0" To="400" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="MoveSearchLeft">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="55,0" To="455,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="45,0" To="455,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="HideSearch">
             <DoubleAnimation Storyboard.TargetProperty="Width" From="400" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="MoveSearchRight">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="55,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="455,0" To="45,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="ShowSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-225,0" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
@@ -25,13 +25,18 @@
         <Storyboard x:Key="HideSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
+        <Storyboard x:Key="ShowNotification">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,400,0"  DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
+        <Storyboard x:Key="HideNotification">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,10,0" DecelerationRatio=".5" Duration="0:0:0.25" />
+        </Storyboard>
     </Window.Resources>
     <Grid x:Name="BaseGrid" Background="{DynamicResource BackgroundBrush}" Loaded="BaseGrid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button  Width="60" Height="20" Content="Testing" Click="Button_Click"  Grid.Row="0" Panel.ZIndex="100" />
         <Frame x:Name="ActiveContent" Grid.Row="1" ></Frame>
         <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="10" Grid.RowSpan="2">
             <Grid.RowDefinitions>
@@ -56,16 +61,29 @@
             <Grid x:Name="SideButton" Margin="10,0" HorizontalAlignment="Left" Height="20" MouseLeftButtonDown="SideButton_MouseLeftButtonDown">
                 <Image Source="{DynamicResource MenuIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
             </Grid>
-            <Grid x:Name="MoreButton" Margin="10,0" HorizontalAlignment="Right" Height="30" MouseLeftButtonDown="MoreButton_MouseLeftButtonDown">
-                <Image Source="{DynamicResource MoreIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
+            <TextBlock x:Name="PageTitle" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource TextColor}" Margin="50,0,0,3" />
+            <Grid x:Name="RightButtons" Margin="0,0,10,0">
+                <Grid x:Name="MoreButton" Margin="0,0" HorizontalAlignment="Right" Height="30" MouseLeftButtonDown="MoreButton_MouseLeftButtonDown">
+                    <Image Source="{DynamicResource MoreIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
+                </Grid>
+                <Grid x:Name="SearchButton" Margin="45,0" HorizontalAlignment="Right" Height="20" MouseLeftButtonDown="SearchButton_MouseLeftButtonDown">
+                    <Image Source="{DynamicResource SearchIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
+                </Grid>
+                <Grid x:Name="SearchBar" HorizontalAlignment="Right" Width="0" Margin="40,8" >
+                    <Border Background="{DynamicResource BackgroundBrush}" CornerRadius="2">
+                        <TextBox x:Name="SearchBox" BorderThickness="0" Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="17" LostFocus="TextBox_LostFocus" ></TextBox>
+                    </Border>
+                </Grid>
             </Grid>
-            <Grid x:Name="SearchButton" Margin="55,0" HorizontalAlignment="Right" Height="20" MouseLeftButtonDown="SearchButton_MouseLeftButtonDown">
-                <Image Source="{DynamicResource SearchIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
-            </Grid>
-            <Grid x:Name="SearchBar" HorizontalAlignment="Right" Width="0" Margin="50,8" >
-                <Border Background="{DynamicResource BackgroundBrush}" CornerRadius="2">
-                    <TextBox x:Name="SearchBox" BorderThickness="0" Background="#00000000" Foreground="{DynamicResource TextColor}" FontSize="17" LostFocus="TextBox_LostFocus"></TextBox>
-                </Border>
+            <Grid HorizontalAlignment="Right" x:Name="NotificationArea" Width="400" Margin="0,0,0,0"  Panel.ZIndex="6" Visibility="Hidden" Opacity="0">
+                <Grid Margin="0,40,0,0"  Background="{DynamicResource TransparentBG}" />
+                <Grid x:Name="CustomContent" Margin="10,0,0,0" HorizontalAlignment="Left" Width="350">
+                    
+                </Grid>
+                <Grid HorizontalAlignment="Right" x:Name="ThemeSwitch"  Margin="0,0,10,0" MouseDown="ThemeSwitch_MouseUp">
+                    <Image Source="{DynamicResource ThemeIcon}" RenderOptions.BitmapScalingMode="HighQuality" Height="25" />
+                </Grid>
+                
             </Grid>
         </Grid>
     </Grid>

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +29,6 @@ namespace TVSPlayer {
             InitializeComponent();
             SetDimensions();
         }
-        private bool theme;
 
         private void SetDimensions() {
             if (Properties.Settings.Default.Maximized) {
@@ -73,24 +75,115 @@ namespace TVSPlayer {
             StartAnimation("MoveSearchRight", SearchButton);
         }
 
-        //Switches theme
+        bool rightsidevisible = false;
         private void MoreButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            ThemeSwitcher.SwitchTheme();
+            if (rightsidevisible) {
+                StartAnimation("HideNotification", RightButtons);
+                Storyboard sb = (Storyboard)FindResource("OpacityDown");
+                Storyboard clone = sb.Clone();
+                clone.Completed += (s, ev) => {
+                    NotificationArea.Visibility = Visibility.Hidden;
+                };
+                clone.Begin(NotificationArea);
+                rightsidevisible = false;
+            } else {
+                StartAnimation("ShowNotification", RightButtons);
+                NotificationArea.Visibility = Visibility.Visible;
+                StartAnimation("OpacityUp", NotificationArea);
+                rightsidevisible = true;
+
+            }
         }
 
         #endregion
 
         #region Page handling
+
+        public static string GetSearchBarText() {
+            Window main = Application.Current.MainWindow;
+            return ((MainWindow)main).SearchBox.Text;
+        }
+
         /// <summary>
         /// Function that renders new frame and page on top of existing content
         /// </summary>
         /// <param name="page">Page you want to show</param>
         public static void AddPage(Page page) {
             Window main = Application.Current.MainWindow;
-            ((MainWindow)main).PageCreator(page);
-            
+            ((MainWindow)main).PageCreator(page);      
         }
-        //Adds new page
+
+        /// <summary>
+        /// Call this function (and this function only) when you need to search API (returns either basic info about Series or null)
+        /// </summary>
+        public async Task<Series> SearchShowAsync() {
+            SearchSingleShow singleSearch = new SearchSingleShow();
+            AddPage(singleSearch);
+            Series s = await singleSearch.ReturnTVShowWhenNotNull();
+            RemovePage();
+            singleSearch.show = null;
+            if (s.imdbId == "kua") {
+                return null;
+            }
+            return s;
+        }
+
+        /// <summary>
+        /// Removes last page added
+        /// </summary>
+        public static void RemovePage() {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageRemover();
+        }
+
+        /// <summary>
+        /// Sets page in Main Frame to any page
+        /// </summary>
+        /// <param name="page">What page to set to</param>
+        public static void SetPage(Page page) {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageSetter(page);
+        }
+        
+        /// <summary>
+        /// Sets stuff from the customization class
+        /// </summary>
+        /// <param name="customization">Instance of PageCustomization</param>
+        public static void SetPageCustomization(PageCustomization customization) {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageCustomizationSetter(customization);
+        }
+
+        private TextChangedEventHandler lastHandler;
+
+        private void PageCustomizationSetter(PageCustomization custom) {
+            if (!String.IsNullOrEmpty(custom.MainTitle)) {
+                PageTitle.Text = custom.MainTitle;
+            }
+            if (custom.SearchBarEvent != null) {
+                if (lastHandler != null) {
+                    SearchBox.TextChanged -= lastHandler;
+                }
+                lastHandler = custom.SearchBarEvent;
+                SearchBox.TextChanged += custom.SearchBarEvent;
+            }
+            if (custom.Buttons != null) {
+                CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
+                CustomContent.Children.Add(custom.Buttons);
+            }
+        }
+
+        private void PageSetter(Page page) {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            Storyboard temp = sb.Clone();
+            temp.Completed += (s,e) => {
+                ActiveContent.Content = page;
+                Storyboard up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(ActiveContent);
+            };
+            temp.Begin(ActiveContent);
+        }
+
         private void PageCreator(Page page) {
             Frame fr = new Frame();
             Grid.SetRowSpan(fr, 2);
@@ -102,14 +195,7 @@ namespace TVSPlayer {
             BaseGrid.Children.Add(fr);
             sbLoad.Begin(fr);
         }
-        /// <summary>
-        /// Removes last page added
-        /// </summary>
-        public static void RemovePage() {
-            Window main = Application.Current.MainWindow;
-            ((MainWindow)main).PageRemover();
-        }
-        //Removes last page
+        
         private void PageRemover() {
             var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as FrameworkElement;
             Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
@@ -117,30 +203,19 @@ namespace TVSPlayer {
             sbLoad.Completed += (s, e) => FinishedRemove(p);
             sbLoad.Begin(p);
         }
+
         private void FinishedRemove(UIElement ue) {
             BaseGrid.Children.Remove(ue);
         }
-        /// <summary>
-        /// Call this function (and this function only) when you need to search API (returns either basic info about Series or null)
-        /// </summary>
-       public async Task<Series> SearchShowAsync() {
-            SearchSingleShow singleSearch = new SearchSingleShow();
-            AddPage(singleSearch);
-            Series s = await singleSearch.ReturnTVShowWhenNotNull();
-            RemovePage();
-            singleSearch.show = null;
-            if (s.imdbId == "kua") {
-                return null;
-            }
-            return s;
-        }
+
         #endregion
 
-        //Code for "Test" button
-        private void Button_Click(object sender, RoutedEventArgs e) {
+        #region Events
 
-          
+        private void ThemeSwitch_MouseUp(object sender, MouseButtonEventArgs e) {
+            ThemeSwitcher.SwitchTheme();
         }
+        #endregion
 
         public static bool checkConnection() {
             Ping ping = new Ping();
@@ -199,16 +274,31 @@ namespace TVSPlayer {
                 }
                 //Wait for all tasks created in foreach to complete
                 tasks.WaitAll();
+                Thread.Sleep(500);
             });
             //This code runs after all API calls are done and stuff is saved
-            RemovePage();
+            ProgressBarPage prog = new ProgressBarPage(ids.Count);
+            AddPage(prog);
+            total = 0;
+            await Task.Run(() => {
+                List<Series> seriesList = Database.GetSeries();
+                foreach (Series series in seriesList) {
+                    Renamer.FindAndRename(series);
+                    Dispatcher.Invoke(new Action(() => {
+                        total++;
+                        prog.SetValue(total);
+                    }), DispatcherPriority.Send);
+                }
+                Thread.Sleep(1000);
+            });
+            SetPage(new Library());
         }
 
         private async void TestFunctions() {
             Series s = Series.GetSeries(121361);
             //Database.AddEpisode(121361,Episode.GetAllEpisodes(121361));
-            s.libraryPath = @"C:\Users\tomas\TVSTests\Game of Thrones";
-            Settings.FirstScanLocation = @"C:\Users\tomas\TVSTests\FirstTest";
+            s.libraryPath = @"D:\TVSTests\Game of Thrones";
+            Settings.FirstScanLocation = @"";
             Settings.SecondScanLocation = @"";
             Settings.ThirdScanLocation = @"";
 
@@ -218,17 +308,18 @@ namespace TVSPlayer {
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            Settings.Load();
-            if (false) {
+            if (true) {
+               
                 if (!Directory.Exists(Helper.data)) {
-                    //AddPage(new Intro());
+                    AddPage(new Intro());
                 } else {
-
+                    SetPage(new Library());
                 }
-
                 if (!checkConnection()) {
                     AddPage(new StartupInternetError());
                 }
+                Settings.Load();
+
             } else {
                 TestFunctions();
             }
@@ -241,9 +332,13 @@ namespace TVSPlayer {
             } else {
                 Properties.Settings.Default.Maximized = false;
             }
-            Properties.Settings.Default.Resolution = Math.Ceiling(this.ActualWidth) + "x" + Math.Ceiling(this.ActualHeight);
+            Properties.Settings.Default.Resolution = this.Width + "x" + this.Height;
             Properties.Settings.Default.Save();
         }
+
+
     }
+
+    
 
 }

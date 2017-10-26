@@ -19,6 +19,13 @@
     <BitmapImage x:Key="PlusIcon" UriSource="pack://application:,,,/Icons/ico-add-light.png" />
     <BitmapImage x:Key="EditIcon" UriSource="pack://application:,,,/Icons/ico-edit-light.png" />
     <BitmapImage x:Key="NoPoster" UriSource="pack://application:,,,/Icons/poster-dark.png" />
+    <BitmapImage x:Key="ThemeIcon" UriSource="pack://application:,,,/Icons/ico-theme-light.png" />
+    <BitmapImage x:Key="PosterIcon" UriSource="pack://application:,,,/Icons/ico-poster-light.png" />
+    <BitmapImage x:Key="ListIcon" UriSource="pack://application:,,,/Icons/ico-list-light.png" />
+    <BitmapImage x:Key="AlphabeticalIcon" UriSource="pack://application:,,,/Icons/ico-alpha-light.png" />
+    <BitmapImage x:Key="AlphabeticalReverseIcon" UriSource="pack://application:,,,/Icons/ico-alphareverse-light.png" />
+    <BitmapImage x:Key="CalendarIcon" UriSource="pack://application:,,,/Icons/ico-calendar-light.png" />
+
 
 
 </ResourceDictionary>

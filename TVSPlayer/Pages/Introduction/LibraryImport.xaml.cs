@@ -168,8 +168,6 @@ namespace TVSPlayer
             }
             Settings.Library = SelectFolderText.Text;
             await MainWindow.CreateDatabase(ids);
-            List<Series> all = Database.GetSeries();
-
             MainWindow.RemovePage();
         }
        
