@@ -41,7 +41,7 @@ namespace TVSPlayer
                     Dispatcher.Invoke(() => {
                         var poster = new SeriesInLibrary(series);
                         poster.Opacity = 0;
-                        poster.Height = 295;
+                        poster.Height = Properties.Settings.Default.LibrarySize;
                         Storyboard sb = (Storyboard)FindResource("OpacityUp");
                         sb.Begin(poster);              
                         Panel.Children.Add(poster);
