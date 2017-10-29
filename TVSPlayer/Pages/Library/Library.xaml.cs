@@ -18,6 +18,8 @@ using System.Windows.Threading;
 using TVS.API;
 using System.Linq;
 using System.Globalization;
+using System.IO;
+using System.Net;
 
 namespace TVSPlayer
 {
@@ -35,25 +37,68 @@ namespace TVSPlayer
             custom.Buttons = new LibraryButtons(this);
             custom.SearchBarEvent = (s, ev) => SearchText(MainWindow.GetSearchBarText());
             MainWindow.SetPageCustomization(custom);
+            //PanelPosters.Opacity = 0;        
+            await ((LibraryButtons)custom.Buttons).SetView();
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                LoadingText.Visibility = Visibility.Hidden;
+            };
+            clone.Begin(LoadingText);
+        }
+
+
+
+        /// <summary>
+        /// Renders posters for library
+        /// </summary>
+        /// <returns></returns>
+        public async Task RenderPosters() {
+            PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
+            List<Series> allSeries = Database.GetSeries();
+            foreach (Series series in allSeries) {
+                SeriesInLibrary poster = new SeriesInLibrary(series);
+                poster.Height = Properties.Settings.Default.LibrarySize;
+                poster.RemoveIcon.MouseLeftButtonUp += (s,ev) => RemoveFromLibrary(series,poster);
+                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(series,poster);
+                PanelPosters.Children.Add(poster);
+            }     
+          
+        }
+
+        public async void SelectPosters(Series series, SeriesInLibrary sil) {
+            Poster poster = await MainWindow.SelectPoster(series.id);
+            
+            await Task.Run( async () => {
+                series.defaultPoster = poster;
+                Database.EditSeries(series.id, series);
+                if (sil != null) {
+                    Dispatcher.Invoke(() => {
+                        Storyboard sb = (Storyboard)FindResource("OpacityDown");
+                        sb.Begin(sil.PosterImage);
+                    }, DispatcherPriority.Send);
+                    BitmapImage bmp = await Database.GetSelectedPoster(series.id);
+                    Dispatcher.Invoke(() => {
+                        sil.PosterImage.Source = bmp;
+                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
+                        sb.Begin(sil.PosterImage);
+                    }, DispatcherPriority.Send);
+                }
+            });         
+        }
+
+        public async Task RenderList() {
+            PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
             List<Series> allSeries = Database.GetSeries();
             await Task.Run(() => {
                 foreach (Series series in allSeries) {
-                    Dispatcher.Invoke(() => {
-                        var poster = new SeriesInLibrary(series);
-                        poster.Opacity = 0;
-                        poster.Height = Properties.Settings.Default.LibrarySize;
-                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                        sb.Begin(poster);              
-                        Panel.Children.Add(poster);
-                    }, DispatcherPriority.Send);
-                    Thread.Sleep(50);
                 }
 
             });
         }
 
         private void SearchText(string text) {
-            foreach (SeriesInLibrary series in Panel.Children) {
+            foreach (SeriesInLibrary series in PanelPosters.Children) {
                 series.Visibility = Visibility.Visible;
                 if (!series.series.seriesName.ToLower().Contains(text.ToLower())) {
                     series.Visibility = Visibility.Collapsed;
@@ -61,69 +106,98 @@ namespace TVSPlayer
             }
         }
 
-        public void SortAlpha() {
+        private void RemoveFromLibrary(Series series, FrameworkElement element) {
+            MessageBoxResult result = MessageBox.Show("This will delete Series from library.\n\nDo you also want to delete the files?","Warning",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
+            if (result != MessageBoxResult.Cancel) {
+                Database.RemoveSeries(series.id);
+                while (true) {
+                    try {
+                        Directory.Delete(Helper.data + series.id, true);
+                        break;
+                    } catch (IOException e) { Thread.Sleep(15); }
+                }
+                if (result == MessageBoxResult.Yes) {
+                    while (true) {
+                        try {
+                            Directory.Delete(series.libraryPath, true);
+                            break;
+                        } catch (IOException e) { Thread.Sleep(15); }
+                    }
+                }
+                Storyboard sb = (Storyboard)FindResource("OpacityDown");
+                var clone = sb.Clone();
+                clone.Completed += (s, ev) => {
+                    element.Visibility = Visibility.Collapsed;
+                };
+                clone.Begin(element);
+            }
+
+
+        }
+
+        public void SortAlphaPosters() {
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             Storyboard clone = sb.Clone();
             clone.Completed += (s, e) => {
                 List<SeriesInLibrary> silList = new List<SeriesInLibrary>();
-                UIElementCollection series = Panel.Children;
+                UIElementCollection series = PanelPosters.Children;
                 foreach (UIElement ui in series) {
                     silList.Add((SeriesInLibrary)ui);
                 }
-                Panel.Children.RemoveRange(0, Panel.Children.Count);
+                PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
                 silList = silList.OrderBy(x => x.series.seriesName).ToList();
                 foreach (SeriesInLibrary sil in silList) {
-                    Panel.Children.Add(sil);
+                    PanelPosters.Children.Add(sil);
                 }
                 sb = (Storyboard)FindResource("OpacityUp");
-                sb.Begin(this);
+                sb.Begin(PanelPosters);
                 };
-            clone.Begin(this);
+            clone.Begin(PanelPosters);
             
         }
 
-        public void SortReverse() {
+        public void SortReversePosters() {
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             Storyboard clone = sb.Clone();
             clone.Completed += (s, e) => {
                 List<SeriesInLibrary> silList = new List<SeriesInLibrary>();
-                UIElementCollection series = Panel.Children;
+                UIElementCollection series = PanelPosters.Children;
                 foreach (UIElement ui in series) {
                     silList.Add((SeriesInLibrary)ui);
                 }
-                Panel.Children.RemoveRange(0, Panel.Children.Count);
+                PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
                 silList = silList.OrderBy(x => x.series.seriesName).Reverse().ToList();
                 foreach (SeriesInLibrary sil in silList) {
-                    Panel.Children.Add(sil);
+                    PanelPosters.Children.Add(sil);
                 }
                 sb = (Storyboard)FindResource("OpacityUp");
-                sb.Begin(this);
+                sb.Begin(PanelPosters);
             };
-            clone.Begin(this);
+            clone.Begin(PanelPosters);
         }
 
-        public void SortCalendar() {
+        public void SortCalendarPosters() {
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             Storyboard clone = sb.Clone();
             clone.Completed += (s, e) => {
                 List<SeriesInLibrary> silList = new List<SeriesInLibrary>();
-                UIElementCollection series = Panel.Children;
+                UIElementCollection series = PanelPosters.Children;
                 foreach (UIElement ui in series) {
                     silList.Add((SeriesInLibrary)ui);
                 }
-                Panel.Children.RemoveRange(0, Panel.Children.Count);
-                silList = SortEpisode(silList);
+                PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
+                silList = SortEpisodePosters(silList);
                 foreach (SeriesInLibrary sil in silList) {
-                    Panel.Children.Add(sil);
+                    PanelPosters.Children.Add(sil);
                 }
                 sb = (Storyboard)FindResource("OpacityUp");
-                sb.Begin(this);
+                sb.Begin(PanelPosters);
             };
-            clone.Begin(this);
+            clone.Begin(PanelPosters);
 
         }
 
-        private List<SeriesInLibrary> SortEpisode(List<SeriesInLibrary> list) {
+        private List<SeriesInLibrary> SortEpisodePosters(List<SeriesInLibrary> list) {
             List<Series> active = new List<Series>();
             Dictionary<Series, string> sorted = new Dictionary<Series, string>();
             List<Tuple<SeriesInLibrary, Series, string>> together = new List<Tuple<SeriesInLibrary, Series, string>>();
@@ -167,7 +241,7 @@ namespace TVSPlayer
         public void SetSize(double size) {
             Properties.Settings.Default.LibrarySize = size;
             Properties.Settings.Default.Save();
-            UIElementCollection uiColl = Panel.Children;
+            UIElementCollection uiColl = PanelPosters.Children;
             foreach (SeriesInLibrary ui in uiColl) {
                 ui.Height = size;
             }

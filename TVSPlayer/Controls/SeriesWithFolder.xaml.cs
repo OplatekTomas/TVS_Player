@@ -47,8 +47,7 @@ namespace TVSPlayer {
         }
 
         private async void Edit_MouseUp(object sender, MouseButtonEventArgs e) {
-            Window main = Window.GetWindow(this);
-            Series show = await((MainWindow)main).SearchShowAsync();
+            Series show = await MainWindow.SearchShow();
             if (show.seriesName != null) {
                 SeriesName.Text = show.seriesName;
                 id = show.id;

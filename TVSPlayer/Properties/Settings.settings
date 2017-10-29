@@ -11,5 +11,11 @@
     <Setting Name="LibrarySize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">295</Value>
     </Setting>
+    <Setting Name="LibrarySort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LibraryView" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

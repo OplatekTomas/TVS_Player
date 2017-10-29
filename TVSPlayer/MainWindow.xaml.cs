@@ -113,10 +113,34 @@ namespace TVSPlayer {
             ((MainWindow)main).PageCreator(page);      
         }
 
+        public static async Task<Poster> SelectPoster(int id) {
+            Window main = Application.Current.MainWindow;
+            return await ((MainWindow)main).PosterSelector(id);
+        }
+
+        private async Task<Poster> PosterSelector(int id) {
+            SelectPoster selectPoster = new SelectPoster(id);
+            AddPage(selectPoster);
+            Poster s = await selectPoster.ReturnTVShowWhenNotNull();
+            if (s.fileName == "kua") {
+                return null;
+            }
+            RemovePage();        
+            return s;
+        }
+
         /// <summary>
-        /// Call this function (and this function only) when you need to search API (returns either basic info about Series or null)
+        /// Call this function when you need to search API (returns either basic info about Series or null)
         /// </summary>
-        public async Task<Series> SearchShowAsync() {
+        public static async Task<Series> SearchShow() {
+            Window main = Application.Current.MainWindow;
+            return await ((MainWindow)main).ShowSearcher();
+        }
+
+        /// <summary>
+        /// Call this function when you need to search API (returns either basic info about Series or null)
+        /// </summary>
+        private async Task<Series> ShowSearcher() {
             SearchSingleShow singleSearch = new SearchSingleShow();
             AddPage(singleSearch);
             Series s = await singleSearch.ReturnTVShowWhenNotNull();
@@ -245,7 +269,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="ids">List of TVDb ids</param>     
         /// <returns></returns>
-        public async Task GetFullShows(List<Tuple<int, string>> ids) {
+        private async Task GetFullShows(List<Tuple<int, string>> ids) {
             ProgressBarPage pbar = new ProgressBarPage(ids.Count);
             int total = 0;
             AddPage(pbar);

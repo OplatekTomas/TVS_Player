@@ -76,7 +76,7 @@
     <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
-    <Compile Include="Controls\CustomButtons\LibraryButtons.xaml.cs">
+    <Compile Include="Pages\Library\LibraryButtons.xaml.cs">
       <DependentUpon>LibraryButtons.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Library\Library.xaml.cs">
@@ -121,11 +121,17 @@
     <Compile Include="Controls\ShowDetailsFromApi.xaml.cs">
       <DependentUpon>ShowDetailsFromApi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SeriesInLibrary.xaml.cs">
+    <Compile Include="Pages\Library\SeriesInLibrary.xaml.cs">
       <DependentUpon>SeriesInLibrary.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Library\SelectPoster.xaml.cs">
+      <DependentUpon>SelectPoster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Library\PosterSelection.xaml.cs">
+      <DependentUpon>PosterSelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
-    <Page Include="Controls\CustomButtons\LibraryButtons.xaml">
+    <Page Include="Pages\Library\LibraryButtons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,7 +203,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SeriesInLibrary.xaml">
+    <Page Include="Pages\Library\SeriesInLibrary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Library\SelectPoster.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Library\PosterSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

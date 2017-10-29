@@ -433,7 +433,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="id">TVDb id of Series</param>
         /// <returns>BitmapImage with poster in it or default image when no poster is downloaded</returns>
-        public static BitmapImage GetSelectedPoster(int id) {
+        public async static Task<BitmapImage> GetSelectedPoster(int id) {
             Series s = GetSeries(id);
             if (s.defaultPoster == null) {
                 List<Poster> lp = GetPosters(id);
@@ -446,12 +446,12 @@ namespace TVSPlayer {
             }
             string file = db + id + "\\Posters\\" + s.defaultPoster.fileName;
             if (File.Exists(file)) {
-                return LoadImage(file);
+                return await LoadImage(file);
             } else {
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile("https://www.thetvdb.com/banners/"+s.defaultPoster.fileName, file);
-                return LoadImage(file);
+                await webClient.DownloadFileTaskAsync(new Uri("https://www.thetvdb.com/banners/" + s.defaultPoster.fileName), file);
+                return await LoadImage(file);
             }
         }
 
@@ -460,8 +460,17 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="file">what file to load from</param>
         /// <returns>loaded image</returns>
-        private static BitmapImage LoadImage(string file) {
-           return new BitmapImage(new Uri(file));
+        public async static Task<BitmapImage> LoadImage(string file) {
+            var bmp = await System.Threading.Tasks.Task.Run(() => {
+                BitmapImage img = new BitmapImage();
+                img.BeginInit();
+                img.CacheOption = BitmapCacheOption.OnLoad;
+                img.UriSource = new Uri(file);
+                img.EndInit();
+                img.Freeze();
+                return img;
+            });
+            return bmp;
         }
         
         /// <summary>
@@ -579,6 +588,7 @@ namespace TVSPlayer {
 
             } while (true);
         }
+       
         /// <summary>
         /// Converts any object to json
         /// </summary>

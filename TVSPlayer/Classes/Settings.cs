@@ -50,7 +50,6 @@ namespace TVSPlayer {
                     sw.Write(json);
                     sw.Close();
                     return;
-                    //Load(json);
                 } catch (IOException e) {
                     Thread.Sleep(10);
                 }
@@ -67,15 +66,13 @@ namespace TVSPlayer {
         public static void Load() {
             Type type = typeof(Settings);
             string filename = Helper.data + "Settings.tvsp";
-            // Library = "";
-            // Test = Library;
             CreateDir();
             if (!File.Exists(filename)) {
                 File.Create(filename).Dispose();
             }
             do {
                 try {
-                    FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
+                    FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic);
                     object[,] a;
                     StreamReader sr = new StreamReader(filename);
                     string json = sr.ReadToEnd();

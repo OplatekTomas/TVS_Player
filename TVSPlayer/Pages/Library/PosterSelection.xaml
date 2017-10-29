@@ -1,15 +1,14 @@
-﻿<UserControl x:Class="TVSPlayer.SeriesInLibrary"
+﻿<UserControl x:Class="TVSPlayer.PosterSelection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="259">
-    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
-        <Grid Margin="3,0,3,6">
-            <Image x:Name="PosterImage" RenderOptions.BitmapScalingMode="HighQuality" >
-            </Image>
+             d:DesignHeight="400" d:DesignWidth="272">
+    <Grid Loaded="Grid_Loaded" >
+        <Grid x:Name="Background" MouseUp="Background_MouseUp" Margin="3" Background="{DynamicResource BackgroundBrush}">
+            <Image x:Name="PosterImage" Margin="3" Source="{DynamicResource NoPoster}" RenderOptions.BitmapScalingMode="HighQuality"  />
         </Grid>
     </Grid>
 </UserControl>

@@ -58,5 +58,28 @@ namespace TVSPlayer.Properties {
                 this["LibrarySize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LibrarySort {
+            get {
+                return ((int)(this["LibrarySort"]));
+            }
+            set {
+                this["LibrarySort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool LibraryView {
+            get {
+                return ((bool)(this["LibraryView"]));
+            }
+            set {
+                this["LibraryView"] = value;
+            }
+        }
     }
 }

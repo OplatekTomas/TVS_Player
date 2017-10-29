@@ -26,7 +26,7 @@
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="ShowNotification">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,400,0"  DecelerationRatio=".5" Duration="0:0:0.25" />
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,350,0"  DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="HideNotification">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,10,0" DecelerationRatio=".5" Duration="0:0:0.25" />
@@ -37,7 +37,7 @@
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Frame x:Name="ActiveContent" Grid.Row="1" ></Frame>
+        <Frame x:Name="ActiveContent" Grid.Row="1" NavigationUIVisibility="Hidden" ></Frame>
         <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="10" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px" />
@@ -75,9 +75,10 @@
                     </Border>
                 </Grid>
             </Grid>
-            <Grid HorizontalAlignment="Right" x:Name="NotificationArea" Width="400" Margin="0,0,0,0"  Panel.ZIndex="6" Visibility="Hidden" Opacity="0">
-                <Grid Margin="0,40,0,0"  Background="{DynamicResource TransparentBG}" />
-                <Grid x:Name="CustomContent" Margin="10,0,0,0" HorizontalAlignment="Left" Width="350">
+            <Grid HorizontalAlignment="Right" x:Name="NotificationArea" Width="350" Margin="0,0,0,0"  Panel.ZIndex="6" Visibility="Hidden" Opacity="0">
+                <Grid Margin="-67,40,0,0"  Background="{DynamicResource TransparentBG}" x:Name="Notifications" >
+                </Grid>
+                <Grid x:Name="CustomContent" Margin="10,0,0,0" HorizontalAlignment="Left" Width="300">
                     
                 </Grid>
                 <Grid HorizontalAlignment="Right" x:Name="ThemeSwitch"  Margin="0,0,10,0" MouseDown="ThemeSwitch_MouseUp">

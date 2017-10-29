@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TVSPlayer">
     <Storyboard x:Key="OpacityUp">
-        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" DecelerationRatio=".5" Duration="0:0:0.25" Timeline.DesiredFrameRate="60" />
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" DecelerationRatio=".5" Duration="0:0:0.25" Timeline.DesiredFrameRate="60" />
     </Storyboard>
     <Storyboard x:Key="OpacityDown" >
-        <DoubleAnimation  Storyboard.TargetProperty="Opacity" From="1" To="0" DecelerationRatio=".5" Duration="0:0:0.30" />
+        <DoubleAnimation  Storyboard.TargetProperty="Opacity"  To="0" DecelerationRatio=".5" Duration="0:0:0.30" />
     </Storyboard>
     <Storyboard x:Key="SlideToMiddle">
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.Y)" To="0" DecelerationRatio="1"  Duration="0:0:0.2" Timeline.DesiredFrameRate="60"/>

@@ -141,8 +141,7 @@ namespace TVSPlayer
             VistaFolderBrowserDialog fbd = new VistaFolderBrowserDialog();
             if ((bool)fbd.ShowDialog()) {
                 if (Path.GetDirectoryName(fbd.SelectedPath) == library) {
-                    Window main = Window.GetWindow(this);
-                    Series show = await ((MainWindow)main).SearchShowAsync();
+                    Series show = await MainWindow.SearchShow();
                     if (show.seriesName != null) {
                         Storyboard sb = (Storyboard)FindResource("OpacityUp");
                         SeriesWithFolder swf = new SeriesWithFolder(show.id);

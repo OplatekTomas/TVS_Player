@@ -66,8 +66,7 @@ namespace TVSPlayer {
         }
 
         private async void AddShow() {
-            Window main = Window.GetWindow(this);
-            Series show = await ((MainWindow)main).SearchShowAsync();
+            Series show = await MainWindow.SearchShow();
             if (show.seriesName != null) {
                 var greatClassNameIdiot = new SeriesWithoutFolderLibCreation(show.id);
                 greatClassNameIdiot.Remove.MouseUp += (s, e) => Remove(greatClassNameIdiot);

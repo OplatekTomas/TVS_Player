@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="TVSPlayer.LibraryButtons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             Height="40" d:DesignWidth="300">
+    <Grid Loaded="Grid_Loaded">
+        <Grid Height="25" HorizontalAlignment="Left" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" ToolTip="Add Series to library" Margin="5">
+            <Image Source="{DynamicResource PlusIcon}" />
+        </Grid>
+ 
+        <Grid Height="25" HorizontalAlignment="Left" Margin="80,0,0,0" ToolTip="Set library view" x:Name="SwitchView" MouseUp="SwitchView_MouseUp">
+            <Image Source="{DynamicResource PosterIcon}" x:Name="ViewImage" RenderOptions.BitmapScalingMode="HighQuality" />
+        </Grid>
+        <Slider x:Name="Slider" HorizontalAlignment="Right" Margin="10" ToolTip="Set size of posters" VerticalAlignment="Center" Width="170" Minimum="229" Maximum="555" Style="{StaticResource Horizontal_Slider}"  />
+        <Grid Height="27" HorizontalAlignment="Left" Margin="40,0" ToolTip="Sort library" x:Name="SortType" MouseUp="SortType_MouseUp">
+            <Image Source="{DynamicResource CalendarIcon}" x:Name="SortImage" RenderOptions.BitmapScalingMode="HighQuality" />
+        </Grid>
+
+
+    </Grid>
+</UserControl>

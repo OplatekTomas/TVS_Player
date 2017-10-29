@@ -34,7 +34,6 @@
                     </ScrollViewer.Resources>
                     <StackPanel x:Name="panel">
 
-
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
