@@ -32,8 +32,8 @@ namespace TVSPlayer
             viewPosters = Properties.Settings.Default.LibraryView;
         }
         private Library lib;
-        int sortType = 0;
-        bool viewPosters;
+        public int sortType = 0;
+        public bool viewPosters;
 
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -65,15 +65,18 @@ namespace TVSPlayer
             }
             switch (sortType) {
                 case 0:
-                    lib.SortAlphaPosters();
+                    lib.SortAlphaPosters(true);
+                    lib.SortAlphaList(true);
                     SortImage.SetResourceReference(Image.SourceProperty, "AlphabeticalIcon");
                     break;
                 case 1:
-                    lib.SortReversePosters();
+                    lib.SortAlphaPosters(false);
+                    lib.SortAlphaList(false);
                     SortImage.SetResourceReference(Image.SourceProperty, "AlphabeticalReverseIcon");
                     break;
                 case 2:
                     lib.SortCalendarPosters();
+                    lib.SortCalendarList();
                     SortImage.SetResourceReference(Image.SourceProperty, "CalendarIcon");
                     break;
             }

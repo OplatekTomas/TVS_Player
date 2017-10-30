@@ -12,9 +12,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 
 namespace TVSPlayer {
@@ -55,19 +57,34 @@ namespace TVSPlayer {
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             List<Poster> list = Database.GetPosters(id);
-            if (list.Count > 0) {
-                Dictionary<Poster, BitmapImage> dic = await GetPosters(list);
-                foreach (var item in dic) {
-                    PosterSelection ps = new PosterSelection(item.Key,item.Value);
-                    ps.Background.MouseUp += (s,ev) => OnClick(ps);
-                    ps.Width = 250;
-                    Panel.Children.Add(ps);
+            await Task.Run(async () => {
+                if (list.Count > 0) {
+                    Dictionary<Poster, BitmapImage> dic = await GetPosters(list);
+                    Dispatcher.Invoke(() => {
+                        var sb = (Storyboard)FindResource("OpacityDown");
+                        var temp = sb.Clone();
+                        temp.Completed += (s, ev) => { LoadingText.Visibility = Visibility.Collapsed; };
+                        temp.Begin(LoadingText);
+                    }, DispatcherPriority.Send);
+                    foreach (var item in dic) {
+                        Dispatcher.Invoke(() => {
+                            PosterSelection ps = new PosterSelection(item.Key, item.Value);
+                            ps.Background.MouseUp += (s, ev) => OnClick(ps);
+                            ps.Width = 250;
+                            ps.Opacity = 0;
+                            var stb = (Storyboard)FindResource("OpacityUp");
+                            stb.Begin(ps);
+                            Panel.Children.Add(ps);
+                        }, DispatcherPriority.Send);
+                        Thread.Sleep(16);
+                    }
+                } else {
+                    Poster p = new Poster();
+                    p.fileName = "kua";
+                    poster = p;
                 }
-            } else {
-                Poster p = new Poster();
-                p.fileName = "kua";
-                poster = p;
-            }
+            });
+          
         }
         private async Task<Dictionary<Poster, BitmapImage>> GetPosters(List<Poster> posters) {
             Dictionary<Poster, BitmapImage> dic = new Dictionary<Poster, BitmapImage>();

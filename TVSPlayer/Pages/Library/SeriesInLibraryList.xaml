@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="1280">
     <Grid>
-        <Grid x:Name="BGGrid">
+        <Grid x:Name="BGGrid" Loaded="BGGrid_Loaded">
             <Grid.Style>
                 <Style>
                     <Setter Property="Grid.Background" Value="#00000000" />
@@ -18,8 +18,8 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="28" Margin="5,-1,0,0" />
-            <Grid  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0">
+            <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="25" Margin="5,-1,0,0" />
+            <Grid  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0">
                 <Grid Width="25" Height="25" x:Name="RemoveIcon" HorizontalAlignment="Right" >
                     <Image Source="{DynamicResource RemoveIcon}" />
                 </Grid>

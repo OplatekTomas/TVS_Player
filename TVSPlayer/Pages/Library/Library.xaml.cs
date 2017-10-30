@@ -29,12 +29,13 @@ namespace TVSPlayer
     public partial class Library : Page {
         public Library() {
             InitializeComponent();
+            buttons = new LibraryButtons(this);
         }
-
+        LibraryButtons buttons;
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization custom = new PageCustomization();
             custom.MainTitle = "Library";
-            custom.Buttons = new LibraryButtons(this);
+            custom.Buttons = buttons;
             custom.SearchBarEvent = (s, ev) => SearchText(MainWindow.GetSearchBarText());
             MainWindow.SetPageCustomization(custom);
             //PanelPosters.Opacity = 0;        
@@ -55,22 +56,51 @@ namespace TVSPlayer
         /// <returns></returns>
         public async Task RenderPosters() {
             PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
+            PanelList.Children.RemoveRange(0, PanelList.Children.Count);
             List<Series> allSeries = Database.GetSeries();
             foreach (Series series in allSeries) {
                 SeriesInLibrary poster = new SeriesInLibrary(series);
                 poster.Height = Properties.Settings.Default.LibrarySize;
                 poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
                 poster.RemoveIcon.MouseLeftButtonUp += (s,ev) => RemoveFromLibrary(series,poster);
-                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(series,poster);
+                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster);
                 PanelPosters.Children.Add(poster);
             }     
           
         }
 
-        public async void SelectPosters(Series series, SeriesInLibrary sil) {
+        public async Task RenderList() {
+            PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
+            PanelList.Children.RemoveRange(0, PanelList.Children.Count);
+            List<Series> allSeries = Database.GetSeries();            
+            await Task.Run(() => {
+                foreach (Series series in allSeries) {
+                    Dispatcher.Invoke(() => {
+                        SeriesInLibraryList sil = new SeriesInLibraryList(series);
+                        sil.Height = 60;
+                        sil.RemoveIcon.MouseUp += (s, ev) => RemoveFromLibrary(series, sil);
+                        sil.PosterIcon.MouseUp += (s, ev) => SelectPosters(null);
+                        sil.Detail.MouseUp += (s, ev) => ShowDetails(series);
+                        sil.Opacity = 0;
+                        PanelList.Children.Add(sil);
+                        var sb = (Storyboard)FindResource("OpacityUp");
+                        sb.Begin(sil);
+                    }, DispatcherPriority.Send);
+                    Thread.Sleep(16);
+                }
+
+            });
+
+        }
+
+        public async void ShowDetails(Series series) {
+
+        }
+
+        public async void SelectPosters(SeriesInLibrary sil) {
+            Series series = sil.series;
             Poster poster = await MainWindow.SelectPoster(series.id);
-            
-            await Task.Run( async () => {
+            await Task.Run(async () => {
                 series.defaultPoster = poster;
                 Database.EditSeries(series.id, series);
                 if (sil != null) {
@@ -85,24 +115,7 @@ namespace TVSPlayer
                         sb.Begin(sil.PosterImage);
                     }, DispatcherPriority.Send);
                 }
-            });         
-        }
-
-        public async Task RenderList() {
-            PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
-            List<Series> allSeries = Database.GetSeries();
-            foreach (Series series in allSeries) {
-                
-            }
-        }
-
-        private void SearchText(string text) {
-            foreach (SeriesInLibrary series in PanelPosters.Children) {
-                series.Visibility = Visibility.Visible;
-                if (!series.series.seriesName.ToLower().Contains(text.ToLower())) {
-                    series.Visibility = Visibility.Collapsed;
-                }
-            }
+            });
         }
 
         private void RemoveFromLibrary(Series series, FrameworkElement element) {
@@ -134,7 +147,25 @@ namespace TVSPlayer
 
         }
 
-        public void SortAlphaPosters() {
+        private void SearchText(string text) {
+            if (buttons.viewPosters == true) {
+                foreach (SeriesInLibrary series in PanelPosters.Children) {
+                    series.Visibility = Visibility.Visible;
+                    if (!series.series.seriesName.ToLower().Contains(text.ToLower())) {
+                        series.Visibility = Visibility.Collapsed;
+                    }
+                }
+            } else {
+                foreach (SeriesInLibraryList series in PanelList.Children) {
+                    series.Visibility = Visibility.Visible;
+                    if (!series.series.seriesName.ToLower().Contains(text.ToLower())) {
+                        series.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
+
+        public void SortAlphaPosters(bool alpha) {
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             Storyboard clone = sb.Clone();
             clone.Completed += (s, e) => {
@@ -144,7 +175,7 @@ namespace TVSPlayer
                     silList.Add((SeriesInLibrary)ui);
                 }
                 PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
-                silList = silList.OrderBy(x => x.series.seriesName).ToList();
+                silList = alpha ? silList.OrderBy(x => x.series.seriesName).ToList() : silList.OrderBy(x => x.series.seriesName).Reverse().ToList();
                 foreach (SeriesInLibrary sil in silList) {
                     PanelPosters.Children.Add(sil);
                 }
@@ -153,26 +184,6 @@ namespace TVSPlayer
                 };
             clone.Begin(PanelPosters);
             
-        }
-
-        public void SortReversePosters() {
-            Storyboard sb = (Storyboard)FindResource("OpacityDown");
-            Storyboard clone = sb.Clone();
-            clone.Completed += (s, e) => {
-                List<SeriesInLibrary> silList = new List<SeriesInLibrary>();
-                UIElementCollection series = PanelPosters.Children;
-                foreach (UIElement ui in series) {
-                    silList.Add((SeriesInLibrary)ui);
-                }
-                PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
-                silList = silList.OrderBy(x => x.series.seriesName).Reverse().ToList();
-                foreach (SeriesInLibrary sil in silList) {
-                    PanelPosters.Children.Add(sil);
-                }
-                sb = (Storyboard)FindResource("OpacityUp");
-                sb.Begin(PanelPosters);
-            };
-            clone.Begin(PanelPosters);
         }
 
         public void SortCalendarPosters() {
@@ -197,16 +208,10 @@ namespace TVSPlayer
         }
 
         private List<SeriesInLibrary> SortEpisodePosters(List<SeriesInLibrary> list) {
-            List<Series> active = new List<Series>();
-            Dictionary<Series, string> sorted = new Dictionary<Series, string>();
-            List<Tuple<SeriesInLibrary, Series, string>> together = new List<Tuple<SeriesInLibrary, Series, string>>();
-            foreach (var sir in list) {
-                active.Add(sir.series);
-            }
-            foreach (Series s in active) {
+            Dictionary<SeriesInLibrary, string> sorted = new Dictionary<SeriesInLibrary, string>();
+            foreach (SeriesInLibrary sil in list) {
                 Episode ep = new Episode();
-                List<Episode> li = Database.GetEpisodes(s.id);
-                li = li.OrderBy(x => x.firstAired).Reverse().ToList();
+                List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
                 foreach (Episode e in li) {
                     if (!String.IsNullOrEmpty(e.firstAired)) {
                         DateTime dt = DateTime.ParseExact(e.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture);
@@ -216,26 +221,72 @@ namespace TVSPlayer
                         }
                     }
                 }
-                sorted.Add(s, ep.firstAired);
+                sorted.Add(sil, ep.firstAired);
             }
-            foreach (var s in sorted) {
-                foreach (var sir in list) {
-                    if (s.Key.id == sir.series.id) {
-                        together.Add(new Tuple<SeriesInLibrary, Series, string>(sir,s.Key,s.Value));
-                    }
-                }
-            }
-            together = together.OrderBy(x => x.Item3).Reverse().ToList();
-            var stopit = new List<SeriesInLibrary>();
-            foreach (var wtf in together) {
-                stopit.Add(wtf.Item1);
-            }
-            return stopit;
+            return sorted.OrderBy(x => x.Value).Reverse().ToDictionary(x => x.Key, x => x.Value).Keys.ToList();           
         }
 
-        public void ViewPosters() { }
+        public void SortAlphaList(bool alpha) {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            Storyboard clone = sb.Clone();
+            clone.Completed += (s, e) => {
+                List<SeriesInLibraryList> silList = new List<SeriesInLibraryList>();
+                foreach (SeriesInLibraryList ui in PanelList.Children) {
+                    silList.Add(ui);
+                }
+                PanelList.Children.RemoveRange(0, PanelList.Children.Count);
+                silList = alpha ? silList.OrderBy(x => x.series.seriesName).ToList() : silList.OrderBy(x => x.series.seriesName).Reverse().ToList();
+                foreach (SeriesInLibraryList sil in silList) {
+                    PanelList.Children.Add(sil);
+                }
+                sb = (Storyboard)FindResource("OpacityUp");
+                sb.Begin(PanelList);
+            };
+            clone.Begin(PanelList);
 
-        public void ViewList() { }
+        }
+
+       
+
+        public void SortCalendarList() {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            Storyboard clone = sb.Clone();
+            clone.Completed += (s, e) => {
+                List<SeriesInLibraryList> silList = new List<SeriesInLibraryList>();
+                foreach (SeriesInLibraryList ui in PanelList.Children) {
+                    silList.Add(ui);
+                }
+                PanelList.Children.RemoveRange(0, PanelList.Children.Count);
+                silList = SortEpisodeList(silList);
+                foreach (SeriesInLibraryList sil in silList) {
+                    PanelList.Children.Add(sil);
+                }
+                sb = (Storyboard)FindResource("OpacityUp");
+                sb.Begin(PanelPosters);
+            };
+            clone.Begin(PanelPosters);
+
+        }
+
+        private List<SeriesInLibraryList> SortEpisodeList(List<SeriesInLibraryList> list) {
+            Dictionary<SeriesInLibraryList, string> sorted = new Dictionary<SeriesInLibraryList, string>();
+            foreach (SeriesInLibraryList sil in list) {
+                Episode ep = new Episode();
+                List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
+                foreach (Episode e in li) {
+                    if (!String.IsNullOrEmpty(e.firstAired)) {
+                        DateTime dt = DateTime.ParseExact(e.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        if (dt < DateTime.Now) {
+                            ep = e;
+                            break;
+                        }
+                    }
+                }
+                sorted.Add(sil, ep.firstAired);
+            }
+            return sorted.OrderBy(x => x.Value).Reverse().ToDictionary(x => x.Key, x => x.Value).Keys.ToList();
+        }
+
 
         public void SetSize(double size) {
             Properties.Settings.Default.LibrarySize = size;

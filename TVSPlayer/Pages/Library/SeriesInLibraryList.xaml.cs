@@ -28,5 +28,10 @@ namespace TVSPlayer {
         private void Detail_MouseUp(object sender, MouseButtonEventArgs e) {
 
         }
+
+        private void BGGrid_Loaded(object sender, RoutedEventArgs e) {
+            SeriesName.Text = series.seriesName;
+        }
+
     }
 }
