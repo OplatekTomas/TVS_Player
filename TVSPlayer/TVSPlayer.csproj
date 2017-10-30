@@ -130,6 +130,9 @@
     <Compile Include="Pages\Library\PosterSelection.xaml.cs">
       <DependentUpon>PosterSelection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Library\SeriesInLibraryList.xaml.cs">
+      <DependentUpon>SeriesInLibraryList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="Pages\Library\LibraryButtons.xaml">
       <SubType>Designer</SubType>
@@ -212,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Library\PosterSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Library\SeriesInLibraryList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

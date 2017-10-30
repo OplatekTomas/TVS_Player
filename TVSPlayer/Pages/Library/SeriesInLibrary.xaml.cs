@@ -28,33 +28,53 @@ namespace TVSPlayer
             this.series = series;
         }
         public Series series;
+        bool showing = false;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             PosterImage.Source = await Database.GetSelectedPoster(series.id);
-            ShowName.Text = series.seriesName;
-            ShowName.ToolTip = series.seriesName;
+            // ShowName.Text = series.seriesName;
+            // ShowName.ToolTip = series.seriesName;
+            PosterImage.ToolTip = series.seriesName;
         }
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e) {
-            DoubleAnimation animation = new DoubleAnimation(this.ActualHeight / 3.25, new TimeSpan(0, 0, 0, 0, 200));
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+
+        }
+
+        private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            if (!showing) {
+                Show();
+                showing = true;
+            } else {
+                Hide();
+                showing = false;
+            }
+        }
+
+        private void Show() {
+            DoubleAnimation animation = new DoubleAnimation(this.ActualHeight / 8, new TimeSpan(0, 0, 0, 0, 200));
             animation.AccelerationRatio = animation.DecelerationRatio = 0.5;
             DetailsGrid.BeginAnimation(HeightProperty, animation);
             RemoveIcon.Height = this.ActualHeight / 16;
             PosterIcon.Height = this.ActualHeight / 14;
-            PosterIcon.Margin = new Thickness(0,0,this.ActualWidth / 7.5,3);
+            PosterIcon.Margin = new Thickness(0, 0, this.ActualWidth / 7.5, 3);
             QuestionIcon.Height = this.ActualHeight / 15;
             QuestionIcon.Margin = new Thickness(0, 0, this.ActualWidth / 3.75, 0);
-            ShowName.FontSize = this.ActualHeight / 14;
+            //ShowName.FontSize = this.ActualHeight / 14;
             Storyboard sb = (Storyboard)FindResource("OpacityUp");
             sb.Begin(DetailsGrid);
         }
 
-        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
-            DoubleAnimation animation = new DoubleAnimation(0 , new TimeSpan(0, 0, 0, 0, 200));
+        private void Hide() {
+            DoubleAnimation animation = new DoubleAnimation(0, new TimeSpan(0, 0, 0, 0, 200));
             animation.AccelerationRatio = animation.DecelerationRatio = 0.5;
             DetailsGrid.BeginAnimation(HeightProperty, animation);
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             sb.Begin(DetailsGrid);
         }
+
     }
 }

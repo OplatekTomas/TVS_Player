@@ -66,15 +66,15 @@ namespace TVSPlayer
             switch (sortType) {
                 case 0:
                     lib.SortAlphaPosters();
-                    SortImage.Source = (BitmapImage)FindResource("AlphabeticalIcon");
+                    SortImage.SetResourceReference(Image.SourceProperty, "AlphabeticalIcon");
                     break;
                 case 1:
                     lib.SortReversePosters();
-                    SortImage.Source = (BitmapImage)FindResource("AlphabeticalReverseIcon");
+                    SortImage.SetResourceReference(Image.SourceProperty, "AlphabeticalReverseIcon");
                     break;
                 case 2:
                     lib.SortCalendarPosters();
-                    SortImage.Source = (BitmapImage)FindResource("CalendarIcon");
+                    SortImage.SetResourceReference(Image.SourceProperty, "CalendarIcon");
                     break;
             }
         }
@@ -84,11 +84,11 @@ namespace TVSPlayer
             Properties.Settings.Default.Save();
             lib.PanelPosters.Opacity = 0;
             if (viewPosters) {
-                ViewImage.Source = (BitmapImage)FindResource("ListIcon");
+                ViewImage.SetResourceReference(Image.SourceProperty, "ListIcon");
                 await lib.RenderList();
                 viewPosters = false;          
             } else {
-                ViewImage.Source = (BitmapImage)FindResource("PosterIcon");
+                ViewImage.SetResourceReference(Image.SourceProperty, "PosterIcon");
                 await lib.RenderPosters();
                 viewPosters = true;
             }
@@ -133,6 +133,14 @@ namespace TVSPlayer
                  SetView(false);
             };
             clone.Begin(ViewImage);
+        }
+
+        private void Slider_MouseWheel(object sender, MouseWheelEventArgs e) {
+            if (e.Delta > 0) {
+                Slider.Value++;
+            } else {
+                Slider.Value--;
+            }
         }
     }
 }

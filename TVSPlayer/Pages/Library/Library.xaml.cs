@@ -59,6 +59,7 @@ namespace TVSPlayer
             foreach (Series series in allSeries) {
                 SeriesInLibrary poster = new SeriesInLibrary(series);
                 poster.Height = Properties.Settings.Default.LibrarySize;
+                poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
                 poster.RemoveIcon.MouseLeftButtonUp += (s,ev) => RemoveFromLibrary(series,poster);
                 poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(series,poster);
                 PanelPosters.Children.Add(poster);
@@ -90,11 +91,9 @@ namespace TVSPlayer
         public async Task RenderList() {
             PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
             List<Series> allSeries = Database.GetSeries();
-            await Task.Run(() => {
-                foreach (Series series in allSeries) {
-                }
-
-            });
+            foreach (Series series in allSeries) {
+                
+            }
         }
 
         private void SearchText(string text) {
@@ -244,6 +243,7 @@ namespace TVSPlayer
             UIElementCollection uiColl = PanelPosters.Children;
             foreach (SeriesInLibrary ui in uiColl) {
                 ui.Height = size;
+                ui.Width = size / 1.47058823529;
             }
         }
 

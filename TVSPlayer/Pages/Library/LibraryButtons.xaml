@@ -14,7 +14,7 @@
         <Grid Height="25" HorizontalAlignment="Left" Margin="80,0,0,0" ToolTip="Set library view" x:Name="SwitchView" MouseUp="SwitchView_MouseUp">
             <Image Source="{DynamicResource PosterIcon}" x:Name="ViewImage" RenderOptions.BitmapScalingMode="HighQuality" />
         </Grid>
-        <Slider x:Name="Slider" HorizontalAlignment="Right" Margin="10" ToolTip="Set size of posters" VerticalAlignment="Center" Width="170" Minimum="229" Maximum="555" Style="{StaticResource Horizontal_Slider}"  />
+        <Slider x:Name="Slider" HorizontalAlignment="Right" Margin="10" ToolTip="Set size of posters" VerticalAlignment="Center" Width="170" Minimum="229" Maximum="555" Style="{StaticResource Horizontal_Slider}" MouseWheel="Slider_MouseWheel" />
         <Grid Height="27" HorizontalAlignment="Left" Margin="40,0" ToolTip="Sort library" x:Name="SortType" MouseUp="SortType_MouseUp">
             <Image Source="{DynamicResource CalendarIcon}" x:Name="SortImage" RenderOptions.BitmapScalingMode="HighQuality" />
         </Grid>
