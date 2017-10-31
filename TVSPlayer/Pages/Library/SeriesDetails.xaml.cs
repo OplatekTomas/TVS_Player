@@ -38,7 +38,7 @@ namespace TVSPlayer
                     Dispatcher.Invoke(() => {
                         var auc = new ActorUserControl(actor);
                         auc.Name.Text = actor.name;
-                        auc.Name.MouseUp += (s, ev) => { Process.Start("http://www.imdb.com/find?ref_=nv_sr_fn&q="+actor.name.Replace(' ','+')+"&s=all"); };
+                        auc.Name.MouseUp += (s, ev) => { Process.Start("http://www.imdb.com/find?ref_=nv_sr_fn&q=" + actor.name.Replace(' ', '+') + "&s=all"); };
                         auc.Role.Text = actor.role;
                         auc.Opacity = 0;
                         auc.Margin = new Thickness(0, 0, 20, 5);
@@ -49,6 +49,15 @@ namespace TVSPlayer
                     Thread.Sleep(16);
                 }
 
+            });
+            Task.Run( async() => {
+                var bmp = await Database.GetSelectedPoster(series.id);
+                Dispatcher.Invoke(() => {
+                    PosterImage.Opacity = 0;
+                    PosterImage.Source = bmp;
+                    var sb = (Storyboard)FindResource("OpacityUp");
+                    sb.Begin(PosterImage);
+                });
             });
 
         }
@@ -63,6 +72,8 @@ namespace TVSPlayer
                 sb.Begin(RightArrow);
                 sb.Begin(LeftArrow);
             }
+            Column.Width = new GridLength(BackgroundGrid.ActualHeight*0.85);
+
         }
 
         private void RightArrow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -72,7 +83,6 @@ namespace TVSPlayer
         }
 
         private void LeftArrow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-
             for (int i = 0; i < 15; i++) {
                 ScrollView.LineRight();
             }

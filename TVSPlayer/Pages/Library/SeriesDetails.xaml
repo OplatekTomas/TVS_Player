@@ -26,10 +26,10 @@
         </Grid>
         <Grid Grid.Row="1" x:Name="BackgroundGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" x:Name="Column" />
+                <ColumnDefinition Width="4.5*" />
             </Grid.ColumnDefinitions>
-            <Image MinWidth="{Binding ActualHeight,ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x}" Height="{Binding Height, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x-20}" x:Name="Poster" Source="D:\Downloads\Chrome\121361-2-7.jpg"  Margin="65,10,0,10" HorizontalAlignment="Left" />
+            <Image  Height="{Binding Height, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x-20}" x:Name="PosterImage" Margin="65,10,0,10" HorizontalAlignment="Left" />
             <Grid Grid.Column="2">
                 <StackPanel>
                     <TextBlock Text="SampleText" FontSize="30" />
