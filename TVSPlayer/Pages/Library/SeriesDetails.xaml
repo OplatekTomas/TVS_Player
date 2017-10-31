@@ -7,8 +7,61 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="SeriesDetails">
+    <Page.Resources>
+        <Storyboard x:Key="GoWide">
+            <DoubleAnimation To="60" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
+        </Storyboard>
+        <Storyboard x:Key="GoAway">
+            <DoubleAnimation To="0" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
+        </Storyboard>
+    </Page.Resources>
+    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Left" Margin="6,8" x:Name="BackButton" MouseUp="BackButton_MouseUp">
+            <Image Source="{DynamicResource BackIcon}" />
+        </Grid>
+        <Grid Grid.Row="1" x:Name="BackgroundGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Image MinWidth="{Binding ActualHeight,ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x}" Height="{Binding Height, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x-20}" x:Name="Poster" Source="D:\Downloads\Chrome\121361-2-7.jpg"  Margin="65,10,0,10" HorizontalAlignment="Left" />
+            <Grid Grid.Column="2">
+                <StackPanel>
+                    <TextBlock Text="SampleText" FontSize="30" />
+                    <TextBlock Text="SampleText" FontSize="30" />
+                    <TextBlock Text="SampleText" FontSize="30" />
+                    <TextBlock Text="SampleText" FontSize="30" />
+                    <TextBlock Text="SampleText" FontSize="30" />
 
-    <Grid Background="{DynamicResource BackgroundBrush}">
-        
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Margin="0,0,0,20">
+            <Grid x:Name="RightArrow" MouseLeftButtonUp="RightArrow_MouseLeftButtonUp" HorizontalAlignment="Left" Width="0">
+                <Image Source="{DynamicResource ForwardIconHQ}" RenderTransformOrigin="0.5,0.5" >
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="180"/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Grid>
+            <Grid x:Name="LeftArrow" MouseLeftButtonUp="LeftArrow_MouseLeftButtonUp" HorizontalAlignment="Right" Width="0">
+                <Image Source="{DynamicResource ForwardIconHQ}" RenderTransformOrigin="0.5,0.5" />
+            </Grid>
+            <ScrollViewer x:Name="ScrollView" PreviewMouseWheel="ScrollView_MouseWheel" SizeChanged="ScrollView_SizeChanged" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="Auto" VerticalScrollBarVisibility="Disabled" Margin="60,0">
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
+                </ScrollViewer.Resources>
+                <StackPanel Orientation="Horizontal" x:Name="Panel">
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Page>

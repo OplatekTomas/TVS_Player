@@ -455,6 +455,20 @@ namespace TVSPlayer {
             }
         }
 
+        public async static Task<BitmapImage> LoadImage(Uri uri) {
+            var bmp = await Task.Run( async () => {
+                var bytes = await new WebClient().DownloadDataTaskAsync(uri);
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = new MemoryStream(bytes);
+                image.EndInit();
+                image.Freeze();
+                return image;
+            });
+            return bmp;
+        }
+
         /// <summary>
         /// Loads image from file
         /// </summary>

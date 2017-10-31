@@ -71,8 +71,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ActorUserControl.xaml.cs">
+      <DependentUpon>ActorUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\Database.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\MathConverter.cs" />
     <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
@@ -137,6 +141,10 @@
       <DependentUpon>SeriesDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Page Include="Controls\ActorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Library\LibraryButtons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

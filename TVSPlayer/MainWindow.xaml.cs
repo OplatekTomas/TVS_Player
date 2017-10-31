@@ -164,9 +164,10 @@ namespace TVSPlayer {
         /// Sets page in Main Frame to any page
         /// </summary>
         /// <param name="page">What page to set to</param>
-        public static void SetPage(Page page) {
+        public static void SetPage(FrameworkElement page) {
             Window main = Application.Current.MainWindow;
             ((MainWindow)main).PageSetter(page);
+            SetPageCustomization(new PageCustomization());
         }
         
         /// <summary>
@@ -181,23 +182,23 @@ namespace TVSPlayer {
         private TextChangedEventHandler lastHandler;
 
         private void PageCustomizationSetter(PageCustomization custom) {
-            if (!String.IsNullOrEmpty(custom.MainTitle)) {
-                PageTitle.Text = custom.MainTitle;
+            PageTitle.Text = custom.MainTitle;
+            if (lastHandler != null) {
+                SearchBox.TextChanged -= lastHandler;
             }
             if (custom.SearchBarEvent != null) {
-                if (lastHandler != null) {
-                    SearchBox.TextChanged -= lastHandler;
-                }
                 lastHandler = custom.SearchBarEvent;
                 SearchBox.TextChanged += custom.SearchBarEvent;
             }
             if (custom.Buttons != null) {
                 CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
                 CustomContent.Children.Add(custom.Buttons);
+            } else {
+                CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
             }
         }
 
-        private void PageSetter(Page page) {
+        private void PageSetter(FrameworkElement page) {
             Storyboard sb = (Storyboard)FindResource("OpacityDown");
             Storyboard temp = sb.Clone();
             temp.Completed += (s,e) => {
@@ -319,16 +320,8 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            Series s = Series.GetSeries(121361);
-            //Database.AddEpisode(121361,Episode.GetAllEpisodes(121361));
-            s.libraryPath = @"D:\TVSTests\Game of Thrones";
-            Settings.FirstScanLocation = @"";
-            Settings.SecondScanLocation = @"";
-            Settings.ThirdScanLocation = @"";
+            SetPage(new ActorUserControl(null) { Height=300 });
 
-
-            //Settings.SaveSettings();
-            Renamer.FindAndRename(s);
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
