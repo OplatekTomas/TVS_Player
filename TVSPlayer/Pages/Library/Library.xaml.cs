@@ -39,12 +39,6 @@ namespace TVSPlayer
             custom.SearchBarEvent = (s, ev) => SearchText(MainWindow.GetSearchBarText());
             MainWindow.SetPageCustomization(custom);       
             await ((LibraryButtons)custom.Buttons).SetView();
-            Storyboard sb = (Storyboard)FindResource("OpacityDown");
-            var clone = sb.Clone();
-            clone.Completed += (s, ev) => {
-                LoadingText.Visibility = Visibility.Hidden;
-            };
-            clone.Begin(LoadingText);
         }
 
 
@@ -62,8 +56,9 @@ namespace TVSPlayer
                 poster.Height = Properties.Settings.Default.LibrarySize;
                 poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
                 poster.RemoveIcon.MouseLeftButtonUp += (s,ev) => RemoveFromLibrary(series,poster);
-                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster);
+                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster, series);
                 poster.QuestionIcon.MouseLeftButtonUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
+                poster.PosterImage.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
                 PanelPosters.Children.Add(poster);
             }     
           
@@ -79,9 +74,10 @@ namespace TVSPlayer
                         SeriesInLibraryList sil = new SeriesInLibraryList(series);
                         sil.Height = 60;
                         sil.RemoveIcon.MouseUp += (s, ev) => RemoveFromLibrary(series, sil);
-                        sil.PosterIcon.MouseUp += (s, ev) => SelectPosters(null);
+                        sil.PosterIcon.MouseUp += (s, ev) => SelectPosters(null, series);
                         sil.Detail.MouseUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
                         sil.Opacity = 0;
+                        sil.Left.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
                         PanelList.Children.Add(sil);
                         var sb = (Storyboard)FindResource("OpacityUp");
                         sb.Begin(sil);
@@ -94,8 +90,7 @@ namespace TVSPlayer
         }
 
 
-        public async void SelectPosters(SeriesInLibrary sil) {
-            Series series = sil.series;
+        public async void SelectPosters(SeriesInLibrary sil, Series series) {
             Poster poster = await MainWindow.SelectPoster(series.id);
             await Task.Run(async () => {
                 series.defaultPoster = poster;

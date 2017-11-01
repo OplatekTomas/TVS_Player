@@ -140,6 +140,9 @@
     <Compile Include="Pages\Library\SeriesDetails.xaml.cs">
       <DependentUpon>SeriesDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Episodes\SeriesEpisodes.xaml.cs">
+      <DependentUpon>SeriesEpisodes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="Controls\ActorUserControl.xaml">
       <SubType>Designer</SubType>
@@ -234,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Library\SeriesDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Episodes\SeriesEpisodes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

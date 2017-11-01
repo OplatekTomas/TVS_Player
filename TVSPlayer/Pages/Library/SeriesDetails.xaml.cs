@@ -59,6 +59,29 @@ namespace TVSPlayer
                     sb.Begin(PosterImage);
                 });
             });
+            Task.Run(() => {
+                Dispatcher.Invoke(() => {
+                    genres.Text = "";
+                    for (int i = 0; i < series.genre.Count; i++) {
+                        if (i != series.genre.Count - 1) {
+                            genres.Text += series.genre[i] + ", ";
+                        } else {
+                            genres.Text += series.genre[i];
+                        }
+                    }
+                    showName.Text = series.seriesName;
+                    schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
+                    network.Text = series.network;
+                    stat.Text = series.status;
+                    prem.Text = series.firstAired;
+                    len.Text = series.runtime;
+                    summary.Text = series.overview;
+                    agerating.Text = series.rating;
+                    rating.Text = series.siteRating + "/10";
+
+                },System.Windows.Threading.DispatcherPriority.Send);
+               
+            });
 
         }
 
@@ -100,6 +123,10 @@ namespace TVSPlayer
                 ScrollView.LineRight();
                 ScrollView.LineRight();
             }
+        }
+
+        private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
+            Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1");
         }
     }
 }

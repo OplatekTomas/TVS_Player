@@ -18,7 +18,7 @@
             </Image.Effect>
         </Image>
         <Grid Grid.Row="1" Margin="0,7,0,0">
-            <TextBlock x:Name="Name" VerticalAlignment="Top" FontWeight="Bold" Text="Name" TextAlignment="Center" Foreground="{DynamicResource TextColor}" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/18}"  Grid.Row="1"  />
+            <TextBlock x:Name="Name" TextDecorations="Underline" VerticalAlignment="Top" FontWeight="Bold" Text="Name" TextAlignment="Center" Foreground="{DynamicResource TextColor}" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/18}"  Grid.Row="1"  />
             <TextBlock VerticalAlignment="Center" Text="as" TextAlignment="Center" Foreground="{DynamicResource TextColor}" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/21}"  Grid.Row="1" />
             <TextBlock x:Name="Role" VerticalAlignment="Bottom" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/19}"  Text="Role" TextAlignment="Center" Foreground="{DynamicResource TextColor}" Grid.Row="1" />
         </Grid>

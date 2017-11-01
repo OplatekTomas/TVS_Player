@@ -70,7 +70,7 @@ namespace TVSPlayer {
                         Dispatcher.Invoke(() => {
                             PosterSelection ps = new PosterSelection(item.Key, item.Value);
                             ps.Background.MouseUp += (s, ev) => OnClick(ps);
-                            ps.Width = 250;
+                            ps.Width = 208;
                             ps.Opacity = 0;
                             var stb = (Storyboard)FindResource("OpacityUp");
                             stb.Begin(ps);
