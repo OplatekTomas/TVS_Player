@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 
 namespace TVSPlayer {
@@ -24,5 +27,66 @@ namespace TVSPlayer {
             this.series = series;
         }
         Series series;
+        bool hasBackground = false;
+
+
+        private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
+            MainWindow.SetPage(new Library());
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            PageCustomization pg = new PageCustomization();
+            pg.MainTitle = series.seriesName;
+            MainWindow.SetPageCustomization(pg);
+            Task.Run(() => LoadBackground());
+            Task.Run(() => LoadSeasons());
+        }
+
+        private async void LoadBackground() {
+            BitmapImage bmp = await Database.GetFanArt(series.id);
+            Dispatcher.Invoke(() => {
+                if (bmp != null) {
+                    hasBackground = true;
+                    BackgroundImage.Source = bmp;
+                    Darkener.Visibility = Visibility.Visible;
+                    var sb = (Storyboard)FindResource("BlurImage");
+                    sb.Begin();
+                    var sboard = (Storyboard)FindResource("OpacityUp");
+                    sboard.Begin(BackgroundImage);
+                } else {
+                    BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
+                }
+            },DispatcherPriority.Send);          
+        }
+        private async void LoadSeasons() {
+            List<Episode> eps = Database.GetEpisodes(series.id);
+            List<List<Episode>> sorted = new List<List<Episode>>();
+
+            for (int i = 1; ; i++) {
+                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture) < DateTime.Now).ToList();
+                if (list.Count != 0) {
+                    sorted.Add(list);
+                } else {
+                    break;
+                }
+            }
+            Dispatcher.Invoke(() => {
+                foreach (var list in sorted) {
+                    TextBlock text = new TextBlock();
+                    text.FontSize = 24;
+                    text.FontWeight = FontWeights.Bold;
+                    text.Foreground = (Brush)FindResource("TextColor");
+                    text.Margin = new Thickness(0, 0, 0, 10);
+                    text.Text = "Season " + (sorted.IndexOf(list) + 1);
+                    SeasonView sv = new SeasonView(list,series);
+                    sv.Height = 195;
+                    sv.Margin = new Thickness(0, 0, 25, 20);
+                    Panel.Children.Add(text);
+                    Panel.Children.Add(sv);
+                }
+            }, DispatcherPriority.Send);
+        }
+
+
     }
 }

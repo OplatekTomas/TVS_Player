@@ -7,8 +7,37 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="SeriesEpisodes">
+    <Page.Resources>
+        <Storyboard x:Key="BlurImage">
+            <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="ImageEffect" DecelerationRatio="0.9" Duration="0:0:0.300" />
+        </Storyboard>
+    </Page.Resources>
 
-    <Grid Background="{DynamicResource BackgroundBrush}">
-        
+    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="BackgroundImage" Grid.RowSpan="3" Margin="-100" Opacity="0" >
+            <Image.Effect>
+                <BlurEffect Radius="0" RenderingBias="Performance" x:Name="ImageEffect" />
+            </Image.Effect>
+        </Image>
+        <Grid Grid.RowSpan="3" Background="#CC202020" Visibility="Hidden" x:Name="Darkener" Opacity="1" />
+        <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3">
+            <Image Source="{StaticResource BackIcon}" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Margin="5" Focusable="False">
+            <ScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}"></Style>
+            </ScrollViewer.Resources>
+            <StackPanel Margin="30,0,5,0" x:Name="Panel">
+                <Grid Height="400">
+                    
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Page>

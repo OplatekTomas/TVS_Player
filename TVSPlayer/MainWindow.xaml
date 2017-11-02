@@ -25,9 +25,6 @@
         <Storyboard x:Key="HideSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="ShowNotification">
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,350,0"  DecelerationRatio=".5" Duration="0:0:0.25" />
-        </Storyboard>
         <Storyboard x:Key="HideNotification">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,10,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>

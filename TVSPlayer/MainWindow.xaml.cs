@@ -87,7 +87,9 @@ namespace TVSPlayer {
                 clone.Begin(NotificationArea);
                 rightsidevisible = false;
             } else {
-                StartAnimation("ShowNotification", RightButtons);
+                double rightMargin = CustomContent.Children.Count == 1 ? Int32.Parse(CustomContent.Children[0].GetValue(ActualWidthProperty).ToString()) + 50 : 50;
+                ThicknessAnimation animation = new ThicknessAnimation(new Thickness(0, 0, rightMargin, 0), new TimeSpan(0, 0, 0, 0, 250));
+                RightButtons.BeginAnimation(MarginProperty, animation);
                 NotificationArea.Visibility = Visibility.Visible;
                 StartAnimation("OpacityUp", NotificationArea);
                 rightsidevisible = true;
@@ -245,9 +247,9 @@ namespace TVSPlayer {
         public static bool checkConnection() {
             Ping ping = new Ping();
             try {
-                PingReply tvdb = ping.Send("api.thetvdb.com");
-                PingReply tvmaze = ping.Send("api.tvmaze.com");
-                PingReply google = ping.Send("www.google.com");
+                ping.Send("api.thetvdb.com");
+                ping.Send("api.tvmaze.com");
+                ping.Send("www.google.com");
                 return true;
             } catch (PingException ex) {
                 return false;
@@ -287,9 +289,23 @@ namespace TVSPlayer {
                             s.libraryPath = combination.Item2;
                             Database.AddSeries(s);
                         });
-                        secondTasks[1] = Task.Run(() => Database.AddActor(id, Actor.GetActors(id)));
-                        secondTasks[2] = Task.Run(() => Database.AddPoster(id, Poster.GetPosters(id)));
-                        secondTasks[3] = Task.Run(() => Database.AddEpisode(id, Episode.GetAllEpisodes(id)));
+                        secondTasks[1] = Task.Run(() => {
+                            List<Actor> list = Actor.GetActors(id);
+                            if (list != null) {
+                                Database.AddActor(id, list);
+                            } });
+                        secondTasks[2] = Task.Run(() => {
+                            List<Episode> list = Episode.GetEpisodes(id);
+                            if (list != null) {
+                                Database.AddEpisode(id, list);
+                            }
+                        });
+                        secondTasks[3] = Task.Run(() => {
+                            List<Poster> list = Poster.GetPosters(id);
+                            if (list != null) {
+                                Database.AddPoster(id, list);
+                            }
+                        });
                         Task.WaitAll(secondTasks);
                         Dispatcher.Invoke(new Action(() => {
                             total++;

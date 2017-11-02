@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="TVSPlayer.EpisodeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="185" d:DesignWidth="230">
+    <Grid Loaded="Grid_Loaded">
+        <Image MaxHeight="124" HorizontalAlignment="Left" MaxWidth="220" RenderOptions.BitmapScalingMode="HighQuality"  VerticalAlignment="Top" x:Name="ThumbImage" Margin="5,0" >
+            <Image.Effect>
+                <DropShadowEffect Opacity="0.5" BlurRadius="10" />
+            </Image.Effect>
+        </Image>
+        <TextBlock TextTrimming="CharacterEllipsis" Text="561" VerticalAlignment="Bottom"  Margin="10,23" FontWeight="Bold" FontSize="16" x:Name="EpisodeName" Foreground="{StaticResource TextColor}" />
+        <TextBlock Text="468684" VerticalAlignment="Bottom" Margin="10,0" FontSize="14" x:Name="EpisodeNumber" Foreground="{StaticResource TextColor}" />
+
+    </Grid>
+</UserControl>

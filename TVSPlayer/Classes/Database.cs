@@ -203,11 +203,16 @@ namespace TVSPlayer {
         /// <param name="ep">new Episode that will replace the old one</param>
         /// <returns>true if edit was successful or false if it was not</returns>
         public static bool EditEpisode(int id, int epId, Episode ep) {
-            if (RemoveEpisode(id, epId)) {
-                AddEpisode(id, ep);
+            List<Episode> eps = GetEpisodes(id);
+            try {
+                eps.Remove(eps.Single(se => se.id == epId));
+                eps.Add(ep);
+                string json = JsonConvert.SerializeObject(eps);
+                WriteToFile(db + id + "\\Episodes.tvsp", json);
                 return true;
+            } catch (Exception e) {
+                return false;
             }
-            return false;
         }
 
         /// <summary>
@@ -290,6 +295,31 @@ namespace TVSPlayer {
             list.AddRange(episode);
             string json = JsonConvert.SerializeObject(list);
             WriteToFile(db + id + "\\Episodes.tvsp", json);
+        }
+
+        /// <summary>
+        /// Returns thumbnail for episode. Also takes care of caching.
+        /// </summary>
+        /// <param name="id">TVDb id of Series</param>
+        /// <param name="epId">TVDb id of Episode</param>
+        /// <returns>BitmapImage with thumbnail or null in case of errors</returns>
+        public static async Task<BitmapImage> GetEpisodeThumbnail(int id, int epId) {
+            var bmp = await Task.Run(async() => {
+                Episode ep = GetEpisode(id, epId, true);
+                if (File.Exists(ep.thumbnail) && !String.IsNullOrEmpty(ep.thumbnail)) {
+                    return await LoadImage(ep.thumbnail);
+                } else if (!String.IsNullOrEmpty(ep.filename)) {
+                    string file = db + id + "\\Thumbnails\\" + Path.GetFileName(ep.filename);
+                    WebClient wc = new WebClient();
+                    Directory.CreateDirectory(Path.GetDirectoryName(file));
+                    wc.DownloadFile("https://www.thetvdb.com/banners/" + ep.filename, file);
+                    ep.thumbnail = file;
+                    EditEpisode(id, epId, ep);
+                    return await LoadImage(ep.thumbnail);
+                }
+                return null;
+            });
+            return bmp;
         }
 
         #endregion
@@ -455,6 +485,29 @@ namespace TVSPlayer {
             }
         }
 
+        public async static Task<BitmapImage> GetFanArt(int id) {
+            string path = db + id + "\\Fanart\\Fanart.png";
+            if (!File.Exists(path)) {
+                await Task.Run(() => {
+                    Poster fanart = Poster.GetFanArt(id);
+                    if (!String.IsNullOrEmpty(fanart.fileName)) {
+                        WebClient wc = new WebClient();                       
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                        wc.DownloadFile("https://www.thetvdb.com/banners/" + fanart.fileName, path);
+                    }
+                });
+            }
+            if (File.Exists(path)) {
+               return await LoadImage(path);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Loads image from url
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
         public async static Task<BitmapImage> LoadImage(Uri uri) {
             var bmp = await Task.Run( async () => {
                 var bytes = await new WebClient().DownloadDataTaskAsync(uri);
@@ -510,7 +563,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="id">TVDb id of Series</param>
         /// <param name="posters">List of posters to add</param>
-        private static void PosterAdder(int id, List<Poster> posters) {
+        private static void PosterAdder(int id, List<Poster> posters) {           
             string original = ReadFromFile(db + id + "\\Posters.tvsp");
             List<Poster> list = new List<Poster>();
             if (!String.IsNullOrEmpty(original)) {
@@ -555,6 +608,8 @@ namespace TVSPlayer {
             return false;
         }
         #endregion
+
+
 
 
 
