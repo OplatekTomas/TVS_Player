@@ -39,8 +39,18 @@ namespace TVSPlayer {
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
+            Task.Run(() => LoadInfo());
             Task.Run(() => LoadSeasons());
         }
+
+        private async void LoadInfo() {
+            BitmapImage bmp = await Database.GetSelectedPoster(series.id);
+            Dispatcher.Invoke(() => {
+                //DefaultPoster.Source = bmp;
+            });
+
+        }
+
 
         private async void LoadBackground() {
             BitmapImage bmp = await Database.GetFanArt(series.id);
@@ -79,6 +89,14 @@ namespace TVSPlayer {
                     text.Margin = new Thickness(0, 0, 0, 10);
                     text.Text = "Season " + (sorted.IndexOf(list) + 1);
                     SeasonView sv = new SeasonView(list,series);
+                    //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
+                    sv.ScrollView.PreviewMouseWheel += (s, ev) => {
+                        if (ev.Delta > 0) {
+                            ScrollView.LineUp();
+                        } else {
+                            ScrollView.LineDown();
+                        }
+                    };
                     sv.Height = 195;
                     sv.Margin = new Thickness(0, 0, 25, 20);
                     Panel.Children.Add(text);
@@ -87,6 +105,7 @@ namespace TVSPlayer {
             }, DispatcherPriority.Send);
         }
 
+  
 
     }
 }

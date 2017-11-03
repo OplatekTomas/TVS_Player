@@ -57,22 +57,6 @@ namespace TVSPlayer {
             MainWindow.SetPage(new Library());
         }
 
-        private void ScrollView_MouseWheel(object sender, MouseWheelEventArgs e) {
-            if (e.Delta > 0) {
-                ScrollView.LineLeft();
-                ScrollView.LineLeft();
-                ScrollView.LineLeft();
-                ScrollView.LineLeft();
-
-            } else {
-                ScrollView.LineRight();
-                ScrollView.LineRight();
-                ScrollView.LineRight();
-                ScrollView.LineRight();
-
-            }
-        }
-
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             await Task.Run(async() => {
                 foreach (Episode ep in episodes) {
@@ -101,6 +85,29 @@ namespace TVSPlayer {
                 return await Database.LoadImage(new Uri("https://www.thetvdb.com/banners/" + episode.filename));
             }
             return null;
+        }
+
+
+        Point scrollMousePoint = new Point();
+        double hOff = 1;
+        private void scrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            scrollMousePoint = e.GetPosition(ScrollView);
+            hOff = ScrollView.HorizontalOffset;
+            ScrollView.CaptureMouse();
+        }
+
+        private void scrollViewer_PreviewMouseMove(object sender, MouseEventArgs e) {
+            if (ScrollView.IsMouseCaptured) {
+                ScrollView.ScrollToHorizontalOffset(hOff + (scrollMousePoint.X - e.GetPosition(ScrollView).X));
+            }
+        }
+
+        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            ScrollView.ReleaseMouseCapture();
+        }
+
+        private void scrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            ScrollView.ScrollToHorizontalOffset(ScrollView.HorizontalOffset + e.Delta);
         }
 
     }

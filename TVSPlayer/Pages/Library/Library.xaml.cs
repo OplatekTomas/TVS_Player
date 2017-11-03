@@ -20,6 +20,7 @@ using System.Linq;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Diagnostics;
 
 namespace TVSPlayer
 {
@@ -39,6 +40,10 @@ namespace TVSPlayer
             custom.SearchBarEvent = (s, ev) => SearchText(MainWindow.GetSearchBarText());
             MainWindow.SetPageCustomization(custom);       
             await ((LibraryButtons)custom.Buttons).SetView();
+            var sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => { LoadingText.Visibility = Visibility.Hidden; };
+            clone.Begin(LoadingText);
         }
 
 
@@ -51,16 +56,25 @@ namespace TVSPlayer
             PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
             PanelList.Children.RemoveRange(0, PanelList.Children.Count);
             List<Series> allSeries = Database.GetSeries();
-            foreach (Series series in allSeries) {
-                SeriesInLibrary poster = new SeriesInLibrary(series);
-                poster.Height = Properties.Settings.Default.LibrarySize;
-                poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
-                poster.RemoveIcon.MouseLeftButtonUp += (s,ev) => RemoveFromLibrary(series,poster);
-                poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster, series);
-                poster.QuestionIcon.MouseLeftButtonUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
-                poster.PosterImage.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
-                PanelPosters.Children.Add(poster);
-            }     
+            await Task.Run(async() => {
+                foreach (Series series in allSeries) {
+                    BitmapImage bmp = await Database.GetSelectedPoster(series.id);
+                    Dispatcher.Invoke(() => {
+                        SeriesInLibrary poster = new SeriesInLibrary(series);
+                        poster.PosterImage.Source = bmp;
+                        poster.Height = Properties.Settings.Default.LibrarySize;
+                        poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
+                        poster.RemoveIcon.MouseLeftButtonUp += (s, ev) => RemoveFromLibrary(series, poster);
+                        poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster, series);
+                        poster.QuestionIcon.MouseLeftButtonUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
+                        poster.PosterImage.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
+                        PanelPosters.Children.Add(poster);
+                    }, DispatcherPriority.Send);
+
+                }
+
+            });
+             
           
         }
 

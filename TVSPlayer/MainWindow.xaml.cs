@@ -184,6 +184,14 @@ namespace TVSPlayer {
         private TextChangedEventHandler lastHandler;
 
         private void PageCustomizationSetter(PageCustomization custom) {
+            StartAnimation("HideNotification", RightButtons);
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            Storyboard clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                NotificationArea.Visibility = Visibility.Hidden;
+            };
+            clone.Begin(NotificationArea);
+            rightsidevisible = false;
             PageTitle.Text = custom.MainTitle;
             if (lastHandler != null) {
                 SearchBox.TextChanged -= lastHandler;

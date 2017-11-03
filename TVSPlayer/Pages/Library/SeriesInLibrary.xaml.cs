@@ -31,10 +31,6 @@ namespace TVSPlayer
         bool showing = false;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            PosterImage.Opacity = 0;
-            PosterImage.Source = await Database.GetSelectedPoster(series.id);
-            var sb = (Storyboard)FindResource("OpacityUp");
-            sb.Begin(PosterImage);
             PosterImage.ToolTip = series.seriesName;
         }
 
