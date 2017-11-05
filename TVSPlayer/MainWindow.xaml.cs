@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using TVS.API;
+using Timer = System.Timers.Timer;
 
 namespace TVSPlayer {
 
@@ -30,16 +32,7 @@ namespace TVSPlayer {
             SetDimensions();
         }
 
-        private void SetDimensions() {
-            if (Properties.Settings.Default.Maximized) {
-                this.WindowState = WindowState.Maximized;
-            } else { 
-                string height = Properties.Settings.Default.Resolution;
-                List<string> dimensions = height.Split('x').ToList();
-                Application.Current.MainWindow.Width = Int32.Parse(dimensions[0]);
-                Application.Current.MainWindow.Height = Int32.Parse(dimensions[1]);
-            }
-        }
+        
 
         #region Animations
 
@@ -265,6 +258,59 @@ namespace TVSPlayer {
 
         }
 
+        private void StartDailyUpdate() {
+            if (Settings.LastCheck.AddDays(1) < DateTime.Now) {
+                UpdateDatabase();
+            }
+            Timer timer = new Timer(86400000);
+            timer.Elapsed += (s, ev) => UpdateDatabase();
+            timer.Start();
+        }
+
+        private async void UpdateDatabase() {
+            await Task.Run(() => {
+                List<Series> series = Database.GetSeries();           
+                List<int> ids = Series.GetUpdates(Settings.LastCheck);
+                List<Series> toUpdate = new List<Series>();
+                foreach (var ser in series) {
+                    foreach (int id in ids) {
+                        if (ser.id == id) {
+                            toUpdate.Add(ser);
+                            break;
+                        }
+                    }
+                }
+                foreach (var ser in toUpdate) {
+                    UpdateSeries(ser);
+                }
+            });
+            Settings.LastCheck = DateTime.Now;
+        }
+
+        private void UpdateSeries(Series series) {
+            List<Task> tasks = new List<Task>();
+            tasks.Add(Task.Run(() => {
+            }));
+            tasks.Add(Task.Run(() => {
+            }));
+            tasks.Add(Task.Run(() => {
+            }));
+            tasks.Add(Task.Run(() => {
+            }));
+            tasks.WaitAll();
+        }
+
+        private void SetDimensions() {
+            if (Properties.Settings.Default.Maximized) {
+                this.WindowState = WindowState.Maximized;
+            } else {
+                string height = Properties.Settings.Default.Resolution;
+                List<string> dimensions = height.Split('x').ToList();
+                Application.Current.MainWindow.Width = Int32.Parse(dimensions[0]);
+                Application.Current.MainWindow.Height = Int32.Parse(dimensions[1]);
+            }
+        }
+
         /// <summary>
         /// Creates database from ids provided USAGE: await CreateDatabase(...)
         /// </summary>
@@ -350,16 +396,17 @@ namespace TVSPlayer {
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (true) {
-               
+                Settings.Load();
                 if (!Directory.Exists(Helper.data)) {
                     AddPage(new Intro());
+                    Settings.LastCheck = DateTime.Now;
                 } else {
                     SetPage(new Library());
+                   // StartDailyUpdate();
                 }
                 if (!checkConnection()) {
                     AddPage(new StartupInternetError());
                 }
-                Settings.Load();
 
             } else {
                 TestFunctions();

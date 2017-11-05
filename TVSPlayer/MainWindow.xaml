@@ -34,8 +34,8 @@
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Frame x:Name="ActiveContent" Grid.Row="1" NavigationUIVisibility="Hidden" ></Frame>
-        <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="10" Grid.RowSpan="2">
+        <Frame x:Name="ActiveContent" Grid.Row="1" Panel.ZIndex="10"  NavigationUIVisibility="Hidden" ></Frame>
+        <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="15" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px" />
                 <RowDefinition />
@@ -53,7 +53,7 @@
                 </Grid>
             </StackPanel>
         </Grid>
-        <Grid x:Name="HiderGrid" Background="#00000000" Panel.ZIndex="9" MouseUp="HiderGrid_MouseUp" Opacity="0" Visibility="Hidden" Grid.RowSpan="2" />
+        <Grid x:Name="HiderGrid" Background="#00000000" Panel.ZIndex="14" MouseUp="HiderGrid_MouseUp" Opacity="0" Visibility="Hidden" Grid.RowSpan="2" />
         <Grid Panel.ZIndex="5" Height="40" Background="{DynamicResource TransparentBG}" VerticalAlignment="Top" x:Name="TopBar" Grid.Row="0">
             <Grid x:Name="SideButton" Margin="10,0" HorizontalAlignment="Left" Height="20" MouseLeftButtonDown="SideButton_MouseLeftButtonDown">
                 <Image Source="{DynamicResource MenuIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>

@@ -77,7 +77,6 @@ namespace TVSPlayer
              
           
         }
-
         public async Task RenderList() {
             PanelPosters.Children.RemoveRange(0, PanelPosters.Children.Count);
             PanelList.Children.RemoveRange(0, PanelList.Children.Count);

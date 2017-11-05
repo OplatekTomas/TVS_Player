@@ -9,9 +9,8 @@
     <UserControl.Resources>
 
     </UserControl.Resources>
-    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded" MouseRightButtonUp="Grid_MouseRightButtonUp" MouseLeave="Grid_MouseLeave">
-        <Grid x:Name="ImageBG" Margin="3,0,3,6" Background="{DynamicResource LighterBG}">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Loading..." Foreground="{DynamicResource TextColor}" FontSize="18"  />
+    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded" MouseRightButtonUp="Grid_MouseRightButtonUp">
+        <Grid x:Name="ImageBG" Margin="3,0,3,6">
             <Image x:Name="PosterImage" MaxWidth="{Binding ActualWidth, ElementName=ImageBG}" Margin="-1" RenderOptions.BitmapScalingMode="HighQuality" Grid.RowSpan="2" Panel.ZIndex="2" />
             <Grid Panel.ZIndex="3" Background="{DynamicResource TransparentStaticBG}" MaxWidth="{Binding ActualWidth, ElementName=PosterImage}"   Height="0" Margin="-1" x:Name="DetailsGrid" VerticalAlignment="Bottom">
                 <!--<TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" MaxWidth="{Binding ActualWidth, ElementName=PosterImage}" TextWrapping="NoWrap" Foreground="White" Text="{Binding LongText}" Margin="10"  FontSize="22" TextTrimming="CharacterEllipsis" x:Name="ShowName" />-->

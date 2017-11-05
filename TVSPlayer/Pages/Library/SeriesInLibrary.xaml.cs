@@ -34,13 +34,6 @@ namespace TVSPlayer
             PosterImage.ToolTip = series.seriesName;
         }
 
-        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
-        }
-
-        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
-
-        }
-
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
             if (!showing) {
                 Show();

@@ -31,7 +31,7 @@ namespace TVSPlayer {
 
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            MainWindow.SetPage(new Library());
+            MainWindow.SetPage(new Library()); 
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {

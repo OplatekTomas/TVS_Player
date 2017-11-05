@@ -18,6 +18,7 @@ namespace TVSPlayer {
         private static string scantwo;
         private static string scanthree;
         private static bool theme;
+        private static DateTime lastCheck;
         public static string Library { get { return library; } set { library = value; SaveSettings(); } }
         public static bool AutoDownload { get { return autodownload; } set { autodownload = value; SaveSettings(); } }
         public static string DownloadCacheLocation { get { return cachelocation; } set { cachelocation = value; SaveSettings(); } }
@@ -25,6 +26,9 @@ namespace TVSPlayer {
         public static string SecondScanLocation { get { return scantwo; } set { scantwo = value; SaveSettings(); } }
         public static string ThirdScanLocation { get { return scanthree; } set { scanthree = value; SaveSettings(); } }
         public static bool Theme  { get { return theme; } set { theme = value; SaveSettings(); } }
+        public static DateTime LastCheck { get { return lastCheck; } set { lastCheck = value; SaveSettings(); } }
+
+
 
         public static void SaveSettings() {
             Type type = typeof(Settings);
