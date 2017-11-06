@@ -171,8 +171,8 @@ namespace TVSPlayer {
                 if (doBreak) break;
             }
             if (epi != null && epi.seriesId == null && fromAPI) {
-                epi = Episode.GetEpisode(epi.id);
-                EditEpisode(series.id,epi.id,epi);
+                epi = epi.Update(Episode.GetEpisode(epi.id));
+                EditEpisode(id, epi.id, epi);
             }
             return epi;
         }
@@ -232,7 +232,7 @@ namespace TVSPlayer {
                 }
             }
             if (epi != null && epi.seriesId == null && fromAPI) {
-                epi = Episode.GetEpisode(epi.id);
+                epi = epi.Update(Episode.GetEpisode(epi.id));
                 EditEpisode(id, epi.id, epi);
             }
             return epi;
@@ -256,7 +256,7 @@ namespace TVSPlayer {
                 }
             }
             if (epi != null && epi.seriesId == null && fromAPI) {
-                epi = Episode.GetEpisode(epi.id);
+                epi = epi.Update(Episode.GetEpisode(epi.id));
                 EditEpisode(id, epi.id, epi);
             }
             return epi;
@@ -296,7 +296,7 @@ namespace TVSPlayer {
             string json = JsonConvert.SerializeObject(list);
             WriteToFile(db + id + "\\Episodes.tvsp", json);
         }
-
+        
         /// <summary>
         /// Returns thumbnail for episode. Also takes care of caching.
         /// </summary>
@@ -330,7 +330,7 @@ namespace TVSPlayer {
         /// Returns all actors in a Series by TVDb id
         /// </summary>
         /// <param name="id">TVDb id of Series</param>
-        /// <returns>List of Actors or null if noone was found</returns>
+        /// <returns>List of Actors or null if one was found</returns>
         public static List<Actor> GetActors(int id) {
             string orig = ReadFromFile(db + id + "\\Actors.tvsp");
             List<Actor> eps = new List<Actor>();

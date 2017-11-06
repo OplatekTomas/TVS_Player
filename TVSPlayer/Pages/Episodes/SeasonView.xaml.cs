@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -21,13 +23,16 @@ namespace TVSPlayer {
     /// Interaction logic for SeasonView.xaml
     /// </summary>
     public partial class SeasonView : UserControl {
-        public SeasonView(List<Episode> episodes,Series series) {
+        public SeasonView(List<Episode> episodes,Series series, SeriesEpisodes episodeView) {
             InitializeComponent();
             this.episodes = episodes;
             this.series = series;
+            this.episodeView = episodeView;
         }
         List<Episode> episodes;
         Series series;
+        SeriesEpisodes episodeView;
+        bool isScrolling = false;
 
         private void ScrollView_SizeChanged(object sender, SizeChangedEventArgs e) {
             if ((ScrollView.ActualWidth + 130) > this.ActualWidth) {
@@ -64,8 +69,9 @@ namespace TVSPlayer {
                         BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
                         Episode episode = Database.GetEpisode(series.id, ep.id, true);
                         Dispatcher.Invoke(() => {
-                            EpisodeView epv = new EpisodeView(episode, true);
+                            EpisodeView epv = new EpisodeView(episode, true, episodeView);
                             epv.Width = 230;
+                            epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
                             epv.Opacity = 0;
                             epv.ThumbImage.Source = bmp;
                             epv.Margin = new Thickness(5, 0, 10, 0);
@@ -80,6 +86,25 @@ namespace TVSPlayer {
            
         }
 
+        private void CoverGridMouseUp(Episode episode) {
+            if (!isScrolling) {
+                List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+                foreach (var item in episode.files) {
+                    if (item.Type == Episode.ScannedFile.FileType.Video) {
+                        list.Add(item);
+                    }
+                }
+                List<FileInfo> infoList = new List<FileInfo>();
+                foreach (var item in list) {
+                    infoList.Add(new FileInfo(item.NewName));
+                }
+                FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
+                if (info != null) {
+                    Process.Start(info.FullName);
+                }
+            }         
+        }
+
         private async Task<BitmapImage> LoadThumb(Episode episode) {
             if (!String.IsNullOrEmpty(episode.filename)) {
                 return await Database.LoadImage(new Uri("https://www.thetvdb.com/banners/" + episode.filename));
@@ -90,7 +115,11 @@ namespace TVSPlayer {
 
         Point scrollMousePoint = new Point();
         double hOff = 1;
-        private void scrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private async void scrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            await Task.Run(() => {
+                Thread.Sleep(100);
+                isScrolling = true;
+            });
             scrollMousePoint = e.GetPosition(ScrollView);
             hOff = ScrollView.HorizontalOffset;
             ScrollView.CaptureMouse();
@@ -102,12 +131,12 @@ namespace TVSPlayer {
             }
         }
 
-        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private async void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             ScrollView.ReleaseMouseCapture();
-        }
-
-        private void scrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-            ScrollView.ScrollToHorizontalOffset(ScrollView.HorizontalOffset + e.Delta);
+            await Task.Run(() => {
+                Thread.Sleep(500);
+                isScrolling = false;
+            });
         }
 
     }

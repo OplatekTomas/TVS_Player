@@ -40,18 +40,24 @@ namespace TVSPlayer {
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
-            Task.Run(() => LoadInfo());
             Task.Run(() => LoadSeasons());
+            Task.Run(() => LoadInfo());
         }
 
         private async void LoadInfo() {
             BitmapImage bmp = await Database.GetSelectedPoster(series.id);
             List<Episode> list = Database.GetEpisodes(series.id);
-            int episodeCount, downloadedEpisodes, seasonsCount, missingEpisodes;
-            episodeCount = downloadedEpisodes = seasonsCount = missingEpisodes = 0;
+            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
+            int episodeCount, downloadedEpisodes, seasonsCount, ratingCount;
+            double averageRating;
+            averageRating = episodeCount = downloadedEpisodes = seasonsCount = ratingCount = 0;
             foreach (Episode ep in list) {
                 if (ep.airedSeason != 0) {
                     episodeCount++;
+                    if(ep.siteRatingCount > 0) {
+                        averageRating += ep.siteRating;
+                        ratingCount++;
+                    }
                 }
                 if (ep.airedSeason > seasonsCount) {
                     seasonsCount++;
@@ -60,12 +66,19 @@ namespace TVSPlayer {
                     downloadedEpisodes++;
                 }
             }
-            missingEpisodes = episodeCount - downloadedEpisodes;
-            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
-
+            averageRating = averageRating / ratingCount;
             Dispatcher.Invoke(() => {
                 DefaultPoster.Source = bmp;
-                
+                if (nextEpisode != null) {
+                    NextDate.Text = DateTime.ParseExact(nextEpisode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                } else {
+                    NextDate.Text = "-";
+                }
+                SeasonCount.Text = seasonsCount.ToString();
+                EpisodeCount.Text = episodeCount.ToString();
+                EpisodeCountSpecials.Text = list.Count.ToString();
+                EpisodesOffline.Text = downloadedEpisodes.ToString();
+                AverageRating.Text = Math.Round(averageRating, 2).ToString();
             });
 
         }
@@ -87,7 +100,7 @@ namespace TVSPlayer {
                 }
             },DispatcherPriority.Send);          
         }
-        private async void LoadSeasons() {
+        private void LoadSeasons() {
             List<Episode> eps = Database.GetEpisodes(series.id);
             List<List<Episode>> sorted = new List<List<Episode>>();
 
@@ -103,16 +116,19 @@ namespace TVSPlayer {
                 foreach (var list in sorted) {
                     TextBlock text = new TextBlock();
                     text.FontSize = 24;
-                    text.FontWeight = FontWeights.Bold;
                     text.Foreground = (Brush)FindResource("TextColor");
                     text.Margin = new Thickness(0, 0, 0, 10);
                     text.Text = "Season " + (sorted.IndexOf(list) + 1);
-                    SeasonView sv = new SeasonView(list,series);
+                    SeasonView sv = new SeasonView(list,series,this);
                     //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
                     sv.ScrollView.PreviewMouseWheel += (s, ev) => {
                         if (ev.Delta > 0) {
                             ScrollView.LineUp();
+                            ScrollView.LineUp();
+                            ScrollView.LineUp();
                         } else {
+                            ScrollView.LineDown();
+                            ScrollView.LineDown();
                             ScrollView.LineDown();
                         }
                     };

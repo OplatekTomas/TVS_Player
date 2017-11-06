@@ -86,6 +86,9 @@
     <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Pages\Episodes\EpisodeDetails.xaml.cs">
+      <DependentUpon>EpisodeDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Episodes\EpisodeView.xaml.cs">
       <DependentUpon>EpisodeView.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,10 @@
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Page Include="Controls\ActorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Episodes\EpisodeDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -422,6 +429,14 @@
   <ItemGroup>
     <Resource Include="Icons\ico-calendar-dark.png" />
     <Resource Include="Icons\ico-calendar-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-download-dark.png" />
+    <Resource Include="Icons\ico-download-light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-broadcast-dark.png" />
+    <Resource Include="Icons\ico-broadcast-light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

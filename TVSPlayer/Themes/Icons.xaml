@@ -25,6 +25,8 @@
     <BitmapImage x:Key="AlphabeticalIcon" UriSource="pack://application:,,,/Icons/ico-alpha-light.png" />
     <BitmapImage x:Key="AlphabeticalReverseIcon" UriSource="pack://application:,,,/Icons/ico-alphareverse-light.png" />
     <BitmapImage x:Key="CalendarIcon" UriSource="pack://application:,,,/Icons/ico-calendar-light.png" />
+    <BitmapImage x:Key="DownloadIcon" UriSource="pack://application:,,,/Icons/ico-download-light.png" />
+    <BitmapImage x:Key="BroadcastIcon" UriSource="pack://application:,,,/Icons/ico-broadcast-light.png" />
 
 
 

@@ -63,6 +63,9 @@ namespace TVSPlayer {
             Application.Current.Resources["CalendarIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-calendar-dark.png", UriKind.Absolute));
             Application.Current.Resources["AlphabeticalIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alpha-dark.png", UriKind.Absolute));
             Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-dark.png", UriKind.Absolute));
+            Application.Current.Resources["DownloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-download-dark.png", UriKind.Absolute));
+            Application.Current.Resources["BroadcastIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-broadcast-dark.png", UriKind.Absolute));
+
         }
 
         private static void LightIcons() {
@@ -90,6 +93,8 @@ namespace TVSPlayer {
             Application.Current.Resources["CalendarIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-calendar-light.png", UriKind.Absolute));
             Application.Current.Resources["AlphabeticalIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alpha-light.png", UriKind.Absolute));
             Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-light.png", UriKind.Absolute));
+            Application.Current.Resources["DownloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-download-light.png", UriKind.Absolute));
+            Application.Current.Resources["BroadcastIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-broadcast-light.png", UriKind.Absolute));
 
         }
     }
