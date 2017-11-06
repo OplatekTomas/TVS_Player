@@ -34,7 +34,7 @@
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Frame x:Name="ActiveContent" Grid.Row="1" Panel.ZIndex="10"  NavigationUIVisibility="Hidden" ></Frame>
+        <Frame x:Name="ActiveContent" Grid.Row="1" Panel.ZIndex="5"  NavigationUIVisibility="Hidden" ></Frame>
         <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="15" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80px" />

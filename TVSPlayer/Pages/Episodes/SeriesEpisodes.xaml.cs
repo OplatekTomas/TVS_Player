@@ -27,6 +27,7 @@ namespace TVSPlayer {
             this.series = series;
         }
         Series series;
+        
         bool hasBackground = false;
 
 
@@ -45,8 +46,26 @@ namespace TVSPlayer {
 
         private async void LoadInfo() {
             BitmapImage bmp = await Database.GetSelectedPoster(series.id);
+            List<Episode> list = Database.GetEpisodes(series.id);
+            int episodeCount, downloadedEpisodes, seasonsCount, missingEpisodes;
+            episodeCount = downloadedEpisodes = seasonsCount = missingEpisodes = 0;
+            foreach (Episode ep in list) {
+                if (ep.airedSeason != 0) {
+                    episodeCount++;
+                }
+                if (ep.airedSeason > seasonsCount) {
+                    seasonsCount++;
+                }
+                if (ep.files.Count > 0) {
+                    downloadedEpisodes++;
+                }
+            }
+            missingEpisodes = episodeCount - downloadedEpisodes;
+            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
+
             Dispatcher.Invoke(() => {
-                //DefaultPoster.Source = bmp;
+                DefaultPoster.Source = bmp;
+                
             });
 
         }
@@ -105,7 +124,8 @@ namespace TVSPlayer {
             }, DispatcherPriority.Send);
         }
 
-  
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e) {
 
+        }
     }
 }

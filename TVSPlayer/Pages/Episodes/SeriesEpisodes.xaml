@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TVSPlayer"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="SeriesEpisodes">
+      Title="SeriesEpisodes" SizeChanged="Page_SizeChanged">
     <Page.Resources>
         <Storyboard x:Key="BlurImage">
             <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="ImageEffect" DecelerationRatio="0.9" Duration="0:0:0.300" />
@@ -18,7 +18,7 @@
             <RowDefinition Height="45"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="BackgroundImage" Grid.RowSpan="3" Margin="-100" Opacity="0" >
+        <Image x:Name="BackgroundImage" Grid.RowSpan="3" Margin="-100" Opacity="0" RenderOptions.BitmapScalingMode="NearestNeighbor" >
             <Image.Effect>
                 <BlurEffect Radius="0" RenderingBias="Performance" x:Name="ImageEffect" />
             </Image.Effect>
@@ -34,10 +34,14 @@
             </ScrollViewer.Resources>
             <StackPanel Margin="30,0,5,0" x:Name="Panel">
                 <Grid Height="400">
-                    <StackPanel>
-                        <Image HorizontalAlignment="Left" x:Name="DefaultPoster" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image HorizontalAlignment="Left" x:Name="DefaultPoster" Height="390" Margin="10,0,0,10"/>
                         <Grid Margin="10">
-                            
+                            <StackPanel>
+                                <TextBlock Text="Number of seasons: "  Margin="0,3"  Foreground="#F5F5F5" FontSize="16" />
+                                <TextBlock Text="Number of episodes: " Margin="0,3" Foreground="#F5F5F5" FontSize="16" />
+
+                            </StackPanel>
                         </Grid>
                     </StackPanel>
                 </Grid>

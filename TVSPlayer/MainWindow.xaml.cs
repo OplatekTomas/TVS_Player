@@ -260,11 +260,12 @@ namespace TVSPlayer {
 
         private void StartDailyUpdate() {
             if (Settings.LastCheck.AddDays(1) < DateTime.Now) {
-                UpdateDatabase();
+                //UpdateDatabase();
+                Settings.LastCheck = DateTime.Now;
             }
             Timer timer = new Timer(86400000);
             timer.Elapsed += (s, ev) => UpdateDatabase();
-            timer.Start();
+            //timer.Start();
         }
 
         private async void UpdateDatabase() {
@@ -396,17 +397,19 @@ namespace TVSPlayer {
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (true) {
-                Settings.Load();
                 if (!Directory.Exists(Helper.data)) {
                     AddPage(new Intro());
                     Settings.LastCheck = DateTime.Now;
                 } else {
                     SetPage(new Library());
-                   // StartDailyUpdate();
+                    Settings.Load();
+
+                    StartDailyUpdate();
                 }
                 if (!checkConnection()) {
                     AddPage(new StartupInternetError());
                 }
+
 
             } else {
                 TestFunctions();

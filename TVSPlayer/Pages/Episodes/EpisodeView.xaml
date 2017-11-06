@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="185" d:DesignWidth="230">
     <Grid Loaded="Grid_Loaded">
-        <Image MaxHeight="124" HorizontalAlignment="Left" MaxWidth="220"  VerticalAlignment="Top" x:Name="ThumbImage" Margin="5,0" >
+        <Image MaxHeight="124" HorizontalAlignment="Left" MaxWidth="220"  VerticalAlignment="Top" x:Name="ThumbImage" Margin="5,0" RenderOptions.BitmapScalingMode="LowQuality" >
             <Image.Effect>
                 <DropShadowEffect Opacity="0.5" BlurRadius="10" />
             </Image.Effect>
