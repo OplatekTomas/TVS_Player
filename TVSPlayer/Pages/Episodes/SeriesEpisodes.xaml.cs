@@ -48,16 +48,11 @@ namespace TVSPlayer {
             BitmapImage bmp = await Database.GetSelectedPoster(series.id);
             List<Episode> list = Database.GetEpisodes(series.id);
             var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
-            int episodeCount, downloadedEpisodes, seasonsCount, ratingCount;
-            double averageRating;
-            averageRating = episodeCount = downloadedEpisodes = seasonsCount = ratingCount = 0;
+            int episodeCount, downloadedEpisodes, seasonsCount;
+            episodeCount = downloadedEpisodes = seasonsCount = 0;
             foreach (Episode ep in list) {
                 if (ep.airedSeason != 0) {
                     episodeCount++;
-                    if(ep.siteRatingCount > 0) {
-                        averageRating += ep.siteRating;
-                        ratingCount++;
-                    }
                 }
                 if (ep.airedSeason > seasonsCount) {
                     seasonsCount++;
@@ -65,8 +60,7 @@ namespace TVSPlayer {
                 if (ep.files.Count > 0) {
                     downloadedEpisodes++;
                 }
-            }
-            averageRating = averageRating / ratingCount;
+            }         
             Dispatcher.Invoke(() => {
                 DefaultPoster.Source = bmp;
                 if (nextEpisode != null) {
@@ -74,11 +68,24 @@ namespace TVSPlayer {
                 } else {
                     NextDate.Text = "-";
                 }
+                if (!String.IsNullOrEmpty(series.firstAired)){
+                    Premiered.Text = DateTime.ParseExact(series.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                }
+                genres.Text = "";
+                for (int i = 0; i < series.genre.Count; i++) {
+                    if (i != series.genre.Count - 1) {
+                        genres.Text += series.genre[i] + ", ";
+                    } else {
+                        genres.Text += series.genre[i];
+                    }
+                }
+                showName.Text = series.seriesName;
+                Status.Text = series.status;
+                Schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
+                Rating.Text = series.siteRating + "/10";
                 SeasonCount.Text = seasonsCount.ToString();
                 EpisodeCount.Text = episodeCount.ToString();
-                EpisodeCountSpecials.Text = list.Count.ToString();
                 EpisodesOffline.Text = downloadedEpisodes.ToString();
-                AverageRating.Text = Math.Round(averageRating, 2).ToString();
             });
 
         }
@@ -141,6 +148,10 @@ namespace TVSPlayer {
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e) {
+
+        }
+
+        private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
 
         }
     }

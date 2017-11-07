@@ -32,7 +32,7 @@ namespace TVSPlayer {
             SetDimensions();
         }
 
-        
+        public static bool videoPlayback = false;
 
         #region Animations
 
@@ -93,6 +93,38 @@ namespace TVSPlayer {
         #endregion
 
         #region Page handling
+
+        public static void GoFullScreen(bool reset = false) {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).FullscreenSetter(reset);
+        }
+        bool isFullscreen = false;
+        WindowState lastState;
+        public void FullscreenSetter(bool reset) {
+            if (reset) {
+                this.WindowState = lastState;
+                isFullscreen = false;
+                this.Topmost = false;
+                this.ResizeMode = ResizeMode.CanResize;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+            } else if (!isFullscreen) {
+                lastState = this.WindowState;
+                isFullscreen = true;
+                this.Visibility = Visibility.Collapsed;
+                this.Topmost = true;
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize;
+                this.WindowState = WindowState.Maximized;
+                this.Visibility = Visibility.Visible;
+            } else {
+                this.WindowState = lastState;
+                isFullscreen = false;
+                this.Topmost = false;
+                this.ResizeMode = ResizeMode.CanResize;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+            }
+
+        }
 
         public static string GetSearchBarText() {
             Window main = Application.Current.MainWindow;
@@ -244,6 +276,8 @@ namespace TVSPlayer {
             ThemeSwitcher.SwitchTheme();
         }
         #endregion
+
+
 
         public static bool checkConnection() {
             Ping ping = new Ping();
@@ -417,7 +451,7 @@ namespace TVSPlayer {
 
         }
 
-        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        private async void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             if (this.WindowState == WindowState.Maximized) {
                 Properties.Settings.Default.Maximized = true;
             } else {
@@ -425,6 +459,13 @@ namespace TVSPlayer {
             }
             Properties.Settings.Default.Resolution = this.Width + "x" + this.Height;
             Properties.Settings.Default.Save();
+            if (videoPlayback) {
+                LocalPlayer player = (LocalPlayer)((Frame)BaseGrid.Children[BaseGrid.Children.Count - 1]).Content;
+                player.Player.Stop();
+                player.Player.Close();
+                //this will give the player some time to end properly
+                Thread.Sleep(500);
+            }
         }
 
 

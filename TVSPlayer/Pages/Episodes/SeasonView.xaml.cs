@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TVS.API;
+using static TVS.API.Episode;
 
 namespace TVSPlayer {
     /// <summary>
@@ -86,7 +87,7 @@ namespace TVSPlayer {
            
         }
 
-        private void CoverGridMouseUp(Episode episode) {
+        private async void CoverGridMouseUp(Episode episode) {
             if (!isScrolling) {
                 List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
                 foreach (var item in episode.files) {
@@ -100,7 +101,14 @@ namespace TVSPlayer {
                 }
                 FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
                 if (info != null) {
-                    Process.Start(info.FullName);
+                    ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+                    //Used to release as many resources as possible to give all rendering power to video playback
+                    MainWindow.SetPage(new BlankPage());
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                    await Task.Run(() => {
+                        Thread.Sleep(500);
+                    });
+                    MainWindow.AddPage(new LocalPlayer(series, episode,sf));
                 }
             }         
         }

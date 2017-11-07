@@ -36,30 +36,41 @@
                 <Grid Height="400" x:Name="DetailsGrid">
                     <Grid x:Name="SeriesDetails">
                         <StackPanel Orientation="Horizontal">
-                            <Image HorizontalAlignment="Left" x:Name="DefaultPoster" Height="390" Margin="10,0,0,10">
+                            <Image HorizontalAlignment="Left" x:Name="DefaultPoster" Height="380" Margin="10,0,0,20">
                                 <Image.Effect>
                                     <DropShadowEffect BlurRadius="10" Opacity=".5" />
                                 </Image.Effect>
                             </Image>
-                            <Grid Margin="20,0">
-                                <StackPanel  Margin="0,20">
-                                    <TextBlock Text="Next episode air date: "  Margin="0,0,0,3"  Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock Text="Number of seasons: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock Text="Number of episodes: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock Text="Number of episodes with specials: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock Text="Number of episodes available offline: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock Text="Average rating per episode: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
+                            <Grid Grid.Column="2" Margin="25,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="showName" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                                <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="#F5F5F5" Grid.ColumnSpan="3" />
+                                <StackPanel>
+                                    <TextBlock  Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Usual schedule:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Status:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Premiered:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock  Text="Rating: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+
                                 </StackPanel>
-                            </Grid>
-                            <Grid Margin="0,0">
-                                <StackPanel  Margin="0,20">
-                                    <TextBlock x:Name="NextDate" Text="Next episode air date: "  Margin="0,0,0,3"  Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock x:Name="SeasonCount" Text="Number of seasons: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock x:Name="EpisodeCount" Text="Number of episodes: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock x:Name="EpisodeCountSpecials" Text="Number of episodes with specials: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock x:Name="EpisodesOffline" Text="Number of episodes available offline: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
-                                    <TextBlock x:Name="AverageRating" Text="Average rating per episode: " Margin="0,3" Foreground="#F5F5F5" FontSize="18" />
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock  x:Name="NextDate" Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="Schedule"  Text="Usual schedule:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="Status"  Text="Status:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="Premiered"  Text="Premiered:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="SeasonCount"  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="EpisodeCount"  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="EpisodesOffline"  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <TextBlock x:Name="Rating"  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+
                                 </StackPanel>
+                                <Grid Grid.ColumnSpan="2"/>
                             </Grid>
                         </StackPanel>
                     </Grid>
