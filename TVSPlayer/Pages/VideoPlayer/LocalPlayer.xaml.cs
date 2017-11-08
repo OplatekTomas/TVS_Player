@@ -44,9 +44,16 @@ namespace TVSPlayer
             EpisodeName.Text = Helper.GenerateName(series, episode);
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
             VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
-            Player.MediaOpened += (s, ev) => MediaOpenedEvent();
+            Player.MediaFailed += (s, ev) => MediaFailedEvent();
             Player.MediaEnded += (s, ev) => MediaFinishedEvent();
+            Player.MediaOpened += (s, ev) => MediaOpenedEvent();
             Player.Source = new Uri(scannedFile.NewName);
+        }
+
+        private void MediaFailedEvent() {
+            Dispatcher.Invoke(() => {
+                Return();
+            }, DispatcherPriority.Send);
         }
 
         private void MediaFinishedEvent() {
