@@ -102,11 +102,13 @@ namespace TVSPlayer {
         WindowState lastState;
         public void FullscreenSetter(bool reset) {
             if (reset) {
-                this.WindowState = lastState;
-                isFullscreen = false;
-                this.Topmost = false;
-                this.ResizeMode = ResizeMode.CanResize;
-                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                if (this.WindowStyle == WindowStyle.None) {
+                    this.WindowState = lastState;
+                    isFullscreen = false;
+                    this.Topmost = false;
+                    this.ResizeMode = ResizeMode.CanResize;
+                    this.WindowStyle = WindowStyle.SingleBorderWindow;
+                }
             } else if (!isFullscreen) {
                 lastState = this.WindowState;
                 isFullscreen = true;

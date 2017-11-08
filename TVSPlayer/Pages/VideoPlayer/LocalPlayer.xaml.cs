@@ -191,5 +191,10 @@ namespace TVSPlayer
                 Player.Volume = 0;
             }
         }
+
+
+        private void FullscreenIcon_MouseUp(object sender, MouseButtonEventArgs e) {
+            MainWindow.GoFullScreen();
+        }
     }
 }

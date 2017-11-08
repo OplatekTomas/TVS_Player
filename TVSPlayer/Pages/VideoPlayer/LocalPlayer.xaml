@@ -25,7 +25,7 @@
             <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
             <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
             <Grid  Grid.Row="1">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,29">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top">
                     <Slider x:Name="VolumeSlider" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" Value="0.85" ValueChanged="VolumeSlider_ValueChanged" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
@@ -39,6 +39,9 @@
                         <Image Source="/Icons/ico-forward-light.png" />
                     </Grid>
                 </StackPanel>
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="FullscreenIcon" Margin="20,20" Height="25" MouseUp="FullscreenIcon_MouseUp">
+                    <Image  VerticalAlignment="Top" Source="/Icons/ico-fullscreen-light.png" />
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
