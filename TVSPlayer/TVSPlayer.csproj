@@ -463,6 +463,9 @@
   <ItemGroup>
     <Resource Include="Icons\ico-fullscreen-light.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ico-windows-light.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets" Condition="Exists('..\packages\WPFMediaKit.2.2.0\build\WPFMediaKit.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

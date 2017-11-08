@@ -94,37 +94,76 @@ namespace TVSPlayer {
 
         #region Page handling
 
-        public static void GoFullScreen(bool reset = false) {
-            Window main = Application.Current.MainWindow;
-            ((MainWindow)main).FullscreenSetter(reset);
+        public enum PlayerState { PiP, Fullscreen, Normal };
+        private class Dimensions {
+            public double Width { get; set; }
+            public double Height { get; set; }
+            public WindowState LastState { get; set; }
+
         }
-        bool isFullscreen = false;
-        WindowState lastState;
-        public void FullscreenSetter(bool reset) {
-            if (reset) {
-                if (this.WindowStyle == WindowStyle.None) {
-                    this.WindowState = lastState;
-                    isFullscreen = false;
+        Dimensions dimensions;
+        PlayerState currentState = PlayerState.Normal;
+        public static void SwitchState(PlayerState state ,bool reset = false) {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).FullscreenSetter(state ,reset);
+        }
+
+        public void FullscreenSetter(PlayerState state, bool reset) {
+            if (currentState == state) {
+                state = PlayerState.Normal;
+            }
+            if (currentState == PlayerState.Normal && state == PlayerState.Normal) {
+                return;
+            }
+            if ((currentState == PlayerState.Fullscreen && state == PlayerState.PiP) || ((currentState == PlayerState.PiP && state == PlayerState.Fullscreen))) {
+                FullscreenSetter(PlayerState.Normal, reset);
+            }
+            switch (state) {
+                case PlayerState.Fullscreen:
+                    dimensions = new Dimensions() {
+                        Width = this.Width,
+                        Height = this.Height,
+                        LastState = this.WindowState
+                    };
+                    this.Visibility = Visibility.Collapsed;
+                    this.Topmost = true;
+                    this.WindowStyle = WindowStyle.None;
+                    this.ResizeMode = ResizeMode.NoResize;
+                    this.WindowState = WindowState.Maximized;
+                    this.Visibility = Visibility.Visible;
+                    break;
+                case PlayerState.PiP:
+                    dimensions = new Dimensions() {
+                        Width = this.Width,
+                        Height = this.Height,
+                        LastState = this.WindowState
+                    };
+                    this.WindowStyle = WindowStyle.None;
+                    this.WindowState = WindowState.Normal;
+                    this.MinWidth = 640;
+                    this.Width = this.MinWidth;
+                    this.MinHeight = 360;
+                    this.Height = this.MinHeight;
+                    this.Left = SystemParameters.PrimaryScreenWidth - 660;
+                    this.Top = 20;
+                    this.ResizeMode = ResizeMode.NoResize;
+                    this.Topmost = true;
+                    break;
+                case PlayerState.Normal:
+                    this.WindowState = dimensions.LastState;
                     this.Topmost = false;
+                    this.MinHeight = 480;
+                    this.MinWidth = 800;
+                    this.Height = dimensions.Height;
+                    this.Width = dimensions.Width;
                     this.ResizeMode = ResizeMode.CanResize;
                     this.WindowStyle = WindowStyle.SingleBorderWindow;
-                }
-            } else if (!isFullscreen) {
-                lastState = this.WindowState;
-                isFullscreen = true;
-                this.Visibility = Visibility.Collapsed;
-                this.Topmost = true;
-                this.WindowStyle = WindowStyle.None;
-                this.ResizeMode = ResizeMode.NoResize;
-                this.WindowState = WindowState.Maximized;
-                this.Visibility = Visibility.Visible;
-            } else {
-                this.WindowState = lastState;
-                isFullscreen = false;
-                this.Topmost = false;
-                this.ResizeMode = ResizeMode.CanResize;
-                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                    dimensions = null;
+                    break;
             }
+            currentState = state;
+
+
 
         }
 
@@ -452,17 +491,33 @@ namespace TVSPlayer {
             }
 
         }
-
-        private async void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (this.WindowState == WindowState.Maximized) {
-                Properties.Settings.Default.Maximized = true;
+        
+        /// <summary>
+        /// Events that takes care of everything that needs to be saved before closing
+        /// </summary>
+        private void Main_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (dimensions != null) {
+                if (dimensions.LastState == WindowState.Maximized) {
+                    Properties.Settings.Default.Maximized = true;
+                } else {
+                    Properties.Settings.Default.Maximized = false;
+                }
+                Properties.Settings.Default.Resolution = dimensions.Width + "x" + dimensions.Height;
             } else {
-                Properties.Settings.Default.Maximized = false;
+                if (this.WindowState == WindowState.Maximized) {
+                    Properties.Settings.Default.Maximized = true;
+                } else {
+                    Properties.Settings.Default.Maximized = false;
+                }
+                Properties.Settings.Default.Resolution = this.Width + "x" + this.Height;
             }
-            Properties.Settings.Default.Resolution = this.Width + "x" + this.Height;
             Properties.Settings.Default.Save();
+
             if (videoPlayback) {
                 LocalPlayer player = (LocalPlayer)((Frame)BaseGrid.Children[BaseGrid.Children.Count - 1]).Content;
+                player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
+                player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                Database.EditEpisode(player.series.id, player.episode.id, player.episode);
                 player.Player.Stop();
                 player.Player.Close();
                 //this will give the player some time to end properly

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using TVS.API;
+using static TVS.API.Episode;
 
 namespace TVSPlayer {
     /// <summary>
@@ -153,6 +156,35 @@ namespace TVSPlayer {
 
         private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
 
+        }
+
+        public static ScannedFile GetFileToPlay(Episode episode, Series series) {
+            List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+            foreach (var item in episode.files) {
+                if (item.Type == Episode.ScannedFile.FileType.Video) {
+                    list.Add(item);
+                }
+            }
+            List<FileInfo> infoList = new List<FileInfo>();
+            foreach (var item in list) {
+                infoList.Add(new FileInfo(item.NewName));
+            }
+            FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
+            if (info != null) {
+               return list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+            }
+            return null;
+        }
+
+        private async void PlayNextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            List<Episode> episodes = Database.GetEpisodes(series.id);
+            var ep = episodes.Where(x => !x.finised && x.airedSeason > 0 && x.files.Where(y => y.Type == Episode.ScannedFile.FileType.Video).ToList().Count > 0).OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList().FirstOrDefault();
+            MainWindow.SetPage(new BlankPage());
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            await Task.Run(() => {
+                Thread.Sleep(500);
+            });
+            MainWindow.AddPage(new LocalPlayer(series, ep, GetFileToPlay(ep, series)));
         }
     }
 }

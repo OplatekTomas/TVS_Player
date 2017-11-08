@@ -57,6 +57,9 @@
                                     <TextBlock  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <TextBlock  Text="Rating: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                                    <Grid HorizontalAlignment="Left" Margin="0,30" x:Name="PlayNextEpisode" MouseLeftButtonUp="PlayNextEpisode_MouseLeftButtonUp" ToolTip="Play next episode or continue"> 
+                                        <Image Source="/Icons/ico-play-light.png" Height="35" />
+                                    </Grid>
 
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">

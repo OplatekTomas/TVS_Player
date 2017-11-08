@@ -35,16 +35,7 @@ namespace TVSPlayer {
         SeriesEpisodes episodeView;
         bool isScrolling = false;
 
-        private void ScrollView_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if ((ScrollView.ActualWidth + 130) > this.ActualWidth) {
-                var sb = (Storyboard)FindResource("GoWide");
-               // sb.Begin(RightArrow);
-                //sb.Begin(LeftArrow);
-            } else {
-                var sb = (Storyboard)FindResource("GoAway");
-               // sb.Begin(RightArrow);
-               // sb.Begin(LeftArrow);
-            }
+        private void ScrollView_SizeChanged(object sender, SizeChangedEventArgs e) {         
         }
 
         private void RightArrow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
