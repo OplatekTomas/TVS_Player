@@ -22,7 +22,7 @@
                     </Image>
                     <Grid Margin="10,0,0,35" VerticalAlignment="Bottom">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Grid x:Name="Play" Margin="7,0" ToolTip="Plays local file">
+                            <Grid x:Name="Play" Margin="7,0" ToolTip="Plays local file" MouseLeftButtonUp="Play_MouseLeftButtonUp">
                                 <Image Source="/Icons/ico-play-light.png" Width="30" />
                             </Grid>
                             <Grid x:Name="Download" Margin="7,0" ToolTip="Downloads episode using torrent">

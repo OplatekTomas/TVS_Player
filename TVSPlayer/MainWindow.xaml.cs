@@ -63,6 +63,7 @@ namespace TVSPlayer {
 
         //Hides search bar
         private void TextBox_LostFocus(object sender, RoutedEventArgs e) {
+            SearchBox.Text = "";
             StartAnimation("HideSearch", SearchBar);
             StartAnimation("OpacityDown", SearchBar);
             StartAnimation("MoveSearchRight", SearchButton);
@@ -99,16 +100,17 @@ namespace TVSPlayer {
             public double Width { get; set; }
             public double Height { get; set; }
             public WindowState LastState { get; set; }
-
+            public double Left { get; set; }
+            public double Top { get; set; }
         }
         Dimensions dimensions;
         PlayerState currentState = PlayerState.Normal;
         public static void SwitchState(PlayerState state ,bool reset = false) {
             Window main = Application.Current.MainWindow;
-            ((MainWindow)main).FullscreenSetter(state ,reset);
+            ((MainWindow)main).ViewSwitcher(state ,reset);
         }
 
-        public void FullscreenSetter(PlayerState state, bool reset) {
+        public void ViewSwitcher(PlayerState state, bool reset) {
             if (currentState == state) {
                 state = PlayerState.Normal;
             }
@@ -116,7 +118,11 @@ namespace TVSPlayer {
                 return;
             }
             if ((currentState == PlayerState.Fullscreen && state == PlayerState.PiP) || ((currentState == PlayerState.PiP && state == PlayerState.Fullscreen))) {
-                FullscreenSetter(PlayerState.Normal, reset);
+                ViewSwitcher(PlayerState.Normal, reset);
+            }
+            if (currentState == PlayerState.PiP) {
+                this.Top = dimensions.Top;
+                this.Left = dimensions.Left;
             }
             switch (state) {
                 case PlayerState.Fullscreen:
@@ -136,7 +142,9 @@ namespace TVSPlayer {
                     dimensions = new Dimensions() {
                         Width = this.Width,
                         Height = this.Height,
-                        LastState = this.WindowState
+                        LastState = this.WindowState,
+                        Left = this.Left,
+                        Top = this.Top
                     };
                     this.WindowStyle = WindowStyle.None;
                     this.WindowState = WindowState.Normal;
@@ -320,7 +328,7 @@ namespace TVSPlayer {
 
 
 
-        public static bool checkConnection() {
+        public static bool CheckConnection() {
             Ping ping = new Ping();
             try {
                 ping.Send("api.thetvdb.com");
@@ -331,49 +339,6 @@ namespace TVSPlayer {
                 return false;
             }
 
-        }
-
-        private void StartDailyUpdate() {
-            if (Settings.LastCheck.AddDays(1) < DateTime.Now) {
-                //UpdateDatabase();
-                Settings.LastCheck = DateTime.Now;
-            }
-            Timer timer = new Timer(86400000);
-            timer.Elapsed += (s, ev) => UpdateDatabase();
-            //timer.Start();
-        }
-
-        private async void UpdateDatabase() {
-            await Task.Run(() => {
-                List<Series> series = Database.GetSeries();           
-                List<int> ids = Series.GetUpdates(Settings.LastCheck);
-                List<Series> toUpdate = new List<Series>();
-                foreach (var ser in series) {
-                    foreach (int id in ids) {
-                        if (ser.id == id) {
-                            toUpdate.Add(ser);
-                            break;
-                        }
-                    }
-                }
-                foreach (var ser in toUpdate) {
-                    UpdateSeries(ser);
-                }
-            });
-            Settings.LastCheck = DateTime.Now;
-        }
-
-        private void UpdateSeries(Series series) {
-            List<Task> tasks = new List<Task>();
-            tasks.Add(Task.Run(() => {
-            }));
-            tasks.Add(Task.Run(() => {
-            }));
-            tasks.Add(Task.Run(() => {
-            }));
-            tasks.Add(Task.Run(() => {
-            }));
-            tasks.WaitAll();
         }
 
         private void SetDimensions() {
@@ -466,25 +431,23 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            SetPage(new ActorUserControl(null) { Height=300 });
+            var list = await Torrent.Search(Database.GetSeries(121361), Database.GetEpisode(121361, 7, 7, true));
 
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (false) {
                 if (!Directory.Exists(Helper.data)) {
                     AddPage(new Intro());
                     Settings.LastCheck = DateTime.Now;
                 } else {
                     SetPage(new Library());
                     Settings.Load();
-
-                    StartDailyUpdate();
+                    UpdateDatabase.StartUpdateBackground();
                 }
-                if (!checkConnection()) {
+                if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 }
-
 
             } else {
                 TestFunctions();

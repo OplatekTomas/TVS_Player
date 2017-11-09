@@ -170,13 +170,60 @@ namespace TVSPlayer {
                 }
                 if (doBreak) break;
             }
-            if (epi != null && epi.seriesId == null && fromAPI) {
+            if (epi != null && String.IsNullOrEmpty(epi.filename) && fromAPI) {
+                epi = epi.Update(Episode.GetEpisode(epi.id));
+                EditEpisode(id, epi.id, epi);
+            }
+            return epi;
+        }
+        
+        /// <summary>
+        /// Searches for Episode
+        /// </summary>
+        /// <param name="id">TVDb id of Series</param>
+        /// <param name="epId">TVDb id of Episode</param>
+        /// <param name="fromAPI"> If data is not complete also search TVDb API</param>
+        /// <returns>Episode or null in case of errors</returns>
+        public static Episode GetEpisode(int id, int epId, bool fromAPI = false) {
+            List<Episode> le = GetEpisodes(id);
+            Episode epi = null;
+            foreach (Episode ep in le) {
+                if (ep.id == epId) {
+                    epi = ep;
+                    break;
+                }
+            }
+            if (epi != null && String.IsNullOrEmpty(epi.filename) && fromAPI) {
                 epi = epi.Update(Episode.GetEpisode(epi.id));
                 EditEpisode(id, epi.id, epi);
             }
             return epi;
         }
 
+        /// <summary>
+        /// Searches for Episode
+        /// </summary>
+        /// <param name="id">TVDb id of Series</param>
+        /// <param name="season">Which season is Episode from</param>
+        /// <param name="episode">Which episode it is</param>
+        /// <param name="fromAPI">If data is not complete also search TVDb API default: false</param>
+        /// <returns>Episode or null in case of errors</returns>
+        public static Episode GetEpisode(int id, int season, int episode, bool fromAPI = false) {
+            List<Episode> le = GetEpisodes(id);
+            Episode epi = null;
+            foreach (Episode ep in le) {
+                if (ep.airedSeason == season && ep.airedEpisodeNumber == episode) {
+                    epi = ep;
+                    break;
+                }
+            }
+            if (epi != null && String.IsNullOrEmpty(epi.filename) && fromAPI) {
+                epi = epi.Update(Episode.GetEpisode(epi.id));
+                EditEpisode(id, epi.id, epi);
+            }
+            return epi;
+        }
+        
         /// <summary>
         /// Removes episode from database
         /// </summary>
@@ -213,53 +260,6 @@ namespace TVSPlayer {
             } catch (Exception e) {
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Searches for Episode
-        /// </summary>
-        /// <param name="id">TVDb id of Series</param>
-        /// <param name="epId">TVDb id of Episode</param>
-        /// <param name="fromAPI"> If data is not complete also search TVDb API</param>
-        /// <returns>Episode or null in case of errors</returns>
-        public static Episode GetEpisode(int id, int epId, bool fromAPI = false) {
-            List<Episode> le = GetEpisodes(id);
-            Episode epi = null;
-            foreach (Episode ep in le) {
-                if (ep.id == epId) {
-                    epi = ep;
-                    break;
-                }
-            }
-            if (epi != null && epi.seriesId == null && fromAPI) {
-                epi = epi.Update(Episode.GetEpisode(epi.id));
-                EditEpisode(id, epi.id, epi);
-            }
-            return epi;
-        }
-
-        /// <summary>
-        /// Searches for Episode
-        /// </summary>
-        /// <param name="id">TVDb id of Series</param>
-        /// <param name="season">Which season is Episode from</param>
-        /// <param name="episode">Which episode it is</param>
-        /// <param name="fromAPI">If data is not complete also search TVDb API default: false</param>
-        /// <returns>Episode or null in case of errors</returns>
-        public static Episode GetEpisode(int id, int season, int episode, bool fromAPI = false) {
-            List<Episode> le = GetEpisodes(id);
-            Episode epi = null;
-            foreach (Episode ep in le) {
-                if (ep.airedSeason == season && ep.airedEpisodeNumber == episode) {
-                    epi = ep;
-                    break;
-                }
-            }
-            if (epi != null && epi.seriesId == null && fromAPI) {
-                epi = epi.Update(Episode.GetEpisode(epi.id));
-                EditEpisode(id, epi.id, epi);
-            }
-            return epi;
         }
        
         /// <summary>
@@ -340,6 +340,11 @@ namespace TVSPlayer {
             }
             return eps.OrderBy(s => s.sortOrder).ToList();
 
+        }
+
+        public static Actor GetActor(int id, int idActor) {
+            var actors = GetActors(id);
+            return actors.Where(x => x.id == idActor).FirstOrDefault();
         }
        
         /// <summary>
@@ -457,7 +462,12 @@ namespace TVSPlayer {
             }
             return eps;
         }
-        
+
+        public static Poster GetPoster(int id, int idPoster) {
+            var posters = GetPosters(id);
+            return posters.Where(x => x.id == idPoster).FirstOrDefault();
+        }
+
         /// <summary>
         /// Returns currently selected poster as BitmapImage so it can be set as Image.Source
         /// </summary>

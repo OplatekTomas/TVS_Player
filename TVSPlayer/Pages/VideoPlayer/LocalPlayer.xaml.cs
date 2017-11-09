@@ -237,16 +237,17 @@ namespace TVSPlayer
             Player.MediaPosition -= 100000000;
         }
 
-        private void Return() {
+        private async void Return() {
+            PlayerPage.MouseMove -= Page_MouseMove;
             timer.Stop();
             MainWindow.videoPlayback = false;
             MainWindow.SwitchState(MainWindow.PlayerState.Normal);
-            Mouse.OverrideCursor = null;
             episode.continueAt = Player.MediaPosition - 50000000 > 0 ? Player.MediaPosition - 50000000 : 0;
             episode.finised = Player.MediaDuration - 3000000000 < Player.MediaPosition ? true : false;
             Database.EditEpisode(series.id, episode.id, episode);
             MainWindow.RemovePage();
             MainWindow.SetPage(new SeriesEpisodes(series));
+            Mouse.OverrideCursor = null;
         }
 
         private void PlayerPage_PreviewKeyUp(object sender, KeyEventArgs e) {

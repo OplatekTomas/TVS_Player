@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TVS.API;
+using static TVS.API.Episode;
 
 namespace TVSPlayer
 {
@@ -101,6 +103,30 @@ namespace TVSPlayer
 
         private void BackIcon_MouseUp(object sender, MouseButtonEventArgs e) {
 
+        }
+
+        private async void Play_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+            foreach (var item in episode.files) {
+                if (item.Type == ScannedFile.FileType.Video) {
+                    list.Add(item);
+                }
+            }
+            List<FileInfo> infoList = new List<FileInfo>();
+            foreach (var item in list) {
+                infoList.Add(new FileInfo(item.NewName));
+            }
+            FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
+            if (info != null) {
+                ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+                //Used to release as many resources as possible to give all rendering power to video playback
+                MainWindow.SetPage(new BlankPage());
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                await Task.Run(() => {
+                    Thread.Sleep(500);
+                });
+                MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
+            }
         }
     }
 }

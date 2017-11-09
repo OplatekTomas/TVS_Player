@@ -32,7 +32,7 @@ namespace TVSPlayer {
             Storyboard s = FindResource("Rotate") as Storyboard;
             Storyboard anim = s.Clone();
             anim.Begin(ReloadImage);         
-            if (MainWindow.checkConnection()) {
+            if (MainWindow.CheckConnection()) {
                 MainWindow.RemovePage();
             }
         }
