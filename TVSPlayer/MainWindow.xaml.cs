@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ragnar;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -431,8 +432,10 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            var list = await Torrent.Search(Database.GetSeries(121361), Database.GetEpisode(121361, 7, 7, true));
-
+            Settings.Load();
+            var list = await Torrent.SingleSearch(Database.GetSeries(305288), Database.GetEpisode(305288, 2, 1, true),TorrentQuality.HD);
+            TorrentDownloader downloader = new TorrentDownloader(list);
+            await downloader.Stream();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {

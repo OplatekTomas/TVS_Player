@@ -19,7 +19,18 @@ namespace TVSPlayer {
         public int Leech { get; set; }
         public string Size { get; set; }
 
+        public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
+            return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
+        }
 
+        public async static Task<Torrent> SingleSearch(Series series, Episode episode) {
+            return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
+        }
+
+        public async static Task<Torrent> SingleSearch(Series series, Episode episode, TorrentQuality quality) {
+            var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            return tor;
+        }
 
         public async static Task<List<Torrent>> Search(Series series, Episode episode) {
             return await Task.Run(() => {
