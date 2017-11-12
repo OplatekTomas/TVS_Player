@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 using TVS.Notification;
 using static TVS.API.Episode;
@@ -129,15 +130,25 @@ namespace TVSPlayer
         }
 
         private async void Download_MouseUp(object sender, MouseButtonEventArgs e) {
+            MainWindow.AddPage(new PleaseWait());
             Torrent torrent = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.DownloadQuality);
             if (torrent != null) {
                 TorrentDownloader downloader = new TorrentDownloader(torrent);
-                NotificationSender se = new NotificationSender("Download started", Helper.GenerateName(Database.GetSeries((int)episode.seriesId), episode));
-                se.Show();
                 await downloader.Download();
+                NotificationSender se = new NotificationSender("Download started", Helper.GenerateName(Database.GetSeries((int)episode.seriesId), episode));
+                se.ClickedEvent += (s, ev) => {
+                    Dispatcher.Invoke(() => {
+                        MainWindow.RemoveAllPages();
+                        MainWindow.SetPage(new DownloadsView());
+                    }, DispatcherPriority.Send);
+
+                };
+                se.Show();
+
             } else {
                 MessageBox.Show("Sorry, torrent not found");
             }
+            MainWindow.RemovePage();
         }
     }
 }
