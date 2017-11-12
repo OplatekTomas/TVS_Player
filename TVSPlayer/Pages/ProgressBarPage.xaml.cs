@@ -60,23 +60,6 @@ namespace TVSPlayer {
 
         }
 
-        private void test() {
-            Task.Run(() => {
-                double max = 0;
-                Dispatcher.Invoke(new Action(() => {
-                    max = ProgBar.Maximum;
-                }), DispatcherPriority.Send);
-                for (int i = 1; i <= max; i++) {
-                    Dispatcher.Invoke(new Action(() => {
-                        SetValue(i);
-                    }), DispatcherPriority.Send);
-                    Thread.Sleep(new Random().Next(300, 1500));
-
-                }
-
-            });
-        }
-
         private void Animate() {
             Storyboard sb = (Storyboard)FindResource("Rotate");
             Storyboard temp = sb.Clone();

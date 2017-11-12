@@ -23,6 +23,21 @@ namespace TVSPlayer {
             }
         }
 
+        public static void MoveAfterDownload(TorrentDownloader torrent) {
+            List<string> files = new List<string>();
+            string path = torrent.Status.SavePath + "\\" + torrent.Status.Name;
+            torrent.TorrentSession.Dispose();
+            if (File.Exists(path)) {
+                Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\");
+                File.Move(path, Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\" + Path.GetFileName(path));
+                path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\";
+            }
+            var list = Rename(GetSeriesFilesInfo(torrent.TorrentSource.Series, path));
+            foreach (var item in list) {
+                Database.EditEpisode(torrent.TorrentSource.Series.id, item.episode.id, item.episode);
+            }
+            Directory.Delete(path, true);
+        }
 
         private static List<ScannedFileInfo> FindAndRenameInLibrary(Series series) {
             if (series.libraryPath == null) {
@@ -43,7 +58,6 @@ namespace TVSPlayer {
             if (Directory.Exists(Settings.ThirdScanLocation)) files.AddRange(GetSeriesFilesInfo(series, Settings.ThirdScanLocation));
             return Rename(files);
         }
-
 
         private static List<ScannedFileInfo> Rename(List<ScannedFileInfo> list) {
             List<ScannedFileInfo> newList = new List<ScannedFileInfo>();
@@ -230,6 +244,7 @@ namespace TVSPlayer {
             return sfiList;
 
         }
+ 
 
         private static List<string> FilterSeries(Series series, List<string> files) {
             List<string> newFiles = new List<string>();
@@ -283,7 +298,7 @@ namespace TVSPlayer {
             return filtered;
         }
 
-#endregion
+        #endregion
        
         private class ScannedFileInfo{
             public string origFile;

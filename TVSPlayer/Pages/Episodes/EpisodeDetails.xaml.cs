@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TVS.API;
+using TVS.Notification;
 using static TVS.API.Episode;
 
 namespace TVSPlayer
@@ -93,12 +94,8 @@ namespace TVSPlayer
             }
         }
 
-        private async void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             ScrollView.ReleaseMouseCapture();
-            await Task.Run(() => {
-                Thread.Sleep(500);
-                isScrolling = false;
-            });
         }
 
         private void BackIcon_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -126,6 +123,20 @@ namespace TVSPlayer
                     Thread.Sleep(500);
                 });
                 MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
+            } else {
+                MessageBox.Show("No files found...","Error");
+            }
+        }
+
+        private async void Download_MouseUp(object sender, MouseButtonEventArgs e) {
+            Torrent torrent = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.DownloadQuality);
+            if (torrent != null) {
+                TorrentDownloader downloader = new TorrentDownloader(torrent);
+                NotificationSender se = new NotificationSender("Download started", Helper.GenerateName(Database.GetSeries((int)episode.seriesId), episode));
+                se.Show();
+                await downloader.Download();
+            } else {
+                MessageBox.Show("Sorry, torrent not found");
             }
         }
     }

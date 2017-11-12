@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using TVS.API;
+using TVS.Notification;
 using Timer = System.Timers.Timer;
 
 namespace TVSPlayer {
@@ -63,11 +64,16 @@ namespace TVSPlayer {
         }
 
         //Hides search bar
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e) {
-            SearchBox.Text = "";
+        private async void TextBox_LostFocus(object sender, RoutedEventArgs e) {
             StartAnimation("HideSearch", SearchBar);
             StartAnimation("OpacityDown", SearchBar);
             StartAnimation("MoveSearchRight", SearchButton);
+            await Task.Run(() => {
+                Thread.Sleep(500);
+                Dispatcher.Invoke(() => {
+                    SearchBox.Text = "";
+                }, DispatcherPriority.Send);
+            });
         }
 
         bool rightsidevisible = false;
@@ -237,6 +243,11 @@ namespace TVSPlayer {
             ((MainWindow)main).PageRemover();
         }
 
+        public static void RemoveAllPages() {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).PageRemoverFull();
+        }
+
         /// <summary>
         /// Sets page in Main Frame to any page
         /// </summary>
@@ -298,16 +309,21 @@ namespace TVSPlayer {
             Frame fr = new Frame();
             Grid.SetRowSpan(fr, 2);
             fr.Opacity = 0;
-            Panel.SetZIndex(fr, 100);
             fr.Content = page;
             Storyboard sb = this.FindResource("OpacityUp") as Storyboard;
             Storyboard sbLoad = sb.Clone();
-            BaseGrid.Children.Add(fr);
+            ContentOnTop.Children.Add(fr);
             sbLoad.Begin(fr);
         }
-        
+
+        private void PageRemoverFull() {
+            for (int i = 0; i < ContentOnTop.Children.Count; i++) {
+                PageRemover();
+            }
+        }
+
         private void PageRemover() {
-            var p = BaseGrid.Children[BaseGrid.Children.Count - 1] as FrameworkElement;
+            var p = ContentOnTop.Children[ContentOnTop.Children.Count - 1] as FrameworkElement;
             Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
             Storyboard sbLoad = sb.Clone();
             sbLoad.Completed += (s, e) => FinishedRemove(p);
@@ -315,7 +331,7 @@ namespace TVSPlayer {
         }
 
         private void FinishedRemove(UIElement ue) {
-            BaseGrid.Children.Remove(ue);
+            ContentOnTop.Children.Remove(ue);
         }
 
         #endregion
@@ -326,8 +342,6 @@ namespace TVSPlayer {
             ThemeSwitcher.SwitchTheme();
         }
         #endregion
-
-
 
         public static bool CheckConnection() {
             Ping ping = new Ping();
@@ -432,14 +446,12 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            Settings.Load();
-            var list = await Torrent.SingleSearch(Database.GetSeries(305288), Database.GetEpisode(305288, 2, 1, true),TorrentQuality.HD);
-            TorrentDownloader downloader = new TorrentDownloader(list);
-            await downloader.Stream();
+            TorrentDownloader downloader = new TorrentDownloader(await Torrent.SearchSingle(Database.GetSeries(121361), Database.GetEpisode(121361, 7, 7, true), TorrentQuality.Standart));
+            await downloader.Download();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) {
+            if (true) {
                 if (!Directory.Exists(Helper.data)) {
                     AddPage(new Intro());
                     Settings.LastCheck = DateTime.Now;
@@ -453,6 +465,7 @@ namespace TVSPlayer {
                 }
 
             } else {
+                Settings.Load();
                 TestFunctions();
             }
 
@@ -480,7 +493,7 @@ namespace TVSPlayer {
             Properties.Settings.Default.Save();
 
             if (videoPlayback) {
-                LocalPlayer player = (LocalPlayer)((Frame)BaseGrid.Children[BaseGrid.Children.Count - 1]).Content;
+                LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[BaseGrid.Children.Count - 1]).Content;
                 player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
                 player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                 Database.EditEpisode(player.series.id, player.episode.id, player.episode);
@@ -491,7 +504,17 @@ namespace TVSPlayer {
             }
         }
 
+        private void LibrarySidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new Library());
+            LibrarySelected.Opacity = 1;
+            DownloadsSelected.Opacity = 0;
+        }
 
+        private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new DownloadsView());
+            LibrarySelected.Opacity = 0;
+            DownloadsSelected.Opacity = 1;
+        }
     }
 
     

@@ -55,6 +55,10 @@
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.AeroLite">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ragnar, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\Ragnar.0.6.0\lib\net45\Ragnar.dll</HintPath>
     </Reference>
@@ -76,9 +80,11 @@
     <Reference Include="TVS.API">
       <HintPath>DLL\TVS.API.dll</HintPath>
     </Reference>
+    <Reference Include="TVS.Notification">
+      <HintPath>DLL\TVS.Notification.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="WPFMediaKit, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WPFMediaKit.2.2.0\lib\WPFMediaKit.dll</HintPath>
     </Reference>
@@ -101,6 +107,9 @@
     <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Pages\Other\DownloadsView.xaml.cs">
+      <DependentUpon>DownloadsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\VideoPlayer\BlankPage.xaml.cs">
       <DependentUpon>BlankPage.xaml</DependentUpon>
     </Compile>
@@ -180,7 +189,14 @@
       <DependentUpon>SeasonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
+    <Compile Include="Controls\TorrentUserControl.xaml.cs">
+      <DependentUpon>TorrentUserControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\ActorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Other\DownloadsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -316,6 +332,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TorrentUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -438,9 +458,7 @@
   <ItemGroup>
     <Resource Include="Icons\ico-theme-dark.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Other\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Icons\ico-poster-dark.png" />
     <Resource Include="Icons\ico-poster-light.png" />

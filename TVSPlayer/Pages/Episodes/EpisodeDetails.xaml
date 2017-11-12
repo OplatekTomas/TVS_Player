@@ -20,12 +20,12 @@
                             <DropShadowEffect BlurRadius="10" Opacity="0.5" />
                         </Image.Effect>
                     </Image>
-                    <Grid Margin="10,0,0,35" VerticalAlignment="Bottom">
+                    <Grid Margin="10,0,0,35" VerticalAlignment="Bottom" Background="#01000000">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Grid x:Name="Play" Margin="7,0" ToolTip="Plays local file" MouseLeftButtonUp="Play_MouseLeftButtonUp">
                                 <Image Source="/Icons/ico-play-light.png" Width="30" />
                             </Grid>
-                            <Grid x:Name="Download" Margin="7,0" ToolTip="Downloads episode using torrent">
+                            <Grid x:Name="Download" Margin="7,0" ToolTip="Downloads episode using torrent" MouseUp="Download_MouseUp">
                                 <Image Source="/Icons/ico-download-light.png" Width="30" />
                             </Grid>
                             <Grid x:Name="Stream" Margin="7,0" ToolTip="Streams episode using torrent">

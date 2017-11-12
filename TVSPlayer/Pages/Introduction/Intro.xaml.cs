@@ -33,7 +33,7 @@ namespace TVSPlayer
 
         private void FadeIn_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.RemovePage();
-            MainWindow.AddPage(new SelectThemeStartUp());
+            MainWindow.AddPage(new InitialSettings());
         }
     }
 }

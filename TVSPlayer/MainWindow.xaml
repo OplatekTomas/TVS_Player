@@ -34,6 +34,7 @@
             <RowDefinition Height="40px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid x:Name="ContentOnTop" Grid.RowSpan="2" Panel.ZIndex="100" />
         <Frame x:Name="ActiveContent" Grid.Row="1" Panel.ZIndex="5"  NavigationUIVisibility="Hidden" ></Frame>
         <Grid x:Name="SideMenu" Margin="-225,0,0,0" HorizontalAlignment="Left" Width="225" Background="{DynamicResource TransparentBG}" Panel.ZIndex="15" Grid.RowSpan="2">
             <Grid.RowDefinitions>
@@ -44,12 +45,15 @@
                 <Image Source="Icons/LogoWide.png" Margin="10"></Image>
             </Grid>
             <StackPanel Grid.Row="2">
-                <Grid>
-                    <Grid Height="45">
-                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" />
-                        <Image Source="{DynamicResource PlayIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
-                        <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource TextColor}" FontSize="20" />
-                    </Grid>
+                <Grid Height="45" x:Name="LibrarySidebar" MouseLeftButtonUp="LibrarySidebar_MouseLeftButtonUp">
+                    <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="LibrarySelected" />
+                    <Image Source="{DynamicResource PlayIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource TextColor}" FontSize="20" />
+                </Grid>
+                <Grid Height="45" x:Name="DownloadsSidebar" MouseLeftButtonUp="DownloadsSidebar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225">
+                    <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="DownloadsSelected"  Opacity="0" />
+                    <Image Source="{DynamicResource DownloadIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Margin="50,8,0,5"  Text="Downloads" Foreground="{DynamicResource TextColor}" FontSize="20" />
                 </Grid>
             </StackPanel>
         </Grid>
@@ -78,7 +82,7 @@
                 <Grid x:Name="CustomContent" Margin="10,0,0,0" HorizontalAlignment="Left" Width="300">
                     
                 </Grid>
-                <Grid HorizontalAlignment="Right" x:Name="ThemeSwitch"  Margin="0,0,10,0" MouseDown="ThemeSwitch_MouseUp">
+                <Grid HorizontalAlignment="Right" x:Name="ThemeSwitch"  Margin="0,0,10,0" ToolTip="Not working in this release!">
                     <Image Source="{DynamicResource ThemeIcon}" RenderOptions.BitmapScalingMode="HighQuality" Height="25" />
                 </Grid>
                 

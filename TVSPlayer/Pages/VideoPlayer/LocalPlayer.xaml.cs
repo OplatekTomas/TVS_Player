@@ -76,9 +76,10 @@ namespace TVSPlayer
             minutes = seconds = hours = 0;
             value = value / 10000000;
             hours = Convert.ToInt32(Math.Floor((double)(value / 60 / 60)));
-            minutes = Convert.ToInt32(Math.Floor((double)(value - 60 * hours) / 60));
-            seconds = Convert.ToInt32(Math.Floor((double)(value - (60 * hours) - (60 * minutes))));
-            string hoursString = hours > 0 ? hours + "0" : "";
+            minutes = Convert.ToInt32(Math.Floor((double)(value / 60 - 60 * hours)));
+
+            seconds = Convert.ToInt32(Math.Floor((double)(value - ((60 * 60 * hours) + (60 * minutes)) )));
+            string hoursString = hours > 0 ? hours + ":" : "";
             string minutesString = minutes >= 10 ? minutes.ToString() + ":" : "0" + minutes + ":";
             string secondsString = seconds >= 10 ? seconds.ToString() : "0" + seconds;
             return hoursString + minutesString + secondsString;

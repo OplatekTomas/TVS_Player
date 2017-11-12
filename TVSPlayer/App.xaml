@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="/TVSPlayer;component/Themes/Icons.xaml" />
                 <ResourceDictionary Source="/TVSPlayer;component/Themes/Animations.xaml" />
                 <ResourceDictionary Source="/TVSPlayer;component/Themes/Styles.xaml" />
+                <ResourceDictionary Source="/PresentationFramework.AeroLite;component/themes/AeroLite.NormalColor.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

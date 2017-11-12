@@ -10,7 +10,7 @@ using TVS.API;
 namespace TVSPlayer {
     public enum TorrentQuality { Standart, HD, FHD, UHD }
 
-    class Torrent {
+    public class Torrent {
 
         public string Magnet { get; set; }
         public string Name { get; set; }
@@ -18,16 +18,19 @@ namespace TVSPlayer {
         public int Seeders { get; set; }
         public int Leech { get; set; }
         public string Size { get; set; }
+        public Series Series { get; set; }
+        public Episode Episode { get; set; }
+
 
         public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
             return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
         }
 
-        public async static Task<Torrent> SingleSearch(Series series, Episode episode) {
+        public async static Task<Torrent> SearchSingle(Series series, Episode episode) {
             return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
         }
 
-        public async static Task<Torrent> SingleSearch(Series series, Episode episode, TorrentQuality quality) {
+        public async static Task<Torrent> SearchSingle(Series series, Episode episode, TorrentQuality quality) {
             var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
             return tor;
         }
@@ -65,6 +68,8 @@ namespace TVSPlayer {
                     t.Seeders = Int32.Parse(row.ChildNodes[3].InnerText);
                     t.Leech = Int32.Parse(row.ChildNodes[5].InnerText);
                     t.Size = row.ChildNodes[9].ChildNodes[0].InnerText;
+                    t.Series = series;
+                    t.Episode = episode;
                     tList.Add(t);
                 }
                 return tList;

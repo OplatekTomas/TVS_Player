@@ -19,6 +19,7 @@ namespace TVSPlayer {
         private static string scanthree;
         private static bool theme;
         private static DateTime lastCheck;
+        private static TorrentQuality downloadquality;
         public static string Library { get { return library; } set { library = value; SaveSettings(); } }
         public static bool AutoDownload { get { return autodownload; } set { autodownload = value; SaveSettings(); } }
         public static string DownloadCacheLocation { get { return cachelocation; } set { cachelocation = value; SaveSettings(); } }
@@ -27,6 +28,7 @@ namespace TVSPlayer {
         public static string ThirdScanLocation { get { return scanthree; } set { scanthree = value; SaveSettings(); } }
         public static bool Theme  { get { return theme; } set { theme = value; SaveSettings(); } }
         public static DateTime LastCheck { get { return lastCheck; } set { lastCheck = value; SaveSettings(); } }
+        public static TorrentQuality DownloadQuality { get { return downloadquality; } set { downloadquality = value; SaveSettings(); } }
 
 
 
@@ -88,7 +90,11 @@ namespace TVSPlayer {
                         int i = 0;
                         foreach (FieldInfo field in fields) {
                             if (field.Name == (a[i, 0] as string)) {
-                                field.SetValue(null, a[i, 1]);
+                                try {
+                                    field.SetValue(null, Convert.ChangeType(a[i, 1], field.FieldType));
+                                } catch (InvalidCastException e) {
+                                    field.SetValue(null,(TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
+                                }
                             }
                             i++;
                         };
