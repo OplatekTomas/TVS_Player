@@ -55,6 +55,7 @@ namespace TVSPlayer
         private void SwitchAutoDownload_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             DownloadSwitcher();
         }
+
         public async void DownloadSwitcher() {
             if (Settings.AutoDownload) {
                 if (owner.series.autoDownload) {

@@ -28,7 +28,7 @@ namespace TVSPlayer
         {
             InitializeComponent();
             this.series = series;
-            this.page = page;
+            this.page = WhereToBack;
         }
         Series series;
         Page page;
