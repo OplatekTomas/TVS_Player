@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             Height="40" d:DesignWidth="300">
+             Height="40" Width="300">
     <Grid Loaded="Grid_Loaded">
         <Grid Height="25" HorizontalAlignment="Left" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" ToolTip="Add Series to library" Margin="5">
             <Image Source="{DynamicResource PlusIcon}" />

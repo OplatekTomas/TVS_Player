@@ -50,6 +50,9 @@ namespace TVSPlayer {
         }
 
         private void HiderGrid_MouseUp(object sender, MouseButtonEventArgs e) {
+            HideSideBar();
+        }
+        private void HideSideBar() {
             StartAnimation("HideSideMenu", SideMenu);
             StartAnimation("OpacityDown", HiderGrid);
             HiderGrid.Visibility = Visibility.Hidden;
@@ -288,6 +291,7 @@ namespace TVSPlayer {
             }
             if (custom.Buttons != null) {
                 CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
+                CustomContent.Width = ((FrameworkElement)custom.Buttons).Width;
                 CustomContent.Children.Add(custom.Buttons);
             } else {
                 CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
@@ -311,9 +315,10 @@ namespace TVSPlayer {
             fr.Opacity = 0;
             fr.Content = page;
             Storyboard sb = this.FindResource("OpacityUp") as Storyboard;
-            Storyboard sbLoad = sb.Clone();
+            Storyboard blur = (Storyboard)FindResource("BlurBackground");
+            blur.Begin();
             ContentOnTop.Children.Add(fr);
-            sbLoad.Begin(fr);
+            sb.Begin(fr);
         }
 
         private void PageRemoverFull() {
@@ -326,6 +331,8 @@ namespace TVSPlayer {
             var p = ContentOnTop.Children[ContentOnTop.Children.Count - 1] as FrameworkElement;
             Storyboard sb = this.FindResource("OpacityDown") as Storyboard;
             Storyboard sbLoad = sb.Clone();
+            Storyboard blur = (Storyboard)FindResource("DeBlurBackground");
+            blur.Begin();
             sbLoad.Completed += (s, e) => FinishedRemove(p);
             sbLoad.Begin(p);
         }
@@ -446,8 +453,6 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            NotificationSender s = new NotificationSender("Test", "Notification");
-            s.Show();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -506,14 +511,24 @@ namespace TVSPlayer {
 
         private void LibrarySidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new Library());
+            HideSideBar();
             LibrarySelected.Opacity = 1;
             DownloadsSelected.Opacity = 0;
         }
 
         private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new DownloadsView());
+            HideSideBar();
             LibrarySelected.Opacity = 0;
             DownloadsSelected.Opacity = 1;
+        }
+
+        private void SideButton_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void SideButton_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
         }
     }
 

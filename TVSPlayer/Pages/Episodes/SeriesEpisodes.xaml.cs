@@ -29,7 +29,7 @@ namespace TVSPlayer {
             InitializeComponent();
             this.series = series;
         }
-        Series series;
+        public Series series;
         
         bool hasBackground = false;
 
@@ -40,6 +40,7 @@ namespace TVSPlayer {
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization pg = new PageCustomization();
+            pg.Buttons = new EpisodeButtons(this);
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
@@ -67,7 +68,7 @@ namespace TVSPlayer {
             Dispatcher.Invoke(() => {
                 DefaultPoster.Source = bmp;
                 if (nextEpisode != null) {
-                    NextDate.Text = DateTime.ParseExact(nextEpisode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                    NextDate.Text = DateTime.ParseExact(nextEpisode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1).ToString("dd. MM. yyyy");
                 } else {
                     NextDate.Text = "-";
                 }
@@ -110,25 +111,28 @@ namespace TVSPlayer {
                 }
             },DispatcherPriority.Send);          
         }
-        private void LoadSeasons() {
+        public void LoadSeasons() {
             List<Episode> eps = Database.GetEpisodes(series.id);
             List<List<Episode>> sorted = new List<List<Episode>>();
 
             for (int i = 1; ; i++) {
-                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture) < DateTime.Now).ToList();
+                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
+                if (Properties.Settings.Default.EpisodeSort) list.Reverse();
                 if (list.Count != 0) {
                     sorted.Add(list);
                 } else {
                     break;
                 }
             }
+            if (Properties.Settings.Default.EpisodeSort) sorted.Reverse();
             Dispatcher.Invoke(() => {
+                SecondPanel.Children.RemoveRange(0, SecondPanel.Children.Count);
                 foreach (var list in sorted) {
                     TextBlock text = new TextBlock();
                     text.FontSize = 24;
                     text.Foreground = (Brush)FindResource("TextColor");
                     text.Margin = new Thickness(0, 0, 0, 10);
-                    text.Text = "Season " + (sorted.IndexOf(list) + 1);
+                    text.Text = "Season " + (list[0].airedSeason);
                     SeasonView sv = new SeasonView(list,series,this);
                     //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
                     sv.ScrollView.PreviewMouseWheel += (s, ev) => {
@@ -144,8 +148,8 @@ namespace TVSPlayer {
                     };
                     sv.Height = 195;
                     sv.Margin = new Thickness(0, 0, 25, 20);
-                    Panel.Children.Add(text);
-                    Panel.Children.Add(sv);
+                    SecondPanel.Children.Add(text);
+                    SecondPanel.Children.Add(sv);
                 }
             }, DispatcherPriority.Send);
         }

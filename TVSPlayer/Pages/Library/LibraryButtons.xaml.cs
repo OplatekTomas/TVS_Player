@@ -117,12 +117,12 @@ namespace TVSPlayer
                         await MainWindow.CreateDatabase(new List<Tuple<int, string>>() { new Tuple<int, string>(series.id, fbd.SelectedPath) });
                         MainWindow.SetPage(new Library());
                     } else {
-                        MessageBox.Show(series.seriesName + " is already in database","Error", MessageBoxButton.OK);
+                        await MessageBox.Show(series.seriesName + " is already in database","Error");
                     }
 
 
                 } else {
-                    MessageBox.Show("Selected directory is not in library","Error",MessageBoxButton.OK,MessageBoxImage.Warning);
+                   await MessageBox.Show("Selected directory is not in library","Error");
                 }
             }
         }

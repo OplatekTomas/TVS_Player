@@ -40,22 +40,24 @@
                 
                 <StackPanel Margin="30,0" VerticalAlignment="Center">
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode name: " />
-                    <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Season: " />
-                    <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode: " />
+                    <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Info: " />
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Rating:" />
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Air date:" />
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Directors:" />
+                    <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Guest stars:" />
+
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Downloaded:" />
                 </StackPanel>
                 <StackPanel Margin="30,0,0,0" MaxWidth="250" VerticalAlignment="Center">
-                    <TextBlock x:Name="EpisodeName" TextDecorations="Underline" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode name: " MouseLeftButtonDown="EPName_MouseLeftButtonUp" />
+                    <TextBlock x:Name="EpisodeName" TextDecorations="Underline" Margin="0,3" FontSize="16" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" Foreground="#F5F5F5" Text="Episode name: " MouseLeftButtonDown="EPName_MouseLeftButtonUp" />
                     <TextBlock x:Name="Season" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Season: " />
-                    <TextBlock x:Name="Episode" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode: " />
                     <TextBlock x:Name="Rating" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Rating:" />
                     <TextBlock x:Name="Airdate" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Air date:" />
                     <TextBlock x:Name="Writers" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
                     <TextBlock x:Name="Directors" Margin="0,3" FontSize="16" TextTrimming="CharacterEllipsis" Foreground="#F5F5F5" Text="Directors:" />
+                    <TextBlock x:Name="GuestStars" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="GuestStars" />
+
                     <TextBlock x:Name="Downloaded" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="No" />
                 </StackPanel>
                 <Grid Margin="40,95" MinWidth="300" Width="{Binding ActualWidth, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/2.3}">

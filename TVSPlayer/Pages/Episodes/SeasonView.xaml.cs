@@ -28,27 +28,12 @@ namespace TVSPlayer {
             InitializeComponent();
             this.episodes = episodes;
             this.series = series;
-            this.episodeView = episodeView;
+            this.seriesEpisodes = episodeView;
         }
         List<Episode> episodes;
         Series series;
-        SeriesEpisodes episodeView;
+        SeriesEpisodes seriesEpisodes;
         bool isScrolling = false;
-
-        private void ScrollView_SizeChanged(object sender, SizeChangedEventArgs e) {         
-        }
-
-        private void RightArrow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            for (int i = 0; i < 15; i++) {
-                ScrollView.LineLeft();
-            }
-        }
-
-        private void LeftArrow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            for (int i = 0; i < 15; i++) {
-                ScrollView.LineRight();
-            }
-        }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.SetPage(new Library());
@@ -61,7 +46,7 @@ namespace TVSPlayer {
                         BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
                         Episode episode = Database.GetEpisode(series.id, ep.id, true);
                         Dispatcher.Invoke(() => {
-                            EpisodeView epv = new EpisodeView(episode, true, episodeView);
+                            EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
                             epv.Width = 230;
                             epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
                             epv.Opacity = 0;

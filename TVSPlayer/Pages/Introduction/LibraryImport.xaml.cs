@@ -154,7 +154,7 @@ namespace TVSPlayer
                         sb.Begin(swf);
                     }
                 } else {
-                    MessageBox.Show("Directory is not in previously selected path");
+                    await MessageBox.Show("Directory is not in previously selected path");
                 }
             }
         }

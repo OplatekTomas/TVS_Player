@@ -62,20 +62,20 @@ namespace TVSPlayer {
         private static List<ScannedFileInfo> Rename(List<ScannedFileInfo> list) {
             List<ScannedFileInfo> newList = new List<ScannedFileInfo>();
             foreach (ScannedFileInfo sfi in list) {
-                newList.Add(Rename(sfi));
+                newList.Add(Rename(sfi).Result);
             }
             return newList;
         }
 
-        private static ScannedFileInfo Rename(ScannedFileInfo info) {
+        private async static Task<ScannedFileInfo> Rename(ScannedFileInfo info) {
             info.newFile = GetPath(info);
             if (info.newFile != info.origFile) {
                 try {
                     File.Move(info.origFile, info.newFile);
                 } catch (IOException) {
-                    MessageBoxResult result = MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Errror", MessageBoxButton.YesNo, MessageBoxImage.Error);
+                    MessageBoxResult result = await MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Errror", MessageBoxButtons.YesNoCancel);
                     if (result == MessageBoxResult.Yes) {
-                        return Rename(info);
+                        return Rename(info).Result;
                     }
                 }
             }

@@ -44,7 +44,7 @@
                             <Grid Grid.Column="2" Margin="25,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="250"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock x:Name="showName" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                                 <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="#F5F5F5" Grid.ColumnSpan="3" />
@@ -57,7 +57,7 @@
                                     <TextBlock  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <TextBlock  Text="Rating: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <Grid HorizontalAlignment="Left" Margin="0,30" x:Name="PlayNextEpisode" MouseLeftButtonUp="PlayNextEpisode_MouseLeftButtonUp" ToolTip="Play next episode or continue"> 
+                                    <Grid HorizontalAlignment="Left" Margin="0,30" x:Name="PlayNextEpisode" MouseLeftButtonUp="PlayNextEpisode_MouseLeftButtonUp" ToolTip="Play next episode or continue">
                                         <Image Source="/Icons/ico-play-light.png" Height="35" />
                                     </Grid>
 
@@ -78,6 +78,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
+                <StackPanel x:Name="SecondPanel" />
             </StackPanel>
         </ScrollViewer>
 

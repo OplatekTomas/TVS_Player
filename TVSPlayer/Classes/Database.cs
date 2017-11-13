@@ -620,9 +620,6 @@ namespace TVSPlayer {
         #endregion
 
 
-
-
-
         /// <summary>
         /// Reads from file, is safe - waits for file not to be used if it is used
         /// </summary>

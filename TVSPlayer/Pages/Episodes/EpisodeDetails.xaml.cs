@@ -39,9 +39,8 @@ namespace TVSPlayer
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
             EPName.Text = EpisodeName.Text = episode.episodeName;
-            Season.Text = episode.airedSeason.ToString();
-            Episode.Text = episode.airedEpisodeNumber.ToString();
-            Rating.Text = episode.siteRating.ToString();
+            Season.Text = Helper.GenerateName(episode);
+            Rating.Text = episode.siteRating + "/10";
             if (!String.IsNullOrEmpty(episode.firstAired)) {
                 Airdate.Text = DateTime.ParseExact(episode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
             }
@@ -59,6 +58,14 @@ namespace TVSPlayer
                     Directors.Text += episode.directors[i];
                 } else {
                     Directors.Text += episode.directors[i] + ", ";
+                }
+            }
+            GuestStars.Text = null;
+            for (int i = 0; i < episode.guestStars.Count; i++) {
+                if (i == episode.guestStars.Count - 1) {
+                    GuestStars.Text += episode.guestStars[i];
+                } else {
+                    GuestStars.Text += episode.guestStars[i] + ", ";
                 }
             }
             if (episode.files.Count > 0) {
@@ -125,7 +132,7 @@ namespace TVSPlayer
                 });
                 MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
             } else {
-                MessageBox.Show("No files found...","Error");
+                await MessageBox.Show("No files found...","Error");
             }
         }
 
@@ -146,7 +153,7 @@ namespace TVSPlayer
                 se.Show();
 
             } else {
-                MessageBox.Show("Sorry, torrent not found");
+                await MessageBox.Show("Sorry, torrent not found");
             }
             MainWindow.RemovePage();
         }
@@ -167,6 +174,14 @@ namespace TVSPlayer
                 }
             }
             ep.files = new List<ScannedFile>();
+        }
+
+        private void EpisodeName_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void EpisodeName_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
         }
     }
 }

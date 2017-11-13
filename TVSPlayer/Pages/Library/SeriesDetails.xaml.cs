@@ -24,12 +24,14 @@ namespace TVSPlayer
     /// </summary>
     public partial class SeriesDetails : Page
     {
-        public SeriesDetails(Series series)
+        public SeriesDetails(Series series, Page WhereToBack)
         {
             InitializeComponent();
             this.series = series;
+            this.page = page;
         }
         Series series;
+        Page page;
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             List<Actor> actors = Database.GetActors(series.id);
@@ -112,7 +114,7 @@ namespace TVSPlayer
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            MainWindow.SetPage(new Library());
+            MainWindow.SetPage(page);
         }
 
         private void ScrollView_MouseWheel(object sender, MouseWheelEventArgs e) {

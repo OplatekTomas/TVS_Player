@@ -47,11 +47,11 @@ namespace TVSPlayer {
             return p;
         }
 
-        private void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
+        private async void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
             if (currentPoster != null) {
                 poster = currentPoster;
             } else {
-                MessageBox.Show("No poster selected");
+                await MessageBox.Show("No poster selected");
             }
         }
 

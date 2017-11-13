@@ -45,9 +45,9 @@ namespace TVSPlayer {
             }
         }
 
-        private void Now_MouseUp(object sender, MouseButtonEventArgs e) {
+        private async void Now_MouseUp(object sender, MouseButtonEventArgs e) {
             if (!Directory.Exists(FolderLocation.Text)) {
-                MessageBox.Show("Either one of the locations you entered does not exist or few of them are same");
+                await MessageBox.Show("Either one of the locations you entered does not exist or few of them are same");
             } else {
                 TextBoxGrid.VerticalAlignment = VerticalAlignment.Top;
                 TextBoxGrid.Margin = new Thickness(10, TopRow.ActualHeight - 57, 10, 0);
@@ -87,12 +87,12 @@ namespace TVSPlayer {
             temp.Begin(result);
         }
 
-        private void Later_MouseUp(object sender, MouseButtonEventArgs e) {
+        private async void Later_MouseUp(object sender, MouseButtonEventArgs e) {
             if (Directory.Exists(FolderLocation.Text)) {
                 Settings.Library = FolderLocation.Text;
                 MainWindow.RemovePage();
             } else {
-                MessageBox.Show("Directory does not exist");
+                await MessageBox.Show("Directory does not exist");
             }
 
         }
@@ -113,7 +113,7 @@ namespace TVSPlayer {
                 await MainWindow.CreateDatabase(ids);
                 MainWindow.RemovePage();
             } else {
-                MessageBox.Show("Directory does not exist");
+                await MessageBox.Show("Directory does not exist");
             }
         }
 

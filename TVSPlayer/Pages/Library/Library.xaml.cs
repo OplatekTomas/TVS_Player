@@ -66,7 +66,7 @@ namespace TVSPlayer
                         poster.Width = Properties.Settings.Default.LibrarySize / 1.47058823529;
                         poster.RemoveIcon.MouseLeftButtonUp += (s, ev) => RemoveFromLibrary(series, poster);
                         poster.PosterIcon.MouseLeftButtonUp += (s, ev) => SelectPosters(poster, series);
-                        poster.QuestionIcon.MouseLeftButtonUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
+                        poster.QuestionIcon.MouseLeftButtonUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series,new Library())); };
                         poster.PosterImage.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
                         PanelPosters.Children.Add(poster);
                     }, DispatcherPriority.Send);
@@ -88,7 +88,7 @@ namespace TVSPlayer
                         sil.Height = 60;
                         sil.RemoveIcon.MouseUp += (s, ev) => RemoveFromLibrary(series, sil);
                         sil.PosterIcon.MouseUp += (s, ev) => SelectPosters(null, series);
-                        sil.Detail.MouseUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series)); };
+                        sil.Detail.MouseUp += (s, ev) => { MainWindow.SetPage(new SeriesDetails(series, new Library())); };
                         sil.Opacity = 0;
                         sil.Left.MouseLeftButtonUp += (s, ev) => MainWindow.SetPage(new SeriesEpisodes(series));
                         PanelList.Children.Add(sil);
@@ -123,8 +123,8 @@ namespace TVSPlayer
             });
         }
 
-        private void RemoveFromLibrary(Series series, FrameworkElement element) {
-            MessageBoxResult result = MessageBox.Show("This will delete Series from library.\n\nDo you also want to delete the files?","Warning",MessageBoxButton.YesNoCancel,MessageBoxImage.Question);
+        private async void RemoveFromLibrary(Series series, FrameworkElement element) {
+            MessageBoxResult result = await MessageBox.Show("This will delete Series from library.\n\nDo you also want to delete the files?","Warning",MessageBoxButtons.YesNoCancel);
             if (result != MessageBoxResult.Cancel) {
                 Database.RemoveSeries(series.id);
                 while (true) {
@@ -219,7 +219,7 @@ namespace TVSPlayer
                 List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
                 foreach (Episode e in li) {
                     if (!String.IsNullOrEmpty(e.firstAired)) {
-                        DateTime dt = DateTime.ParseExact(e.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture);
+                        DateTime dt = DateTime.ParseExact(e.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).AddDays(1);
                         if (dt < DateTime.Now) {
                             ep = e;
                             break;
@@ -280,7 +280,7 @@ namespace TVSPlayer
                 List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
                 foreach (Episode e in li) {
                     if (!String.IsNullOrEmpty(e.firstAired)) {
-                        DateTime dt = DateTime.ParseExact(e.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        DateTime dt = DateTime.ParseExact(e.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1);
                         if (dt < DateTime.Now) {
                             ep = e;
                             break;

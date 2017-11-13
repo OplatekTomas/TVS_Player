@@ -16,7 +16,7 @@
     </UserControl.Resources>
     <Grid Loaded="Grid_Loaded">
         
-        <ScrollViewer CanContentScroll="False" x:Name="ScrollView" PreviewMouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp" PreviewMouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown" PreviewMouseMove="scrollViewer_PreviewMouseMove" SizeChanged="ScrollView_SizeChanged" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled" Margin="0,0">
+        <ScrollViewer CanContentScroll="False" x:Name="ScrollView" PreviewMouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp" PreviewMouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown" PreviewMouseMove="scrollViewer_PreviewMouseMove" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled" Margin="0,0">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
             </ScrollViewer.Resources>

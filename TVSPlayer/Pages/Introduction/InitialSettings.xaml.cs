@@ -119,8 +119,8 @@ namespace TVSPlayer {
             CacheFolder.Text = "";
         }
 
-        private void AutoDownload_Checked(object sender, RoutedEventArgs e) {
-            MessageBoxResult res = MessageBox.Show("This feature will download new episodes using torrent.\nDepending on where you live this might be illegal in your country.\nI am not responsible for your actions.\n\n Are you sure you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        private async void AutoDownload_Checked(object sender, RoutedEventArgs e) {
+            MessageBoxResult res = await MessageBox.Show("This feature will download new episodes using torrent.\nDepending on where you live this might be illegal in your country.\nI am not responsible for your actions.\n\n Are you sure you want to continue?", "Warning", MessageBoxButtons.YesNoCancel);
             if (res == MessageBoxResult.Yes) {
                 CacheFolder.IsEnabled = true;
                 Storyboard sb = (Storyboard)FindResource("ShowButton");
@@ -141,13 +141,13 @@ namespace TVSPlayer {
             sbOp.Begin(CacheSelect);
         }
 
-        private void Continue_MouseUp(object sender, MouseButtonEventArgs e) {
+        private async void Continue_MouseUp(object sender, MouseButtonEventArgs e) {
             if (DoChecks()) {
                 SaveLocations();
                 MainWindow.RemovePage();
                 MainWindow.AddPage(new StartUp());
             } else {
-                MessageBox.Show("Either some directory does not exist or some of the directories are the same");
+                await MessageBox.Show("Either some directory does not exist or some of the directories are the same");
             }
         }
 

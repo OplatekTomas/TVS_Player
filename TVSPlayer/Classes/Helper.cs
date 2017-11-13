@@ -26,6 +26,13 @@ namespace TVSPlayer {
             }
             return name;
         }
+        public static string GenerateName(Episode episode) {
+            if (episode.airedSeason < 10) {
+                return episode.airedEpisodeNumber < 10 ? "S0" + episode.airedSeason + "E0" + episode.airedEpisodeNumber : "S0" + episode.airedSeason + "E" + episode.airedEpisodeNumber;
+            } else {
+                return episode.airedEpisodeNumber < 10 ? "S" + episode.airedSeason + "E0" + episode.airedEpisodeNumber : "S" + episode.airedSeason + "E" + episode.airedEpisodeNumber;
+            }
+        }
 
 
     }

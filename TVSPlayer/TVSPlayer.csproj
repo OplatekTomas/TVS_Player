@@ -116,6 +116,12 @@
     <Compile Include="Classes\PageCustomization.cs" />
     <Compile Include="Classes\Renamer.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="Controls\MessageBox\MessageBox.xaml.cs">
+      <DependentUpon>MessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Episodes\EpisodeButtons.xaml.cs">
+      <DependentUpon>EpisodeButtons.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Other\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
@@ -161,7 +167,7 @@
     <Compile Include="Controls\SeriesWithFolder.xaml.cs">
       <DependentUpon>SeriesWithFolder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SearchSingleShow.xaml.cs">
+    <Compile Include="Pages\Other\SearchSingleShow.xaml.cs">
       <DependentUpon>SearchSingleShow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SeriesWithoutFolder.xaml.cs">
@@ -170,7 +176,7 @@
     <Compile Include="Controls\SeriesWithoutFolderLibCreation.xaml.cs">
       <DependentUpon>SeriesWithoutFolderLibCreation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ProgressBarPage.xaml.cs">
+    <Compile Include="Pages\Other\ProgressBarPage.xaml.cs">
       <DependentUpon>ProgressBarPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShowDetailsFromApi.xaml.cs">
@@ -205,6 +211,14 @@
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ActorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MessageBox\MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Episodes\EpisodeButtons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -280,7 +294,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SearchSingleShow.xaml">
+    <Page Include="Pages\Other\SearchSingleShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,7 +306,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ProgressBarPage.xaml">
+    <Page Include="Pages\Other\ProgressBarPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

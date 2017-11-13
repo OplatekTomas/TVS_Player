@@ -94,5 +94,17 @@ namespace TVSPlayer.Properties {
                 this["Volume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EpisodeSort {
+            get {
+                return ((bool)(this["EpisodeSort"]));
+            }
+            set {
+                this["EpisodeSort"] = value;
+            }
+        }
     }
 }
