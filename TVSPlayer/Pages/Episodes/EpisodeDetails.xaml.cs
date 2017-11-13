@@ -150,5 +150,23 @@ namespace TVSPlayer
             }
             MainWindow.RemovePage();
         }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
+        private void Remove_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var ep = Database.GetEpisode((int)episode.seriesId, episode.id);
+            foreach (var file in ep.files) {
+                if (File.Exists(file.NewName)) {
+                    File.Delete(file.NewName);
+                }
+            }
+            ep.files = new List<ScannedFile>();
+        }
     }
 }

@@ -20,7 +20,7 @@
                             <DropShadowEffect BlurRadius="10" Opacity="0.5" />
                         </Image.Effect>
                     </Image>
-                    <Grid Margin="10,0,0,35" VerticalAlignment="Bottom" Background="#01000000">
+                    <Grid Margin="10,0,0,35" VerticalAlignment="Bottom" Background="#01000000" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Grid x:Name="Play" Margin="7,0" ToolTip="Plays local file" MouseLeftButtonUp="Play_MouseLeftButtonUp">
                                 <Image Source="/Icons/ico-play-light.png" Width="30" />
@@ -31,7 +31,7 @@
                             <Grid x:Name="Stream" Margin="7,0" ToolTip="Streams episode using torrent">
                                 <Image Source="/Icons/ico-broadcast-light.png" Width="30" />
                             </Grid>
-                            <Grid x:Name="Remove" Margin="7,0" ToolTip="Deletes all files for episode">
+                            <Grid x:Name="Remove" Margin="7,0" ToolTip="Deletes all files for episode" MouseLeftButtonUp="Remove_MouseLeftButtonUp">
                                 <Image Source="/Icons/ico-remove-light.png" Width="27" />
                             </Grid>
                         </StackPanel>
@@ -48,14 +48,14 @@
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Directors:" />
                     <TextBlock Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Downloaded:" />
                 </StackPanel>
-                <StackPanel Margin="30,0,0,0" VerticalAlignment="Center">
+                <StackPanel Margin="30,0,0,0" MaxWidth="250" VerticalAlignment="Center">
                     <TextBlock x:Name="EpisodeName" TextDecorations="Underline" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode name: " MouseLeftButtonDown="EPName_MouseLeftButtonUp" />
                     <TextBlock x:Name="Season" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Season: " />
                     <TextBlock x:Name="Episode" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Episode: " />
                     <TextBlock x:Name="Rating" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Rating:" />
                     <TextBlock x:Name="Airdate" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Air date:" />
-                    <TextBlock x:Name="Writers" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
-                    <TextBlock x:Name="Directors" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Directors:" />
+                    <TextBlock x:Name="Writers" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
+                    <TextBlock x:Name="Directors" Margin="0,3" FontSize="16" TextTrimming="CharacterEllipsis" Foreground="#F5F5F5" Text="Directors:" />
                     <TextBlock x:Name="Downloaded" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="No" />
                 </StackPanel>
                 <Grid Margin="40,95" MinWidth="300" Width="{Binding ActualWidth, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/2.3}">

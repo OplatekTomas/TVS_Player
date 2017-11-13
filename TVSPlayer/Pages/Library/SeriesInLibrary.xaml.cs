@@ -31,7 +31,7 @@ namespace TVSPlayer
         bool showing = false;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            PosterImage.ToolTip = series.seriesName;
+            //PosterImage.ToolTip = series.seriesName;
         }
 
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
@@ -66,5 +66,14 @@ namespace TVSPlayer
             sb.Begin(DetailsGrid);
         }
 
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+            Show();
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+            Hide();
+        }
     }
 }

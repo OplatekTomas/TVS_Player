@@ -39,11 +39,13 @@ namespace TVSPlayer {
         }
 
         private void ThumbImage_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
             var sb = (Storyboard)FindResource("OpacityUp");
             sb.Begin(CoverGrid);
         }
 
         private void ThumbImage_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
             var sb = (Storyboard)FindResource("OpacityDown");
             sb.Begin(CoverGrid);
         }

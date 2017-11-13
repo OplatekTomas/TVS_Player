@@ -446,8 +446,8 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            TorrentDownloader downloader = new TorrentDownloader(await Torrent.SearchSingle(Database.GetSeries(121361), Database.GetEpisode(121361, 7, 7, true), TorrentQuality.Standart));
-            await downloader.Download();
+            NotificationSender s = new NotificationSender("Test", "Notification");
+            s.Show();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
