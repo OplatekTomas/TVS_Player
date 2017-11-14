@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,17 +31,19 @@ namespace TVSPlayer {
             this.series = series;
         }
         public Series series;
-        
+
         bool hasBackground = false;
 
+        List<EpisodeSearch> searchValues = new List<EpisodeSearch>();
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            MainWindow.SetPage(new Library()); 
+            MainWindow.SetPage(new Library());
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization pg = new PageCustomization();
             pg.Buttons = new EpisodeButtons(this);
+            pg.SearchBarEvent += (s, ev) => Search();
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
@@ -48,9 +51,37 @@ namespace TVSPlayer {
             Task.Run(() => LoadInfo());
         }
 
+
+        private void Search() {
+            List<EpisodeSearch> results = new List<EpisodeSearch>();
+            string text = MainWindow.GetSearchBarText().ToLower();
+            if (!string.IsNullOrEmpty(text)) { 
+                foreach (var item in searchValues) {
+                    if (item.episodeText.Contains(text) | item.seasonText.Contains(text) | item.fullName.Contains(text) | text.Contains(item.seasonText) | text.Contains(item.episodeText) | text.Contains(item.fullName)) {
+                        results.Add(item);
+                    }
+                }
+            }
+        }
+
+        private void GenerateSearch(List<Episode> episodes) {
+            episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString())).ToList();
+            foreach (var episode in episodes) {
+                List<string> parts = Helper.GenerateName(episode).Split('E').ToList();
+                EpisodeSearch ep = new EpisodeSearch() {
+                    episode = episode,
+                    seasonText = parts[0].ToLower(),
+                    episodeText = ("E" + parts[1]).ToLower(),
+                    fullName = episode.episodeName.ToLower()
+                };
+                searchValues.Add(ep);
+            }
+        }
+
         private async void LoadInfo() {
             BitmapImage bmp = await Database.GetSelectedPoster(series.id);
             List<Episode> list = Database.GetEpisodes(series.id);
+            GenerateSearch(list);
             var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
             int episodeCount, downloadedEpisodes, seasonsCount;
             episodeCount = downloadedEpisodes = seasonsCount = 0;
@@ -64,7 +95,7 @@ namespace TVSPlayer {
                 if (ep.files.Count > 0) {
                     downloadedEpisodes++;
                 }
-            }         
+            }
             Dispatcher.Invoke(() => {
                 DefaultPoster.Source = bmp;
                 if (nextEpisode != null) {
@@ -72,8 +103,8 @@ namespace TVSPlayer {
                 } else {
                     NextDate.Text = "-";
                 }
-                if (!String.IsNullOrEmpty(series.firstAired)){
-                    Premiered.Text = DateTime.ParseExact(series.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                if (!String.IsNullOrEmpty(series.firstAired)) {
+                    Premiered.Text = DateTime.ParseExact(series.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
                 }
                 genres.Text = "";
                 for (int i = 0; i < series.genre.Count; i++) {
@@ -109,14 +140,14 @@ namespace TVSPlayer {
                 } else {
                     BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
                 }
-            },DispatcherPriority.Send);          
+            }, DispatcherPriority.Send);
         }
         public void LoadSeasons() {
             List<Episode> eps = Database.GetEpisodes(series.id);
             List<List<Episode>> sorted = new List<List<Episode>>();
 
             for (int i = 1; ; i++) {
-                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
+                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
                 if (Properties.Settings.Default.EpisodeSort) list.Reverse();
                 if (list.Count != 0) {
                     sorted.Add(list);
@@ -133,7 +164,7 @@ namespace TVSPlayer {
                     text.Foreground = (Brush)FindResource("TextColor");
                     text.Margin = new Thickness(0, 0, 0, 10);
                     text.Text = "Season " + (list[0].airedSeason);
-                    SeasonView sv = new SeasonView(list,series,this);
+                    SeasonView sv = new SeasonView(list, series, this);
                     //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
                     sv.ScrollView.PreviewMouseWheel += (s, ev) => {
                         if (ev.Delta > 0) {
@@ -175,7 +206,7 @@ namespace TVSPlayer {
             }
             FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
             if (info != null) {
-               return list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+                return list.Where(x => x.NewName == info.FullName).FirstOrDefault();
             }
             return null;
         }
@@ -189,6 +220,13 @@ namespace TVSPlayer {
                 Thread.Sleep(500);
             });
             MainWindow.AddPage(new LocalPlayer(series, ep, GetFileToPlay(ep, series)));
+        }
+
+        private class EpisodeSearch{
+            public Episode episode;
+            public string seasonText;
+            public string episodeText;
+            public string fullName;
         }
     }
 }
