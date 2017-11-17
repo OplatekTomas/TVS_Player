@@ -52,6 +52,10 @@ namespace TVSPlayer {
         }
 
         private void CoverGrid_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            RightClickEvent();
+        }
+
+        public void RightClickEvent() {
             var sb = (Storyboard)FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
@@ -61,7 +65,7 @@ namespace TVSPlayer {
                 EpisodeDetails epDetails = new EpisodeDetails(episode);
                 epDetails.Opacity = 0;
                 epDetails.Height = 400;
-                epDetails.BackIcon.MouseUp += (se, eve) => Remove(epDetails); 
+                epDetails.BackIcon.MouseUp += (se, eve) => Remove(epDetails);
                 epDetails.ScrollView.PreviewMouseWheel += (se, eve) => {
                     if (eve.Delta > 0) {
                         episodeView.ScrollView.LineUp();
@@ -83,7 +87,6 @@ namespace TVSPlayer {
                 clone.Begin((FrameworkElement)episodeView.DetailsGrid.Children[1]);
             }
             episodeView.ScrollView.ScrollToTop();
-
         }
 
         private void Remove(EpisodeDetails details) {

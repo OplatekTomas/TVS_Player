@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 using static TVS.API.Episode;
 
@@ -39,36 +40,32 @@ namespace TVSPlayer {
             MainWindow.SetPage(new Library());
         }
 
-        private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            await Task.Run(async() => {
+        private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            Task.Run(async () => {
                 foreach (Episode ep in episodes) {
-                    await Task.Run(async () => {
-                        Episode episode = Database.GetEpisode(series.id, ep.id, true);
-                        BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
-                        Dispatcher.Invoke(() => {
-                            EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
-                            epv.Width = 230;
-                            epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
-                            epv.Opacity = 0;
-                            epv.ThumbImage.Source = bmp;
-                            epv.Margin = new Thickness(5, 0, 10, 0);
-                            Panel.Children.Add(epv);
-                            Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                            sb.Begin(epv);
-                        });
-                    });
-                    Thread.Sleep(25);
+                    Episode episode = Database.GetEpisode(series.id, ep.id, true);
+                    BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
+                    Dispatcher.Invoke(() => {
+                        EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
+                        epv.Width = 230;
+                        epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode,epv);
+                        epv.Opacity = 0;
+                        epv.ThumbImage.Source = bmp;
+                        epv.Margin = new Thickness(5, 0, 10, 0);
+                        Panel.Children.Add(epv);
+                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
+                        sb.Begin(epv);
+                    }, DispatcherPriority.Send);
                 }
             });
-           
         }
 
-        private async void CoverGridMouseUp(Episode episode) {
-            if (!isScrolling) {
-                EpisodeViewMouseLeftUp(series, episode);
+        private async void CoverGridMouseUp(Episode episode,EpisodeView epv) {
+            if (!isScrolling && !(await EpisodeViewMouseLeftUp(series, episode))) {
+                epv.RightClickEvent();
             }         
         }
-        public async static void EpisodeViewMouseLeftUp(Series series,Episode episode) {
+        public async static Task<bool> EpisodeViewMouseLeftUp(Series series,Episode episode) {
             List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
             foreach (var item in episode.files) {
                 if (item.Type == Episode.ScannedFile.FileType.Video) {
@@ -89,6 +86,9 @@ namespace TVSPlayer {
                     Thread.Sleep(500);
                 });
                 MainWindow.AddPage(new LocalPlayer(series, episode, sf));
+                return true;
+            } else {
+                return false;
             }
         }
 

@@ -67,7 +67,11 @@ namespace TVSPlayer {
                     EpisodeView epv = new EpisodeView(episode, true, this);
                     epv.EpisodeNumber.Text = "Season: " + ep.airedSeason;
                     epv.RightSideText.Text = "Episode: " + ep.airedEpisodeNumber;
-                    epv.CoverGrid.PreviewMouseLeftButtonUp += (s, ev) => SeasonView.EpisodeViewMouseLeftUp(series, ep);
+                    epv.CoverGrid.PreviewMouseLeftButtonUp += async (s, ev) => {
+                        if (!(await SeasonView.EpisodeViewMouseLeftUp(series, ep))) {
+                            epv.RightClickEvent();
+                        }
+                    };
                     epv.Width = 210;
                     epv.Height = 169;
                     epv.ThumbImage.Source = bmp;
@@ -173,7 +177,6 @@ namespace TVSPlayer {
 
         }
 
-
         private async void LoadBackground() {
             BitmapImage bmp = await Database.GetFanArt(series.id);
             Dispatcher.Invoke(() => {
@@ -190,6 +193,7 @@ namespace TVSPlayer {
                 }
             }, DispatcherPriority.Send);
         }
+
         public void LoadSeasons() {
             List<Episode> eps = Database.GetEpisodes(series.id);
             List<List<Episode>> sorted = new List<List<Episode>>();
@@ -214,23 +218,25 @@ namespace TVSPlayer {
                     text.Text = "Season " + (list[0].airedSeason);
                     SeasonView sv = new SeasonView(list, series, this);
                     //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
-                    sv.ScrollView.PreviewMouseWheel += (s, ev) => {
-                        if (ev.Delta > 0) {
-                            ScrollView.LineUp();
-                            ScrollView.LineUp();
-                            ScrollView.LineUp();
-                        } else {
-                            ScrollView.LineDown();
-                            ScrollView.LineDown();
-                            ScrollView.LineDown();
-                        }
-                    };
+                    sv.ScrollView.PreviewMouseWheel += (s, ev) => Scroll(ev);
                     sv.Height = 195;
                     sv.Margin = new Thickness(0, 0, 25, 20);
                     SecondPanel.Children.Add(text);
                     SecondPanel.Children.Add(sv);
                 }
             }, DispatcherPriority.Send);
+        }
+
+        private void Scroll(MouseWheelEventArgs ev) {
+            if (ev.Delta > 0) {
+                ScrollView.LineUp();
+                ScrollView.LineUp();
+                ScrollView.LineUp();
+            } else {
+                ScrollView.LineDown();
+                ScrollView.LineDown();
+                ScrollView.LineDown();
+            }
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e) {
