@@ -79,6 +79,7 @@
                     </Grid>
                 </Grid>
                 <StackPanel x:Name="SecondPanel" />
+                <WrapPanel x:Name="SearchResultPanel" Margin="10,0" />
             </StackPanel>
         </ScrollViewer>
 

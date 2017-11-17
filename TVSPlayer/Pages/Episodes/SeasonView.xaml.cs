@@ -43,8 +43,8 @@ namespace TVSPlayer {
             await Task.Run(async() => {
                 foreach (Episode ep in episodes) {
                     await Task.Run(async () => {
-                        BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
                         Episode episode = Database.GetEpisode(series.id, ep.id, true);
+                        BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
                         Dispatcher.Invoke(() => {
                             EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
                             epv.Width = 230;
@@ -65,28 +65,31 @@ namespace TVSPlayer {
 
         private async void CoverGridMouseUp(Episode episode) {
             if (!isScrolling) {
-                List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
-                foreach (var item in episode.files) {
-                    if (item.Type == Episode.ScannedFile.FileType.Video) {
-                        list.Add(item);
-                    }
-                }
-                List<FileInfo> infoList = new List<FileInfo>();
-                foreach (var item in list) {
-                    infoList.Add(new FileInfo(item.NewName));
-                }
-                FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
-                if (info != null) {
-                    ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
-                    //Used to release as many resources as possible to give all rendering power to video playback
-                    MainWindow.SetPage(new BlankPage());
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                    await Task.Run(() => {
-                        Thread.Sleep(500);
-                    });
-                    MainWindow.AddPage(new LocalPlayer(series, episode,sf));
-                }
+                EpisodeViewMouseLeftUp(series, episode);
             }         
+        }
+        public async static void EpisodeViewMouseLeftUp(Series series,Episode episode) {
+            List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+            foreach (var item in episode.files) {
+                if (item.Type == Episode.ScannedFile.FileType.Video) {
+                    list.Add(item);
+                }
+            }
+            List<FileInfo> infoList = new List<FileInfo>();
+            foreach (var item in list) {
+                infoList.Add(new FileInfo(item.NewName));
+            }
+            FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
+            if (info != null) {
+                ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+                //Used to release as many resources as possible to give all rendering power to video playback
+                MainWindow.SetPage(new BlankPage());
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                await Task.Run(() => {
+                    Thread.Sleep(500);
+                });
+                MainWindow.AddPage(new LocalPlayer(series, episode, sf));
+            }
         }
 
         private async Task<BitmapImage> LoadThumb(Episode episode) {

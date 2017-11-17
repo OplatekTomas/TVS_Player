@@ -34,7 +34,7 @@ namespace TVSPlayer {
 
         bool hasBackground = false;
 
-        List<EpisodeSearch> searchValues = new List<EpisodeSearch>();
+        Dictionary<Episode, string> searchValues = new Dictionary<Episode, string>();
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.SetPage(new Library());
@@ -43,7 +43,7 @@ namespace TVSPlayer {
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization pg = new PageCustomization();
             pg.Buttons = new EpisodeButtons(this);
-            pg.SearchBarEvent += (s, ev) => Search();
+            pg.SearchBarEvent += async (s, ev) => { await Search(); };
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
@@ -52,29 +52,77 @@ namespace TVSPlayer {
         }
 
 
-        private void Search() {
-            List<EpisodeSearch> results = new List<EpisodeSearch>();
+        private async Task Search() {
+            SearchResultPanel.Children.Clear();
             string text = MainWindow.GetSearchBarText().ToLower();
-            if (!string.IsNullOrEmpty(text)) { 
-                foreach (var item in searchValues) {
-                    if (item.episodeText.Contains(text) | item.seasonText.Contains(text) | item.fullName.Contains(text) | text.Contains(item.seasonText) | text.Contains(item.episodeText) | text.Contains(item.fullName)) {
-                        results.Add(item);
-                    }
+            text = text.Trim();
+            if (!String.IsNullOrEmpty(text)) {
+                SearchResultPanel.Visibility = Visibility.Visible;
+                SecondPanel.Visibility = Visibility.Collapsed;
+                var eps = GoThroughValues(text);
+                List<UIElement> list = new List<UIElement>();
+                foreach (var ep in eps) {
+                    Episode episode = Database.GetEpisode(series.id, ep.id, true);
+                    BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
+                    EpisodeView epv = new EpisodeView(episode, true, this);
+                    epv.EpisodeNumber.Text = "Season: " + ep.airedSeason;
+                    epv.RightSideText.Text = "Episode: " + ep.airedEpisodeNumber;
+                    epv.CoverGrid.PreviewMouseLeftButtonUp += (s, ev) => SeasonView.EpisodeViewMouseLeftUp(series, ep);
+                    epv.Width = 210;
+                    epv.Height = 169;
+                    epv.ThumbImage.Source = bmp;
+                    epv.Margin = new Thickness(10);
+                    SearchResultPanel.Children.Add(epv);
                 }
+            } else {
+                SearchResultPanel.Visibility = Visibility.Collapsed;
+                SecondPanel.Visibility = Visibility.Visible;
             }
         }
 
+        private List<Episode> GoThroughValues(string text) {
+            List<Episode> eps = searchValues.Keys.ToList();
+            var result = new List<Episode>();
+            Match seasonRgx = new Regex("s[0-9]?[0-9]", RegexOptions.IgnoreCase).Match(text);
+            Match episodeRgx = new Regex("e[0-9]?[0-9]", RegexOptions.IgnoreCase).Match(text);
+            if (seasonRgx.Success) {
+                result = eps.Where(x => GetSeasonsOrEpisodes(seasonRgx.Value).Contains((int)x.airedSeason)).ToList();
+                eps = result.Count > 0 ? result : eps;
+                text = text.Replace(seasonRgx.Value, "");
+            }
+            if (episodeRgx.Success) {
+                result = eps.Where(x => GetSeasonsOrEpisodes(episodeRgx.Value).Contains((int)x.airedEpisodeNumber)).ToList();
+                eps = result.Count > 0 ? result : eps;
+                text = text.Replace(episodeRgx.Value, "");
+            }
+            //Removes whitespace at start and end. Replaces all other whitespaces with single space
+            text = text.Trim();
+            text = Regex.Replace(text, @"\s+", " ");
+            eps = eps.Where(x => x.episodeName.ToLower().Contains(text)).ToList();
+            return eps;
+        }
+
+        private List<int> GetSeasonsOrEpisodes(string text) {
+            List<int> seasons = new List<int>();
+            int season = Int32.Parse(text.Remove(0, 1));
+            if (text.Length >= 3) {
+                return new List<int>() { season };
+            }
+            if (season == 0) {
+                return new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            }
+            for (int i = 0; i < 100; i++) {
+                if (i.ToString()[0] == season.ToString()[0]) {
+                    seasons.Add(i);
+                }
+            }
+            return seasons;
+        }
+
         private void GenerateSearch(List<Episode> episodes) {
-            episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString())).ToList();
+            episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString()) && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
             foreach (var episode in episodes) {
-                List<string> parts = Helper.GenerateName(episode).Split('E').ToList();
-                EpisodeSearch ep = new EpisodeSearch() {
-                    episode = episode,
-                    seasonText = parts[0].ToLower(),
-                    episodeText = ("E" + parts[1]).ToLower(),
-                    fullName = episode.episodeName.ToLower()
-                };
-                searchValues.Add(ep);
+                searchValues.Add(episode, episode.episodeName);
             }
         }
 
@@ -222,11 +270,5 @@ namespace TVSPlayer {
             MainWindow.AddPage(new LocalPlayer(series, ep, GetFileToPlay(ep, series)));
         }
 
-        private class EpisodeSearch{
-            public Episode episode;
-            public string seasonText;
-            public string episodeText;
-            public string fullName;
-        }
     }
 }

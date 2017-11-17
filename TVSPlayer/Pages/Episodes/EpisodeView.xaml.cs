@@ -35,7 +35,8 @@ namespace TVSPlayer {
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             EpisodeName.Text = episode.episodeName;
-            EpisodeNumber.Text = "Episode: " + episode.airedEpisodeNumber;
+            if(EpisodeNumber.Text == "Sample")
+                EpisodeNumber.Text = "Episode: " + episode.airedEpisodeNumber;
         }
 
         private void ThumbImage_MouseEnter(object sender, MouseEventArgs e) {
@@ -50,7 +51,7 @@ namespace TVSPlayer {
             sb.Begin(CoverGrid);
         }
 
-        private async void CoverGrid_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+        private void CoverGrid_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
             var sb = (Storyboard)FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
@@ -95,5 +96,6 @@ namespace TVSPlayer {
             };
             clone.Begin(details);
         }
+
     }
 }
