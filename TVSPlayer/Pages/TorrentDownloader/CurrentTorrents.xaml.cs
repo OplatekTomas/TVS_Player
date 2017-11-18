@@ -26,29 +26,10 @@ namespace TVSPlayer {
         Dictionary<TorrentUserControl, TorrentDownloader> userControls = new Dictionary<TorrentUserControl, TorrentDownloader>();
 
         private void Panel_Loaded(object sender, RoutedEventArgs e) {
-            InitialRender();
-            Update();
+            Render();
         }
-
-
-        private void InitialRender() {
-            Task.Run(() => {
-                foreach (var item in TorrentDownloader.torrents) {
-                    Dispatcher.Invoke(() => {
-                        TorrentUserControl tcu = new TorrentUserControl(item);
-                        tcu.Height = 75;
-                        tcu.Opacity = 0;
-                        Panel.Children.Add(tcu);
-                        userControls.Add(tcu,item);
-                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                        sb.Begin(tcu);
-                    });
-                    Thread.Sleep(16);
-                }
-            });
-        }
-
-        private void Update() {
+      
+        private void Render() {
             Task.Run(() => {
                 bool isLoaded = true;
                 Dispatcher.Invoke(() => { isLoaded = IsLoaded; });

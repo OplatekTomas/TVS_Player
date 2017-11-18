@@ -27,30 +27,11 @@ namespace TVSPlayer {
         Dictionary<FinishedTorrentUserControl, Torrent> uielements = new Dictionary<FinishedTorrentUserControl, Torrent>();
 
         private async void Panel_Loaded(object sender, RoutedEventArgs e) {
-            await InitialRender();
-            Update();
-            await InitialRenderFinished();
-            UpdateFinished();
+            Render();
+            RenderOnFinished();
         }
 
-        private async Task InitialRender() {
-            await Task.Run(() => {
-                foreach (var item in TorrentDownloader.torrents) {
-                    Dispatcher.Invoke(() => {
-                        TorrentUserControl tcu = new TorrentUserControl(item);
-                        tcu.Height = 75;
-                        tcu.Opacity = 0;
-                        Panel.Children.Add(tcu);
-                        userControls.Add(tcu, item);
-                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                        sb.Begin(tcu);
-                    });
-                    Thread.Sleep(16);
-                }
-            });
-        }
-
-        private void Update() {
+        private void Render() {
             Task.Run(() => {
                 bool isLoaded = true;
                 Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
@@ -99,24 +80,7 @@ namespace TVSPlayer {
             });
         }
 
-        private async Task InitialRenderFinished() {
-            await Task.Run(() => {
-                foreach (var item in TorrentDatabase.Load().Where(x => x.HasFinished = true)) {
-                    Dispatcher.Invoke(() => {
-                        FinishedTorrentUserControl tcu = new FinishedTorrentUserControl(item);
-                        tcu.Height = 75;
-                        tcu.Opacity = 0;
-                        SecondPanel.Children.Add(tcu);
-                        uielements.Add(tcu, item);
-                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                        sb.Begin(tcu);
-                    });
-                    Thread.Sleep(16);
-                }
-            });
-        }
-
-        private void UpdateFinished() {
+        private void RenderOnFinished() {
             Task.Run(() => {
                 bool isLoaded = true;
                 Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
