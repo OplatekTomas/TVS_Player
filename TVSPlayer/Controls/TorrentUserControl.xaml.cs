@@ -41,8 +41,8 @@ namespace TVSPlayer {
             TorrentName.Text = downloader.Handle.TorrentFile != null ? downloader.Handle.TorrentFile.Name : "Downloading metadata";
             DownloadSpeed.Text = GetSpeed(downloader.Status.DownloadRate);
             UploadSpeed.Text = GetSpeed(downloader.Status.UploadRate);
-            SetValue(downloader.Status.Progress*100);
-            Percentage.Text = Math.Round(Progress.Value,1) + "%";
+            SetValue(downloader.Status.Progress);
+            Percentage.Text = Math.Round(Progress.Value * 100, 1) + "%";
         }
 
         public void SetValue(double value) {

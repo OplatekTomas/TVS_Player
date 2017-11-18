@@ -87,18 +87,7 @@ namespace TVSPlayer {
                             esr.Clickable.PreviewMouseUp += (s, ev) => SearchClickEvent(episode);
                             esr.QuestionIcon.PreviewMouseUp += (s, ev) => EpisodeView.RightClickEvent(this, episode);
                             esr.Height = 60;
-                            list.Add(esr);
-                        },DispatcherPriority.Send);             
-                    }
-                    foreach (var item in list) {
-                        if (isRunning) {
-                            Dispatcher.Invoke(() => {
-                                SearchResultPanel.Children.Clear();
-                            }, DispatcherPriority.Send);
-                            break;
-                        }
-                        Dispatcher.Invoke(() => {
-                            SearchResultPanel.Children.Add(item);
+                            SearchResultPanel.Children.Add(esr);
                         }, DispatcherPriority.Send);
                     }
                 } else {
@@ -107,8 +96,7 @@ namespace TVSPlayer {
                         SecondPanel.Visibility = Visibility.Visible;
                     });
                 }
-            });
-         
+            });    
         }
 
         private async void SearchClickEvent(Episode episode) {

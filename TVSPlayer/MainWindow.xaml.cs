@@ -52,6 +52,7 @@ namespace TVSPlayer {
         private void HiderGrid_MouseUp(object sender, MouseButtonEventArgs e) {
             HideSideBar();
         }
+
         private void HideSideBar() {
             StartAnimation("HideSideMenu", SideMenu);
             StartAnimation("OpacityDown", HiderGrid);
@@ -453,22 +454,39 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
+            SetPage(new DownloadsView());
+            await Task.Run(async () => {
+                Episode episode = Episode.GetEpisode(6369840);
+                Torrent torrent = await Torrent.SearchSingle(Series.GetSeries(295685), episode);
+                TorrentDownloader torrentDownloader = new TorrentDownloader(torrent);
+                await torrentDownloader.Download();
+                NotificationSender se = new NotificationSender("Download started", Helper.GenerateName(Database.GetSeries((int)episode.seriesId), episode));
+                se.ClickedEvent += (s, ev) => {
+                    Dispatcher.Invoke(() => {
+                        MainWindow.RemoveAllPages();
+                        MainWindow.SetPage(new DownloadsView());
+                    }, DispatcherPriority.Send);
+
+                };
+                se.Show();
+            });
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (true) {
-                if (!Directory.Exists(Helper.data)) {
-                    AddPage(new Intro());
-                    Settings.LastCheck = DateTime.Now;
-                } else {
-                    SetPage(new Library());
-                    Settings.Load();
-                    UpdateDatabase.StartUpdateBackground();
-                }
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
+                } else { 
+                    if (!Directory.Exists(Helper.data)) {
+                        AddPage(new Intro());
+                        Settings.LastCheck = DateTime.Now;
+                    } else {
+                        SetPage(new Library());
+                        Settings.Load();
+                        UpdateDatabase.StartUpdateBackground();
+                        TorrentDownloader.ContinueUnfinished();
+                    }
                 }
-
             } else {
                 Settings.Load();
                 TestFunctions();

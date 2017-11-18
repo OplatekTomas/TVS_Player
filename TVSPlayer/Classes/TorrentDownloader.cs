@@ -38,14 +38,14 @@ namespace TVSPlayer {
             torrentParams.SavePath = GetDownloadPath();
             torrentParams.Url = TorrentSource.Magnet;
             Handle = TorrentSession.AddTorrent(torrentParams);
-            Handle.SequentialDownload = sequential;
+            Handle.SequentialDownload = TorrentSource.IsSequential = sequential;
             Status = Handle.QueryStatus();
             torrents.Add(this);
+            TorrentDatabase.Save(TorrentSource);
             return this;
         }
 
-
-        public async Task<TorrentStatus> Stream() {
+        public async Task<TorrentStatus> Stream(bool showStream = true) {
             //await Download(true);
             return Status;
         }
@@ -63,9 +63,13 @@ namespace TVSPlayer {
                     torrents.Add(downloader);
                     Thread.Sleep(1000);
                 }
-                torrents.Remove(downloader);
+                TorrentSource.Name = Handle.TorrentFile.Name;
+                Episode ep = Database.GetEpisode(TorrentSource.Series.id, TorrentSource.Episode.id);
                 Renamer.MoveAfterDownload(this);
-                Episode ep = Database.GetEpisode(TorrentSource.Series.id,TorrentSource.Episode.id);
+                TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+                TorrentSource.HasFinished = true;
+                TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);
+                torrents.Remove(downloader);
                 if (ShowNotificationWhenFinished) {
                     NotificationSender sender = new NotificationSender("Download finished", Helper.GenerateName(TorrentSource.Series,TorrentSource.Episode));
                     sender.ClickedEvent += (s, ev) => {
@@ -118,6 +122,20 @@ namespace TVSPlayer {
                     return dialog.SelectedPath;
                 } else {
                     return downloads;
+                }
+            }
+        }
+
+        public async static void ContinueUnfinished() {
+            var torrents = TorrentDatabase.Load();
+            torrents = torrents.Where(x => x.HasFinished == false).ToList();
+            foreach (var item in torrents) {
+                TorrentDatabase.Remove(item.Magnet);
+                TorrentDownloader downloader = new TorrentDownloader(item);
+                if (item.IsSequential) {
+                    await downloader.Stream(false);
+                } else {
+                    await downloader.Download();
                 }
             }
         }

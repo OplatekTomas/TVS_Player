@@ -103,6 +103,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\TorrentDatabase.cs" />
+    <Compile Include="Controls\FinishedTorrentUserControl.xaml.cs">
+      <DependentUpon>FinishedTorrentUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TorrentDownloader\AllTorrents.xaml.cs">
+      <DependentUpon>AllTorrents.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\APIExtensions.cs" />
     <Compile Include="Classes\Torrent.cs" />
     <Compile Include="Classes\TorrentDownloader.cs" />
@@ -119,13 +126,19 @@
     <Compile Include="Controls\MessageBox\MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TorrentDownloader\FinishedTorrents.xaml.cs">
+      <DependentUpon>FinishedTorrents.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Episodes\EpisodeSearchResult.xaml.cs">
       <DependentUpon>EpisodeSearchResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Episodes\EpisodeButtons.xaml.cs">
       <DependentUpon>EpisodeButtons.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Other\DownloadsView.xaml.cs">
+    <Compile Include="Pages\TorrentDownloader\CurrentTorrents.xaml.cs">
+      <DependentUpon>CurrentTorrents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TorrentDownloader\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\VideoPlayer\BlankPage.xaml.cs">
@@ -213,11 +226,23 @@
     <Compile Include="Controls\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\FinishedTorrentUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TorrentDownloader\AllTorrents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ActorUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MessageBox\MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TorrentDownloader\FinishedTorrents.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,7 +254,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Other\DownloadsView.xaml">
+    <Page Include="Pages\TorrentDownloader\CurrentTorrents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TorrentDownloader\DownloadsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

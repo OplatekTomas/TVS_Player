@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="TVSPlayer.FinishedTorrentUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="75" d:DesignWidth="1280">
+    <Grid Loaded="Grid_Loaded">
+        <Grid.Style>
+            <Style>
+                <Setter Property="Grid.Background" Value="{DynamicResource BackgroundBrush}"/>
+                <Style.Triggers>
+                    <Trigger Property="Grid.IsMouseOver" Value="True">
+                        <Setter Property="Grid.Background" Value="{DynamicResource LighterBG}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid Margin="0,0,75,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <TextBlock Foreground="{DynamicResource TextColor}" x:Name="TorrentName" Text="Sample text" FontSize="20" Margin="20,10" TextTrimming="CharacterEllipsis" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="EpisodeInfo" Grid.Column="0" VerticalAlignment="Center" Margin="30,0,10,0" Text="Sample" FontSize="16" Foreground="{DynamicResource TextColor}" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="SeriesInfo" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" Text="Sample" FontSize="16" Foreground="{DynamicResource TextColor}" TextTrimming="CharacterEllipsis" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" MouseLeftButtonUp="SeriesInfo_MouseLeftButtonUp" />
+                <TextBlock x:Name="Quality" Grid.Column="2" VerticalAlignment="Center" Margin="10,0" Text="Sample" FontSize="16" Foreground="{DynamicResource TextColor}" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="Size" Grid.Column="3" VerticalAlignment="Center" Margin="10,0" Text="Sample" FontSize="16" Foreground="{DynamicResource TextColor}" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="FinishedAt" Grid.Column="4" VerticalAlignment="Center" Margin="10,0" Text="Sample" FontSize="16" Foreground="{DynamicResource TextColor}" TextTrimming="CharacterEllipsis" />
+
+            </Grid>
+        </Grid>
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,0">
+            <Grid HorizontalAlignment="Right" x:Name="Remove" MouseLeftButtonUp="Remove_MouseLeftButtonUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                <Image Source="{DynamicResource RemoveIcon}" Height="22" />
+            </Grid>
+            <Grid Margin="35,0" x:Name="Play" PreviewMouseLeftButtonUp="Play_PreviewMouseLeftButtonUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                <Image Source="{DynamicResource PlayIcon}" Height="25" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

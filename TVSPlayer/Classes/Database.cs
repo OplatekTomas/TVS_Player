@@ -67,12 +67,7 @@ namespace TVSPlayer {
         /// <param name="series"></param>
         /// <returns></returns>
         private static void SeriesAdder(List<Series> series) {
-            string original = ReadFromFile(Helper.data + "Series.tvsp");
-            List<Series> list = new List<Series>();
-            if (!String.IsNullOrEmpty(original)) {
-                JArray jo = JArray.Parse(original);          
-                list = jo.ToObject<List<Series>>();
-            }
+            var list = GetSeries();
             list.AddRange(series);
             foreach (Series s in series) {
                 if(!Directory.Exists(db + s.id)) Directory.CreateDirectory(db + s.id);
@@ -670,7 +665,7 @@ namespace TVSPlayer {
         /// </summary>
         /// <param name="obj">object to convert</param>
         /// <returns>string formated as json</returns>
-        private static string ObjectToJson(object obj) {
+        public static string ObjectToJson(object obj) {
             return JsonConvert.SerializeObject(obj);
         }
 

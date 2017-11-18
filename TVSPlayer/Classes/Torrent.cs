@@ -1,4 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +21,14 @@ namespace TVSPlayer {
         public int Leech { get; set; }
         public string Size { get; set; }
         public Series Series { get; set; }
+        public int seriesId;
+        public int episodeId;
         public Episode Episode { get; set; }
+        public bool HasFinished { get; set; } = false;
+        public bool IsSequential { get; set; } = false;
+        public string FinishedAt { get; set; } = "-";
 
+       
 
         public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
             return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
