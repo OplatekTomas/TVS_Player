@@ -15,9 +15,14 @@
             </ScrollViewer.Resources>
             <Grid>
                 <Grid Height="400" VerticalAlignment="Top">
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="To be added..." FontSize="50" Foreground="{DynamicResource TextColor}" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                    </Grid>
                 </Grid>
-                <Grid  Margin="0,400,0,0">
+                <Grid Margin="0,400,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="1*"/>

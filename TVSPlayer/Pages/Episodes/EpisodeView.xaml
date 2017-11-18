@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="185" d:DesignWidth="230" MouseRightButtonUp="CoverGrid_PreviewMouseRightButtonUp">
+             d:DesignHeight="185" d:DesignWidth="230" MouseRightButtonUp="CoverGrid_PreviewMouseRightButtonUp" VirtualizingPanel.IsVirtualizing="True">
     <Grid Loaded="Grid_Loaded">
-        <Image MaxHeight="124" HorizontalAlignment="Left" MaxWidth="220"  VerticalAlignment="Top" x:Name="ThumbImage" Margin="5,0" RenderOptions.BitmapScalingMode="LowQuality" />
+        <Image MaxHeight="124" VirtualizingPanel.IsVirtualizing="True" HorizontalAlignment="Left" MaxWidth="220"  VerticalAlignment="Top" x:Name="ThumbImage" Margin="5,0" RenderOptions.BitmapScalingMode="LowQuality" />
         <Grid Height="124" MouseEnter="ThumbImage_MouseEnter"  MouseLeave="ThumbImage_MouseLeave" HorizontalAlignment="Left" Width="220"  VerticalAlignment="Top" Margin="5,0" Background="{DynamicResource TransparentStaticBG}" x:Name="CoverGrid" Opacity="0">
             <Image Source="/Icons/ico-play-light.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" />
         </Grid>

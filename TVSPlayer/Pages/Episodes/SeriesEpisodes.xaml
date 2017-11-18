@@ -78,7 +78,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-                <StackPanel x:Name="SecondPanel" />
+                <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" x:Name="SecondPanel" VirtualizationMode="Recycling" />
                 <StackPanel x:Name="SearchResultPanel" Margin="10,0" />
             </StackPanel>
         </ScrollViewer>

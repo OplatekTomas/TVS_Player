@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="1280">
+             d:DesignHeight="150" d:DesignWidth="1280" VirtualizingPanel.IsVirtualizing="True">
     <UserControl.Resources>
         <Storyboard x:Key="GoWide">
             <DoubleAnimation To="60" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
@@ -20,9 +20,9 @@
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
             </ScrollViewer.Resources>
-            <StackPanel Orientation="Horizontal" x:Name="Panel">
+            <VirtualizingStackPanel  VirtualizingPanel.IsVirtualizing="True" Orientation="Horizontal" x:Name="Panel" VirtualizationMode="Recycling">
 
-            </StackPanel>
+            </VirtualizingStackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>
