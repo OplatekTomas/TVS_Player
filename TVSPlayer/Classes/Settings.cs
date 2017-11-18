@@ -68,6 +68,12 @@ namespace TVSPlayer {
                 Directory.CreateDirectory(Path.GetDirectoryName(filename));
             }
         }
+        public static object GetDefault(Type type) {
+            if (type.IsValueType) {
+                return Activator.CreateInstance(type);
+            }
+            return null;
+        }
 
         public static void Load() {
             Type type = typeof(Settings);
@@ -89,12 +95,16 @@ namespace TVSPlayer {
                         if (a.GetLength(0) != fields.Length) { }
                         int i = 0;
                         foreach (FieldInfo field in fields) {
-                            if (field.Name == (a[i, 0] as string)) {
-                                try {
-                                    field.SetValue(null, Convert.ChangeType(a[i, 1], field.FieldType));
-                                } catch (InvalidCastException e) {
-                                    field.SetValue(null,(TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
+                            try {
+                                if (field.Name == (a[i, 0] as string)) {
+                                    try {
+                                        field.SetValue(null, Convert.ChangeType(a[i, 1], field.FieldType));
+                                    } catch (InvalidCastException e) {
+                                        field.SetValue(null, (TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
+                                    }
                                 }
+                            } catch (IndexOutOfRangeException) {
+                                field.SetValue(null, GetDefault(field.FieldType));
                             }
                             i++;
                         };

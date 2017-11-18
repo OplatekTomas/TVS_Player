@@ -43,7 +43,7 @@ namespace TVSPlayer {
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization pg = new PageCustomization();
             pg.Buttons = new EpisodeButtons(this);
-            pg.SearchBarEvent += async (s, ev) => { await Search(); };
+            pg.SearchBarEvent += async (s, ev) => { Search(); };
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
             Task.Run(() => LoadBackground());
@@ -51,36 +51,69 @@ namespace TVSPlayer {
             Task.Run(() => LoadInfo());
         }
 
-
-        private async Task Search() {
+        bool isRunning = false;
+        Task searchTask;
+        private async void Search() {
             SearchResultPanel.Children.Clear();
             string text = MainWindow.GetSearchBarText().ToLower();
-            text = text.Trim();
-            if (!String.IsNullOrEmpty(text)) {
-                SearchResultPanel.Visibility = Visibility.Visible;
-                SecondPanel.Visibility = Visibility.Collapsed;
-                var eps = GoThroughValues(text);
-                List<UIElement> list = new List<UIElement>();
-                foreach (var ep in eps) {
-                    Episode episode = Database.GetEpisode(series.id, ep.id, true);
-                    BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
-                    EpisodeView epv = new EpisodeView(episode, true, this);
-                    epv.EpisodeNumber.Text = "Season: " + ep.airedSeason;
-                    epv.RightSideText.Text = "Episode: " + ep.airedEpisodeNumber;
-                    epv.CoverGrid.PreviewMouseLeftButtonUp += async (s, ev) => {
-                        if (!(await SeasonView.EpisodeViewMouseLeftUp(series, ep))) {
-                            epv.RightClickEvent();
+            if (searchTask != null && searchTask.Status != TaskStatus.RanToCompletion) {
+                isRunning = true;
+                await Task.Run(() => {
+                    Thread.Sleep(10);
+                });
+            }
+            isRunning = false;
+            searchTask = Task.Run( async() => {
+                text = text.Trim();
+                if (!String.IsNullOrEmpty(text)) {
+                    Dispatcher.Invoke(() => {
+                        SearchResultPanel.Visibility = Visibility.Visible;
+                        SecondPanel.Visibility = Visibility.Collapsed;
+                    });
+                    var eps = GoThroughValues(text);
+                    List<UIElement> list = new List<UIElement>();
+                    foreach (var ep in eps) {
+                        if (isRunning) {
+                            list = new List<UIElement>();
+                            Dispatcher.Invoke(() => {
+                                SearchResultPanel.Children.Clear();
+                            }, DispatcherPriority.Send);
+                            break;
                         }
-                    };
-                    epv.Width = 210;
-                    epv.Height = 169;
-                    epv.ThumbImage.Source = bmp;
-                    epv.Margin = new Thickness(10);
-                    SearchResultPanel.Children.Add(epv);
+                        Episode episode = Database.GetEpisode(series.id, ep.id, true);
+                        Dispatcher.Invoke(() => {
+                            EpisodeSearchResult esr = new EpisodeSearchResult(episode);
+                            esr.PlayIcon.PreviewMouseLeftButtonUp += (s, ev) => SearchClickEvent(episode);
+                            esr.Clickable.PreviewMouseUp += (s, ev) => SearchClickEvent(episode);
+                            esr.QuestionIcon.PreviewMouseUp += (s, ev) => EpisodeView.RightClickEvent(this, episode);
+                            esr.Height = 60;
+                            list.Add(esr);
+                        },DispatcherPriority.Send);             
+                    }
+                    foreach (var item in list) {
+                        if (isRunning) {
+                            Dispatcher.Invoke(() => {
+                                SearchResultPanel.Children.Clear();
+                            }, DispatcherPriority.Send);
+                            break;
+                        }
+                        Dispatcher.Invoke(() => {
+                            SearchResultPanel.Children.Add(item);
+                        }, DispatcherPriority.Send);
+                    }
+                } else {
+                    Dispatcher.Invoke(() => {
+                        SearchResultPanel.Visibility = Visibility.Collapsed;
+                        SecondPanel.Visibility = Visibility.Visible;
+                    });
                 }
-            } else {
-                SearchResultPanel.Visibility = Visibility.Collapsed;
-                SecondPanel.Visibility = Visibility.Visible;
+            });
+         
+        }
+
+        private async void SearchClickEvent(Episode episode) {
+            if (!(await SeasonView.EpisodeViewMouseLeftUp(series, episode))) {
+                EpisodeView.RightClickEvent(this, episode);
             }
         }
 

@@ -119,6 +119,9 @@
     <Compile Include="Controls\MessageBox\MessageBox.xaml.cs">
       <DependentUpon>MessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Episodes\EpisodeSearchResult.xaml.cs">
+      <DependentUpon>EpisodeSearchResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Episodes\EpisodeButtons.xaml.cs">
       <DependentUpon>EpisodeButtons.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MessageBox\MessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Episodes\EpisodeSearchResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

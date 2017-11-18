@@ -13,6 +13,5 @@
         </Grid>
         <TextBlock TextTrimming="CharacterEllipsis" Text="" VerticalAlignment="Bottom"  Margin="10,23" FontWeight="Bold" FontSize="16" x:Name="EpisodeName" Foreground="{StaticResource TextColor}" />
         <TextBlock Text="Sample" VerticalAlignment="Bottom" Margin="10,0" FontSize="14"  x:Name="EpisodeNumber" Foreground="{StaticResource TextColor}" />
-        <TextBlock  VerticalAlignment="Bottom" HorizontalAlignment="Left"  Margin="80,0,0,0" FontSize="14" x:Name="RightSideText" Foreground="{StaticResource TextColor}" />
     </Grid>
 </UserControl>

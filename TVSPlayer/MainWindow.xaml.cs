@@ -498,7 +498,7 @@ namespace TVSPlayer {
             Properties.Settings.Default.Save();
 
             if (videoPlayback) {
-                LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[BaseGrid.Children.Count - 1]).Content;
+                LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
                 player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
                 player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                 Database.EditEpisode(player.series.id, player.episode.id, player.episode);

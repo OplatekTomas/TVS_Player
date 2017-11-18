@@ -52,11 +52,11 @@ namespace TVSPlayer {
         }
 
         private void CoverGrid_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            RightClickEvent();
+            RightClickEvent(episodeView, episode);
         }
 
-        public void RightClickEvent() {
-            var sb = (Storyboard)FindResource("OpacityDown");
+        public static void RightClickEvent(SeriesEpisodes episodeView,Episode episode) {
+            var sb = (Storyboard)Application.Current.FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
                 if (episodeView.DetailsGrid.Children.Count == 2) {
@@ -65,7 +65,7 @@ namespace TVSPlayer {
                 EpisodeDetails epDetails = new EpisodeDetails(episode);
                 epDetails.Opacity = 0;
                 epDetails.Height = 400;
-                epDetails.BackIcon.MouseUp += (se, eve) => Remove(epDetails);
+                epDetails.BackIcon.MouseUp += (se, eve) => Remove(epDetails, episodeView);
                 epDetails.ScrollView.PreviewMouseWheel += (se, eve) => {
                     if (eve.Delta > 0) {
                         episodeView.ScrollView.LineUp();
@@ -78,7 +78,7 @@ namespace TVSPlayer {
                     }
                 };
                 episodeView.DetailsGrid.Children.Add(epDetails);
-                var sboard = (Storyboard)FindResource("OpacityUp");
+                var sboard = (Storyboard)Application.Current.FindResource("OpacityUp");
                 sboard.Begin(epDetails);
             };
             if (episodeView.DetailsGrid.Children.Count == 1) {
@@ -89,12 +89,12 @@ namespace TVSPlayer {
             episodeView.ScrollView.ScrollToTop();
         }
 
-        private void Remove(EpisodeDetails details) {
-            var sb = (Storyboard)FindResource("OpacityDown");
+        private static void Remove(EpisodeDetails details,SeriesEpisodes episodeView) {
+            var sb = (Storyboard)Application.Current.FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
                 episodeView.DetailsGrid.Children.Remove(details);
-                var sboard = (Storyboard)FindResource("OpacityUp");
+                var sboard = (Storyboard)Application.Current.FindResource("OpacityUp");
                 sboard.Begin(episodeView.SeriesDetails);
             };
             clone.Begin(details);

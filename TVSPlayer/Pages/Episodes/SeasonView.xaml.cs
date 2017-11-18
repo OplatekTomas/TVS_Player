@@ -48,7 +48,7 @@ namespace TVSPlayer {
                     Dispatcher.Invoke(() => {
                         EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
                         epv.Width = 230;
-                        epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode,epv);
+                        epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
                         epv.Opacity = 0;
                         epv.ThumbImage.Source = bmp;
                         epv.Margin = new Thickness(5, 0, 10, 0);
@@ -60,9 +60,9 @@ namespace TVSPlayer {
             });
         }
 
-        private async void CoverGridMouseUp(Episode episode,EpisodeView epv) {
+        private async void CoverGridMouseUp(Episode episode) {
             if (!isScrolling && !(await EpisodeViewMouseLeftUp(series, episode))) {
-                epv.RightClickEvent();
+                EpisodeView.RightClickEvent(seriesEpisodes, episode);
             }         
         }
         public async static Task<bool> EpisodeViewMouseLeftUp(Series series,Episode episode) {
