@@ -23,6 +23,7 @@ namespace TVSPlayer {
         public Series Series { get; set; }
         public int seriesId;
         public int episodeId;
+        public string URL { get; set; }
         public Episode Episode { get; set; }
         public bool HasFinished { get; set; } = false;
         public bool IsSequential { get; set; } = false;
@@ -59,7 +60,7 @@ namespace TVSPlayer {
                 foreach (HtmlNode row in rows) {
                     Torrent t = new Torrent();
                     t.Quality = TorrentQuality.Standart;
-                    t.Name = row.ChildNodes[1].InnerText;
+                    t.Name = row.ChildNodes[1].ChildNodes[1].InnerHtml;
                     if (t.Name.Contains("720p")) {
                         t.Quality = TorrentQuality.HD;
                     }
@@ -69,7 +70,7 @@ namespace TVSPlayer {
                     if (t.Name.Contains("2160p")) {
                         t.Quality = TorrentQuality.UHD;
                     }
-                    url = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
+                    t.URL = url = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
                     htmlDocument = htmlWeb.Load(url);
                     List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
                     t.Magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;

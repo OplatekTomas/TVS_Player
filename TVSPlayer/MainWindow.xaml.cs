@@ -485,6 +485,7 @@ namespace TVSPlayer {
                         Settings.Load();
                         UpdateDatabase.StartUpdateBackground();
                         TorrentDownloader.ContinueUnfinished();
+                        Settings.DownloadQuality = TorrentQuality.Standart;
                     }
                 }
             } else {

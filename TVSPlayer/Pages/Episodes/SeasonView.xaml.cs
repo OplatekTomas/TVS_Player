@@ -65,6 +65,7 @@ namespace TVSPlayer {
                 EpisodeView.RightClickEvent(seriesEpisodes, episode);
             }         
         }
+
         public async static Task<bool> EpisodeViewMouseLeftUp(Series series,Episode episode) {
             List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
             foreach (var item in episode.files) {
@@ -111,7 +112,6 @@ namespace TVSPlayer {
             hOff = ScrollView.HorizontalOffset;
             ScrollView.CaptureMouse();
         }
-
         private void scrollViewer_PreviewMouseMove(object sender, MouseEventArgs e) {
             if (ScrollView.IsMouseCaptured) {
                 ScrollView.ScrollToHorizontalOffset(hOff + (scrollMousePoint.X - e.GetPosition(ScrollView).X));

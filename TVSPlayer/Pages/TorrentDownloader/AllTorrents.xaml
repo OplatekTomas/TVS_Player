@@ -10,6 +10,6 @@
 
     <StackPanel>
         <StackPanel x:Name="Panel" Loaded="Panel_Loaded" />
-        <StackPanel x:Name="SecondPanel" />
+        <StackPanel x:Name="SecondPanel" Loaded="SecondPanel_Loaded" />
     </StackPanel>
 </Page>

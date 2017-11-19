@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,7 @@ namespace TVSPlayer
 {
     class UpdateDatabase {
         public async static Task Update() {
-            if (Settings.LastCheck.AddDays(1) < DateTime.Now) { 
+            if (Settings.LastCheck.AddDays(1).Date < DateTime.Now.Date) { 
                 await Task.Run( () => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
@@ -19,16 +21,58 @@ namespace TVSPlayer
                         UpdateFullSeries(id);
                     }
                 });
+                await DownloadLastWeek();
                 Settings.LastCheck = DateTime.Now;
             }
         }
 
+        private async static Task DownloadLastWeek() {
+            await Task.Run(async() => {
+                var series = Database.GetSeries().Where(x=>x.autoDownload);
+                var episodes = new Dictionary<Series,List<Episode>>();
+                foreach (var se in series) {
+                    //adds episodes that dont have files and have been released in last week
+                    episodes.Add(se, Database.GetEpisodes(se.id).Where(x => x.files.Count == 0 && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-7) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList());
+                }
+                foreach (var combination in episodes) {
+                    foreach (var episode in combination.Value) {
+                        if (TorrentDatabase.Load().Where(x => x.Episode.id == episode.id).ToList().Count == 0) {
+                            TorrentDownloader downloader = new TorrentDownloader(await Torrent.SearchSingle(combination.Key, episode, Settings.DownloadQuality));
+                            await downloader.Download();
+                        }
+                    }
+
+                }
+            });
+        }
+
+        public async static Task CheckFiles() {
+            await Task.Run(() => { 
+                foreach (var series in Database.GetSeries()) {
+                    foreach (var episode in Database.GetEpisodes(series.id)) {
+                        for (int i = episode.files.Count - 1;i>=0;i--) {
+                            if (!File.Exists(episode.files[i].NewName)) {
+                                episode.files.RemoveAt(i);
+                                Database.EditEpisode(series.id, episode.id, episode);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         public async static void StartUpdateBackground() {
+            await CheckFiles();
             await Update();
+            Timer checktimer = new Timer(600000);
+            checktimer.Elapsed += async (s, ev) => await CheckFiles();
+            checktimer.Start();
             Timer timer = new Timer(3600000);
-            timer.Elapsed += (s, ev) => Update();
+            timer.Elapsed += async (s, ev) => await Update();
             timer.Start();
         }
+
+
 
         private static void UpdateFullSeries(int id) {
             Task.Run(() => {

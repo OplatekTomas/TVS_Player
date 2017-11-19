@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TVSPlayer"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="MessageBox">
+      Title="MessageBox" Focusable="True">
     <Grid>
         <Grid Background="{DynamicResource TransparentStaticBG}" MouseLeftButtonUp="Close_MouseLeftButtonUp" SizeChanged="Grid_SizeChanged" />
         <Grid Loaded="Grid_Loaded">
@@ -26,7 +26,7 @@
                     <TextBlock HorizontalAlignment="Left" x:Name="Content" TextWrapping="NoWrap" FontSize="15" VerticalAlignment="Center" Margin="10" Foreground="{DynamicResource TextColor}" Text="" />
                 </Grid>
                 <Grid x:Name="Bottom" Grid.Row="2" Margin="0,0,5,5" >
-                    <Grid x:Name="NoButtons" Opacity="0">
+                    <Grid x:Name="NoButtons" Opacity="1">
                         <TextBlock Text="Continue" Foreground="{DynamicResource TextColor}" MouseLeftButtonUp="Close_MouseLeftButtonUp" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" FontSize="14" HorizontalAlignment="Right" Margin="35,0" VerticalAlignment="Center" />
                         <Grid Margin="0,5,5,0" x:Name="Next" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" MouseLeftButtonUp="Close_MouseLeftButtonUp" HorizontalAlignment="Right">
                             <Image Source="{DynamicResource ForwardIcon}" />

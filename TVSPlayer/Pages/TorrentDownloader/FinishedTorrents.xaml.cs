@@ -43,9 +43,9 @@ namespace TVSPlayer {
                         foreach (var item in changes) {
                             Dispatcher.Invoke(() => {
                                 FinishedTorrentUserControl tcu = new FinishedTorrentUserControl(item);
-                                tcu.Height = 75;
+                                tcu.Height = 65;
                                 tcu.Opacity = 0;
-                                tcu.Margin = new Thickness(10, 0, 0, 0);
+                                tcu.Margin = new Thickness(10, 0, 10, 0);
                                 Panel.Children.Add(tcu);
                                 var sb = (Storyboard)FindResource("OpacityUp");
                                 sb.Begin(tcu);

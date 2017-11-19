@@ -42,10 +42,14 @@ namespace TVSPlayer {
             List<Torrent> eps = Load();
             try {
                 eps.Remove(eps.Single(se => se.Magnet == magnet));
+                Series series = newTorrent.Series;
+                Episode episode = newTorrent.Episode;
                 newTorrent.Series = null;
                 newTorrent.Episode = null;
                 eps.Add(newTorrent);
                 string text = JsonConvert.SerializeObject(eps);
+                newTorrent.Series = series;
+                newTorrent.Episode = episode;
                 Database.WriteToFile(Helper.data + "Torrents.tvsp", text);
             } catch (Exception) { }
         }

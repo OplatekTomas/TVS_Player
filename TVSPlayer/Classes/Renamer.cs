@@ -245,7 +245,6 @@ namespace TVSPlayer {
 
         }
  
-
         private static List<string> FilterSeries(Series series, List<string> files) {
             List<string> newFiles = new List<string>();
             foreach (string file in files) {

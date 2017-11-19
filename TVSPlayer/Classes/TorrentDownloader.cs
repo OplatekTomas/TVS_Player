@@ -31,7 +31,7 @@ namespace TVSPlayer {
         public Session TorrentSession { get; set; }
         public bool ShowNotificationWhenFinished { get; set; } = true;
 
-        private TorrentDownloader Download(bool sequential) {
+        private TorrentDownloader DownloadLocal(bool sequential) {
             TorrentSession = new Session();
             TorrentSession.ListenOn(6881, 6889);
             var torrentParams = new AddTorrentParams();
@@ -46,43 +46,89 @@ namespace TVSPlayer {
         }
 
         public async Task<TorrentStatus> Stream(bool showStream = true) {
-            //await Download(true);
+            //await DownloadLocal(true);
             return Status;
         }
 
         public async Task<TorrentDownloader> Download() {
-            var downloader = await Task.Run(() => {
-                return Download(false);
-            });
+            var torrs = torrents;
+            torrs = torrs.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
+            if (torrs.Count == 0) {
+                var downloader = await Task.Run(() => {
+                    return DownloadLocal(false);
+                });
 #pragma warning disable CS4014
-            Task.Run(() => {
-                while (!downloader.Status.IsSeeding) {
-                    Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
-                    torrents.Remove(downloader);
-                    downloader.Status = downloader.Handle.QueryStatus();
-                    torrents.Add(downloader);
-                    Thread.Sleep(1000);
-                }
-                TorrentSource.Name = Handle.TorrentFile.Name;
-                Episode ep = Database.GetEpisode(TorrentSource.Series.id, TorrentSource.Episode.id);
-                Renamer.MoveAfterDownload(this);
-                TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
-                TorrentSource.HasFinished = true;
-                TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);
-                torrents.Remove(downloader);
-                if (ShowNotificationWhenFinished) {
-                    NotificationSender sender = new NotificationSender("Download finished", Helper.GenerateName(TorrentSource.Series,TorrentSource.Episode));
-                    sender.ClickedEvent += (s, ev) => {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            PlayFile(TorrentSource.Series, ep);
-                        },DispatcherPriority.Send);
-                    };
-                    sender.Show();
-                }
-            });
+                Task.Run(() => {
+                    while (Handle != null &&!downloader.Status.IsSeeding) {
+                        Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
+                        downloader.Status = downloader.Handle.QueryStatus();
+                        Thread.Sleep(1000);
+                    }
+                    if (downloader.Status != null) {
+                        TorrentSource.Name = Handle.TorrentFile.Name;
+                        Episode ep = Database.GetEpisode(TorrentSource.Series.id, TorrentSource.Episode.id);
+                        Renamer.MoveAfterDownload(this);
+                        TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+                        TorrentSource.HasFinished = true;
+                        TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);
+                        torrents.Remove(downloader);
+                        if (ShowNotificationWhenFinished) {
+                            NotificationSender sender = new NotificationSender("Download finished", Helper.GenerateName(TorrentSource.Series, TorrentSource.Episode));
+                            sender.ClickedEvent += (s, ev) => {
+                                Application.Current.Dispatcher.Invoke(() => {
+                                    PlayFile(TorrentSource.Series, ep);
+                                }, DispatcherPriority.Send);
+                            };
+                            sender.Show();
+                        }
+                    }
+                });
 #pragma warning restore CS4014
 
-            return downloader;
+                return downloader;
+            } else {
+                await MessageBox.Show("Torrent is already downloading");
+                return null;
+            }
+        }
+
+        public bool IsPaused { get; set; } = false;
+        public async void Pause() {
+            IsPaused = true;
+            await Task.Run(() => {
+                while (IsPaused) {
+                    Handle.Pause();
+                    Thread.Sleep(100);
+                }
+            });
+        }
+
+        public void Resume() {
+            IsPaused = false;
+        }
+
+        public async void Remove(bool deleteFiles) {
+            MainWindow.AddPage(new PleaseWait());
+            string path = Status.SavePath + "\\" + Status.Name;
+            string magnet = TorrentSource.Magnet;
+            await Task.Run(() => {
+                TorrentSession.Dispose();
+                Status.Dispose();
+                Handle.Dispose();
+                Handle = null;
+                Status = null;
+                TorrentSession = null;
+            });
+            torrents.Remove(this);
+            TorrentDatabase.Remove(magnet);
+            if (deleteFiles) {
+                if (Directory.Exists(path)) {
+                    Directory.Delete(path, true);
+                } else if (File.Exists(path)) {
+                    File.Delete(path);
+                }
+            }
+            MainWindow.RemovePage();
         }
 
         public async void PlayFile(Series series, Episode episode) {

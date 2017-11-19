@@ -226,6 +226,9 @@
     <Compile Include="Controls\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TorrentDownloader\TorrentSearchResult.xaml.cs">
+      <DependentUpon>TorrentSearchResult.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\FinishedTorrentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -399,6 +402,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TorrentUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TorrentDownloader\TorrentSearchResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

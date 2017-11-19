@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="75" d:DesignWidth="1280">
+             d:DesignHeight="65" d:DesignWidth="1280">
     <Grid Loaded="Grid_Loaded">
         <Grid.Style>
             <Style>
@@ -18,7 +18,7 @@
             </Style>
         </Grid.Style>
         <Grid Margin="0,0,75,0">
-            <TextBlock Foreground="{DynamicResource TextColor}" x:Name="TorrentName" Text="Sample text" FontSize="20" Margin="10" />
+            <TextBlock Foreground="{DynamicResource TextColor}" x:Name="TorrentName" Text="Sample text" FontSize="18" Margin="10,15" />
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,5,0">
                 <Image Height="15" Margin="0,2,0,0" Source="{DynamicResource ForwardIcon}" RenderTransformOrigin="0.5,0.5" >
                     <Image.RenderTransform>
@@ -41,11 +41,11 @@
             <ProgressBar x:Name="Progress" Foreground="{DynamicResource AccentColor}" Background="{DynamicResource LightestBG}" Maximum="1" Value="0" Height="5" BorderThickness="0" VerticalAlignment="Bottom" Margin="10"/>
         </Grid>
         <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,0">
-            <Grid HorizontalAlignment="Right" x:Name="Remove">
+            <Grid HorizontalAlignment="Right" x:Name="Remove" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Remove_MouseUp">
                 <Image Source="{DynamicResource RemoveIcon}" Height="22" />
             </Grid>
-            <Grid Margin="35,0" x:Name="Pause">
-                <Image Source="/Icons/ico-pause-light.png" Height="25" />
+            <Grid Margin="35,0" x:Name="Pause" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Pause_MouseUp">
+                <Image x:Name="PauseIcon" Source="/Icons/ico-pause-light.png" Height="25" />
             </Grid>
         </Grid>
 

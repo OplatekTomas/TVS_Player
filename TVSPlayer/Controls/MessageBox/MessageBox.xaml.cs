@@ -63,6 +63,7 @@ namespace TVSPlayer
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            Focus();
             Content.Text = TextContent;
             Header.Text = String.IsNullOrEmpty(HeaderText) ? "" : HeaderText;
             if (Buttons == MessageBoxButtons.YesNoCancel) {
