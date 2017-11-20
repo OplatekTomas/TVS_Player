@@ -261,6 +261,16 @@ namespace TVSPlayer {
             ((MainWindow)main).PageSetter(page);
             SetPageCustomization(new PageCustomization());
         }
+
+        public static void HideContent() {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).BaseGrid.Visibility = Visibility.Collapsed;
+        }
+
+        public static void ShowContent() {
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).BaseGrid.Visibility = Visibility.Visible;
+        }
         
         /// <summary>
         /// Sets stuff from the customization class

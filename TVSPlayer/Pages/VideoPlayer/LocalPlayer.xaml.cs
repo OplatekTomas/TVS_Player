@@ -39,6 +39,7 @@ namespace TVSPlayer
         DispatcherTimer positionUpdate = new DispatcherTimer();
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            MainWindow.HideContent();
             MainWindow.videoPlayback = true;
             PlayerPage.Focus();
             EpisodeName.Text = Helper.GenerateName(series, episode);
@@ -239,6 +240,7 @@ namespace TVSPlayer
         }
 
         private async void Return() {
+            MainWindow.ShowContent();
             PlayerPage.MouseMove -= Page_MouseMove;
             timer.Stop();
             MainWindow.videoPlayback = false;
