@@ -45,9 +45,21 @@ namespace TVSPlayer {
             return this;
         }
 
-        public async Task<TorrentStatus> Stream(bool showStream = true) {
-            //await DownloadLocal(true);
-            return Status;
+        public async Task<TorrentDownloader> Stream(bool showStream = true) {
+            var downloader = await Task.Run(() => {
+                return DownloadLocal(true);
+            });
+#pragma warning disable CS4014
+            Task.Run(() => {
+                while (Handle != null && !downloader.Status.IsSeeding) {
+                    Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
+                    downloader.Status = downloader.Handle.QueryStatus();
+                    Thread.Sleep(1000);
+                }
+            });
+#pragma warning restore CS4014
+            MainWindow.AddPage(new TorrentStreamer(downloader));
+            return downloader;
         }
 
         public async Task<TorrentDownloader> Download() {

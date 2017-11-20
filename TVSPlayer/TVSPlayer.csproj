@@ -229,6 +229,9 @@
     <Compile Include="Pages\TorrentDownloader\TorrentSearchResult.xaml.cs">
       <DependentUpon>TorrentSearchResult.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\VideoPlayer\TorrentStreamer.xaml.cs">
+      <DependentUpon>TorrentStreamer.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\FinishedTorrentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -409,6 +412,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\VideoPlayer\TorrentStreamer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -580,6 +587,7 @@
     <Content Include="boost_thread-vc120-mt-1_55.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Icons\reload.png" />
     <Content Include="torrent.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -23,6 +23,13 @@ namespace TVSPlayer {
             }
         }
 
+        public static void FindAndRenameInOther(Series series) {
+            List<ScannedFileInfo> temp = FindAndRenameInOthers(series);
+            foreach (ScannedFileInfo sfi in temp) {
+                Database.EditEpisode(series.id, sfi.episode.id, sfi.episode);
+            }
+        }
+
         public static void MoveAfterDownload(TorrentDownloader torrent) {
             List<string> files = new List<string>();
             string path = torrent.Status.SavePath + "\\" + torrent.Status.Name;
@@ -267,7 +274,7 @@ namespace TVSPlayer {
             return false;
         }
 
-        private static bool IsMatchToIdentifiers(string file) {
+        public static bool IsMatchToIdentifiers(string file) {
             Match season = new Regex("[s][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
             Match episode = new Regex("[e][0-9][0-9]", RegexOptions.IgnoreCase).Match(file);
             Match special = new Regex("[0-5][0-9][x][0-5][0-9]", RegexOptions.IgnoreCase).Match(file);

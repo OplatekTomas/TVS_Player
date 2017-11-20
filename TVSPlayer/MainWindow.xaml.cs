@@ -464,26 +464,12 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            SetPage(new DownloadsView());
-            await Task.Run(async () => {
-                Episode episode = Episode.GetEpisode(6369840);
-                Torrent torrent = await Torrent.SearchSingle(Series.GetSeries(295685), episode);
-                TorrentDownloader torrentDownloader = new TorrentDownloader(torrent);
-                await torrentDownloader.Download();
-                NotificationSender se = new NotificationSender("Download started", Helper.GenerateName(Database.GetSeries((int)episode.seriesId), episode));
-                se.ClickedEvent += (s, ev) => {
-                    Dispatcher.Invoke(() => {
-                        MainWindow.RemoveAllPages();
-                        MainWindow.SetPage(new DownloadsView());
-                    }, DispatcherPriority.Send);
-
-                };
-                se.Show();
-            });
+            TorrentDownloader td = new TorrentDownloader( await Torrent.SearchSingle(Database.GetSeries(295685), Database.GetEpisode(295685, 6319816),TorrentQuality.Standart));
+            td.Stream();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (false) {
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else { 
@@ -494,7 +480,7 @@ namespace TVSPlayer {
                         SetPage(new Library());
                         Settings.Load();
                         UpdateDatabase.StartUpdateBackground();
-                        TorrentDownloader.ContinueUnfinished();
+                       // TorrentDownloader.ContinueUnfinished();
                         Settings.DownloadQuality = TorrentQuality.Standart;
                     }
                 }

@@ -22,6 +22,11 @@ namespace TVSPlayer
                     }
                 });
                 await DownloadLastWeek();
+                await Task.Run(() => {
+                    foreach (Series series in Database.GetSeries()) {
+                        Renamer.FindAndRename(series);
+                    }
+                });
                 Settings.LastCheck = DateTime.Now;
             }
         }
@@ -72,20 +77,19 @@ namespace TVSPlayer
             timer.Start();
         }
 
-
-
-        private static void UpdateFullSeries(int id) {
-            Task.Run(() => {
-                UpdateSeries(id);
-                UpdateEpisodes(id);
-                UpdateEpisodes(id);
-                UpdateActors(id);
+        private async static Task UpdateFullSeries(int id) {
+            await Task.Run(() => {
+                List<Task> tasks = new List<Task>();
+                tasks.Add(UpdateSeries(id));
+                tasks.Add(UpdateEpisodes(id));
+                tasks.Add(UpdatePosters(id));
+                tasks.Add(UpdateActors(id));
+                tasks.WaitAll();
             });
-
         }
 
-        private static void UpdateSeries(int id) {
-            Task.Run(() => {
+        private static async Task UpdateSeries(int id) {
+            await Task.Run(() => {
                 var series = Database.GetSeries(id);
                 var newseries = Series.GetSeries(id);
                 if (series.Compare(newseries)) {
@@ -95,8 +99,8 @@ namespace TVSPlayer
             });
         }
 
-        private static void UpdateEpisodes(int id) {
-            Task.Run(() => {
+        private static async Task UpdateEpisodes(int id) {
+            await Task.Run(() => {
                 var list = Episode.GetEpisodes(id);
                 foreach (var episode in list) {
                     var ep = Database.GetEpisode(id, episode.id);
@@ -112,8 +116,8 @@ namespace TVSPlayer
             });
         }
 
-        private static void UpdateActors(int id) {
-            Task.Run(() => {
+        private static async Task UpdateActors(int id) {
+            await Task.Run(() => {
                 var list = Actor.GetActors(id);
                 foreach (var actor in list) {
                     var ac = Database.GetActor(id, actor.id);
@@ -130,8 +134,8 @@ namespace TVSPlayer
             });
         }
 
-        private static void UpdatePosters(int id) {
-            Task.Run(() => {
+        private static async Task UpdatePosters(int id) {
+            await Task.Run(() => {
                 var list = Poster.GetPosters(id);
                 foreach (var poster in list) {
                     var po = Database.GetPoster(id,poster.id);
