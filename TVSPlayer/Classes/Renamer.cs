@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TVS.API;
@@ -30,20 +31,30 @@ namespace TVSPlayer {
             }
         }
 
-        public static void MoveAfterDownload(TorrentDownloader torrent) {
+        public async static void MoveAfterDownload(TorrentDownloader torrent) {
             List<string> files = new List<string>();
             string path = torrent.Status.SavePath + "\\" + torrent.Status.Name;
-            torrent.TorrentSession.Dispose();
-            if (File.Exists(path)) {
-                Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\");
-                File.Move(path, Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\" + Path.GetFileName(path));
-                path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\";
+            TorrentDownloader.TorrentSession.RemoveTorrent(torrent.Handle);
+            bool moved = false;
+            while (!moved) { 
+                try {
+                    if (File.Exists(path)) {
+                        Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\");
+                        File.Move(path, Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\" + Path.GetFileName(path));
+                        path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\";
+                    }
+                    var list = Rename(GetSeriesFilesInfo(torrent.TorrentSource.Series, path));
+                    foreach (var item in list) {
+                        Database.EditEpisode(torrent.TorrentSource.Series.id, item.episode.id, item.episode);
+                    }
+                    Directory.Delete(path, true);
+                    moved = true;
+                } catch (IOException e) {
+                    await Task.Run(() => {
+                        Thread.Sleep(100);
+                    });
+                }
             }
-            var list = Rename(GetSeriesFilesInfo(torrent.TorrentSource.Series, path));
-            foreach (var item in list) {
-                Database.EditEpisode(torrent.TorrentSource.Series.id, item.episode.id, item.episode);
-            }
-            Directory.Delete(path, true);
         }
 
         private static List<ScannedFileInfo> FindAndRenameInLibrary(Series series) {

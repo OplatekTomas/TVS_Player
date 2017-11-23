@@ -28,14 +28,12 @@
                     </Image.RenderTransform>
                 </Image>
             </Grid>
-            <ProgressBar x:Name="BufferProgress" Height="4" Width="150" Background="White" HorizontalAlignment="Center" BorderThickness="0" Maximum="0.015" Foreground="{DynamicResource AccentColor}" Margin="0,80,0,0" />
         </Grid>
-        <Grid x:Name="BottomBar" Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="100" VerticalAlignment="Bottom">
+        <Grid x:Name="BottomBar" Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="70" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="11*"/>
             </Grid.RowDefinitions>
-            <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
             <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
             <Grid VerticalAlignment="Bottom" Grid.RowSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">

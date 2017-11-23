@@ -19,21 +19,26 @@ using System.Windows;
 namespace TVSPlayer {
     public class TorrentDownloader {
 
-        public static List<TorrentDownloader> torrents = new List<TorrentDownloader>();
-
+        /// <summary>
+        /// Default constructor for TorrentDownloader
+        /// </summary>
+        /// <param name="torrent">Torrent that is supposed to be downloaded</param>
         public TorrentDownloader(Torrent torrent) {
             TorrentSource = torrent;
         }
 
+        public static Session TorrentSession;
         public TorrentStatus Status { get; set; }
         public Torrent TorrentSource { get; set; }
         public TorrentHandle Handle { get; set; }
-        public Session TorrentSession { get; set; }
         public bool ShowNotificationWhenFinished { get; set; } = true;
+        private static List<TorrentDownloader> torrents = new List<TorrentDownloader>();
 
         private TorrentDownloader DownloadLocal(bool sequential) {
-            TorrentSession = new Session();
-            TorrentSession.ListenOn(6881, 6889);
+            if (TorrentSession == null) {
+                TorrentSession = new Session();
+                TorrentSession.ListenOn(6881, 6889);
+            }      
             var torrentParams = new AddTorrentParams();
             torrentParams.SavePath = GetDownloadPath();
             torrentParams.Url = TorrentSource.Magnet;
@@ -43,6 +48,10 @@ namespace TVSPlayer {
             torrents.Add(this);
             TorrentDatabase.Save(TorrentSource);
             return this;
+        }
+
+        public static List<TorrentDownloader> GetTorrents() {
+            return torrents;
         }
 
         public async Task<TorrentDownloader> Stream(bool showStream = true) {
@@ -63,8 +72,7 @@ namespace TVSPlayer {
         }
 
         public async Task<TorrentDownloader> Download() {
-            var torrs = torrents;
-            torrs = torrs.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
+            var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
             if (torrs.Count == 0) {
                 var downloader = await Task.Run(() => {
                     return DownloadLocal(false);
@@ -119,32 +127,16 @@ namespace TVSPlayer {
             IsPaused = false;
         }
 
-        public async void Remove(bool deleteFiles) {
-            MainWindow.AddPage(new PleaseWait());
-            string path = Status.SavePath + "\\" + Status.Name;
+        public void Remove(bool deleteFiles) {
             string magnet = TorrentSource.Magnet;
-            await Task.Run(() => {
-                TorrentSession.Dispose();
-                Status.Dispose();
-                Handle.Dispose();
-                Handle = null;
-                Status = null;
-                TorrentSession = null;
-            });
-            torrents.Remove(this);
+            TorrentSession.RemoveTorrent(Handle,deleteFiles);
             TorrentDatabase.Remove(magnet);
-            if (deleteFiles) {
-                if (Directory.Exists(path)) {
-                    Directory.Delete(path, true);
-                } else if (File.Exists(path)) {
-                    File.Delete(path);
-                }
-            }
-            MainWindow.RemovePage();
+            torrents.Remove(this);        
         }
 
         public async void PlayFile(Series series, Episode episode) {
             List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+            episode = Database.GetEpisode(series.id, episode.id);
             foreach (var item in episode.files) {
                 if (item.Type == Episode.ScannedFile.FileType.Video) {
                     list.Add(item);

@@ -32,7 +32,7 @@ namespace TVSPlayer {
 
         private async void Render() {
             while (IsLoaded) {
-                var list = TorrentDownloader.torrents;
+                var list = TorrentDownloader.GetTorrents();
                 if (list.Count > userControls.Count) {
                     var torrents = new List<Torrent>();
                     userControls.Values.ToList().ForEach(x => torrents.Add(x.TorrentSource));

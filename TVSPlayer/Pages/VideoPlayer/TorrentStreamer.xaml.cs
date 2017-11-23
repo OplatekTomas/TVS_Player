@@ -15,6 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace TVSPlayer {
     /// <summary>
@@ -27,38 +28,38 @@ namespace TVSPlayer {
         }
         TorrentDownloader downloader;
         string fileLenght;
+        string file;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
+            VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
+            VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             Focus();
-            while (downloader.Status.Progress < 0.025) {
+            Player.MediaOpened += (s, ev) => MediaOpenedEvent();
+            while (Player.MediaDuration == 0) {
                 Animate();
                 await Task.Run(() => {
                     Thread.Sleep(1080);
                 });
+                file = GetSource();
+                if (file != null && File.Exists(file)) {
+                    Player.Source = new Uri(file);
+                    Player.Stop();
+                }
             }
+            Player.MediaFailed += (s, ev) => MediaFailedEvent();
+            Player.MediaEnded += (s, ev) => MediaFinishedEvent();
             var sb = (Storyboard)FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
                 Middle.Visibility = Visibility.Collapsed;
             };
             sb.Begin(Middle);
-            string file = GetSource();
-            if (file != null) {
-                VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
-                VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
-                Player.MediaOpened += (s, ev) => MediaOpenedEvent();
-                Player.MediaFailed += (s, ev) => MediaFailedEvent();
-                Player.MediaEnded += (s, ev) => MediaFinishedEvent();
-                Player.Source = new Uri(file);
-            }
+
         }
 
         private void Animate() {
-            DoubleAnimation animation = new DoubleAnimation(downloader.Status.Progress, new TimeSpan(0, 0, 0, 0, 200));
-            animation.AccelerationRatio = animation.DecelerationRatio = .5;
-            BufferProgress.BeginAnimation(ProgressBar.ValueProperty, animation);
             Storyboard sb = (Storyboard)FindResource("Rotate");
             Storyboard temp = sb.Clone();
             temp.Completed += (s, e) => {
@@ -70,19 +71,19 @@ namespace TVSPlayer {
         DispatcherTimer positionUpdate = new DispatcherTimer();
         private void MediaOpenedEvent() {
             Player.Play();
+            if (positionUpdate.IsEnabled) {
+                positionUpdate.Stop();
+                positionUpdate = new DispatcherTimer();
+            }
             positionUpdate.Interval = new TimeSpan(0, 0, 1);
             positionUpdate.Tick += new EventHandler(UpdatePosition);
             positionUpdate.Start();
         }
 
-        private void UpdatePosition(object sender, EventArgs e) {
-            VideoSlider.Value = Player.MediaPosition;
-            long duration = Convert.ToInt64(Player.MediaDuration * (downloader.Status.Progress - 0.025));
-            VideoSlider.Maximum = duration;
-            CurrentTime.Text = GetTime(Player.MediaPosition) + "/" + GetTime(duration);
+        private async void UpdatePosition(object sender, EventArgs e) { 
+           
         }
-
-
+   
         private void MediaFailedEvent() {
 
         }
@@ -91,11 +92,11 @@ namespace TVSPlayer {
             string path = downloader.Status.SavePath + "\\" + downloader.Status.Name;
             if (File.Exists(path)) {
                 return path;
-            } else {
+            } else if (Directory.Exists(path)) {
                 var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
                 string[] fileExtension = new string[7] { ".mkv", ".m4v", ".avi", ".mp4", ".mov", ".wmv", ".flv" };
                 foreach (var file in files) {
-                    if (Renamer.IsMatchToIdentifiers(file) && fileExtension.Contains(Path.GetExtension(file).ToLower())){
+                    if (Renamer.IsMatchToIdentifiers(file) && fileExtension.Contains(Path.GetExtension(file).ToLower())) {
                         return file;
                     }
                 }
@@ -103,17 +104,21 @@ namespace TVSPlayer {
             return null;
         }
 
-        private void MediaFinishedEvent() {
-           // Return();
+        private async void MediaFinishedEvent() {
+            // Return();
+            if (Player.MediaDuration < Player.MediaPosition) {
+
+            } else {
+
+            }
         }
 
-        private string GetTime(long value) {
+        private string GetTime(float value) {
             int minutes, seconds, hours;
             minutes = seconds = hours = 0;
             value = value / 10000000;
             hours = Convert.ToInt32(Math.Floor((double)(value / 60 / 60)));
             minutes = Convert.ToInt32(Math.Floor((double)(value / 60 - 60 * hours)));
-
             seconds = Convert.ToInt32(Math.Floor((double)(value - ((60 * 60 * hours) + (60 * minutes)))));
             string hoursString = hours > 0 ? hours + ":" : "";
             string minutesString = minutes >= 10 ? minutes.ToString() + ":" : "0" + minutes + ":";
@@ -128,7 +133,6 @@ namespace TVSPlayer {
             contentUpdate = new DispatcherTimer();
             contentUpdate.Interval = new TimeSpan(0, 0, 0, 0, 500);
             contentUpdate.Tick += (s, ev) => {
-                Player.MediaPosition = Convert.ToInt64(VideoSlider.Value);
                 CurrentTime.Text = GetTime(Player.MediaPosition) + "/" + fileLenght;
             };
             contentUpdate.Start();
@@ -137,7 +141,6 @@ namespace TVSPlayer {
         }
 
         private void VideoSlider_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
-            Player.MediaPosition = Convert.ToInt64(VideoSlider.Value);
             contentUpdate.Stop();
             if (isPlaying) {
                 Player.Play();
@@ -224,8 +227,8 @@ namespace TVSPlayer {
             Return();
         }
 
-         //Yes I do know this can be simplified but that would result in slower pause and I do not want that
-         bool isPlaying = true;
+        //Yes I do know this can be simplified but that would result in slower pause and I do not want that
+        bool isPlaying = true;
         private void Pause() {
             if (isPlaying) {
                 Player.Pause();
@@ -251,7 +254,7 @@ namespace TVSPlayer {
             isPlaying = !isPlaying;
         }
 
-         double lastValue = 0.85;
+        double lastValue = 0.85;
         private void Mute() {
             if (Player.Volume == 0) {
                 Player.Volume = lastValue;
