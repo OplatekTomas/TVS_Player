@@ -32,6 +32,8 @@ namespace TVSPlayer {
         public Torrent TorrentSource { get; set; }
         public TorrentHandle Handle { get; set; }
         public bool ShowNotificationWhenFinished { get; set; } = true;
+        public bool IsPaused { get; set; } = false;
+
         private static List<TorrentDownloader> torrents = new List<TorrentDownloader>();
 
         private TorrentDownloader DownloadLocal(bool sequential) {
@@ -85,18 +87,12 @@ namespace TVSPlayer {
                         Thread.Sleep(1000);
                     }
                     if (downloader.Status != null) {
-                        TorrentSource.Name = Handle.TorrentFile.Name;
-                        Episode ep = Database.GetEpisode(TorrentSource.Series.id, TorrentSource.Episode.id);
-                        Renamer.MoveAfterDownload(this);
-                        TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
-                        TorrentSource.HasFinished = true;
-                        TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);
-                        torrents.Remove(downloader);
+                        StopAndMove();
                         if (ShowNotificationWhenFinished) {
                             NotificationSender sender = new NotificationSender("Download finished", Helper.GenerateName(TorrentSource.Series, TorrentSource.Episode));
                             sender.ClickedEvent += (s, ev) => {
                                 Application.Current.Dispatcher.Invoke(() => {
-                                    PlayFile(TorrentSource.Series, ep);
+                                    PlayFile(TorrentSource.Series, Database.GetEpisode(TorrentSource.Series.id, TorrentSource.Episode.id));
                                 }, DispatcherPriority.Send);
                             };
                             sender.Show();
@@ -112,7 +108,8 @@ namespace TVSPlayer {
             }
         }
 
-        public bool IsPaused { get; set; } = false;
+
+
         public async void Pause() {
             IsPaused = true;
             await Task.Run(() => {
@@ -132,6 +129,15 @@ namespace TVSPlayer {
             TorrentSession.RemoveTorrent(Handle,deleteFiles);
             TorrentDatabase.Remove(magnet);
             torrents.Remove(this);        
+        }
+
+        public void StopAndMove() {
+            TorrentSource.Name = Handle.TorrentFile.Name;
+            Renamer.MoveAfterDownload(this);
+            TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+            TorrentSource.HasFinished = true;
+            TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);
+            torrents.Remove(this);
         }
 
         public async void PlayFile(Series series, Episode episode) {

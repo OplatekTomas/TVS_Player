@@ -464,7 +464,7 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            var torr = await Torrent.SearchSingle(Database.GetSeries(295685), Database.GetEpisode(295685, 3, 8), TorrentQuality.FHD);
+            var torr = await Torrent.SearchSingle(Database.GetSeries(295685), Database.GetEpisode(295685, 3, 8), TorrentQuality.HD);
             TorrentDownloader td = new TorrentDownloader(torr);
             td.Stream();
         }
@@ -514,12 +514,33 @@ namespace TVSPlayer {
             Properties.Settings.Default.Save();
 
             if (videoPlayback) {
-                LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
-                player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
-                player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
-                Database.EditEpisode(player.series.id, player.episode.id, player.episode);
-                player.Player.Stop();
-                player.Player.Close();
+                try {
+                    LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
+                    player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
+                    player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    Database.EditEpisode(player.series.id, player.episode.id, player.episode);
+                    player.Player.Stop();
+                    player.Player.Close();
+                } catch (Exception) {
+                    TorrentStreamer player = (TorrentStreamer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
+                    var series = Database.GetSeries(player.downloader.TorrentSource.Series.id);
+                    var ep = Database.GetEpisode(player.downloader.TorrentSource.Series.id, player.downloader.TorrentSource.Episode.id);
+                    ep.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
+                    ep.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    if (player.downloader.Status.IsSeeding) {
+                        player.downloader.StopAndMove();
+                    } else {
+                        var torrent = player.downloader.TorrentSource;
+                        torrent.IsSequential = false;
+                        TorrentDatabase.Edit(torrent.Magnet, torrent);
+                    }
+                    Database.EditEpisode(series.id, ep.id, ep);
+
+                    player.Player.Stop();
+                    player.Player.Close();
+
+                }
+
                 //this will give the player some time to end properly
                 Thread.Sleep(500);
             }

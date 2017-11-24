@@ -16,7 +16,26 @@
             <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3">
                 <Image Source="{StaticResource BackIcon}" />
             </Grid>
-            <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" Margin="45,0,0,3" />
+            <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+            <ProgressBar x:Name="DownloadProgress" Background="{DynamicResource TransparentStaticBG}" Margin="0,0,15,0" HorizontalAlignment="Right" Width="200" Height="5" Maximum="1" Foreground="{DynamicResource AccentColor}" BorderThickness="0"/>
+            <Image Height="15" Margin="0,2,0,0" Source="{DynamicResource ForwardIcon}" RenderTransformOrigin="0.5,0.5" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="90"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <TextBlock Foreground="{DynamicResource TextColor}" x:Name="DownloadSpeed" Text="0B/s" FontSize="16" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <Image Height="15" Margin="5,0,0,0" Source="{DynamicResource ForwardIcon}" RenderTransformOrigin="0.5,0.5" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="270"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <TextBlock Foreground="{DynamicResource TextColor}" x:Name="UploadSpeed" Text="0B/s" FontSize="16" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </StackPanel>
         </Grid>
         <Grid x:Name="Middle" Panel.ZIndex="3" Background="{DynamicResource TransparentStaticBG}" Visibility="Visible">
             <Grid x:Name="MiddleImage" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-30,0,0">
@@ -29,15 +48,16 @@
                 </Image>
             </Grid>
         </Grid>
-        <Grid x:Name="BottomBar" Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="70" VerticalAlignment="Bottom">
+        <Grid x:Name="BottomBar" Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="100" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="11*"/>
             </Grid.RowDefinitions>
+            <Slider x:Name="TimeLine" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10" PreviewMouseLeftButtonDown="VideoSlider_PreviewMouseDown" IsMoveToPointEnabled="True" PreviewMouseLeftButtonUp="VideoSlider_PreviewMouseUp" />
             <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
             <Grid VerticalAlignment="Bottom" Grid.RowSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">
-                    <Slider x:Name="VolumeSlider" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
+                    <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2">
                     <Grid Height="35" Margin="20,0" x:Name="BackIcon" MouseLeftButtonUp="BackIcon_MouseLeftButtonUp">

@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using Microsoft.WindowsAPICodePack.Shell;
+using NReco.VideoInfo;
+using TVS.API;
 
 namespace TVSPlayer {
     /// <summary>
@@ -26,9 +28,9 @@ namespace TVSPlayer {
             InitializeComponent();
             this.downloader = downloader;
         }
-        TorrentDownloader downloader;
-        string fileLenght;
+        public TorrentDownloader downloader;
         string file;
+        FFProbe media;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             MainWindow.HideContent();
@@ -48,6 +50,10 @@ namespace TVSPlayer {
                     Player.Stop();
                 }
             }
+            TorrentDatabase.Save(downloader.TorrentSource);
+            media = new FFProbe();
+            Animate();
+            await Task.Delay(1080);
             Player.MediaFailed += (s, ev) => MediaFailedEvent();
             Player.MediaEnded += (s, ev) => MediaFinishedEvent();
             var sb = (Storyboard)FindResource("OpacityDown");
@@ -80,12 +86,56 @@ namespace TVSPlayer {
             positionUpdate.Start();
         }
 
-        private async void UpdatePosition(object sender, EventArgs e) { 
-           
+        private async void UpdatePosition(object sender, EventArgs e) {
+            var downloaded =  media.GetMediaInfo(file).Duration.TotalSeconds * downloader.Status.Progress;
+            var seconds = Player.MediaPosition / 10000000;
+            TimeLine.Maximum = downloaded;
+            TimeLine.Value = seconds;
+            DownloadSpeed.Text = GetSpeed(downloader.Status.DownloadRate);
+            UploadSpeed.Text = GetSpeed(downloader.Status.UploadRate);
+            SetValue(downloader.Status.Progress);
+            CurrentTime.Text = GetTime(seconds) + ":" + GetTime((float)downloaded);
+            if (seconds > downloaded - 5) {
+                Player.Pause();
+                Middle.Visibility = Visibility.Visible;
+                Middle.BeginStoryboard((Storyboard)FindResource("OpacityUp"));
+                while ((media.GetMediaInfo(file).Duration.TotalSeconds * downloader.Status.Progress) - 10 > seconds) {
+                    Animate();
+                    await Task.Delay(1080);
+                }
+                var sb = (Storyboard)FindResource("OpacityDown");
+                var clone = sb.Clone();
+                clone.Completed += (s, ev) => {
+                    Middle.Visibility = Visibility.Collapsed;
+                };
+                sb.Begin(Middle);
+                Player.Play();
+            }
         }
-   
-        private void MediaFailedEvent() {
 
+
+        private string GetSpeed(double speed) {
+            string speedText = speed + " B/s";
+            if (speed > 1000) {
+                speedText = (speed / 1000).ToString("N0") + " kB/s";
+            }
+            if (speed > 1000000) {
+                speedText = (speed / 1000000).ToString("N1") + " MB/s";
+            }
+            if (speed > 1000000000) {
+                speedText = (speed / 1000000000).ToString("N1") + " GB/s";
+            }
+            return speedText;
+        }
+
+        private void MediaFailedEvent() {
+            Return();
+        }
+
+        public void SetValue(float value) {
+            DoubleAnimation animation = new DoubleAnimation(value, new TimeSpan(0, 0, 0, 0, 200));
+            animation.AccelerationRatio = animation.DecelerationRatio = .5;
+            DownloadProgress.BeginAnimation(ProgressBar.ValueProperty, animation);
         }
 
         private string GetSource() {
@@ -104,19 +154,13 @@ namespace TVSPlayer {
             return null;
         }
 
-        private async void MediaFinishedEvent() {
-            // Return();
-            if (Player.MediaDuration < Player.MediaPosition) {
-
-            } else {
-
-            }
+        private void MediaFinishedEvent() {
+            Return();
         }
 
         private string GetTime(float value) {
-            int minutes, seconds, hours;
+            long minutes, seconds, hours;
             minutes = seconds = hours = 0;
-            value = value / 10000000;
             hours = Convert.ToInt32(Math.Floor((double)(value / 60 / 60)));
             minutes = Convert.ToInt32(Math.Floor((double)(value / 60 - 60 * hours)));
             seconds = Convert.ToInt32(Math.Floor((double)(value - ((60 * 60 * hours) + (60 * minutes)))));
@@ -127,13 +171,13 @@ namespace TVSPlayer {
         }
 
         DispatcherTimer contentUpdate = new DispatcherTimer();
-
         private void VideoSlider_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             contentUpdate.Stop();
             contentUpdate = new DispatcherTimer();
             contentUpdate.Interval = new TimeSpan(0, 0, 0, 0, 500);
             contentUpdate.Tick += (s, ev) => {
-                CurrentTime.Text = GetTime(Player.MediaPosition) + "/" + fileLenght;
+                Player.MediaPosition = Convert.ToInt64(TimeLine.Value)* 10000000;
+                CurrentTime.Text = GetTime(Player.MediaPosition) + "/" + GetTime((float)media.GetMediaInfo(file).Duration.TotalSeconds * downloader.Status.Progress);
             };
             contentUpdate.Start();
             Player.Pause();
@@ -142,6 +186,7 @@ namespace TVSPlayer {
 
         private void VideoSlider_PreviewMouseUp(object sender, MouseButtonEventArgs e) {
             contentUpdate.Stop();
+            Player.MediaPosition = Convert.ToInt64(TimeLine.Value) * 10000000;
             if (isPlaying) {
                 Player.Play();
             }
@@ -273,6 +318,9 @@ namespace TVSPlayer {
         }
 
         private async void Return() {
+            if (downloader.Handle.IsSeed) {
+                downloader.StopAndMove();
+            }
             MainWindow.ShowContent();
             MouseMove -= Page_MouseMove;
             timer.Stop();
