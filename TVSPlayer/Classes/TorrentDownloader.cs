@@ -57,6 +57,10 @@ namespace TVSPlayer {
         }
 
         public async Task<TorrentDownloader> Stream(bool showStream = true) {
+            if (!Settings.StreamedBefore) {
+                await MessageBox.Show("Streaming is not fully stable feature.\n\nIt still works via torrent which means that files are not always perfect while downloading.\nIf you experience glitches try moving video timeline slider.\nIf that doesn't help just restart the stream", "Streaming tips");
+                Settings.StreamedBefore = true;
+            }
             var downloader = await Task.Run(() => {
                 return DownloadLocal(true);
             });
@@ -69,6 +73,7 @@ namespace TVSPlayer {
                 }
             });
 #pragma warning restore CS4014
+            GC.Collect();
             MainWindow.AddPage(new TorrentStreamer(downloader));
             return downloader;
         }
@@ -188,11 +193,7 @@ namespace TVSPlayer {
             foreach (var item in torrents) {
                 TorrentDatabase.Remove(item.Magnet);
                 TorrentDownloader downloader = new TorrentDownloader(item);
-                if (item.IsSequential) {
-                    await downloader.Stream(false);
-                } else {
-                    await downloader.Download();
-                }
+                await downloader.Download();     
             }
         }
 

@@ -470,7 +470,7 @@ namespace TVSPlayer {
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) {
+            if (true) {
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else { 

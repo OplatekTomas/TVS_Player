@@ -28,7 +28,7 @@
                             <Grid x:Name="Download" Margin="7,0" ToolTip="Downloads episode using torrent" MouseUp="Download_MouseUp">
                                 <Image Source="/Icons/ico-download-light.png" Width="30" />
                             </Grid>
-                            <Grid x:Name="Stream" Margin="7,0" ToolTip="Streams episode using torrent">
+                            <Grid x:Name="Stream" Margin="7,0" ToolTip="Streams episode using torrent" MouseLeftButtonUp="Stream_MouseLeftButtonUp">
                                 <Image Source="/Icons/ico-broadcast-light.png" Width="30" />
                             </Grid>
                             <Grid x:Name="Remove" Margin="7,0" ToolTip="Deletes all files for episode" MouseLeftButtonUp="Remove_MouseLeftButtonUp">

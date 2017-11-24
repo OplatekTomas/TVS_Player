@@ -35,23 +35,30 @@ namespace TVSPlayer {
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
+            media = new FFProbe();
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
             VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             Focus();
             Player.MediaOpened += (s, ev) => MediaOpenedEvent();
-            while (Player.MediaDuration == 0) {
+            while (true) {
                 Animate();
                 await Task.Run(() => {
                     Thread.Sleep(1080);
                 });
                 file = GetSource();
-                if (file != null && File.Exists(file)) {
-                    Player.Source = new Uri(file);
-                    Player.Stop();
+                if (file != null && downloader.Status.Progress > 0.01) {
+                    var duration = media.GetMediaInfo(file).Duration.TotalSeconds;
+                    var downloaded = duration * downloader.Status.Progress;
+                    if (File.Exists(file) && duration != 0 && downloaded > 10) {
+                        Player.Source = new Uri(file);
+                        Player.Stop();
+                        break;
+                    }
                 }
+               
             }
             TorrentDatabase.Save(downloader.TorrentSource);
-            media = new FFProbe();
+
             Animate();
             await Task.Delay(1080);
             Player.MediaFailed += (s, ev) => MediaFailedEvent();
@@ -94,8 +101,8 @@ namespace TVSPlayer {
             DownloadSpeed.Text = GetSpeed(downloader.Status.DownloadRate);
             UploadSpeed.Text = GetSpeed(downloader.Status.UploadRate);
             SetValue(downloader.Status.Progress);
-            CurrentTime.Text = GetTime(seconds) + ":" + GetTime((float)downloaded);
-            if (seconds > downloaded - 5) {
+            CurrentTime.Text = GetTime(seconds) + "/" + GetTime((float)downloaded);
+            if (seconds >= downloaded - 5) {
                 Player.Pause();
                 Middle.Visibility = Visibility.Visible;
                 Middle.BeginStoryboard((Storyboard)FindResource("OpacityUp"));
@@ -112,7 +119,6 @@ namespace TVSPlayer {
                 Player.Play();
             }
         }
-
 
         private string GetSpeed(double speed) {
             string speedText = speed + " B/s";
@@ -131,6 +137,11 @@ namespace TVSPlayer {
         private void MediaFailedEvent() {
             Return();
         }
+
+        private void MediaFinishedEvent() {
+            Return();
+        }
+
 
         public void SetValue(float value) {
             DoubleAnimation animation = new DoubleAnimation(value, new TimeSpan(0, 0, 0, 0, 200));
@@ -152,10 +163,6 @@ namespace TVSPlayer {
                 }
             }
             return null;
-        }
-
-        private void MediaFinishedEvent() {
-            Return();
         }
 
         private string GetTime(float value) {

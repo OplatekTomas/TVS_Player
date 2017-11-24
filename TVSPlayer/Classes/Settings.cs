@@ -19,8 +19,11 @@ namespace TVSPlayer {
         private static string scanthree;
         private static bool theme;
         private static int downloadSpeed;
+        private static bool stremedBefore;
         private static DateTime lastCheck;
         private static TorrentQuality downloadquality;
+        private static TorrentQuality streamquality;
+
         public static string Library { get { return library; } set { library = value; SaveSettings(); } }
         public static bool AutoDownload { get { return autodownload; } set { autodownload = value; SaveSettings(); } }
         public static string DownloadCacheLocation { get { return cachelocation; } set { cachelocation = value; SaveSettings(); } }
@@ -30,7 +33,11 @@ namespace TVSPlayer {
         public static bool Theme  { get { return theme; } set { theme = value; SaveSettings(); } }
         public static DateTime LastCheck { get { return lastCheck; } set { lastCheck = value; SaveSettings(); } }
         public static TorrentQuality DownloadQuality { get { return downloadquality; } set { downloadquality = value; SaveSettings(); } }
+        public static TorrentQuality StreamQuality { get { return streamquality; } set { streamquality = value; SaveSettings(); } }
+
         public static int DownloadSpeed { get { return downloadSpeed; } set { downloadSpeed = value; SaveSettings(); } }
+        public static bool StreamedBefore { get { return stremedBefore; } set { stremedBefore = value; SaveSettings(); } }
+
 
 
 

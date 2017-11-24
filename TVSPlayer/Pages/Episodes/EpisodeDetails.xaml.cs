@@ -183,5 +183,13 @@ namespace TVSPlayer
         private void EpisodeName_MouseLeave(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = null;
         }
+
+        private async void Stream_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            MainWindow.AddPage(new PleaseWait());
+            Torrent tor = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.StreamQuality);
+            MainWindow.RemovePage();
+            TorrentDownloader td = new TorrentDownloader(tor);
+            await td.Stream();
+        }
     }
 }
