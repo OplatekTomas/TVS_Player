@@ -25,7 +25,7 @@
         </Image>
         <Grid Grid.RowSpan="3" Background="#CC202020" Visibility="Hidden" x:Name="Darkener" Opacity="1" />
         <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3">
-            <Image Source="{StaticResource BackIcon}" />
+            <Image Source="{StaticResource BackIcon}" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" />
         </Grid>
 
         <ScrollViewer x:Name="ScrollView" Grid.Row="2" CanContentScroll="False"  HorizontalScrollBarVisibility="Disabled" Margin="5" Focusable="False" PanningMode="VerticalFirst" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsVirtualizing="True">
@@ -46,7 +46,7 @@
                                     <ColumnDefinition Width="200"/>
                                     <ColumnDefinition Width="250"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="showName" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                                <TextBlock x:Name="showName"  MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave"  MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                                 <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="#F5F5F5" Grid.ColumnSpan="3" />
                                 <StackPanel>
                                     <TextBlock  Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
@@ -58,7 +58,7 @@
                                     <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <TextBlock  Text="Rating: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
                                     <Grid HorizontalAlignment="Left" Margin="0,30" x:Name="PlayNextEpisode" MouseLeftButtonUp="PlayNextEpisode_MouseLeftButtonUp" ToolTip="Play next episode or continue">
-                                        <Image Source="/Icons/ico-play-light.png" Height="35" />
+                                        <Image Source="/Icons/ico-play-light.png" Height="35"  MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave"  />
                                     </Grid>
 
                                 </StackPanel>

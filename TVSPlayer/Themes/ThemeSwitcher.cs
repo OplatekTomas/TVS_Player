@@ -65,6 +65,7 @@ namespace TVSPlayer {
             Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-dark.png", UriKind.Absolute));
             Application.Current.Resources["DownloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-download-dark.png", UriKind.Absolute));
             Application.Current.Resources["BroadcastIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-broadcast-dark.png", UriKind.Absolute));
+            Application.Current.Resources["CogIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-cog-dark.png", UriKind.Absolute));
 
         }
 
@@ -95,6 +96,7 @@ namespace TVSPlayer {
             Application.Current.Resources["AlphabeticalReverseIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-alphareverse-light.png", UriKind.Absolute));
             Application.Current.Resources["DownloadIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-download-light.png", UriKind.Absolute));
             Application.Current.Resources["BroadcastIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-broadcast-light.png", UriKind.Absolute));
+            Application.Current.Resources["CogIcon"] = new BitmapImage(new Uri("pack://application:,,,/Icons/ico-cog-light.png", UriKind.Absolute));
 
         }
     }

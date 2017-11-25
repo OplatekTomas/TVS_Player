@@ -1,0 +1,108 @@
+﻿<Page x:Class="TVSPlayer.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="SettingsPage">
+
+    <Grid Loaded="Grid_Loaded" Margin="10,10">
+        <ScrollViewer Margin="0,0,0,45">
+            <ScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" />
+            </ScrollViewer.Resources>
+            <Grid>
+                <StackPanel >
+                    <TextBlock FontWeight="SemiBold" Text="Library location:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5" />
+                    <CheckBox x:Name="EnableDownload" FontWeight="SemiBold" Background="{DynamicResource LighterBG}" BorderThickness="0" Margin="5,30,5,5" Content="Enable automatic download" Foreground="{DynamicResource TextColor}" Click="CheckBox_Click" >
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.35" ScaleY="1.35"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
+                    <TextBlock FontWeight="SemiBold" Text="Download cache:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,13,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Scan directories for episodes:" Foreground="{DynamicResource TextColor}" FontSize="18" Margin="5,35,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Directory 1:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Directory 2:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,14,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Directory 3:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,14,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Downloading:" Foreground="{DynamicResource TextColor}" FontSize="18" Margin="5,35,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Max download speed:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Max upload speed:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Download quality:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
+                    <TextBlock FontWeight="SemiBold" Text="Stream quality: " Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
+
+                </StackPanel>
+                <StackPanel Margin="175,0,20,0">
+                    <TextBlock x:Name="LibraryLocation" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5" />
+                    <Grid Margin="5,64,5,5">
+                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="CacheFolder" Margin="0,0,35,0" BorderThickness="0" TextChanged="CacheFolder_TextChanged" Text="Select directory" />
+                        <Grid Height="24" x:Name="CacheSelect" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="CacheSelect_MouseLeftButtonUp">
+                            <Image Source="{DynamicResource FolderIcon}"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="5,73,5,5">
+                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir1Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir1Box_TextChanged" Text="Select directory" />
+                        <Grid  Height="24" x:Name="Dir1Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dir1Select_MouseLeftButtonUp">
+                            <Image Source="{DynamicResource FolderIcon}"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="5,11,5,5">
+                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir2Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir2Box_TextChanged" Text="Select directory" />
+                        <Grid Height="24" x:Name="Dir2Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dir2Select_MouseLeftButtonUp">
+                            <Image Source="{DynamicResource FolderIcon}"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="5,11,5,5">
+                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir3Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir3Box_TextChanged" Text="Select directory" />
+                        <Grid Height="24" x:Name="Dor3Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dor3Select_MouseLeftButtonUp">
+                            <Image Source="{DynamicResource FolderIcon}"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="5,70,5,5">
+                        <TextBox x:Name="DownSpeed" BorderThickness="0" Width="60" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" HorizontalAlignment="Left" TextChanged="DownSpeed_TextChanged" />
+                        <TextBlock Foreground="{DynamicResource TextColor}" FontSize="14" Text="KB/s.   0 = no limit" Margin="70,2,0,0" />
+                    </Grid>
+                    <Grid Margin="5,7,5,5">
+                        <TextBox x:Name="UpSpeed" BorderThickness="0" Width="60" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" HorizontalAlignment="Left" TextChanged="UpSpeed_TextChanged" />
+                        <TextBlock Foreground="{DynamicResource TextColor}" FontSize="14" Text="KB/s.   0 = no limit" Margin="70,2,0,0" />
+                    </Grid>
+                    <ComboBox Margin="5,7,5,5" x:Name="DownQuality" Height="24" Foreground="{DynamicResource TextColor}" Width="100" HorizontalAlignment="Left" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" SelectionChanged="DownQuality_SelectionChanged">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#222222"/>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ComboBoxItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="Standart" />
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="HD" />
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="FullHD" />
+                    </ComboBox>
+                    <ComboBox Margin="5,7,5,5" x:Name="StreamQuality" Height="24" Foreground="{DynamicResource TextColor}" Width="100" HorizontalAlignment="Left" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" SelectionChanged="StreamQuality_SelectionChanged">
+                        <ComboBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#222222"/>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ComboBoxItem}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="Standart" />
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="HD" />
+                        <ComboBoxItem Height="24" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Content="FullHD" />
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

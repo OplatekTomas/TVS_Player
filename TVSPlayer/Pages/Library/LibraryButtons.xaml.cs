@@ -145,5 +145,13 @@ namespace TVSPlayer
                 Slider.Value--;
             }
         }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

@@ -130,5 +130,21 @@ namespace TVSPlayer
         private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
             Process.Start("http://www.imdb.com/title/" + series.imdbId + "/?ref_=fn_al_tt_1");
         }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
+        private void Panel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+
+        }
+
+        private void Panel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+        }
     }
 }

@@ -45,6 +45,8 @@ namespace TVSPlayer {
             torrentParams.SavePath = GetDownloadPath();
             torrentParams.Url = TorrentSource.Magnet;
             Handle = TorrentSession.AddTorrent(torrentParams);
+            SetDownloadSpeedLimit(Settings.DownloadSpeed);
+            SetUploadSpeedLimit(Settings.UploadSpeed);
             Handle.SequentialDownload = TorrentSource.IsSequential = sequential;
             Status = Handle.QueryStatus();
             torrents.Add(this);
@@ -113,7 +115,25 @@ namespace TVSPlayer {
             }
         }
 
+        public static void SetDownloadSpeedLimit(int limit) {
+            Settings.DownloadSpeed = limit;
+            if (TorrentSession != null) {
+                SessionSettings ss = TorrentSession.QuerySettings();
+                ss.DownloadRateLimit = limit;
+                TorrentSession.SetSettings(ss);
+            }
 
+        }
+
+        public static void SetUploadSpeedLimit(int limit) {
+            Settings.UploadSpeed = limit;
+            if (TorrentSession != null) {
+                SessionSettings ss = TorrentSession.QuerySettings();
+                ss.UploadRateLimit = limit;
+                TorrentSession.SetSettings(ss);
+            }
+
+        }
 
         public async void Pause() {
             IsPaused = true;
@@ -196,6 +216,8 @@ namespace TVSPlayer {
                 await downloader.Download();     
             }
         }
+
+
 
     }
 }

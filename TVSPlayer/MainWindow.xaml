@@ -19,10 +19,10 @@
         <Storyboard x:Key="MoveSearchRight">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="45,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="ShowSideMenu" Timeline.DesiredFrameRate="60">
+        <Storyboard x:Key="ShowSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
-        <Storyboard x:Key="HideSideMenu" Timeline.DesiredFrameRate="60">
+        <Storyboard x:Key="HideSideMenu">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="-225,0" DecelerationRatio=".5" Duration="0:0:0.25" />
         </Storyboard>
         <Storyboard x:Key="HideNotification">
@@ -55,19 +55,36 @@
                     <Image Source="Icons/LogoWide.png" Margin="10"/>
                 </Grid>
                 <StackPanel Grid.Row="2">
-                    <Grid Height="45" x:Name="LibrarySidebar" MouseLeftButtonUp="LibrarySidebar_MouseLeftButtonUp">
+                    <Grid Height="45" x:Name="LibrarySidebar" MouseLeftButtonUp="LibrarySidebar_MouseLeftButtonUp" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
                         <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="LibrarySelected" />
                         <Image Source="{DynamicResource PlayIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
                         <TextBlock Margin="50,8,0,5"  Text="Library" Foreground="{DynamicResource TextColor}" FontSize="20" />
                         </Grid>
-                    <Grid Height="45" x:Name="DownloadsSidebar" MouseLeftButtonUp="DownloadsSidebar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225">
+                    <Grid Height="45" x:Name="DownloadsSidebar" MouseLeftButtonUp="DownloadsSidebar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
                         <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="DownloadsSelected"  Opacity="0" />
                         <Image Source="{DynamicResource DownloadIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
                         <TextBlock Margin="50,8,0,5"  Text="Downloads" Foreground="{DynamicResource TextColor}" FontSize="20" />
                     </Grid>
+                    <Grid Height="45" x:Name="ScheduleSideBar" MouseLeftButtonUp="ScheduleSideBar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
+                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="ScheduleSelected"  Opacity="0" />
+                        <Image Source="{DynamicResource CalendarIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <TextBlock Margin="50,8,0,5"  Text="Schedule" Foreground="{DynamicResource TextColor}" FontSize="20" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,20">
+                    <Grid Height="45" x:Name="AboutSideBar" MouseLeftButtonUp="AboutSideBar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
+                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="AboutSelected"  Opacity="0" />
+                        <Image Source="{DynamicResource QuestionIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <TextBlock Margin="50,8,0,5"  Text="About" Foreground="{DynamicResource TextColor}" FontSize="20" />
+                    </Grid>
+                    <Grid Height="45" x:Name="SettingsSideBar" MouseLeftButtonUp="SettingsSideBar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
+                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="SettingsSelected"  Opacity="0" />
+                        <Image Source="{DynamicResource CogIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <TextBlock Margin="50,8,0,5"  Text="Settings" Foreground="{DynamicResource TextColor}" FontSize="20" />
+                    </Grid>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HiderGrid" Background="#00000000" Panel.ZIndex="14" MouseUp="HiderGrid_MouseUp" Opacity="0" Visibility="Hidden" Grid.RowSpan="2" />
+            <Grid x:Name="HiderGrid" Background="#55000000" Panel.ZIndex="14" MouseUp="HiderGrid_MouseUp" Opacity="0" Visibility="Hidden" Grid.RowSpan="2" />
             <Grid Panel.ZIndex="5" Height="40" Background="{DynamicResource TransparentBG}" VerticalAlignment="Top" x:Name="TopBar" Grid.Row="0">
                 <Grid x:Name="SideButton" Margin="10,0" HorizontalAlignment="Left" Height="20" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave" MouseLeftButtonDown="SideButton_MouseLeftButtonDown">
                     <Image Source="{DynamicResource MenuIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
@@ -75,9 +92,9 @@
                 <TextBlock x:Name="PageTitle" FontSize="22" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource TextColor}" Margin="50,0,0,3" />
                 <Grid x:Name="RightButtons" Margin="0,0,10,0">
                     <Grid x:Name="MoreButton" Margin="0,0" HorizontalAlignment="Right" Height="30" MouseLeftButtonDown="MoreButton_MouseLeftButtonDown">
-                        <Image Source="{DynamicResource MoreIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
+                        <Image MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave" Source="{DynamicResource MoreIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
                     </Grid>
-                    <Grid x:Name="SearchButton" Margin="45,0" HorizontalAlignment="Right" Height="20" MouseLeftButtonDown="SearchButton_MouseLeftButtonDown">
+                    <Grid x:Name="SearchButton" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave" Margin="45,0" HorizontalAlignment="Right" Height="20" MouseLeftButtonDown="SearchButton_MouseLeftButtonDown">
                         <Image Source="{DynamicResource SearchIcon}" RenderOptions.BitmapScalingMode="HighQuality" ></Image>
                     </Grid>
                     <Grid x:Name="SearchBar" HorizontalAlignment="Right" Width="0" Margin="40,8" >
@@ -88,10 +105,8 @@
                 </Grid>
                 <Grid HorizontalAlignment="Right" x:Name="NotificationArea" Width="350" Margin="0,0,0,0"  Panel.ZIndex="6" Visibility="Hidden" Opacity="0">
                     <Grid x:Name="CustomContent" Margin="0,0,40,0" HorizontalAlignment="Right" />
-
-
                     <Grid HorizontalAlignment="Right"  Margin="0,0,10,0" ToolTip="Not working in this release!">
-                        <Image Source="{DynamicResource ThemeIcon}" RenderOptions.BitmapScalingMode="HighQuality" Height="25" />
+                        <Image MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave" Source="{DynamicResource ThemeIcon}" RenderOptions.BitmapScalingMode="HighQuality" Height="25" />
                     </Grid>
                 </Grid>
             </Grid>

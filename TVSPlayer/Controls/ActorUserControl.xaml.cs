@@ -38,5 +38,13 @@ namespace TVSPlayer
                 LoadingText.Text = "No image..";
             }
         }
+
+        private void Name_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Name_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

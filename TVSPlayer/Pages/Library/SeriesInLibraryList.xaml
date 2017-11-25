@@ -21,7 +21,7 @@
             <Grid x:Name="Left" Margin="0,0,115,0">
                 <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="25" Margin="5,-1,0,0" />
             </Grid>
-            <Grid  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0">
+            <Grid  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <Grid Width="25" Height="25" x:Name="RemoveIcon" HorizontalAlignment="Right" >
                     <Image Source="{DynamicResource RemoveIcon}" />
                 </Grid>

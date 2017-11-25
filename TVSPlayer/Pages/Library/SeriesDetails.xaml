@@ -21,7 +21,7 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Left" Margin="6,8" x:Name="BackButton" MouseUp="BackButton_MouseUp">
+        <Grid HorizontalAlignment="Left" Margin="6,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <Image Source="{DynamicResource BackIcon}" />
         </Grid>
         <Grid Grid.Row="1" x:Name="BackgroundGrid">
@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="showName" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                <TextBlock x:Name="showName" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <TextBlock x:Name="rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
                 <StackPanel>
@@ -87,9 +87,9 @@
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                 </ScrollViewer.Resources>
-                <StackPanel Orientation="Horizontal" x:Name="Panel">
+                <StackPanel Orientation="Horizontal" x:Name="Panel" PreviewMouseLeftButtonDown="Panel_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="Panel_PreviewMouseLeftButtonUp" />
 
-                </StackPanel>
+
             </ScrollViewer>
         </Grid>
     </Grid>

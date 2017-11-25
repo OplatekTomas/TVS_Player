@@ -218,7 +218,6 @@ namespace TVSPlayer {
         public void LoadSeasons() {
             List<Episode> eps = Database.GetEpisodes(series.id);
             List<List<Episode>> sorted = new List<List<Episode>>();
-
             for (int i = 1; ; i++) {
                 List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
                 if (Properties.Settings.Default.EpisodeSort) list.Reverse();
@@ -232,20 +231,23 @@ namespace TVSPlayer {
             Dispatcher.Invoke(() => {
                 SecondPanel.Children.RemoveRange(0, SecondPanel.Children.Count);
                 foreach (var list in sorted) {
-                    TextBlock text = new TextBlock();
-                    text.FontSize = 24;
-                    text.Foreground = (Brush)FindResource("TextColor");
-                    text.Margin = new Thickness(0, 0, 0, 10);
-                    text.Text = "Season " + (list[0].airedSeason);
                     SeasonView sv = new SeasonView(list, series, this);
-                    //sv.ScrollView.PanningMode = PanningMode.HorizontalFirst;
                     sv.ScrollView.PreviewMouseWheel += (s, ev) => Scroll(ev);
                     sv.Height = 195;
-                    sv.Margin = new Thickness(0, 0, 25, 20);
-                    SecondPanel.Children.Add(text);
+                    sv.Margin = new Thickness(0, 0, 35, 20);
+                    SecondPanel.Children.Add(GenerateText("Season " + list[0].airedSeason));
                     SecondPanel.Children.Add(sv);
                 }
             }, DispatcherPriority.Send);
+        }
+
+        private TextBlock GenerateText(string textblockText) {
+            TextBlock text = new TextBlock();
+            text.FontSize = 24;
+            text.Foreground = (Brush)FindResource("TextColor");
+            text.Margin = new Thickness(0, 0, 0, 10);
+            text.Text = textblockText;
+            return text;
         }
 
         private void Scroll(MouseWheelEventArgs ev) {
@@ -297,5 +299,12 @@ namespace TVSPlayer {
             MainWindow.AddPage(new LocalPlayer(series, ep, GetFileToPlay(ep, series)));
         }
 
+        private void Image_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Image_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

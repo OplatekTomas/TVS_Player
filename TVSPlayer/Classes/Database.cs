@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
+using NReco.VideoConverter;
 using TVS.API;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -299,9 +300,9 @@ namespace TVSPlayer {
         /// <param name="epId">TVDb id of Episode</param>
         /// <returns>BitmapImage with thumbnail or null in case of errors</returns>
         public static async Task<BitmapImage> GetEpisodeThumbnail(int id, int epId) {
-            var bmp = await Task.Run(async() => {
+            return await Task.Run(async() => {
                 Episode ep = GetEpisode(id, epId, true);
-                if (File.Exists(ep.thumbnail) && !String.IsNullOrEmpty(ep.thumbnail)) {
+                if (!String.IsNullOrEmpty(ep.thumbnail) && File.Exists(ep.thumbnail)) {
                     return await LoadImage(ep.thumbnail);
                 } else if (!String.IsNullOrEmpty(ep.filename)) {
                     string file = db + id + "\\Thumbnails\\" + Path.GetFileName(ep.filename);
@@ -311,10 +312,15 @@ namespace TVSPlayer {
                     ep.thumbnail = file;
                     EditEpisode(id, epId, ep);
                     return await LoadImage(ep.thumbnail);
+                } else if (ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).Count() > 0) {
+                    string file = ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).ToList()[0].NewName;
+                    var ffmpeg = new FFMpegConverter();
+                    ffmpeg.GetVideoThumbnail(file, db + id + "\\Thumbnails\\" + ep.id + ".jpg");
+                    ep.thumbnail = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
+                    EditEpisode(id, epId, ep);
                 }
                 return null;
             });
-            return bmp;
         }
 
         #endregion

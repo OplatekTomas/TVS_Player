@@ -28,7 +28,8 @@
     <BitmapImage x:Key="DownloadIcon" UriSource="pack://application:,,,/Icons/ico-download-light.png" />
     <BitmapImage x:Key="BroadcastIcon" UriSource="pack://application:,,,/Icons/ico-broadcast-light.png" />
     <BitmapImage x:Key="PauseIcon" UriSource="pack://application:,,,/Icons/ico-pause-light.png" />
-
+    <BitmapImage x:Key="NoThumbnail" UriSource="pack://application:,,,/Icons/thumbnail-dark.png" />
+    <BitmapImage x:Key="CogIcon" UriSource="pack://application:,,,/Icons/ico-cog-light.png" />
 
 
 </ResourceDictionary>

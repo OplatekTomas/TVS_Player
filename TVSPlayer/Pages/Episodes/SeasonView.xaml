@@ -6,23 +6,12 @@
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="1280" VirtualizingPanel.IsVirtualizing="True">
-    <UserControl.Resources>
-        <Storyboard x:Key="GoWide">
-            <DoubleAnimation To="60" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
-        </Storyboard>
-        <Storyboard x:Key="GoAway">
-            <DoubleAnimation To="0" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
-        </Storyboard>
-    </UserControl.Resources>
     <Grid Loaded="Grid_Loaded">
-        
         <ScrollViewer CanContentScroll="False" x:Name="ScrollView" PreviewMouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp" PreviewMouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown" PreviewMouseMove="scrollViewer_PreviewMouseMove" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled" Margin="0,0">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
             </ScrollViewer.Resources>
-            <VirtualizingStackPanel  VirtualizingPanel.IsVirtualizing="True" Orientation="Horizontal" x:Name="Panel" VirtualizationMode="Recycling">
-
-            </VirtualizingStackPanel>
+            <VirtualizingStackPanel  VirtualizingPanel.IsVirtualizing="True" Orientation="Horizontal" x:Name="Panel" VirtualizationMode="Recycling" />
         </ScrollViewer>
     </Grid>
 </UserControl>

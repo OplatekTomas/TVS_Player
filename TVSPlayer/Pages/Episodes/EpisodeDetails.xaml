@@ -13,7 +13,7 @@
             </ScrollViewer.Resources>
             <StackPanel Orientation="Horizontal">
                 <Grid>
-                    <Image x:Name="BackIcon"  HorizontalAlignment="Left" Margin="0,40" VerticalAlignment="Top" Height="25" RenderOptions.BitmapScalingMode="Fant" Source="/Icons/ico-back-light.png" />
+                    <Image x:Name="BackIcon" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave"  HorizontalAlignment="Left" Margin="0,40" VerticalAlignment="Top" Height="25" RenderOptions.BitmapScalingMode="Fant" Source="/Icons/ico-back-light.png" />
                     <TextBlock Visibility="Collapsed" Text="Splinter" Foreground="#F5F5F5" Margin="35,35" FontSize="24" x:Name="EPName" TextDecorations="Underline" MouseLeftButtonUp="EPName_MouseLeftButtonUp" />
                     <Image x:Name="EpisodeThumb" Margin="10,0,10,0" VerticalAlignment="Center" Height="225" RenderOptions.BitmapScalingMode="Fant">
                         <Image.Effect>

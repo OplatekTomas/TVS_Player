@@ -7,15 +7,14 @@
              mc:Ignorable="d" 
              Height="40" Width="300">
     <Grid Loaded="Grid_Loaded">
-        <Grid Height="25" HorizontalAlignment="Left" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" ToolTip="Add Series to library" Margin="5">
+        <Grid Height="25" HorizontalAlignment="Left" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" ToolTip="Add Series to library" Margin="5">
             <Image Source="{DynamicResource PlusIcon}" />
         </Grid>
- 
-        <Grid Height="25" HorizontalAlignment="Left" Margin="80,0,0,0" ToolTip="Set library view" x:Name="SwitchView" MouseUp="SwitchView_MouseUp">
+        <Grid Height="25" HorizontalAlignment="Left" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" Margin="80,0,0,0" ToolTip="Set library view" x:Name="SwitchView" MouseUp="SwitchView_MouseUp">
             <Image Source="{DynamicResource PosterIcon}" x:Name="ViewImage" RenderOptions.BitmapScalingMode="HighQuality" />
         </Grid>
         <Slider x:Name="Slider" HorizontalAlignment="Right" Margin="10" ToolTip="Set size of posters" VerticalAlignment="Center" Width="170" Minimum="229" Maximum="555" Style="{StaticResource Horizontal_Slider}" MouseWheel="Slider_MouseWheel" />
-        <Grid Height="27" HorizontalAlignment="Left" Margin="40,0" ToolTip="Sort library" x:Name="SortType" MouseUp="SortType_MouseUp">
+        <Grid Height="27" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" HorizontalAlignment="Left" Margin="40,0" ToolTip="Sort library" x:Name="SortType" MouseUp="SortType_MouseUp">
             <Image Source="{DynamicResource CalendarIcon}" x:Name="SortImage" RenderOptions.BitmapScalingMode="HighQuality" />
         </Grid>
 

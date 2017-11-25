@@ -359,6 +359,50 @@ namespace TVSPlayer {
         private void ThemeSwitch_MouseUp(object sender, MouseButtonEventArgs e) {
             ThemeSwitcher.SwitchTheme();
         }
+
+        private void SettingsSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new SettingsPage());
+            HideSideBar();
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = DownloadsSelected.Opacity = 0;
+            SettingsSelected.Opacity = 1;
+        }
+
+        private void AboutSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new AboutView());
+            HideSideBar();
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = DownloadsSelected.Opacity = SettingsSelected.Opacity = 0;
+            AboutSelected.Opacity = 1;
+        }
+
+        private void ScheduleSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new Schedule());
+            HideSideBar();
+            LibrarySelected.Opacity = DownloadsSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            ScheduleSelected.Opacity = 1;
+        }
+
+        private void LibrarySidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new Library());
+            HideSideBar();
+            LibrarySelected.Opacity = 1;
+            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+        }
+
+        private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new DownloadsView());
+            HideSideBar();
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            DownloadsSelected.Opacity = 1;
+        }
+
+        private void SideButton_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void SideButton_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
         #endregion
 
         public static bool CheckConnection() {
@@ -546,27 +590,8 @@ namespace TVSPlayer {
             }
         }
 
-        private void LibrarySidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            SetPage(new Library());
-            HideSideBar();
-            LibrarySelected.Opacity = 1;
-            DownloadsSelected.Opacity = 0;
-        }
 
-        private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            SetPage(new DownloadsView());
-            HideSideBar();
-            LibrarySelected.Opacity = 0;
-            DownloadsSelected.Opacity = 1;
-        }
 
-        private void SideButton_MouseEnter(object sender, MouseEventArgs e) {
-            Mouse.OverrideCursor = Cursors.Hand;
-        }
-
-        private void SideButton_MouseLeave(object sender, MouseEventArgs e) {
-            Mouse.OverrideCursor = null;
-        }
     }
 
     

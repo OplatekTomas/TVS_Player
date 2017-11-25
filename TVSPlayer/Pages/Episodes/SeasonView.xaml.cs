@@ -48,9 +48,13 @@ namespace TVSPlayer {
                     Dispatcher.Invoke(() => {
                         EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
                         epv.Width = 230;
+                        epv.Height = 175;
+                        epv.VerticalAlignment = VerticalAlignment.Top;
                         epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
                         epv.Opacity = 0;
-                        epv.ThumbImage.Source = bmp;
+                        if (bmp != null) { 
+                            epv.ThumbImage.Source = bmp;
+                        }
                         epv.Margin = new Thickness(5, 0, 10, 0);
                         Panel.Children.Add(epv);
                         Storyboard sb = (Storyboard)FindResource("OpacityUp");

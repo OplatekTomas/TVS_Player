@@ -62,10 +62,7 @@ namespace TVSPlayer {
                 SecondScan.Text = fbd.SelectedPath;
             }
         }
-        /// <summary>
-        /// Hide this function in VS and do not look at it.. ever
-        /// </summary>
-        /// <returns>true if everything is fine, false if it isn't</returns>
+
         private bool DoChecks() {
             if (FirstScan.Text == SecondScan.Text && FirstScan.Text != "Select directory") { return false; }
             if (FirstScan.Text == ThirdScan.Text && ThirdScan.Text != "Select directory") { return false; }
