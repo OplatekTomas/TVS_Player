@@ -168,12 +168,14 @@ namespace TVSPlayer
 
         private void Remove_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             var ep = Database.GetEpisode((int)episode.seriesId, episode.id);
+            var list = ep.files;
             foreach (var file in ep.files) {
                 if (File.Exists(file.NewName)) {
-                    File.Delete(file.NewName);
+                    File.Delete(file.NewName);              
                 }
             }
             ep.files = new List<ScannedFile>();
+            Database.EditEpisode((int)ep.seriesId, ep.id, ep);
         }
 
         private void EpisodeName_MouseEnter(object sender, MouseEventArgs e) {

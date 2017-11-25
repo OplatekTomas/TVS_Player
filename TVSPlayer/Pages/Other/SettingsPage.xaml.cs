@@ -45,8 +45,6 @@ namespace TVSPlayer
             UpSpeed.Text = Settings.UploadSpeed.ToString();
             DownQuality.SelectedIndex = (int)Settings.DownloadQuality;
             StreamQuality.SelectedIndex = (int)Settings.StreamQuality;
-
-
         }
 
         private void Dor3Select_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
