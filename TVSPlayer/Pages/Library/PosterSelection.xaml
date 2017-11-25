@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="272">
     <Grid Loaded="Grid_Loaded" >
-        <Grid x:Name="Background" MouseUp="Background_MouseUp" Margin="3" Background="{DynamicResource BackgroundBrush}">
+        <Grid x:Name="Background" MouseUp="Background_MouseUp" Margin="3" Background="{DynamicResource BackgroundBrush}" MouseEnter="Background_MouseEnter" MouseLeave="Background_MouseLeave">
             <Image x:Name="PosterImage" Margin="3" Source="{DynamicResource NoPoster}" RenderOptions.BitmapScalingMode="HighQuality"  />
         </Grid>
     </Grid>

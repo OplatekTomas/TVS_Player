@@ -13,7 +13,7 @@
         <player:MediaUriElement x:Name="Player" />
 
         <Grid Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="45" VerticalAlignment="Top" x:Name="TopBar">
-            <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3">
+            <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
                 <Image Source="{StaticResource BackIcon}" />
             </Grid>
             <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" HorizontalAlignment="Left" />
@@ -59,7 +59,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">
                     <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
                     <Grid Height="35" Margin="20,0" x:Name="BackIcon" MouseLeftButtonUp="BackIcon_MouseLeftButtonUp">
                         <Image Source="/Icons/ico-back-light.png" />
                     </Grid>
@@ -70,7 +70,7 @@
                         <Image Source="/Icons/ico-forward-light.png" />
                     </Grid>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,120,20" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,120,20" VerticalAlignment="Center" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
                     <Grid Height="30"  HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="Picture in Picture" x:Name="AlwaysTopIcon" MouseUp="AlwaysTopIcon_MouseUp">
                         <Image Source="/Icons/ico-windows-light.png" />
                     </Grid>

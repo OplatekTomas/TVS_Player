@@ -41,5 +41,13 @@ namespace TVSPlayer {
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             PosterImage.Source = bmp;
         }
+
+        private void Background_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Background_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

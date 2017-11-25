@@ -121,5 +121,13 @@ namespace TVSPlayer {
             }
             currentPoster = poster.selected ? poster.poster : null;
         }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

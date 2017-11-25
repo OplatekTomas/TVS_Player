@@ -30,7 +30,7 @@
                 </WrapPanel>
             </ScrollViewer>
             <Grid Height="40" VerticalAlignment="Bottom" >
-                <Grid HorizontalAlignment="Right" Margin="5" MouseUp="Grid_MouseUp">
+                <Grid HorizontalAlignment="Right" Margin="5" MouseUp="Grid_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource ForwardIcon}" />
                 </Grid>
             </Grid>
