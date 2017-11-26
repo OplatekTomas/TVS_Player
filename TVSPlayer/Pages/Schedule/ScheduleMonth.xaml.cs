@@ -57,10 +57,9 @@ namespace TVSPlayer {
                                     Grid grid = new Grid();
                                     grid.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#88000000"));
                                     grid.MouseLeftButtonUp += (sx, ev) => {
-                                        Window main = Application.Current.MainWindow;
-                                        ((MainWindow)main).SetLibrary();
                                         MainWindow.SetPage(new SeriesEpisodes(s));
                                         };
+                                    grid.ToolTip = s.seriesName;
                                     grid.MouseEnter += (sx, ev) => { grid.BeginStoryboard((Storyboard)FindResource("OpacityDown")); Mouse.OverrideCursor = Cursors.Hand; };
                                     grid.MouseLeave += (sx, ev) => { grid.BeginStoryboard((Storyboard)FindResource("OpacityUp")); Mouse.OverrideCursor = null; };
                                     Image img = new Image();

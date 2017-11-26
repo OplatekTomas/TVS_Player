@@ -38,7 +38,8 @@ namespace TVSPlayer {
         Dictionary<Episode, string> searchValues = new Dictionary<Episode, string>();
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
-            MainWindow.SetPage(new Library());
+            Window main = Application.Current.MainWindow;
+            ((MainWindow)main).SetLibrary();
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
