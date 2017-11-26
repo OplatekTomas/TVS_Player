@@ -59,25 +59,31 @@ namespace TVSPlayer {
         }
 
         public async Task<TorrentDownloader> Stream(bool showStream = true) {
-            if (!Settings.StreamedBefore) {
-                await MessageBox.Show("Streaming is not fully stable feature.\n\nIt still works via torrent which means that files are not always perfect while downloading.\nIf you experience glitches try moving video timeline slider.\nIf that doesn't help just restart the stream", "Streaming tips");
-                Settings.StreamedBefore = true;
-            }
-            var downloader = await Task.Run(() => {
-                return DownloadLocal(true);
-            });
-#pragma warning disable CS4014
-            Task.Run(() => {
-                while (Handle != null && !downloader.Status.IsSeeding) {
-                    Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
-                    downloader.Status = downloader.Handle.QueryStatus();
-                    Thread.Sleep(1000);
+            var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
+            if (torrs.Count == 0) {
+                if (!Settings.StreamedBefore) {
+                    await MessageBox.Show("Streaming is not fully stable feature.\n\nIt still works via torrent which means that files are not always perfect while downloading.\nIf you experience glitches try moving video timeline slider.\nIf that doesn't help just restart the stream", "Streaming tips");
+                    Settings.StreamedBefore = true;
                 }
-            });
+                var downloader = await Task.Run(() => {
+                    return DownloadLocal(true);
+                });
+#pragma warning disable CS4014
+                Task.Run(() => {
+                    while (Handle != null && !downloader.Status.IsSeeding) {
+                        Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
+                        downloader.Status = downloader.Handle.QueryStatus();
+                        Thread.Sleep(1000);
+                    }
+                });
 #pragma warning restore CS4014
-            GC.Collect();
-            MainWindow.AddPage(new TorrentStreamer(downloader));
-            return downloader;
+                GC.Collect();
+                MainWindow.AddPage(new TorrentStreamer(downloader));
+                return downloader;
+            } else {
+                await MessageBox.Show("Torrnet is already downloading");
+                return null;
+            }
         }
 
         public async Task<TorrentDownloader> Download() {
@@ -180,14 +186,18 @@ namespace TVSPlayer {
             FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
             if (info != null) {
                 ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
-                //Used to release as many resources as possible to give all rendering power to video playback
-                MainWindow.RemoveAllPages();
-                MainWindow.SetPage(new BlankPage());
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                await Task.Run(() => {
-                    Thread.Sleep(500);
-                });
-                MainWindow.AddPage(new LocalPlayer(series, episode, sf));
+                if (!Settings.UseWinDefaultPlayer) {
+                    //Used to release as many resources as possible to give all rendering power to video playback
+                    MainWindow.RemoveAllPages();
+                    MainWindow.SetPage(new BlankPage());
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                    await Task.Run(() => {
+                        Thread.Sleep(500);
+                    });
+                    MainWindow.AddPage(new LocalPlayer(series, episode, sf));
+                } else {
+                    Process.Start(sf.NewName);
+                }
             }
         }
 

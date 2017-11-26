@@ -45,6 +45,7 @@ namespace TVSPlayer
             UpSpeed.Text = Settings.UploadSpeed.ToString();
             DownQuality.SelectedIndex = (int)Settings.DownloadQuality;
             StreamQuality.SelectedIndex = (int)Settings.StreamQuality;
+            UseBuildIn.IsChecked = Settings.UseWinDefaultPlayer;
         }
 
         private void Dor3Select_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -170,6 +171,10 @@ namespace TVSPlayer
                 return true;
             }
             return false;
+        }
+
+        private void UseBuildIn_Click(object sender, RoutedEventArgs e) {
+            Settings.UseWinDefaultPlayer = (bool)UseBuildIn.IsChecked;
         }
     }
 }

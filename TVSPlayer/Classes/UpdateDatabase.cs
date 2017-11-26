@@ -12,7 +12,7 @@ namespace TVSPlayer
 {
     class UpdateDatabase {
         public async static Task Update() {
-            if (Settings.LastCheck.AddDays(1).Date < DateTime.Now.Date) { 
+            if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) { 
                 await Task.Run( () => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
@@ -66,6 +66,9 @@ namespace TVSPlayer
             });
         }
 
+        /// <summary>
+        /// Starts checking if all files are where they are supposed to be and if database is updated
+        /// </summary>
         public async static void StartUpdateBackground() {
             await CheckFiles();
             await Update();

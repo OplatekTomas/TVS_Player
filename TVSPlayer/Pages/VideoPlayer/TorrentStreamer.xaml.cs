@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using Microsoft.WindowsAPICodePack.Shell;
 using NReco.VideoInfo;
 using TVS.API;
+using TVS.Notification;
 
 namespace TVSPlayer {
     /// <summary>
@@ -327,6 +328,13 @@ namespace TVSPlayer {
         private async void Return() {
             if (downloader.Handle.IsSeed) {
                 downloader.StopAndMove();
+            } else {
+                Task.Run(() => {
+                    while (downloader.Handle != null && !downloader.Status.IsSeeding) { Thread.Sleep(2000); }
+                    downloader.StopAndMove();
+                    NotificationSender sender = new NotificationSender("Stream finished", Helper.GenerateName(downloader.TorrentSource.Series, downloader.TorrentSource.Episode));                   
+                    sender.Show();
+                });
             }
             MainWindow.ShowContent();
             MouseMove -= Page_MouseMove;

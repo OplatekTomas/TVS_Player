@@ -124,13 +124,17 @@ namespace TVSPlayer
             FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
             if (info != null) {
                 ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
-                //Used to release as many resources as possible to give all rendering power to video playback
-                MainWindow.SetPage(new BlankPage());
-                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                await Task.Run(() => {
-                    Thread.Sleep(500);
-                });
-                MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
+                if (!Settings.UseWinDefaultPlayer) {
+                    //Used to release as many resources as possible to give all rendering power to video playback
+                    MainWindow.SetPage(new BlankPage());
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                    await Task.Run(() => {
+                        Thread.Sleep(500);
+                    });
+                    MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
+                } else {
+                    Process.Start(sf.NewName);
+                }
             } else {
                 await MessageBox.Show("No files found...","Error");
             }

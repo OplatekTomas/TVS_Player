@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -291,12 +292,19 @@ namespace TVSPlayer {
         private async void PlayNextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             List<Episode> episodes = Database.GetEpisodes(series.id);
             var ep = episodes.Where(x => !x.finised && x.airedSeason > 0 && x.files.Where(y => y.Type == Episode.ScannedFile.FileType.Video).ToList().Count > 0).OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList().FirstOrDefault();
-            MainWindow.SetPage(new BlankPage());
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            await Task.Run(() => {
-                Thread.Sleep(500);
-            });
-            MainWindow.AddPage(new LocalPlayer(series, ep, GetFileToPlay(ep, series)));
+            if (ep != null) { 
+            var sf = GetFileToPlay(ep, series);
+                if (!Settings.UseWinDefaultPlayer) {
+                    MainWindow.SetPage(new BlankPage());
+                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                    await Task.Run(() => {
+                        Thread.Sleep(500);
+                    });
+                    MainWindow.AddPage(new LocalPlayer(series, ep, sf));
+                } else {
+                    Process.Start(sf.NewName);
+                }
+            }
         }
 
         private void Image_MouseEnter(object sender, MouseEventArgs e) {

@@ -33,7 +33,13 @@
                     <TextBlock FontWeight="SemiBold" Text="Max upload speed:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
                     <TextBlock FontWeight="SemiBold" Text="Download quality:" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
                     <TextBlock FontWeight="SemiBold" Text="Stream quality: " Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,10,5,5" />
-
+                    <CheckBox x:Name="UseBuildIn" FontWeight="SemiBold" Background="{DynamicResource LighterBG}" BorderThickness="0" Margin="5,30,5,5" Content="Use system default player for playback (not streaming)" Foreground="{DynamicResource TextColor}" Click="UseBuildIn_Click" >
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.35" ScaleY="1.35"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
                 </StackPanel>
                 <StackPanel Margin="175,0,20,0">
                     <TextBlock x:Name="LibraryLocation" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5" />

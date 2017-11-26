@@ -525,8 +525,7 @@ namespace TVSPlayer {
                         SetPage(new Library());
                         Settings.Load();
                         UpdateDatabase.StartUpdateBackground();
-                       // TorrentDownloader.ContinueUnfinished();
-                        Settings.DownloadQuality = TorrentQuality.Standart;
+                        TorrentDownloader.ContinueUnfinished();
                     }
                 }
             } else {
