@@ -382,10 +382,7 @@ namespace TVSPlayer {
         }
 
         private void LibrarySidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            SetPage(new Library());
-            HideSideBar();
-            LibrarySelected.Opacity = 1;
-            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            SetLibrary();
         }
 
         private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -401,6 +398,13 @@ namespace TVSPlayer {
 
         private void SideButton_MouseLeave(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = null;
+        }
+
+        public void SetLibrary() {
+            SetPage(new Library());
+            HideSideBar();
+            LibrarySelected.Opacity = 1;
+            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
         }
 
         #endregion

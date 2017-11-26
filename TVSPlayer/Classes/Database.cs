@@ -113,6 +113,20 @@ namespace TVSPlayer {
         #endregion
 
         #region Episode
+
+        /// <summary>
+        /// Gets all episodes in database
+        /// </summary>
+        /// <returns>All Episodes in database</returns>
+        public static List<Episode> GetEpisodes() {
+            var series = Database.GetSeries();
+            var eps = new List<Episode>();
+            foreach (var item in series) {
+                eps.AddRange(GetEpisodes(item.id));
+            }
+            return eps;
+        }
+
         /// <summary>
         /// Gets all episodes in Series
         /// </summary>
@@ -469,6 +483,22 @@ namespace TVSPlayer {
             return posters.Where(x => x.id == idPoster).FirstOrDefault();
         }
 
+        public async static Task<BitmapImage> GetBanner(int id) {
+            Series s = GetSeries(id);
+            if (!String.IsNullOrEmpty(s.banner)){
+                string file = db + id + "\\Banners\\" + s.banner;
+                if (File.Exists(file)) {
+                    return await LoadImage(file);
+                } else {
+                    Directory.CreateDirectory(Path.GetDirectoryName(file));
+                    WebClient webClient = new WebClient();
+                    await webClient.DownloadFileTaskAsync(new Uri("https://www.thetvdb.com/banners/" + s.banner), file);
+                    return await LoadImage(file);
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Returns currently selected poster as BitmapImage so it can be set as Image.Source
         /// </summary>
@@ -539,7 +569,7 @@ namespace TVSPlayer {
         /// <param name="file">what file to load from</param>
         /// <returns>loaded image</returns>
         public async static Task<BitmapImage> LoadImage(string file) {
-            var bmp = await System.Threading.Tasks.Task.Run(() => {
+            var bmp = await Task.Run(() => {
                 BitmapImage img = new BitmapImage();
                 img.BeginInit();
                 img.CacheOption = BitmapCacheOption.OnLoad;

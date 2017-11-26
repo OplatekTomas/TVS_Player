@@ -17,7 +17,7 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <Grid Margin="0,0,75,0">
+        <Grid Margin="0,0,95,0">
             <TextBlock Foreground="{DynamicResource TextColor}" x:Name="TorrentName" Text="Sample text" FontSize="18" Margin="10,15" />
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,5,0">
                 <Image Height="15" Margin="0,2,0,0" Source="{DynamicResource ForwardIcon}" RenderTransformOrigin="0.5,0.5" >
@@ -44,8 +44,11 @@
             <Grid HorizontalAlignment="Right" x:Name="Remove" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Remove_MouseUp">
                 <Image Source="{DynamicResource RemoveIcon}" Height="22" />
             </Grid>
-            <Grid Margin="35,0" x:Name="Pause" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Pause_MouseUp">
+            <Grid Margin="0,0,30,0" HorizontalAlignment="Right" x:Name="Pause" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Pause_MouseUp">
                 <Image x:Name="PauseIcon" Source="/Icons/ico-pause-light.png" Height="25" />
+            </Grid>
+            <Grid Margin="0,0,63,0" HorizontalAlignment="Right" x:Name="Question" MouseEnter="Pause_MouseEnter" MouseLeave="Pause_MouseLeave" MouseUp="Question_MouseUp">
+                <Image Source="{DynamicResource QuestionIcon}" Height="23" />
             </Grid>
         </Grid>
 

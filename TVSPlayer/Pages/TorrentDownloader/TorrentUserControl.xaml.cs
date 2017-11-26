@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -95,6 +96,10 @@ namespace TVSPlayer {
             } else if(result == MessageBoxResult.No) {
                 downloader.Remove(false);
             }
+        }
+
+        private void Question_MouseUp(object sender, MouseButtonEventArgs e) {
+            Process.Start(downloader.TorrentSource.URL);
         }
     }
 }

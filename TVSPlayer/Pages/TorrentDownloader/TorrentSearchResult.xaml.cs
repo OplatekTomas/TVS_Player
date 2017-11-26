@@ -57,7 +57,7 @@ namespace TVSPlayer {
             SeriesInfo.Text = "Series name: " + torrent.Series.seriesName;
             Quality.Text = "Quality: " + torrent.Quality.ToString();
             Size.Text = "Size: " + torrent.Size;
-            SeedLeech.Text = "S: " + torrent.Seeders + " L:" + torrent.Leech; 
+            SeedLeech.Text = "S: " + torrent.Seeders + " L: " + torrent.Leech; 
         }
 
         private void Stream_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

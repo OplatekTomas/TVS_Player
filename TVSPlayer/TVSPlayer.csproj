@@ -113,7 +113,7 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\TorrentDatabase.cs" />
-    <Compile Include="Controls\FinishedTorrentUserControl.xaml.cs">
+    <Compile Include="Pages\TorrentDownloader\FinishedTorrentUserControl.xaml.cs">
       <DependentUpon>FinishedTorrentUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TorrentDownloader\AllTorrents.xaml.cs">
@@ -234,11 +234,17 @@
     <Compile Include="Pages\Other\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Other\Schedule.xaml.cs">
+    <Compile Include="Pages\Schedule\Schedule.xaml.cs">
       <DependentUpon>Schedule.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Schedule\ScheduleMonth.xaml.cs">
+      <DependentUpon>ScheduleMonth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Schedule\ScheduleDay.xaml.cs">
+      <DependentUpon>ScheduleDay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
-    <Compile Include="Controls\TorrentUserControl.xaml.cs">
+    <Compile Include="Pages\TorrentDownloader\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TorrentDownloader\TorrentSearchResult.xaml.cs">
@@ -251,7 +257,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\FinishedTorrentUserControl.xaml">
+    <Page Include="Pages\TorrentDownloader\FinishedTorrentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -411,7 +417,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Other\Schedule.xaml">
+    <Page Include="Pages\Schedule\Schedule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Schedule\ScheduleMonth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Schedule\ScheduleDay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -431,7 +445,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TorrentUserControl.xaml">
+    <Page Include="Pages\TorrentDownloader\TorrentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
