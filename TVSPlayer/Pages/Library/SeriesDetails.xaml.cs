@@ -139,12 +139,21 @@ namespace TVSPlayer
             Mouse.OverrideCursor = null;
         }
 
-        private void Panel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-
+        Point scrollMousePoint = new Point();
+        double hOff = 1;
+        private void scrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            scrollMousePoint = e.GetPosition(ScrollView);
+            hOff = ScrollView.HorizontalOffset;
+            ScrollView.CaptureMouse();
+        }
+        private void scrollViewer_PreviewMouseMove(object sender, MouseEventArgs e) {
+            if (ScrollView.IsMouseCaptured) {
+                ScrollView.ScrollToHorizontalOffset(hOff + (scrollMousePoint.X - e.GetPosition(ScrollView).X));
+            }
         }
 
-        private void Panel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-
+        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            ScrollView.ReleaseMouseCapture();
         }
     }
 }

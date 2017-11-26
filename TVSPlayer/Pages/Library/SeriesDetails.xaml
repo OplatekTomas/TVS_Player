@@ -71,7 +71,7 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Margin="0,0,0,20">
-            <Grid x:Name="RightArrow" MouseLeftButtonUp="RightArrow_MouseLeftButtonUp" HorizontalAlignment="Left" Width="0">
+            <Grid x:Name="RightArrow" MouseLeftButtonUp="RightArrow_MouseLeftButtonUp" HorizontalAlignment="Left" Width="0" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <Image Source="{DynamicResource ForwardIconHQ}" RenderTransformOrigin="0.5,0.5" >
                     <Image.RenderTransform>
                         <TransformGroup>
@@ -80,14 +80,14 @@
                     </Image.RenderTransform>
                 </Image>
             </Grid>
-            <Grid x:Name="LeftArrow" MouseLeftButtonUp="LeftArrow_MouseLeftButtonUp" HorizontalAlignment="Right" Width="0">
+            <Grid x:Name="LeftArrow" MouseLeftButtonUp="LeftArrow_MouseLeftButtonUp" HorizontalAlignment="Right" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" Width="0">
                 <Image Source="{DynamicResource ForwardIconHQ}" RenderTransformOrigin="0.5,0.5" />
             </Grid>
-            <ScrollViewer x:Name="ScrollView" PreviewMouseWheel="ScrollView_MouseWheel" SizeChanged="ScrollView_SizeChanged" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="Auto" VerticalScrollBarVisibility="Disabled" Margin="60,0">
+            <ScrollViewer x:Name="ScrollView" PreviewMouseWheel="ScrollView_MouseWheel" PreviewMouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp" PreviewMouseMove="scrollViewer_PreviewMouseMove" PreviewMouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown" SizeChanged="ScrollView_SizeChanged" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" Width="Auto" VerticalScrollBarVisibility="Disabled" Margin="60,0">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                 </ScrollViewer.Resources>
-                <StackPanel Orientation="Horizontal" x:Name="Panel" PreviewMouseLeftButtonDown="Panel_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="Panel_PreviewMouseLeftButtonUp" />
+                <StackPanel Orientation="Horizontal" x:Name="Panel" />
 
 
             </ScrollViewer>
