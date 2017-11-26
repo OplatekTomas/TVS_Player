@@ -69,7 +69,7 @@ namespace TVSPlayer {
             if (!String.IsNullOrEmpty(MonthText.Text)) {
                 if (Int32.TryParse(MonthText.Text, out int result) && result >= 1 && result <= 12) {
                     string oldText = MonthText.Text;
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                     if (oldText == MonthText.Text) {
                         dateTime = new DateTime(dateTime.Year, result, 1);
                         Content.Content = new ScheduleMonth(dateTime, episodes);
@@ -84,8 +84,8 @@ namespace TVSPlayer {
             if (!String.IsNullOrEmpty(YearText.Text)) {
                 if (Int32.TryParse(YearText.Text, out int result) && result <10000) {
                     string oldText = YearText.Text;
-                    await Task.Delay(1000);
-                    if (oldText == MonthText.Text) {
+                    await Task.Delay(500);
+                    if (oldText == YearText.Text) {
                         dateTime = new DateTime(result, dateTime.Month, 1);
                         Content.Content = new ScheduleMonth(dateTime, episodes);
                     }
