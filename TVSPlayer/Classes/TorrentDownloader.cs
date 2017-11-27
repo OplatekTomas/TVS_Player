@@ -125,7 +125,7 @@ namespace TVSPlayer {
             Settings.DownloadSpeed = limit;
             if (TorrentSession != null) {
                 SessionSettings ss = TorrentSession.QuerySettings();
-                ss.DownloadRateLimit = limit;
+                ss.DownloadRateLimit = limit*1024;
                 TorrentSession.SetSettings(ss);
             }
 
@@ -139,7 +139,7 @@ namespace TVSPlayer {
             Settings.UploadSpeed = limit;
             if (TorrentSession != null) {
                 SessionSettings ss = TorrentSession.QuerySettings();
-                ss.UploadRateLimit = limit;
+                ss.UploadRateLimit = limit*1024;
                 TorrentSession.SetSettings(ss);
             }
 
