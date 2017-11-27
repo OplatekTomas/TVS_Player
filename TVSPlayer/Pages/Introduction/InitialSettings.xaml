@@ -1,0 +1,63 @@
+﻿<Page x:Class="TVSPlayer.InitialSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="InitialSettings">
+    <Page.Resources>
+        <Storyboard x:Key="ShowButton">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,40,0" Duration="0:0:0.3" AccelerationRatio="0.5" DecelerationRatio="0.5" />
+        </Storyboard>
+        <Storyboard x:Key="HideButton">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" Duration="0:0:0.3" AccelerationRatio="0.5" DecelerationRatio="0.5" />
+        </Storyboard>
+    </Page.Resources>
+    
+    <Grid Background="{DynamicResource BackgroundBrush}" >
+        <Grid x:Name="Back" MouseUp="Back_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+            <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+        </Grid>
+        <TextBlock FontSize="25" Text="Initial Settings" x:Name="TopText" Margin="40,6" Foreground="{DynamicResource TextColor}" />
+        <StackPanel x:Name="Optionals" VerticalAlignment="Center" Margin="10">
+            <CheckBox IsChecked="False" Checked="AutoDownload_Checked" Unchecked="AutoDownload_Unchecked" x:Name="AutoDownload" Content="Download new episodes autmatically"  Margin="0,10" Foreground="{DynamicResource TextColor}" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" >
+                <CheckBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
+                    </TransformGroup>
+                </CheckBox.RenderTransform>
+            </CheckBox>
+            <TextBlock TextAlignment="Left" Margin="20,0,0,0" Foreground="{DynamicResource TextColor}" Text="Enter directory where episodes will be cached:" FontSize="16" />
+            <Grid Margin="20,5,0,30">
+                <TextBox Height="27" Panel.ZIndex="10" IsEnabled="False" VerticalAlignment="Bottom" x:Name="CacheFolder" Margin="0,0,0,0" GotFocus="CacheFolder_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
+                <Grid Opacity="0" Height="27" x:Name="CacheSelect" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="CacheSelect_MouseUp">
+                    <Image Source="{DynamicResource FolderIcon}"/>
+                </Grid>
+            </Grid>
+            <TextBlock VerticalAlignment="Bottom" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directories that will be scanned for episodes and subs: (optional)" FontSize="16" />
+            <Grid Margin="0,5,0,5">
+                <TextBox Height="27" VerticalAlignment="Bottom" x:Name="FirstScan" Margin="20,0,40,0" GotFocus="FirstScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
+                <Grid  Height="27" x:Name="FirstFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="FirstFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                    <Image Source="{DynamicResource FolderIcon}"/>
+                </Grid>
+            </Grid>
+            <Grid Margin="0,5,0,5">
+                <TextBox Height="27" VerticalAlignment="Bottom" x:Name="SecondScan"  Margin="20,0,40,0" GotFocus="SecondScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
+                <Grid  Height="27" x:Name="SecondFolder" HorizontalAlignment="Right"  Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="SecondFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                    <Image Source="{DynamicResource FolderIcon}"/>
+                </Grid>
+            </Grid>
+            <Grid Margin="0,5,0,5">
+                <TextBox Height="27" VerticalAlignment="Bottom" x:Name="ThirdScan" Margin="20,0,40,0" GotFocus="ThirdScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
+                <Grid  Height="27" x:Name="ThirdFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="ThirdFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                    <Image Source="{DynamicResource FolderIcon}"/>
+                </Grid>
+            </Grid>
+        </StackPanel>
+        <Grid  x:Name="Continue" MouseUp="Continue_MouseUp">
+            <Image Source="{DynamicResource ForwardIcon}" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" />
+        </Grid>
+    </Grid>
+</Page>

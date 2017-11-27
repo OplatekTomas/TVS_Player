@@ -1,0 +1,54 @@
+﻿<Page x:Class="TVSPlayer.LocalPlayer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      xmlns:player="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="LocalPlayer" MouseMove="Page_MouseMove" Focusable="True" x:Name="PlayerPage" PreviewMouseLeftButtonDown="Page_PreviewMouseLeftButtonUp" PreviewKeyUp="PlayerPage_PreviewKeyUp" >
+
+
+    <Grid Background="Black" Loaded="Grid_Loaded" >
+        <Grid Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="45" VerticalAlignment="Top" x:Name="TopBar">
+            <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                <Image Source="{StaticResource BackIcon}" />
+            </Grid>
+            <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" Margin="45,0,0,3" />
+        </Grid>
+        <player:MediaUriElement x:Name="Player" />
+        <Grid x:Name="BottomBar" Background="{StaticResource TransparentStaticBG}" Height="100" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="11*"/>
+            </Grid.RowDefinitions>
+            <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
+            <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
+            <Grid VerticalAlignment="Bottom" Grid.RowSpan="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">
+                    <Slider x:Name="VolumeSlider" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                    <Grid Height="35" Margin="20,0" x:Name="BackIcon" MouseLeftButtonUp="BackIcon_MouseLeftButtonUp">
+                        <Image Source="/Icons/ico-back-light.png" />
+                    </Grid>
+                    <Grid Height="35" x:Name="PlayIcon" MouseLeftButtonUp="PlayIcon_MouseLeftButtonUp">
+                        <Image x:Name="ActualPlayIcon" Source="/Icons/ico-pause-light.png" />
+                    </Grid>
+                    <Grid Height="35"  Margin="20,0" x:Name="ForwardIcon" MouseLeftButtonUp="ForwardIcon_MouseLeftButtonUp">
+                        <Image Source="/Icons/ico-forward-light.png" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,120,20" VerticalAlignment="Center" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                    <Grid Height="30"  HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="Picture in Picture" x:Name="AlwaysTopIcon" MouseUp="AlwaysTopIcon_MouseUp">
+                        <Image Source="/Icons/ico-windows-light.png" />
+                    </Grid>
+                    <Grid Height="25"  Margin="20,0,0,0"  HorizontalAlignment="Right"  VerticalAlignment="Center" x:Name="FullScreenIcon" MouseUp="FullscreenIcon_MouseUp" ToolTip="Go Fullscren"  Width="25">
+                        <Image Source="/Icons/ico-fullscreen-light.png" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="TVSPlayer.ActorUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="310">
+    <Grid Background="{DynamicResource BackgroundBrush}" x:Name="BackgroundGrid" Loaded="BackgroundGrid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3.75*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="LoadingText" HorizontalAlignment="Center" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Loading..."  FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/21}" />
+        <Image x:Name="ActorFace" VerticalAlignment="Top" Margin="5,5,5,0"  >
+            <Image.Effect>
+                <DropShadowEffect BlurRadius="10" Opacity="0.5" ShadowDepth="4" />
+            </Image.Effect>
+        </Image>
+        <Grid Grid.Row="1" Margin="0,7,0,0">
+            <TextBlock MouseEnter="Name_MouseEnter" MouseLeave="Name_MouseLeave" x:Name="Name" TextDecorations="Underline" VerticalAlignment="Top" FontWeight="Bold" Text="Name" TextAlignment="Center" Foreground="{DynamicResource TextColor}" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/18}"  Grid.Row="1"  />
+            <TextBlock VerticalAlignment="Center" Text="as" TextAlignment="Center" Foreground="{DynamicResource TextColor}" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/21}"  Grid.Row="1" />
+            <TextBlock x:Name="Role" VerticalAlignment="Bottom" FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/19}"  Text="Role" TextAlignment="Center" Foreground="{DynamicResource TextColor}" Grid.Row="1" />
+        </Grid>
+
+    </Grid>
+</UserControl>

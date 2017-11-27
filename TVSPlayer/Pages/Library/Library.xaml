@@ -1,0 +1,33 @@
+﻿<Page x:Class="TVSPlayer.Library"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="Library">
+
+    <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded" Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <!--<Slider x:Name="Scale" Minimum="224" Maximum="548" />-->
+        </Grid>
+        <TextBlock Foreground="{DynamicResource TextColor}" x:Name="LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" Text="Loading..." Grid.Row="1" Panel.ZIndex="5" />
+        <ScrollViewer Margin="5,0,5,10" Grid.Row="1" ScrollViewer.CanContentScroll="False" ScrollViewer.PanningMode="VerticalOnly">
+            <ScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
+            </ScrollViewer.Resources>
+            <Grid>
+                <WrapPanel x:Name="PanelPosters">
+                </WrapPanel>
+                <StackPanel x:Name="PanelList">
+                    
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

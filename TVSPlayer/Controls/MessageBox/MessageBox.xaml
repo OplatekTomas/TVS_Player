@@ -1,0 +1,47 @@
+﻿<Page x:Class="TVSPlayer.MessageBox"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVSPlayer"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="MessageBox" Focusable="True">
+    <Grid>
+        <Grid Background="{DynamicResource TransparentStaticBG}" MouseLeftButtonUp="Close_MouseLeftButtonUp" SizeChanged="Grid_SizeChanged" />
+        <Grid Loaded="Grid_Loaded">
+            <Grid Grid.Row="1" Grid.Column="1" Background="{DynamicResource BackgroundBrush}" Panel.ZIndex="5" MinWidth="300" MinHeight="150" Height="{Binding ActualHeight, ElementName=Content,Converter={local:MathConverter}, ConverterParameter=x+100}" Width="{Binding ActualWidth, ElementName=Content,Converter={local:MathConverter}, ConverterParameter=x+30}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="Top" Margin="0,0,0,0" Background="{DynamicResource LighterBG}">
+                    <Grid Margin="5,5,0,5" x:Name="Close" MouseLeftButtonUp="Close_MouseLeftButtonUp" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" HorizontalAlignment="Left">
+                        <Image Source="{DynamicResource BackIcon}" />
+                    </Grid>
+                    <TextBlock x:Name="Header" HorizontalAlignment="Left" FontSize="18" Foreground="{DynamicResource TextColor}" Text="Placeholder" Margin="35,4,0,0" />
+                </Grid>
+                <Grid x:Name="Center" Grid.Row="1">
+                    <TextBlock HorizontalAlignment="Left" x:Name="Content" TextWrapping="NoWrap" FontSize="15" VerticalAlignment="Center" Margin="10" Foreground="{DynamicResource TextColor}" Text="" />
+                </Grid>
+                <Grid x:Name="Bottom" Grid.Row="2" Margin="0,0,5,5" >
+                    <Grid x:Name="NoButtons" Opacity="1">
+                        <TextBlock Text="Continue" Foreground="{DynamicResource TextColor}" MouseLeftButtonUp="Close_MouseLeftButtonUp" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" FontSize="14" HorizontalAlignment="Right" Margin="35,0" VerticalAlignment="Center" />
+                        <Grid Margin="0,5,5,0" x:Name="Next" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" MouseLeftButtonUp="Close_MouseLeftButtonUp" HorizontalAlignment="Right">
+                            <Image Source="{DynamicResource ForwardIcon}" />
+                        </Grid>
+                    </Grid>
+                    <Grid x:Name="YesNo" Opacity="1">
+                        <Grid Margin="0,5,5,0" Background="{DynamicResource LighterBG}" Width="50" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" x:Name="Yes" MouseLeftButtonUp="No_MouseLeftButtonUp"  HorizontalAlignment="Right">
+                            <TextBlock HorizontalAlignment="Center" Text="No" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" Foreground="{DynamicResource TextColor}" MouseLeftButtonUp="Yes_MouseLeftButtonUp" FontSize="14" VerticalAlignment="Center" />
+                        </Grid>
+                        <Grid Margin="0,5,65,0" Width="50" Background="{DynamicResource LighterBG}"  MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" x:Name="No" MouseLeftButtonUp="Yes_MouseLeftButtonUp" HorizontalAlignment="Right">
+                            <TextBlock Text="Yes" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" Foreground="{DynamicResource TextColor}" MouseLeftButtonUp="Yes_MouseLeftButtonUp" FontSize="14" HorizontalAlignment="Center"  VerticalAlignment="Center" />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

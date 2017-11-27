@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TVSPlayer">
+    <BitmapImage x:Key="MenuIcon" UriSource="pack://application:,,,/Icons/ico-menu-light.png" />
+    <BitmapImage x:Key="MoreIcon" UriSource="pack://application:,,,/Icons/ico-more-light.png" />
+    <BitmapImage x:Key="SearchIcon" UriSource="pack://application:,,,/Icons/ico-search-light.png" />
+    <BitmapImage x:Key="PlayIcon" UriSource="pack://application:,,,/Icons/ico-play-light.png" />
+    <BitmapImage x:Key="ImportIcon" UriSource="pack://application:,,,/Icons/ico-import-light.png" />
+    <BitmapImage x:Key="NewFileIcon" UriSource="pack://application:,,,/Icons/ico-newfile-light.png" />
+    <BitmapImage x:Key="RemoveIcon" UriSource="pack://application:,,,/Icons/ico-remove-light.png" />
+    <BitmapImage x:Key="QuestionIcon" UriSource="pack://application:,,,/Icons/ico-question-light.png" />
+    <BitmapImage x:Key="CheckSquareIcon" UriSource="pack://application:,,,/Icons/ico-checksquare-light.png" />
+    <BitmapImage x:Key="CheckIcon" UriSource="pack://application:,,,/Icons/ico-checked-light.png" />
+    <BitmapImage x:Key="ForwardIcon" UriSource="pack://application:,,,/Icons/ico-forward-light.png" />
+    <BitmapImage x:Key="ReloadIcon" UriSource="pack://application:,,,/Icons/ico-reload-light.png" />
+    <BitmapImage x:Key="ForwardIconHQ" UriSource="pack://application:,,,/Icons/ico-forward-light-hq.png" />
+    <BitmapImage x:Key="FolderIcon" UriSource="pack://application:,,,/Icons/ico-folder-light.png" />
+    <BitmapImage x:Key="BackIcon" UriSource="pack://application:,,,/Icons/ico-back-light.png" />
+    <BitmapImage x:Key="PlusIcon" UriSource="pack://application:,,,/Icons/ico-add-light.png" />
+    <BitmapImage x:Key="EditIcon" UriSource="pack://application:,,,/Icons/ico-edit-light.png" />
+    <BitmapImage x:Key="NoPoster" UriSource="pack://application:,,,/Icons/poster-dark.png" />
+    <BitmapImage x:Key="ThemeIcon" UriSource="pack://application:,,,/Icons/ico-theme-light.png" />
+    <BitmapImage x:Key="PosterIcon" UriSource="pack://application:,,,/Icons/ico-poster-light.png" />
+    <BitmapImage x:Key="ListIcon" UriSource="pack://application:,,,/Icons/ico-list-light.png" />
+    <BitmapImage x:Key="AlphabeticalIcon" UriSource="pack://application:,,,/Icons/ico-alpha-light.png" />
+    <BitmapImage x:Key="AlphabeticalReverseIcon" UriSource="pack://application:,,,/Icons/ico-alphareverse-light.png" />
+    <BitmapImage x:Key="CalendarIcon" UriSource="pack://application:,,,/Icons/ico-calendar-light.png" />
+    <BitmapImage x:Key="DownloadIcon" UriSource="pack://application:,,,/Icons/ico-download-light.png" />
+    <BitmapImage x:Key="BroadcastIcon" UriSource="pack://application:,,,/Icons/ico-broadcast-light.png" />
+    <BitmapImage x:Key="PauseIcon" UriSource="pack://application:,,,/Icons/ico-pause-light.png" />
+    <BitmapImage x:Key="NoThumbnail" UriSource="pack://application:,,,/Icons/thumbnail-dark.png" />
+    <BitmapImage x:Key="NoBanner" UriSource="pack://application:,,,/Icons/banner-dark.png" />
+    <BitmapImage x:Key="CogIcon" UriSource="pack://application:,,,/Icons/ico-cog-light.png" />
+
+
+</ResourceDictionary>

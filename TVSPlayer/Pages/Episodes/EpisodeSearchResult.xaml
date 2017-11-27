@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="TVSPlayer.EpisodeSearchResult"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TVSPlayer"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="1280">
+    <Grid x:Name="Base" Background="Transparent" MouseEnter="Base_MouseEnter" MouseLeave="Base_MouseLeave" Loaded="Grid_Loaded">
+        <Grid Panel.ZIndex="3" Background="Transparent" x:Name="Clickable" Margin="0,0,100,0" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" />
+        <TextBlock Margin="10,0" x:Name="MainText" VerticalAlignment="Center" FontSize="22" Foreground="#F5F5F5" Text="" HorizontalAlignment="Left" />
+        <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Margin="10,5" x:Name="SeasonText" VerticalAlignment="Bottom" FontSize="18" Foreground="#F5F5F5" Text="Season: 1"  HorizontalAlignment="Right" />
+            <TextBlock Margin="10,5" x:Name="EpisodeText" VerticalAlignment="Bottom" FontSize="18" Foreground="#F5F5F5" Text="Episode: 1"  HorizontalAlignment="Right" />
+            <Grid Margin="10,0" Background="Transparent" x:Name="PlayIcon" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                <Image Source="/Icons/ico-play-light.png" Height="30"></Image>
+            </Grid>
+            <Grid Margin="10,0,10,0" Background="#01000000" x:Name="QuestionIcon" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+                <Image Source="/Icons/ico-question-light.png" Height="30"></Image>
+            </Grid>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
