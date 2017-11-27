@@ -13,7 +13,7 @@
         </Storyboard>
     </Page.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
-        <Grid x:Name="FadeIn" Opacity="0" MouseUp="FadeIn_MouseUp">
+        <Grid x:Name="FadeIn" Opacity="0" MouseUp="FadeIn_MouseUp" MouseEnter="FadeIn_MouseEnter" MouseLeave="FadeIn_MouseLeave">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="49" Foreground="{DynamicResource TextColor}" Margin="0,0,150,100" Text="Welcome to TVS-Player" />
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" Foreground="{DynamicResource TextColor}" Margin="0,100,185,0" Text="First you need to go through simple setup" />
             <Image Source="pack://application:,,,/Icons/ico-forward-light-hq.png" Height="120" HorizontalAlignment="Right" Margin="0,0,50,0" />

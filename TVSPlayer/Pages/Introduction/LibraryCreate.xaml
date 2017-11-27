@@ -18,7 +18,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid>
-            <Grid x:Name="Back" MouseUp="Back_MouseUp">
+            <Grid x:Name="Back" MouseUp="Back_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
             </Grid>
             <TextBlock FontSize="25" Text="Create library" x:Name="TopText" Margin="40,5" Foreground="{DynamicResource TextColor}" />
@@ -26,17 +26,17 @@
             <Grid x:Name="TextBoxGrid"  Margin="10,0,10,0" VerticalAlignment="Bottom" >
                 <TextBlock x:Name="Header" VerticalAlignment="Top" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directory where your library with TV shows will be located" FontSize="16" />
                 <TextBox Height="27" VerticalAlignment="Bottom" Margin="0,35,42,0" x:Name="FolderLocation" GotFocus="FolderLocation_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,0" MouseUp="SelectFolder_MouseUp">
+                <Grid  Height="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,0" MouseUp="SelectFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource FolderIcon}"/>
                 </Grid>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
-            <Grid Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,25,130" x:Name="Now" MouseUp="Now_MouseUp">
+            <Grid Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,25,130" x:Name="Now" MouseUp="Now_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource TextColor}" Width="230" FontSize="20" Text="Add TV shows now" VerticalAlignment="Center" />
                 <Image Source="{DynamicResource ForwardIcon}" HorizontalAlignment="Right" Margin="0,3,0,0" />
             </Grid>
-            <Grid Height="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25,50" x:Name="Later" MouseUp="Later_MouseUp">
+            <Grid Height="40" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25,50" x:Name="Later" MouseUp="Later_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource TextColor}" Width="230" FontSize="20" Text="Add TV shows later" VerticalAlignment="Center" />
                 <Image Source="{DynamicResource ForwardIcon}" HorizontalAlignment="Right" Margin="0,3,0,0" />
             </Grid>
@@ -50,10 +50,10 @@
                 </StackPanel>
             </ScrollViewer>
             <Grid x:Name="BottomControlls" Height="50" VerticalAlignment="Bottom">
-                <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
+                <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource ForwardIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
                 </Grid>
-                <Grid Height="27" Width="90" HorizontalAlignment="Right" Margin="10,0,47,0" VerticalAlignment="Center" x:Name="AddSeries" MouseUp="AddSeries_MouseUp">
+                <Grid Height="27" Width="90" HorizontalAlignment="Right" Margin="10,0,47,0" VerticalAlignment="Center" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource PlusIcon}" Margin="0" HorizontalAlignment="Left"  />
                     <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Right" Margin="0,-1,0,0"  Text="Add Series" VerticalAlignment="Center" />
                 </Grid>

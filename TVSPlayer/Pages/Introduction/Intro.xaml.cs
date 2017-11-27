@@ -35,5 +35,13 @@ namespace TVSPlayer
             MainWindow.RemovePage();
             MainWindow.AddPage(new InitialSettings());
         }
+
+        private void FadeIn_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void FadeIn_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

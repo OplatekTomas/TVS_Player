@@ -17,11 +17,11 @@
     </Page.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}">
         <Grid Height="47" VerticalAlignment="Top">
-            <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center">
+            <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center" MouseEnter="AddSeries_MouseEnter" MouseLeave="AddSeries_MouseLeave">
                 <Image Source="{DynamicResource BackIcon}" Margin="0" x:Name="Back" />
             </Grid>
             <TextBox x:Name="SelectFolderText" Height="27" VerticalAlignment="Center" Margin="47,0,47,0" BorderThickness="0" FontSize="16" Text="Enter library location" TextAlignment="Center" GotFocus="SelectFolder_GotFocus" />
-            <Grid x:Name="SelectFolder" Height="27" Width="27" HorizontalAlignment="Right" Margin="10,0" VerticalAlignment="Center" MouseUp="SelectFolder_MouseUp">
+            <Grid x:Name="SelectFolder" Height="27" Width="27" HorizontalAlignment="Right" Margin="10,0" VerticalAlignment="Center" MouseUp="SelectFolder_MouseUp" MouseEnter="AddSeries_MouseEnter" MouseLeave="AddSeries_MouseLeave">
                 <Image Source="{DynamicResource FolderIcon}" Margin="0" />
             </Grid>
         </Grid>
@@ -37,10 +37,10 @@
             </ScrollViewer>
         </Grid>
         <Grid VerticalAlignment="Bottom" Height="47" x:Name="BottomBar" Margin="0,0,0,-47" Background="{DynamicResource BackgroundBrush}" >
-            <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
+            <Grid Height="27" Width="27" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center" MouseEnter="AddSeries_MouseEnter" MouseLeave="AddSeries_MouseLeave">
                 <Image Source="{DynamicResource ForwardIcon}" Margin="0" x:Name="Confirm" MouseUp="Confirm_MouseUp" />
             </Grid>
-            <Grid Height="27" Width="90" HorizontalAlignment="Right" Margin="10,0,47,0" VerticalAlignment="Center" x:Name="AddSeries" MouseUp="AddSeries_MouseUp">
+            <Grid Height="27" Width="90" HorizontalAlignment="Right" Margin="10,0,47,0" VerticalAlignment="Center" x:Name="AddSeries" MouseUp="AddSeries_MouseUp" MouseEnter="AddSeries_MouseEnter" MouseLeave="AddSeries_MouseLeave">
                 <Image Source="{DynamicResource PlusIcon}" Margin="0" HorizontalAlignment="Left"  />
                 <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Right" Margin="0,-1,0,0"  Text="Add Series" VerticalAlignment="Center" />
             </Grid>

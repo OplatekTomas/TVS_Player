@@ -8,20 +8,20 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="StartUp">
 
-    <Grid Background="{DynamicResource BackgroundBrush}">
+    <Grid Background="{DynamicResource BackgroundBrush}" >
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid x:Name="Back" MouseUp="Back_MouseUp">
-            <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
+            <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" />
         </Grid>
-        <Grid x:Name="Create" MouseUp="Create_MouseUp">
+        <Grid x:Name="Create" MouseUp="Create_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Center" Text="Create library" FontSize="40" VerticalAlignment="Center" Margin="0,0,200,50" />
             <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Center" Text="Use this option if you don't have any library created" FontSize="18" VerticalAlignment="Center" Margin="50,50,0,0" />
             <Image Source="{DynamicResource ForwardIconHQ}" VerticalAlignment="Center"  HorizontalAlignment="Right" Height="100" Margin="0,0,50,0" />
         </Grid>
-        <Grid x:Name="Import" MouseUp="Import_MouseUp" Grid.Row="1">
+        <Grid x:Name="Import" MouseUp="Import_MouseUp" Grid.Row="1" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Center" Text="Import library" FontSize="40" VerticalAlignment="Center" Margin="0,0,200,50" />
             <TextBlock Foreground="{DynamicResource TextColor}" HorizontalAlignment="Center" Text="Use this option if you already have some form of library" FontSize="18" VerticalAlignment="Center" Margin="80,50,0,0" />
             <Image Source="{DynamicResource ForwardIconHQ}" VerticalAlignment="Center"  HorizontalAlignment="Right" Height="100" Margin="0,0,50,0" />

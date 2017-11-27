@@ -25,17 +25,16 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="Game of thrones" FontSize="26" Margin="5,1" />
-        <TextBlock x:Name="FolderLocation" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,3" Text="C:KappaKAPPAKAPPAKAPPAKAPPA" FontSize="16" />
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,62,0" x:Name="Edit" MouseUp="Edit_MouseUp" >
+        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" Text="" FontSize="26" Margin="5,1" />
+        <TextBlock x:Name="FolderLocation" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="11,3" Text="" FontSize="16" />
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,62,0" x:Name="Edit" MouseUp="Edit_MouseUp" MouseEnter="Edit_MouseEnter" MouseLeave="Edit_MouseLeave">
             <Image Source="{DynamicResource EditIcon}" />
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,15,0" x:Name="Remove" >
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" Margin="0,0,15,0" x:Name="Remove" MouseEnter="Edit_MouseEnter" MouseLeave="Edit_MouseLeave" >
             <Image Source="{DynamicResource RemoveIcon}" />
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,110,0" x:Name="Detail" >
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="25" Height="25" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,110,0" x:Name="Detail" MouseEnter="Edit_MouseEnter" MouseLeave="Edit_MouseLeave" >
             <Image Source="{DynamicResource QuestionIcon}"/>
-
         </Grid>
         <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
             <local:ShowDetailsFromApi x:Name="Details" />

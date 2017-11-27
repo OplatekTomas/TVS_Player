@@ -169,7 +169,13 @@ namespace TVSPlayer
             await MainWindow.CreateDatabase(ids);
             MainWindow.RemovePage();
         }
-       
-        
+
+        private void AddSeries_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void AddSeries_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

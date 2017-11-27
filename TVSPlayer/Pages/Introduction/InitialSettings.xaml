@@ -16,13 +16,13 @@
         </Storyboard>
     </Page.Resources>
     
-    <Grid Background="{DynamicResource BackgroundBrush}">
-        <Grid x:Name="Back" MouseUp="Back_MouseUp">
+    <Grid Background="{DynamicResource BackgroundBrush}" >
+        <Grid x:Name="Back" MouseUp="Back_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <Image Source="{DynamicResource BackIcon}" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" />
         </Grid>
         <TextBlock FontSize="25" Text="Initial Settings" x:Name="TopText" Margin="40,6" Foreground="{DynamicResource TextColor}" />
         <StackPanel x:Name="Optionals" VerticalAlignment="Center" Margin="10">
-            <CheckBox IsChecked="False" Checked="AutoDownload_Checked" Unchecked="AutoDownload_Unchecked" x:Name="AutoDownload" Content="Download new episodes autmatically"  Margin="0,10" Foreground="{DynamicResource TextColor}" >
+            <CheckBox IsChecked="False" Checked="AutoDownload_Checked" Unchecked="AutoDownload_Unchecked" x:Name="AutoDownload" Content="Download new episodes autmatically"  Margin="0,10" Foreground="{DynamicResource TextColor}" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" >
                 <CheckBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>
@@ -39,25 +39,25 @@
             <TextBlock VerticalAlignment="Bottom" TextAlignment="Left" Foreground="{DynamicResource TextColor}" Text="Enter directories that will be scanned for episodes and subs: (optional)" FontSize="16" />
             <Grid Margin="0,5,0,5">
                 <TextBox Height="27" VerticalAlignment="Bottom" x:Name="FirstScan" Margin="20,0,40,0" GotFocus="FirstScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="FirstFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="FirstFolder_MouseUp">
+                <Grid  Height="27" x:Name="FirstFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="FirstFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource FolderIcon}"/>
                 </Grid>
             </Grid>
             <Grid Margin="0,5,0,5">
                 <TextBox Height="27" VerticalAlignment="Bottom" x:Name="SecondScan"  Margin="20,0,40,0" GotFocus="SecondScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="SecondFolder" HorizontalAlignment="Right"  Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="SecondFolder_MouseUp">
+                <Grid  Height="27" x:Name="SecondFolder" HorizontalAlignment="Right"  Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="SecondFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource FolderIcon}"/>
                 </Grid>
             </Grid>
             <Grid Margin="0,5,0,5">
                 <TextBox Height="27" VerticalAlignment="Bottom" x:Name="ThirdScan" Margin="20,0,40,0" GotFocus="ThirdScan_GotFocus"  BorderThickness="0" FontSize="16" Text="Select directory" />
-                <Grid  Height="27" x:Name="ThirdFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="ThirdFolder_MouseUp">
+                <Grid  Height="27" x:Name="ThirdFolder" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Bottom" MouseUp="ThirdFolder_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                     <Image Source="{DynamicResource FolderIcon}"/>
                 </Grid>
             </Grid>
         </StackPanel>
         <Grid  x:Name="Continue" MouseUp="Continue_MouseUp">
-            <Image Source="{DynamicResource ForwardIcon}" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" />
+            <Image Source="{DynamicResource ForwardIcon}" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" />
         </Grid>
     </Grid>
 </Page>

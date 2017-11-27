@@ -46,6 +46,13 @@ namespace TVSPlayer {
                 BGGrid.Background = new BrushConverter().ConvertFromString("#00000000") as SolidColorBrush;
             }
         }
-        
+
+        private void Detail_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Detail_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

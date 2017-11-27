@@ -26,13 +26,11 @@
             </Style>
         </Grid.Style>
         <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="26" Margin="5,-1,0,0" />
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Height="30" x:Name="Confirm" >
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Height="30" x:Name="Confirm" MouseEnter="Detail_MouseEnter" MouseLeave="Detail_MouseLeave">
             <Image Source="{DynamicResource ForwardIcon}" />
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,45,0" x:Name="Detail" >
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="28" Height="26" MouseLeftButtonUp="Detail_MouseLeftButtonUp" Margin="0,0,45,0" x:Name="Detail" MouseEnter="Detail_MouseEnter" MouseLeave="Detail_MouseLeave">
             <Image Source="{DynamicResource QuestionIcon}" />
-
-
         </Grid>
         <Grid x:Name="DetailsPart" Height="400" VerticalAlignment="Bottom" Margin="0,0,0,-400" Background="{DynamicResource LighterBG}" Visibility="Hidden">
             <local:ShowDetailsFromApi x:Name="Details" />

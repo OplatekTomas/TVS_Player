@@ -36,5 +36,13 @@ namespace TVSPlayer {
                 MainWindow.RemovePage();
             }
         }
+
+        private void Reload_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Reload_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }
