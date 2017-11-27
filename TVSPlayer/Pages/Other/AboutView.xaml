@@ -132,7 +132,10 @@
                 <TextBlock Text="Freepik" MouseUp="TextBlock_MouseUp_4" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" /> from <TextBlock Text="www.flaticon.com" MouseUp="FlatIcon_MouseUp" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" TextDecorations="Underline" /> for
                 <TextBlock Text="Checked Icon" MouseUp="TextBlock_MouseUp_35" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" />
             </TextBlock>
-
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Margin="0,5" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}" >
+                Ivan from <TextBlock Text="ikriv.com" MouseUp="TextBlock_MouseUp_38" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" TextDecorations="Underline" /> for
+                <TextBlock Text="XAML MathConverter" MouseUp="TextBlock_MouseUp_40" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" />
+            </TextBlock>
         </StackPanel>
     </ScrollViewer>
 </Page>

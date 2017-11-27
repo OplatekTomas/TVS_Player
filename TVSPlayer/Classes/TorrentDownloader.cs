@@ -27,6 +27,9 @@ namespace TVSPlayer {
             TorrentSource = torrent;
         }
 
+        private static List<TorrentDownloader> torrents = new List<TorrentDownloader>();
+
+
         public static Session TorrentSession;
         public TorrentStatus Status { get; set; }
         public Torrent TorrentSource { get; set; }
@@ -34,30 +37,19 @@ namespace TVSPlayer {
         public bool ShowNotificationWhenFinished { get; set; } = true;
         public bool IsPaused { get; set; } = false;
 
-        private static List<TorrentDownloader> torrents = new List<TorrentDownloader>();
-
-        private TorrentDownloader DownloadLocal(bool sequential) {
-            if (TorrentSession == null) {
-                TorrentSession = new Session();
-                TorrentSession.ListenOn(6881, 6889);
-            }      
-            var torrentParams = new AddTorrentParams();
-            torrentParams.SavePath = GetDownloadPath();
-            torrentParams.Url = TorrentSource.Magnet;
-            Handle = TorrentSession.AddTorrent(torrentParams);
-            SetDownloadSpeedLimit(Settings.DownloadSpeed);
-            SetUploadSpeedLimit(Settings.UploadSpeed);
-            Handle.SequentialDownload = TorrentSource.IsSequential = sequential;
-            Status = Handle.QueryStatus();
-            torrents.Add(this);
-            TorrentDatabase.Save(TorrentSource);
-            return this;
-        }
-
+        /// <summary>
+        /// Returns all torrents that are being downloaded right now
+        /// </summary>
+        /// <returns></returns>
         public static List<TorrentDownloader> GetTorrents() {
             return torrents;
         }
 
+        /// <summary>
+        /// Starts streaming process for torrent and shows player
+        /// </summary>
+        /// <param name="showStream">Show player when stream starts</param>
+        /// <returns></returns>
         public async Task<TorrentDownloader> Stream(bool showStream = true) {
             var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
             if (torrs.Count == 0) {
@@ -86,6 +78,10 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// Download torrent, its added to database when download has finished
+        /// </summary>
+        /// <returns></returns>
         public async Task<TorrentDownloader> Download() {
             var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
             if (torrs.Count == 0) {
@@ -94,7 +90,7 @@ namespace TVSPlayer {
                 });
 #pragma warning disable CS4014
                 Task.Run(() => {
-                    while (Handle != null &&!downloader.Status.IsSeeding) {
+                    while (Handle != null && !downloader.Status.IsSeeding) {
                         Trace.WriteLine(downloader.Status.DownloadRate + ", " + downloader.Status.AllTimeDownload);
                         downloader.Status = downloader.Handle.QueryStatus();
                         Thread.Sleep(1000);
@@ -121,6 +117,10 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// Sets download speed limit in kB/s. 0 = unlimited
+        /// </summary>
+        /// <param name="limit"></param>
         public static void SetDownloadSpeedLimit(int limit) {
             Settings.DownloadSpeed = limit;
             if (TorrentSession != null) {
@@ -131,6 +131,10 @@ namespace TVSPlayer {
 
         }
 
+        /// <summary>
+        /// Sets upload speed limit in kB/s. 0 = unlimited
+        /// </summary>
+        /// <param name="limit"></param>
         public static void SetUploadSpeedLimit(int limit) {
             Settings.UploadSpeed = limit;
             if (TorrentSession != null) {
@@ -141,6 +145,9 @@ namespace TVSPlayer {
 
         }
 
+        /// <summary>
+        /// Pauses torrent download
+        /// </summary>
         public async void Pause() {
             IsPaused = true;
             await Task.Run(() => {
@@ -151,17 +158,27 @@ namespace TVSPlayer {
             });
         }
 
+        /// <summary>
+        /// Resumes torrent download
+        /// </summary>
         public void Resume() {
             IsPaused = false;
         }
 
+        /// <summary>
+        /// Stop torrent from being active
+        /// </summary>
+        /// <param name="deleteFiles"></param>
         public void Remove(bool deleteFiles) {
             string magnet = TorrentSource.Magnet;
-            TorrentSession.RemoveTorrent(Handle,deleteFiles);
+            TorrentSession.RemoveTorrent(Handle, deleteFiles);
             TorrentDatabase.Remove(magnet);
-            torrents.Remove(this);        
+            torrents.Remove(this);
         }
 
+        /// <summary>
+        /// Stops torrent and moves it to the right directory
+        /// </summary>
         public void StopAndMove() {
             TorrentSource.Name = Handle.TorrentFile.Name;
             Renamer.MoveAfterDownload(this);
@@ -171,7 +188,38 @@ namespace TVSPlayer {
             torrents.Remove(this);
         }
 
-        public async void PlayFile(Series series, Episode episode) {
+        /// <summary>
+        /// Continues all unifinished torrents
+        /// </summary>
+        public async static void ContinueUnfinished() {
+            var torrents = TorrentDatabase.Load();
+            torrents = torrents.Where(x => x.HasFinished == false).ToList();
+            foreach (var item in torrents) {
+                TorrentDatabase.Remove(item.Magnet);
+                TorrentDownloader downloader = new TorrentDownloader(item);
+                await downloader.Download();
+            }
+        }
+
+        private TorrentDownloader DownloadLocal(bool sequential) {
+            if (TorrentSession == null) {
+                TorrentSession = new Session();
+                TorrentSession.ListenOn(6881, 6889);
+            }      
+            var torrentParams = new AddTorrentParams();
+            torrentParams.SavePath = GetDownloadPath();
+            torrentParams.Url = TorrentSource.Magnet;
+            Handle = TorrentSession.AddTorrent(torrentParams);
+            SetDownloadSpeedLimit(Settings.DownloadSpeed);
+            SetUploadSpeedLimit(Settings.UploadSpeed);
+            Handle.SequentialDownload = TorrentSource.IsSequential = sequential;
+            Status = Handle.QueryStatus();
+            torrents.Add(this);
+            TorrentDatabase.Save(TorrentSource);
+            return this;
+        }
+
+        private async void PlayFile(Series series, Episode episode) {
             List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
             episode = Database.GetEpisode(series.id, episode.id);
             foreach (var item in episode.files) {
@@ -216,18 +264,6 @@ namespace TVSPlayer {
                 }
             }
         }
-
-        public async static void ContinueUnfinished() {
-            var torrents = TorrentDatabase.Load();
-            torrents = torrents.Where(x => x.HasFinished == false).ToList();
-            foreach (var item in torrents) {
-                TorrentDatabase.Remove(item.Magnet);
-                TorrentDownloader downloader = new TorrentDownloader(item);
-                await downloader.Download();     
-            }
-        }
-
-
 
     }
 }

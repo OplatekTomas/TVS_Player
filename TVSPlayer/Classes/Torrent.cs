@@ -30,21 +30,12 @@ namespace TVSPlayer {
         public bool IsSequential { get; set; } = false;
         public string FinishedAt { get; set; } = "-";
 
-       
-
-        public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
-            return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
-        }
-
-        public async static Task<Torrent> SearchSingle(Series series, Episode episode) {
-            return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
-        }
-
-        public async static Task<Torrent> SearchSingle(Series series, Episode episode, TorrentQuality quality) {
-            var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
-            return tor;
-        }
-
+        /// <summary>
+        /// Searches for torrents with any quality. Use with causion - you might get banned
+        /// </summary>
+        /// <param name="series">Series to search for</param>
+        /// <param name="episode">Episode to serach for</param>
+        /// <returns></returns>
         public async static Task<List<Torrent>> Search(Series series, Episode episode) {
             return await Task.Run(() => {
                 string url = GetUrl(series.seriesName, episode.airedSeason, episode.airedEpisodeNumber);
@@ -84,6 +75,39 @@ namespace TVSPlayer {
                 }
                 return tList;
             });
+        }
+
+        /// <summary>
+        /// Searches 1337x.to for torrents with specified quality. Use with causion - you might get banned
+        /// </summary>
+        /// <param name="series">Series to search for</param>
+        /// <param name="episode">Episode to search for</param>
+        /// <param name="quality">Quality to search for</param>
+        /// <returns></returns>
+        public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
+            return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
+        }
+
+        /// <summary>
+        /// Searches 1337x.to for a single torrent with any quality. Use with causion - you might get banned
+        /// </summary>
+        /// <param name="series">Series to search for</param>
+        /// <param name="episode">Episode to search for</param>
+        /// <returns>The one with most seeders</returns>
+        public async static Task<Torrent> SearchSingle(Series series, Episode episode) {
+            return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Searches 1337x.to for a single torrent with specified quality. Use with causion - you might get banned
+        /// </summary>
+        /// <param name="series">Series to search for</param>
+        /// <param name="episode">Episode to search for</param>
+        /// <param name="quality">Quality to search for</param>
+        /// <returns>The one with most seeders</returns>
+        public async static Task<Torrent> SearchSingle(Series series, Episode episode, TorrentQuality quality) {
+            var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            return tor;
         }
 
         private static string GetUrl(string show, int? season, int? episode) {

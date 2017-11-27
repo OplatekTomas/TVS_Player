@@ -9,6 +9,11 @@ using TVS.API;
 
 namespace TVSPlayer {
     static class TorrentDatabase {
+
+        /// <summary>
+        /// Adds torrent to databae
+        /// </summary>
+        /// <param name="torrent">Torrent</param>
         public static void Save(Torrent torrent) {
             Series series = torrent.Series;
             Episode episode = torrent.Episode;
@@ -24,6 +29,10 @@ namespace TVSPlayer {
             Database.WriteToFile(Helper.data + "Torrents.tvsp", text);
         }
 
+        /// <summary>
+        /// Returns all torrents in database
+        /// </summary>
+        /// <returns></returns>
         public static List<Torrent> Load() {
             string original = Database.ReadFromFile(Helper.data + "Torrents.tvsp");
             List<Torrent> list = new List<Torrent>();
@@ -38,6 +47,11 @@ namespace TVSPlayer {
             return list;
         }
 
+        /// <summary>
+        /// Edits database by magnet and new torrent
+        /// </summary>
+        /// <param name="magnet">any magnet</param>
+        /// <param name="newTorrent">new torrent that will replace old one</param>
         public static void Edit(string magnet, Torrent newTorrent) {
             List<Torrent> eps = Load();
             try {
@@ -54,6 +68,10 @@ namespace TVSPlayer {
             } catch (Exception) { }
         }
 
+        /// <summary>
+        /// Removes torrent from database by magnet
+        /// </summary>
+        /// <param name="magnet">any magnet</param>
         public static void Remove(string magnet) {
             List<Torrent> eps = Load();
             try {
@@ -63,6 +81,11 @@ namespace TVSPlayer {
             } catch (Exception) { }
         }
 
+        /// <summary>
+        /// Cheks if torrent exist in database by magnet
+        /// </summary>
+        /// <param name="magnet">any magnet</param>
+        /// <returns></returns>
         public static bool Exists(string magnet) {
             var list = Load();
             foreach (var item in list) {

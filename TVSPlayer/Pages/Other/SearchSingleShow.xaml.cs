@@ -107,5 +107,12 @@ namespace TVSPlayer {
             show = s;
         }
 
+        private void BackButton_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void BackButton_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
     }
 }

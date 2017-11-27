@@ -43,7 +43,9 @@ namespace TVSPlayer {
 
 
 
-
+        /// <summary>
+        /// Saves Settings. Is called automatically whenever property value is changed
+        /// </summary>
         public static void SaveSettings() {
             Type type = typeof(Settings);
             string filename = Helper.data + "Settings.tvsp";
@@ -87,6 +89,9 @@ namespace TVSPlayer {
             return null;
         }
 
+        /// <summary>
+        /// Loads settings with default value if new settings has been added. In case of enums edit code - might get "crashy" if you dont
+        /// </summary>
         public static void Load() {
             Type type = typeof(Settings);
             string filename = Helper.data + "Settings.tvsp";

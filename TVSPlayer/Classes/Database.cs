@@ -12,12 +12,14 @@ using NReco.VideoConverter;
 using TVS.API;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Windows;
 
 namespace TVSPlayer {
     class Database {
         static string db = Helper.data;
 
         #region Series
+
         /// <summary>
         /// Returns all series in database
         /// </summary>
@@ -357,6 +359,12 @@ namespace TVSPlayer {
 
         }
 
+        /// <summary>
+        /// Returns Actor by TVDb ID of Series and TVDb ID of Actor or null
+        /// </summary>
+        /// <param name="id">TVDb ID of Series</param>
+        /// <param name="idActor">TVDb ID of Actor</param>
+        /// <returns></returns>
         public static Actor GetActor(int id, int idActor) {
             var actors = GetActors(id);
             return actors.Where(x => x.id == idActor).FirstOrDefault();
@@ -459,6 +467,7 @@ namespace TVSPlayer {
                 return false;
             }
         }
+       
         #endregion
 
         #region Poster
@@ -478,14 +487,25 @@ namespace TVSPlayer {
             return eps;
         }
 
+        /// <summary>
+        /// Returns poster by ID of Series and ID of poster or null if nothing is found
+        /// </summary>
+        /// <param name="id">TVDb ID of Series</param>
+        /// <param name="idPoster">TVDb Id of poster</param>
+        /// <returns></returns>
         public static Poster GetPoster(int id, int idPoster) {
             var posters = GetPosters(id);
             return posters.Where(x => x.id == idPoster).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Returns banner for Series or default "no banner" banner
+        /// </summary>
+        /// <param name="id">TVDb ID of Series</param>
+        /// <returns></returns>
         public async static Task<BitmapImage> GetBanner(int id) {
             Series s = GetSeries(id);
-            if (!String.IsNullOrEmpty(s.banner)){
+            if (!String.IsNullOrEmpty(s.banner)) {
                 string file = db + id + "\\Banners\\" + s.banner;
                 if (File.Exists(file)) {
                     return await LoadImage(file);
@@ -495,8 +515,9 @@ namespace TVSPlayer {
                     await webClient.DownloadFileTaskAsync(new Uri("https://www.thetvdb.com/banners/" + s.banner), file);
                     return await LoadImage(file);
                 }
+            } else {
+                return (BitmapImage)Application.Current.FindResource("NoBanner");
             }
-            return null;
         }
 
         /// <summary>
@@ -526,6 +547,11 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// Returns first available fan art as BitmapImage
+        /// </summary>
+        /// <param name="id">TVDb ID of Series</param>
+        /// <returns></returns>
         public async static Task<BitmapImage> GetFanArt(int id) {
             string path = db + id + "\\Fanart\\Fanart.png";
             if (!File.Exists(path)) {
@@ -648,6 +674,7 @@ namespace TVSPlayer {
             }
             return false;
         }
+      
         #endregion
 
 

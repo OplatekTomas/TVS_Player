@@ -14,7 +14,10 @@ using static TVS.API.Episode;
 namespace TVSPlayer {
     class Renamer {
 
-
+        /// <summary>
+        /// Scans and renames direcotires (Lib, 3 scan dirs) and edits database for Series.
+        /// </summary>
+        /// <param name="series"></param>
         public static void FindAndRename(Series series) {
             List<ScannedFileInfo> temp = new List<ScannedFileInfo>();
             temp.AddRange(FindAndRenameInLibrary(series));
@@ -24,6 +27,10 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// cans and renames direcotires (3 scan dirs) and edits database for Series.
+        /// </summary>
+        /// <param name="series"></param>
         public static void FindAndRenameInOther(Series series) {
             List<ScannedFileInfo> temp = FindAndRenameInOthers(series);
             foreach (ScannedFileInfo sfi in temp) {
@@ -31,6 +38,10 @@ namespace TVSPlayer {
             }
         }
 
+        /// <summary>
+        /// Called after torrent has finished downloading. Prefferably use StopAndMove() method from TorrentDownloader
+        /// </summary>
+        /// <param name="torrent">torrent downloader</param>
         public async static void MoveAfterDownload(TorrentDownloader torrent) {
             List<string> files = new List<string>();
             string path = torrent.Status.SavePath + "\\" + torrent.Status.Name;

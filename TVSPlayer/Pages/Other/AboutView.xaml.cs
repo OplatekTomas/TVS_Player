@@ -188,5 +188,14 @@ namespace TVSPlayer
         private void TextBlock_MouseUp_37(object sender, MouseButtonEventArgs e) {
             Process.Start("https://github.com/psantosl");
         }
+
+        private void TextBlock_MouseUp_38(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://ikriv.com/");
+        }
+
+
+        private void TextBlock_MouseUp_40(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://www.ikriv.com/dev/wpf/MathConverter/");
+        }
     }
 }

@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="1" Grid.Column="1" Background="{DynamicResource BackgroundBrush}">
             <Grid Height="47" VerticalAlignment="Top">
-                <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center">
+                <Grid Height="27" Width="27" x:Name="BackButton" HorizontalAlignment="Left" MouseUp="BackButton_MouseUp" Margin="10" VerticalAlignment="Center" MouseEnter="BackButton_MouseEnter" MouseLeave="BackButton_MouseLeave">
                     <Image Source="{DynamicResource BackIcon}" Margin="0" x:Name="Back" />
                 </Grid>
                 <Image />

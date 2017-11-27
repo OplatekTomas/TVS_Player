@@ -11,9 +11,47 @@ using TVS.API;
 namespace TVSPlayer
 {
     class UpdateDatabase {
+
+        /// <summary>
+        /// Starts checking if all files are where they are supposed to be and if database is updated
+        /// </summary>
+        public async static void StartUpdateBackground() {
+            await CheckFiles();
+            await Update();
+            Timer checktimer = new Timer(600000);
+            checktimer.Elapsed += async (s, ev) => await CheckFiles();
+            checktimer.Start();
+            Timer timer = new Timer(3600000);
+            timer.Elapsed += async (s, ev) => await Update();
+            timer.Start();
+        }
+
+        /// <summary>
+        /// Cheks if files in database actually exist on hdd
+        /// </summary>
+        /// <returns></returns>
+        public async static Task CheckFiles() {
+            await Task.Run(() => {
+                foreach (var series in Database.GetSeries()) {
+                    foreach (var episode in Database.GetEpisodes(series.id)) {
+                        for (int i = episode.files.Count - 1; i >= 0; i--) {
+                            if (!File.Exists(episode.files[i].NewName)) {
+                                episode.files.RemoveAt(i);
+                                Database.EditEpisode(series.id, episode.id, episode);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Updates database if it hasnt been updated in the last day and autodownloads every Series that has autodownload enabled
+        /// </summary>
+        /// <returns></returns>
         public async static Task Update() {
-            if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) { 
-                await Task.Run( () => {
+            if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) {
+                await Task.Run(() => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
                     ids = ids.Where(x => series.Any(y => y.id == x)).ToList();
@@ -51,34 +89,6 @@ namespace TVSPlayer
             });
         }
 
-        public async static Task CheckFiles() {
-            await Task.Run(() => { 
-                foreach (var series in Database.GetSeries()) {
-                    foreach (var episode in Database.GetEpisodes(series.id)) {
-                        for (int i = episode.files.Count - 1;i>=0;i--) {
-                            if (!File.Exists(episode.files[i].NewName)) {
-                                episode.files.RemoveAt(i);
-                                Database.EditEpisode(series.id, episode.id, episode);
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        /// <summary>
-        /// Starts checking if all files are where they are supposed to be and if database is updated
-        /// </summary>
-        public async static void StartUpdateBackground() {
-            await CheckFiles();
-            await Update();
-            Timer checktimer = new Timer(600000);
-            checktimer.Elapsed += async (s, ev) => await CheckFiles();
-            checktimer.Start();
-            Timer timer = new Timer(3600000);
-            timer.Elapsed += async (s, ev) => await Update();
-            timer.Start();
-        }
 
         private async static Task UpdateFullSeries(int id) {
             await Task.Run(() => {

@@ -107,19 +107,20 @@ namespace TVSPlayer
                 if (di2.FullName == di1.Parent.FullName) {
                     bool isInDb = false;
                     Series series = await MainWindow.SearchShow();
-                    foreach (Series s in Database.GetSeries()) {
-                        if (s.id == series.id) {
-                            isInDb = true;
-                            break;
+                    if (series.id != 0) { 
+                        foreach (Series s in Database.GetSeries()) {
+                            if (s.id == series.id) {
+                                isInDb = true;
+                                break;
+                            }
+                        }
+                        if (!isInDb) {
+                            await MainWindow.CreateDatabase(new List<Tuple<int, string>>() { new Tuple<int, string>(series.id, fbd.SelectedPath) });
+                            MainWindow.SetPage(new Library());
+                        } else {
+                            await MessageBox.Show(series.seriesName + " is already in database","Error");
                         }
                     }
-                    if (!isInDb) {
-                        await MainWindow.CreateDatabase(new List<Tuple<int, string>>() { new Tuple<int, string>(series.id, fbd.SelectedPath) });
-                        MainWindow.SetPage(new Library());
-                    } else {
-                        await MessageBox.Show(series.seriesName + " is already in database","Error");
-                    }
-
 
                 } else {
                    await MessageBox.Show("Selected directory is not in library","Error");
