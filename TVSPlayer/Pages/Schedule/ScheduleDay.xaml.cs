@@ -31,7 +31,7 @@ namespace TVSPlayer {
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             if (episodes == null || episodes.Count == 0) {
-                //Cover.Opacity = 0;
+                Back.Opacity = 0;
             }
         }
     }
