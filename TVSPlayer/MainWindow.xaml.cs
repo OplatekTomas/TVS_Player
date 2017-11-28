@@ -517,12 +517,16 @@ namespace TVSPlayer {
             td.Stream();
         }
 
+
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (true) {
+                if (!Helper.CheckRunning()) {
+                    Environment.Exit(0);
+                }
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else { 
-                    if (!Directory.Exists(Helper.data)) {
+                    if (!Directory.Exists(Helper.data) && !File.Exists(Helper.data + "Series.tvsp")) {
                         AddPage(new Intro());
                         Settings.LastCheck = DateTime.Now;
                     } else {
