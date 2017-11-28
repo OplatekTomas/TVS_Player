@@ -30,6 +30,9 @@ namespace TVSPlayer {
     public partial class MainWindow : Window {
 
         public MainWindow() {
+            if (!Helper.CheckRunning()) {
+                Environment.Exit(0);
+            }
             InitializeComponent();
             SetDimensions();
         }
@@ -517,17 +520,19 @@ namespace TVSPlayer {
             td.Stream();
         }
 
+
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (true) {              
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
-                } else { 
-                    if (!Directory.Exists(Helper.data)) {
+                } else {
+                    Settings.Load();
+                    if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
                         Settings.LastCheck = DateTime.Now;
+                        UpdateDatabase.StartUpdateBackground(false);
                     } else {
                         SetPage(new Library());
-                        Settings.Load();
                         UpdateDatabase.StartUpdateBackground();
                         TorrentDownloader.ContinueUnfinished();
                     }

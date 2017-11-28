@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,6 +49,38 @@ namespace TVSPlayer {
             }
         }
 
+        public static bool CheckRunning() {
+            var procName = Process.GetCurrentProcess();
+            List<Process> processes = Process.GetProcessesByName(procName.ProcessName).ToList();
+            processes.Remove(procName);
+            if (processes.Count > 1) {
+                foreach (var proc in processes) {
+                    WindowHelper.BringProcessToFront(proc);
+                }
+                return false;
+            } else {
+                return true;
+            }       
+        }
+        public static class WindowHelper {
+            public static void BringProcessToFront(Process process) {
+                IntPtr handle = process.MainWindowHandle;
+                if (IsIconic(handle)) {
+                    ShowWindow(handle, SW_RESTORE);
+                }
+
+                SetForegroundWindow(handle);
+            }
+
+            const int SW_RESTORE = 9;
+
+            [DllImport("User32.dll")]
+            private static extern bool SetForegroundWindow(IntPtr handle);
+            [DllImport("User32.dll")]
+            private static extern bool ShowWindow(IntPtr handle, int nCmdShow);
+            [DllImport("User32.dll")]
+            private static extern bool IsIconic(IntPtr handle);
+        }
 
     }
 

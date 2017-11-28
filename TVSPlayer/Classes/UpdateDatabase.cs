@@ -15,9 +15,11 @@ namespace TVSPlayer
         /// <summary>
         /// Starts checking if all files are where they are supposed to be and if database is updated
         /// </summary>
-        public async static void StartUpdateBackground() {
-            await CheckFiles();
-            await Update();
+        public async static void StartUpdateBackground(bool startNow = true) {
+            if (!startNow) {
+                await CheckFiles();
+                await Update();
+            }
             Timer checktimer = new Timer(600000);
             checktimer.Elapsed += async (s, ev) => await CheckFiles();
             checktimer.Start();
