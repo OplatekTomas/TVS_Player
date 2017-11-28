@@ -525,13 +525,14 @@ namespace TVSPlayer {
             if (true) {              
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
-                } else { 
-                    if (!Directory.Exists(Helper.data) && !File.Exists(Helper.data + "Series.tvsp")) {
+                } else {
+                    Settings.Load();
+                    if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
                         Settings.LastCheck = DateTime.Now;
+                        UpdateDatabase.StartUpdateBackground(false);
                     } else {
                         SetPage(new Library());
-                        Settings.Load();
                         UpdateDatabase.StartUpdateBackground();
                         TorrentDownloader.ContinueUnfinished();
                     }
