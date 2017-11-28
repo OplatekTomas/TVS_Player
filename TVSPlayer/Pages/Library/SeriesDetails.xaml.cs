@@ -34,6 +34,9 @@ namespace TVSPlayer
         Page page;
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            PageCustomization pg = new PageCustomization();
+            pg.MainTitle = series.seriesName +  " - Details";
+            MainWindow.SetPageCustomization(pg);
             List<Actor> actors = Database.GetActors(series.id);
             Task.Run(() => {
                 foreach (Actor actor in actors) {
