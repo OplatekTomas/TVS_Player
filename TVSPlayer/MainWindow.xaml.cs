@@ -30,6 +30,9 @@ namespace TVSPlayer {
     public partial class MainWindow : Window {
 
         public MainWindow() {
+            if (!Helper.CheckRunning()) {
+                Environment.Exit(0);
+            }
             InitializeComponent();
             SetDimensions();
         }
@@ -519,10 +522,7 @@ namespace TVSPlayer {
 
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
-                if (!Helper.CheckRunning()) {
-                    Environment.Exit(0);
-                }
+            if (true) {              
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else { 
