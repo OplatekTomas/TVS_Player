@@ -47,19 +47,19 @@ namespace TVSPlayer {
                         var eps = episodes.Where(x => DateTime.ParseExact(x.Key.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).Day == dateTime.Day).ToDictionary(x => x.Key, x => x.Value);
                         sd = new ScheduleDay(eps);
                         int count = 0;
-                        var se = eps.Values.Distinct().ToList();
+                        var se = eps.GroupBy(s => s.Value).Select(g => g.First()).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                         foreach (var s in se) {
                             RowDefinition row = new RowDefinition();
                             sd.BaseGrid.RowDefinitions.Add(row);
                             await Task.Run(async () => {
-                                var bmp = await Database.GetBanner(s.id);
+                                var bmp = await Database.GetBanner(s.Value.id);
                                 Dispatcher.Invoke(() => {
                                     Grid grid = new Grid();
                                     grid.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#88000000"));
                                     grid.MouseLeftButtonUp += (sx, ev) => {
-                                        MainWindow.SetPage(new SeriesEpisodes(s));
+                                        MainWindow.SetPage(new SeriesEpisodes(s.Value));
                                         };
-                                    grid.ToolTip = s.seriesName;
+                                    grid.ToolTip = s.Value.seriesName + " - " + Helper.GenerateName(s.Key);
                                     grid.MouseEnter += (sx, ev) => { grid.BeginStoryboard((Storyboard)FindResource("OpacityDown")); Mouse.OverrideCursor = Cursors.Hand; };
                                     grid.MouseLeave += (sx, ev) => { grid.BeginStoryboard((Storyboard)FindResource("OpacityUp")); Mouse.OverrideCursor = null; };
                                     Image img = new Image();
@@ -67,7 +67,14 @@ namespace TVSPlayer {
                                     img.Stretch = Stretch.UniformToFill;
                                     img.HorizontalAlignment = HorizontalAlignment.Center;
                                     img.Source = bmp;
-                                    img.ToolTip = s.seriesName;
+                                    if (s.Key.airedEpisodeNumber == 1) {
+                                        Grid grd = new Grid();
+                                        grd.Background = (Brush)FindResource("AccentColor");
+                                        sd.BaseGrid.Children.Add(grd);
+                                        Grid.SetRow(grd, count);
+                                        grid.ToolTip = s.Value.seriesName +" - " + Helper.GenerateName(s.Key)+ " (NEW SEASON)";
+                                        img.Margin = new Thickness(2);
+                                    }
                                     sd.BaseGrid.Children.Add(img);
                                     sd.BaseGrid.Children.Add(grid);
                                     Grid.SetRow(grid, count);

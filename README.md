@@ -22,7 +22,7 @@ TVS-Player is Windows only desktop app written in C# & WPF that maintains your l
 - More stuff...
 
 ### Recommended hardware:
-- Any recent (2009 and newer) at least dual core CPU
+- Any recent (2009 and newer) at least dual core CPU with hyperthreading
 - 3 GB of RAM
 - Intel HD 4400 and faster for ok-ish performance. Dedicated GPU highly recommended.
 - A lot of HDD space for tv shows & around 5MB per TV show for cached images and data
