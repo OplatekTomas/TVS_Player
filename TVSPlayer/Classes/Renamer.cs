@@ -219,12 +219,14 @@ namespace TVSPlayer {
                 sfi.series = series;
                 sfi.extension = Path.GetExtension(sfi.origFile);
                 Tuple<int, int> info = GetInfo(Path.GetFileName(sfi.origFile));
-                Episode episode = allepisodes.SingleOrDefault(e => e.airedSeason == info.Item1 && e.airedEpisodeNumber == info.Item2);
-                if (episode == null) {
-                    toRemove.Add(sfi);
-                } else {
-                    sfi.episode = episode;
-                }        
+                if (info != null) {
+                    Episode episode = allepisodes.SingleOrDefault(e => e.airedSeason == info.Item1 && e.airedEpisodeNumber == info.Item2);
+                    if (episode == null) {
+                        toRemove.Add(sfi);
+                    } else {
+                        sfi.episode = episode;
+                    }
+                }               
             }
             foreach (ScannedFileInfo sfi in toRemove) {
                 sfiList.Remove(sfi);
