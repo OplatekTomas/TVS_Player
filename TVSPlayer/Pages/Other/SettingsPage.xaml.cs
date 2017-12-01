@@ -46,6 +46,10 @@ namespace TVSPlayer
             DownQuality.SelectedIndex = (int)Settings.DownloadQuality;
             StreamQuality.SelectedIndex = (int)Settings.StreamQuality;
             UseBuildIn.IsChecked = Settings.UseWinDefaultPlayer;
+            CacheFolder.TextChanged += CacheFolder_TextChanged;
+            Dir1Box.TextChanged += Dir1Box_TextChanged;
+            Dir2Box.TextChanged += Dir2Box_TextChanged;
+            Dir3Box.TextChanged += Dir3Box_TextChanged;
         }
 
         private void Dor3Select_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -76,27 +80,39 @@ namespace TVSPlayer
             }
         }
 
-        private void CacheFolder_TextChanged(object sender, TextChangedEventArgs e) {
-            if (DoChecks()) {
+        private async void CacheFolder_TextChanged(object sender, TextChangedEventArgs e) {
+            string[] strings = new string[3] { Dir1Box.Text.ToLower(), Dir2Box.Text.ToLower(), Dir2Box.Text.ToLower() };
+            if ((!String.IsNullOrEmpty(CacheFolder.Text) && Directory.Exists(CacheFolder.Text) && !strings.Contains(CacheFolder.Text.ToLower())) || String.IsNullOrEmpty(CacheFolder.Text)) {
                 Settings.DownloadCacheLocation = CacheFolder.Text;
+            } else {
+                await MessageBox.Show("Directories cannot be same");
             }
         }
 
-        private void Dir1Box_TextChanged(object sender, TextChangedEventArgs e) {
-            if (DoChecks()) {
+        private async void Dir1Box_TextChanged(object sender, TextChangedEventArgs e) {
+            string[] strings = new string[3] { CacheFolder.Text.ToLower(), Dir2Box.Text.ToLower(), Dir2Box.Text.ToLower() };
+            if (!String.IsNullOrEmpty(Dir1Box.Text) && Directory.Exists(Dir1Box.Text) && !strings.Contains(Dir1Box.Text.ToLower()) || String.IsNullOrEmpty(Dir1Box.Text)) {
                 Settings.FirstScanLocation = Dir1Box.Text;
+            } else {
+                await MessageBox.Show("Directories cannot be same");
             }
         }
 
-        private void Dir2Box_TextChanged(object sender, TextChangedEventArgs e) {
-            if (DoChecks()) {
+        private async void Dir2Box_TextChanged(object sender, TextChangedEventArgs e) {
+            string[] strings = new string[3] { Dir1Box.Text.ToLower(), CacheFolder.Text.ToLower(), Dir2Box.Text.ToLower() };
+            if (!String.IsNullOrEmpty(Dir2Box.Text) && Directory.Exists(Dir2Box.Text) && !strings.Contains(Dir2Box.Text.ToLower()) || String.IsNullOrEmpty(Dir2Box.Text)) {
                 Settings.SecondScanLocation = Dir2Box.Text;
+            } else {
+                await MessageBox.Show("Directories cannot be same");
             }
         }
 
-        private void Dir3Box_TextChanged(object sender, TextChangedEventArgs e) {
-            if (DoChecks()) {
+        private async void Dir3Box_TextChanged(object sender, TextChangedEventArgs e) {
+            string[] strings = new string[3] { Dir1Box.Text.ToLower(), Dir2Box.Text.ToLower(), CacheFolder.Text.ToLower() };
+            if (!String.IsNullOrEmpty(Dir3Box.Text) && Directory.Exists(Dir3Box.Text) && strings.Contains(Dir3Box.Text.ToLower()) || String.IsNullOrEmpty(Dir3Box.Text)) {
                 Settings.ThirdScanLocation = Dir3Box.Text;
+            } else {
+                await MessageBox.Show("Directories cannot be same");
             }
         }
 
@@ -148,30 +164,7 @@ namespace TVSPlayer
             Mouse.OverrideCursor = null;
         }
 
-        private bool DoChecks() {
-            if (this.IsLoaded) { 
-                if (Dir1Box.Text == Dir2Box.Text && Dir1Box.Text != "Select directory") { return false; }
-                if (Dir1Box.Text == Dir3Box.Text && Dir3Box.Text != "Select directory") { return false; }
-                if (Dir2Box.Text == Dir3Box.Text && Dir2Box.Text != "Select directory") { return false; }
-                if (Dir1Box.Text != "Select directory" && !String.IsNullOrEmpty(Dir1Box.Text)) {
-                    if (!Directory.Exists(Dir1Box.Text)) { return false; }
-                }
-                if (Dir2Box.Text != "Select directory" && !String.IsNullOrEmpty(Dir2Box.Text)) {
-                    if (!Directory.Exists(Dir2Box.Text)) { return false; }
-                }
-                if (Dir3Box.Text != "Select directory" && !String.IsNullOrEmpty(Dir3Box.Text)) {
-                    if (!Directory.Exists(Dir3Box.Text)) { return false; }
-                }
-                if (CacheFolder.Text != "Select directory" && !String.IsNullOrEmpty(CacheFolder.Text)) {
-                    if ((CacheFolder.Text != Dir1Box.Text && CacheFolder.Text != Dir2Box.Text && CacheFolder.Text != Dir3Box.Text)) {
-                        if (!Directory.Exists(CacheFolder.Text)) { return false; }
-                    }
-
-                }
-                return true;
-            }
-            return false;
-        }
+       
 
         private void UseBuildIn_Click(object sender, RoutedEventArgs e) {
             Settings.UseWinDefaultPlayer = (bool)UseBuildIn.IsChecked;

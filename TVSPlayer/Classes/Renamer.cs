@@ -226,6 +226,8 @@ namespace TVSPlayer {
                     } else {
                         sfi.episode = episode;
                     }
+                } else {
+                    toRemove.Add(sfi);
                 }               
             }
             foreach (ScannedFileInfo sfi in toRemove) {
