@@ -28,6 +28,9 @@ TVS-Player is Windows only desktop app written in C# & WPF that maintains your l
 - A lot of HDD space for tv shows & around 5MB per TV show for cached images and data
 
 
+### Installation process:
+You can either download installation (which will take care of everything for you) or download and compile from source. If you want to compile from source make sure you also have K-Lite Codec Pack installed
+
 ### Dislcaimer:
 I'm not responsible for your actions - since it's only third alpha build expect errors
 Downloading and sharing TV shows might not be legal in wherever you live - check your law - I'm not responsible for your actions.
