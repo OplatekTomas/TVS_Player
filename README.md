@@ -31,6 +31,9 @@ TVS-Player is Windows only desktop app written in C# & WPF that maintains your l
 ### Installation process:
 You can either download installation (which will take care of everything for you) or download and compile from source. If you want to compile from source make sure you also have K-Lite Codec Pack installed
 
+### Bug fixing
+If TVS-Player crashed during database import phase try to delete "C:\Users\Public\Documents\TVS-Player" and import/create again. If it crashed yet again try to download source code and compile/debug it yourself. Sorry for that.
+
 ### Dislcaimer:
 I'm not responsible for your actions - since it's only third alpha build expect errors
 Downloading and sharing TV shows might not be legal in wherever you live - check your law - I'm not responsible for your actions.
