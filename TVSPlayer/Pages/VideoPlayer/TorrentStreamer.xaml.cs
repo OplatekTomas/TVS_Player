@@ -35,6 +35,7 @@ namespace TVSPlayer {
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             MainWindow.HideContent();
+            Helper.DisableScreenSaver();
             MainWindow.videoPlayback = true;
             media = new FFProbe();
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
@@ -326,6 +327,8 @@ namespace TVSPlayer {
         }
 
         private async void Return() {
+            Helper.EnableScreenSaver();
+
             if (downloader.Handle.IsSeed) {
                 downloader.StopAndMove();
             } else {

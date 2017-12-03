@@ -39,6 +39,7 @@ namespace TVSPlayer
         DispatcherTimer positionUpdate = new DispatcherTimer();
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+            Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
             PlayerPage.Focus();
@@ -240,6 +241,7 @@ namespace TVSPlayer
         }
 
         private async void Return() {
+            Helper.EnableScreenSaver();
             MainWindow.ShowContent();
             PlayerPage.MouseMove -= Page_MouseMove;
             timer.Stop();
