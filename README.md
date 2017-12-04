@@ -4,6 +4,10 @@
 ### Info:
 TVS-Player is Windows only desktop app written in C# & WPF that maintains your library of TV Shows.
 
+![Imgur](https://i.imgur.com/fdPnbNc.png)
+
+![Imgur](https://i.imgur.com/9cKLppQ.png)
+
 ### Key features:
 - Keeping your library organised and updated
 - Renaming all files to a unified format (ShowName - SxxExx - EpisodeName)
