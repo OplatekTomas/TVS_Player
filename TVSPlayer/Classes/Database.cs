@@ -331,9 +331,11 @@ namespace TVSPlayer {
                 } else if (ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).Count() > 0) {
                     string file = ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).ToList()[0].NewName;
                     var ffmpeg = new FFMpegConverter();
-                    ffmpeg.GetVideoThumbnail(file, db + id + "\\Thumbnails\\" + ep.id + ".jpg");
-                    ep.thumbnail = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
+                    string path = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
+                    ffmpeg.GetVideoThumbnail(file, path, 5); 
+                    ep.thumbnail = path;
                     EditEpisode(id, epId, ep);
+                    return await LoadImage(ep.thumbnail);
                 }
                 return null;
             });

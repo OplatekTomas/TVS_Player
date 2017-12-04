@@ -126,7 +126,6 @@ namespace TVSPlayer
                 ScannedFile sf = list.Where(x => x.NewName == info.FullName).FirstOrDefault();
                 if (!Settings.UseWinDefaultPlayer) {
                     //Used to release as many resources as possible to give all rendering power to video playback
-                    MainWindow.SetPage(new BlankPage());
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
                     await Task.Run(() => {
                         Thread.Sleep(500);
