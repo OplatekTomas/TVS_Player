@@ -1,14 +1,10 @@
 # TVS-Player
 ## Current version: 0.3.1 Alpha
 ### For latest (unstable) code check out "test-code" branch
-### Info:
-TVS-Player is Windows only desktop app written in C# & WPF that maintains your library of TV Shows.
 
-![Imgur](https://i.imgur.com/fdPnbNc.png)
+#### TVS-Player is Windows only desktop app written in C# & WPF that maintains your library of TV Shows.
 
-![Imgur](https://i.imgur.com/9cKLppQ.png)
-
-### Key features:
+### Key features
 - Keeping your library organised and updated
 - Renaming all files to a unified format (ShowName - SxxExx - EpisodeName)
 - Downloading most episodes using torrent
@@ -17,7 +13,7 @@ TVS-Player is Windows only desktop app written in C# & WPF that maintains your l
 - Built-in player with DXVA 2.0 support (K-Lite Codecs required for any kind of playback)
 - Torrent streaming (K-Lite Codecs required for any kind of playback)
 
-### Future features:
+### Future features
 - Subtitle download and playback
 - High quality, high speed background encoding to either lower quality or x265 for data saving
 - FTP or some other service for sharing episodes between devices
@@ -25,14 +21,13 @@ TVS-Player is Windows only desktop app written in C# & WPF that maintains your l
 - Mobile client
 - More stuff...
 
-### Recommended hardware:
+### Recommended hardware
 - Any recent (2009 and newer) at least dual core CPU with hyperthreading
 - 3 GB of RAM
 - Intel HD 530 and faster for ok-ish performance. Dedicated GPU is highly recommended.
 - A lot of HDD space for tv shows & around 1-10 MB per TV show for cached images and data
 
-
-### Installation process:
+### Installation process
 You can either download installation (which will take care of everything for you) or download and compile from source. If you want to compile from source make sure you also have K-Lite Codec Pack installed
 
 ### Changing audio language
@@ -41,7 +36,14 @@ Right now this can't be done in app for various reasons, but if you right click 
 ### Bug fixing
 If TVS-Player crashed during database import phase try to delete "C:\Users\Public\Documents\TVS-Player" and import/create again. If it crashed yet again try to download source code and compile/debug it yourself. Sorry for that.
 
-### Dislcaimer:
+### Screenshots
+
+![Imgur](https://i.imgur.com/fdPnbNc.png)
+
+![Imgur](https://i.imgur.com/9cKLppQ.png)
+
+### Dislcaimer
 I'm not responsible for your actions - since it's only third alpha build expect errors
 Downloading and sharing TV shows might not be legal in wherever you live - check your law - I'm not responsible for your actions.
+
 
