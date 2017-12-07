@@ -22,7 +22,7 @@
         </Grid>
         <TextBlock FontSize="25" Text="Initial Settings" x:Name="TopText" Margin="40,6" Foreground="{DynamicResource TextColor}" />
         <StackPanel x:Name="Optionals" VerticalAlignment="Center" Margin="10">
-            <CheckBox IsChecked="False" Checked="AutoDownload_Checked" Unchecked="AutoDownload_Unchecked" x:Name="AutoDownload" Content="Download new episodes autmatically"  Margin="0,10" Foreground="{DynamicResource TextColor}" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" >
+            <CheckBox IsChecked="False" Checked="AutoDownload_Checked" Unchecked="AutoDownload_Unchecked" x:Name="AutoDownload" Content="Download new episodes automatically"  Margin="0,10" Foreground="{DynamicResource TextColor}" Background="{DynamicResource LighterBG}" BorderBrush="{DynamicResource LighterBG}" >
                 <CheckBox.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="1.4" ScaleY="1.4"/>

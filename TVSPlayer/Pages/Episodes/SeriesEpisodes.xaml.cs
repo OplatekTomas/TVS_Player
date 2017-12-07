@@ -296,7 +296,6 @@ namespace TVSPlayer {
             if (ep != null) { 
             var sf = GetFileToPlay(ep, series);
                 if (!Settings.UseWinDefaultPlayer) {
-                    MainWindow.SetPage(new BlankPage());
                     GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
                     await Task.Run(() => {
                         Thread.Sleep(500);

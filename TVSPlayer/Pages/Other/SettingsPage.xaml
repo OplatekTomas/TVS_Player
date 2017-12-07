@@ -44,25 +44,25 @@
                 <StackPanel Margin="175,0,20,0">
                     <TextBlock x:Name="LibraryLocation" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5" />
                     <Grid Margin="5,64,5,5">
-                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="CacheFolder" Margin="0,0,35,0" BorderThickness="0" TextChanged="CacheFolder_TextChanged" Text="Select directory" />
+                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="CacheFolder" Margin="0,0,35,0" BorderThickness="0" Text="Select directory" />
                         <Grid Height="24" x:Name="CacheSelect" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="CacheSelect_MouseLeftButtonUp">
                             <Image Source="{DynamicResource FolderIcon}"/>
                         </Grid>
                     </Grid>
                     <Grid Margin="5,73,5,5">
-                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir1Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir1Box_TextChanged" Text="Select directory" />
+                        <TextBox Height="24" FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir1Box" Margin="0,0,35,0" BorderThickness="0" Text="Select directory" />
                         <Grid  Height="24" x:Name="Dir1Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dir1Select_MouseLeftButtonUp">
                             <Image Source="{DynamicResource FolderIcon}"/>
                         </Grid>
                     </Grid>
                     <Grid Margin="5,11,5,5">
-                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir2Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir2Box_TextChanged" Text="Select directory" />
+                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir2Box" Margin="0,0,35,0" BorderThickness="0" Text="Select directory" />
                         <Grid Height="24" x:Name="Dir2Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dir2Select_MouseLeftButtonUp">
                             <Image Source="{DynamicResource FolderIcon}"/>
                         </Grid>
                     </Grid>
                     <Grid Margin="5,11,5,5">
-                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir3Box" Margin="0,0,35,0" BorderThickness="0" TextChanged="Dir3Box_TextChanged" Text="Select directory" />
+                        <TextBox FontSize="14" Background="{DynamicResource LighterBG}" Foreground="{DynamicResource TextColor}" Height="24" Panel.ZIndex="10" VerticalAlignment="Bottom" x:Name="Dir3Box" Margin="0,0,35,0" BorderThickness="0"  Text="Select directory" />
                         <Grid Height="24" x:Name="Dor3Select" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="Dir1Select_MouseEnter" MouseLeave="Dir1Select_MouseLeave" MouseLeftButtonUp="Dor3Select_MouseLeftButtonUp">
                             <Image Source="{DynamicResource FolderIcon}"/>
                         </Grid>

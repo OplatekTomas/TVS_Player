@@ -331,9 +331,11 @@ namespace TVSPlayer {
                 } else if (ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).Count() > 0) {
                     string file = ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).ToList()[0].NewName;
                     var ffmpeg = new FFMpegConverter();
-                    ffmpeg.GetVideoThumbnail(file, db + id + "\\Thumbnails\\" + ep.id + ".jpg");
-                    ep.thumbnail = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
+                    string path = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
+                    ffmpeg.GetVideoThumbnail(file, path, 5); 
+                    ep.thumbnail = path;
                     EditEpisode(id, epId, ep);
+                    return await LoadImage(ep.thumbnail);
                 }
                 return null;
             });
@@ -576,7 +578,7 @@ namespace TVSPlayer {
         /// <param name="uri"></param>
         /// <returns></returns>
         public async static Task<BitmapImage> LoadImage(Uri uri) {
-            var bmp = await Task.Run( async () => {
+            var bmp = await Task.Run( async () => {               
                 var bytes = await new WebClient().DownloadDataTaskAsync(uri);
                 var image = new BitmapImage();
                 image.BeginInit();
@@ -596,13 +598,18 @@ namespace TVSPlayer {
         /// <returns>loaded image</returns>
         public async static Task<BitmapImage> LoadImage(string file) {
             var bmp = await Task.Run(() => {
-                BitmapImage img = new BitmapImage();
-                img.BeginInit();
-                img.CacheOption = BitmapCacheOption.OnLoad;
-                img.UriSource = new Uri(file);
-                img.EndInit();
-                img.Freeze();
-                return img;
+                try {
+                    BitmapImage img = new BitmapImage();
+                    img.BeginInit();
+                    img.CacheOption = BitmapCacheOption.OnLoad;
+                    img.UriSource = new Uri(file);
+                    img.EndInit();
+                    img.Freeze();
+                    return img;
+                } catch (Exception) {
+                    File.Delete(file);
+                    return null;
+                }
             });
             return bmp;
         }

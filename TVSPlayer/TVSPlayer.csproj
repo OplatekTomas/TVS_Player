@@ -40,14 +40,14 @@
     <ApplicationIcon>Icons/Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Core, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.6.3.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.6.3\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.6.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.6.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -59,10 +59,10 @@
       <HintPath>..\packages\WindowsAPICodePack-ShellExtensions.1.1.1\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NReco.VideoConverter.LT, Version=1.1.2.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">
-      <HintPath>..\packages\NReco.VideoConverter.LT.1.1.2\lib\net20\NReco.VideoConverter.LT.dll</HintPath>
+    <Reference Include="NReco.VideoConverter, Version=1.1.2.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.VideoConverter.1.1.2\lib\net20\NReco.VideoConverter.dll</HintPath>
     </Reference>
     <Reference Include="NReco.VideoInfo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.VideoInfo.1.0.0\lib\NReco.VideoInfo.dll</HintPath>
@@ -149,9 +149,6 @@
     </Compile>
     <Compile Include="Pages\TorrentDownloader\DownloadsView.xaml.cs">
       <DependentUpon>DownloadsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\VideoPlayer\BlankPage.xaml.cs">
-      <DependentUpon>BlankPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\VideoPlayer\LocalPlayer.xaml.cs">
       <DependentUpon>LocalPlayer.xaml</DependentUpon>
@@ -290,10 +287,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\TorrentDownloader\DownloadsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\VideoPlayer\BlankPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

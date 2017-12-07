@@ -522,7 +522,8 @@ namespace TVSPlayer {
 
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {              
+            if (true) {
+                NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else {
