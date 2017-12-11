@@ -89,7 +89,6 @@ namespace TVSPlayer {
         }
 
 
-
         [DllImport("kernel32.dll")]
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 

@@ -277,16 +277,16 @@ namespace TVSPlayer
             }
         }
 
-        private void PlayerPage_LostFocus(object sender, RoutedEventArgs e) {
-            Focus();
-        }
-
         private void StackPanel_MouseEnter(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = Cursors.Hand;
         }
 
         private void StackPanel_MouseLeave(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = null;
+        }
+
+        private void VideoSlider_GotFocus(object sender, RoutedEventArgs e) {
+            Focus();
         }
     }
 }

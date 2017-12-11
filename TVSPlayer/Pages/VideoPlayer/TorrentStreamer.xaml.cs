@@ -19,6 +19,7 @@ using Microsoft.WindowsAPICodePack.Shell;
 using NReco.VideoInfo;
 using TVS.API;
 using TVS.Notification;
+using static System.Environment;
 
 namespace TVSPlayer {
     /// <summary>
@@ -38,6 +39,7 @@ namespace TVSPlayer {
             Helper.DisableScreenSaver();
             MainWindow.videoPlayback = true;
             media = new FFProbe();
+            media.ToolPath = Environment.GetFolderPath(SpecialFolder.ApplicationData);
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
             VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             Focus();

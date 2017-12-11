@@ -515,9 +515,7 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            var torr = await Torrent.SearchSingle(Database.GetSeries(295685), Database.GetEpisode(295685, 3, 8), TorrentQuality.HD);
-            TorrentDownloader td = new TorrentDownloader(torr);
-            td.Stream();
+            await this.ShowSearcher();
         }
 
 

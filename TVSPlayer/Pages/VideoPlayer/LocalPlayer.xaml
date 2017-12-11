@@ -23,11 +23,11 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="11*"/>
             </Grid.RowDefinitions>
-            <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
+            <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" GotFocus="VideoSlider_GotFocus" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
             <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
             <Grid VerticalAlignment="Bottom" Grid.RowSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">
-                    <Slider x:Name="VolumeSlider" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
+                    <Slider x:Name="VolumeSlider" GotFocus="VideoSlider_GotFocus" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
                     <Grid Height="35" Margin="20,0" x:Name="BackIcon" MouseLeftButtonUp="BackIcon_MouseLeftButtonUp">

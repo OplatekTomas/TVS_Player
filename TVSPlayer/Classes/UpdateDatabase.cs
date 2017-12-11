@@ -16,7 +16,7 @@ namespace TVSPlayer
         /// Starts checking if all files are where they are supposed to be and if database is updated
         /// </summary>
         public async static void StartUpdateBackground(bool startNow = true) {
-            if (!startNow) {
+            if (startNow) {
                 await CheckFiles();
                 await Update();
             }
