@@ -61,14 +61,14 @@ namespace TVSPlayer
                         UpdateFullSeries(id);
                     }
                 });
-                await DownloadLastWeek();
-                await Task.Run(() => {
-                    foreach (Series series in Database.GetSeries()) {
-                        Renamer.FindAndRename(series);
-                    }
-                });
+                await DownloadLastWeek();             
                 Settings.LastCheck = DateTime.Now;
             }
+            await Task.Run(() => {
+                foreach (Series series in Database.GetSeries()) {
+                    Renamer.FindAndRename(series);
+                }
+            });
         }
 
         private async static Task DownloadLastWeek() {

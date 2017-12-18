@@ -85,7 +85,7 @@ namespace TVSPlayer {
         /// <param name="quality">Quality to search for</param>
         /// <returns></returns>
         public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
-            return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
+            return (await Search(series, episode))?.Where(x => x.Quality == quality).ToList();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace TVSPlayer {
         /// <param name="episode">Episode to search for</param>
         /// <returns>The one with most seeders</returns>
         public async static Task<Torrent> SearchSingle(Series series, Episode episode) {
-            return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            return (await Search(series, episode))?.OrderByDescending(x => x.Seeders).FirstOrDefault();
         }
 
         /// <summary>
@@ -106,8 +106,11 @@ namespace TVSPlayer {
         /// <param name="quality">Quality to search for</param>
         /// <returns>The one with most seeders</returns>
         public async static Task<Torrent> SearchSingle(Series series, Episode episode, TorrentQuality quality) {
-            var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
-            return tor;
+            var tor = await Search(series, episode);
+            if (tor != null) {
+                return tor.Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            }
+            return null;
         }
 
         private static string GetUrl(string show, int? season, int? episode) {

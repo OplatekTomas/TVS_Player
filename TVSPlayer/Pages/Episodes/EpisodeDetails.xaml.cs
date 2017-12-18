@@ -141,7 +141,8 @@ namespace TVSPlayer
 
         private async void Download_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.AddPage(new PleaseWait());
-            Torrent torrent = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.DownloadQuality);
+            var ser = Database.GetSeries((int)episode.seriesId);
+            Torrent torrent = await Torrent.SearchSingle(ser, episode, Settings.DownloadQuality);
             if (torrent != null) {
                 TorrentDownloader downloader = new TorrentDownloader(torrent);
                 await downloader.Download();

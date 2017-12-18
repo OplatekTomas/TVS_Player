@@ -43,23 +43,27 @@ namespace TVSPlayer {
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
             Task.Run(async () => {
                 foreach (Episode ep in episodes) {
-                    Episode episode = Database.GetEpisode(series.id, ep.id, true);
-                    BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
-                    Dispatcher.Invoke(() => {
-                        EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
-                        epv.Width = 230;
-                        epv.Height = 175;
-                        epv.VerticalAlignment = VerticalAlignment.Top;
-                        epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
-                        epv.Opacity = 0;
-                        if (bmp != null) { 
-                            epv.ThumbImage.Source = bmp;
-                        }
-                        epv.Margin = new Thickness(5, 0, 10, 0);
-                        Panel.Children.Add(epv);
-                        Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                        sb.Begin(epv);
-                    }, DispatcherPriority.Send);
+                    bool isLoaded = true;
+                    Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
+                    if (isLoaded) { 
+                        Episode episode = Database.GetEpisode(series.id, ep.id, true);
+                        BitmapImage bmp = await Database.GetEpisodeThumbnail(series.id, ep.id);
+                        Dispatcher.Invoke(() => {
+                            EpisodeView epv = new EpisodeView(episode, true, seriesEpisodes);
+                            epv.Width = 230;
+                            epv.Height = 175;
+                            epv.VerticalAlignment = VerticalAlignment.Top;
+                            epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
+                            epv.Opacity = 0;
+                            if (bmp != null) { 
+                                epv.ThumbImage.Source = bmp;
+                            }
+                            epv.Margin = new Thickness(5, 0, 10, 0);
+                            Panel.Children.Add(epv);
+                            Storyboard sb = (Storyboard)FindResource("OpacityUp");
+                            sb.Begin(epv);
+                        }, DispatcherPriority.Send);
+                    }
                 }
             });
         }
