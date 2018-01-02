@@ -102,5 +102,13 @@ namespace TVSPlayer
             Properties.Settings.Default.Save();
             await Task.Run(() => owner.LoadSeasons());
         }
+
+        private void WatchAll_MouseUp(object sender, MouseButtonEventArgs e) {
+            var eps = Database.GetEpisodes(owner.series.id);
+            foreach (var ep in eps) {
+                ep.finised = true;
+                Database.EditEpisode(owner.series.id, ep.id, ep);
+            }
+        }
     }
 }

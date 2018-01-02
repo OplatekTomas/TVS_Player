@@ -70,6 +70,11 @@
                         <Image Source="{DynamicResource CalendarIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
                         <TextBlock Margin="50,8,0,5"  Text="Schedule" Foreground="{DynamicResource TextColor}" FontSize="20" />
                     </Grid>
+                    <Grid Height="45" x:Name="StatisticsSideBar" MouseLeftButtonUp="StatisticsSideBar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">
+                        <Grid HorizontalAlignment="Left" Width="3" Background="{DynamicResource AccentColor}" x:Name="StatisticsSelected"  Opacity="0" />
+                        <Image Source="{DynamicResource StatisticIcon}" HorizontalAlignment="Left" Margin="15,10" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <TextBlock Margin="50,8,0,5"  Text="Statistics" Foreground="{DynamicResource TextColor}" FontSize="20" />
+                    </Grid>
                 </StackPanel>
                 <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,20">
                     <Grid Height="45" x:Name="AboutSideBar" MouseLeftButtonUp="AboutSideBar_MouseLeftButtonUp" HorizontalAlignment="Right" Width="225" MouseEnter="SideButton_MouseEnter" MouseLeave="SideButton_MouseLeave">

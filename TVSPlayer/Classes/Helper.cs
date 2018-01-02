@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TVS.API;
 
@@ -76,14 +77,17 @@ namespace TVSPlayer {
             if (IsIconic(handle)) {
                 ShowWindow(handle, SW_RESTORE);
             }
-
             SetForegroundWindow(handle);
         }
-
+        /// <summary>
+        /// Disables Windows screen saver
+        /// </summary>
         public static void DisableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS);
         }
-
+        /// <summary>
+        /// Enables Windows screen saver
+        /// </summary>
         public static void EnableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
@@ -112,7 +116,11 @@ namespace TVSPlayer {
     }
 
     static class Extensions{
-       
+
+        public static Color ToMediaColor(this System.Drawing.Color color) {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
         /// <summary>
         /// Waits for all Tasks in IEnumerable to complete
         /// </summary>

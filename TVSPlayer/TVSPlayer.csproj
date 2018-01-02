@@ -240,6 +240,9 @@
     <Compile Include="Pages\Schedule\ScheduleDay.xaml.cs">
       <DependentUpon>ScheduleDay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Statistics\Statistics.xaml.cs">
+      <DependentUpon>Statistics.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Compile Include="Pages\TorrentDownloader\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
@@ -419,6 +422,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Schedule\ScheduleDay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Statistics\Statistics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -626,6 +633,8 @@
     <Resource Include="Icons\ico-cog-dark.png" />
     <Resource Include="Icons\ico-cog-light.png" />
     <Resource Include="Icons\banner-dark.png" />
+    <Resource Include="Icons\ico-statistics-dark.png" />
+    <Resource Include="Icons\ico-statistics-light.png" />
     <Content Include="torrent.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

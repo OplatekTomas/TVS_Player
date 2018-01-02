@@ -366,21 +366,21 @@ namespace TVSPlayer {
         private void SettingsSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new SettingsPage());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = DownloadsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = DownloadsSelected.Opacity = StatisticsSelected.Opacity = 0;
             SettingsSelected.Opacity = 1;
         }
 
         private void AboutSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new AboutView());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = DownloadsSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = DownloadsSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             AboutSelected.Opacity = 1;
         }
 
         private void ScheduleSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new Schedule());
             HideSideBar();
-            LibrarySelected.Opacity = DownloadsSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = DownloadsSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             ScheduleSelected.Opacity = 1;
         }
 
@@ -391,8 +391,15 @@ namespace TVSPlayer {
         private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new DownloadsView());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             DownloadsSelected.Opacity = 1;
+        }
+
+        private void StatisticsSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new Statistics());
+            HideSideBar();
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = DownloadsSelected.Opacity = 0;
+            StatisticsSelected.Opacity = 1;
         }
 
         private void SideButton_MouseEnter(object sender, MouseEventArgs e) {
@@ -407,7 +414,7 @@ namespace TVSPlayer {
             SetPage(new Library());
             HideSideBar();
             LibrarySelected.Opacity = 1;
-            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity  = StatisticsSelected.Opacity = 0;
         }
 
         #endregion
@@ -596,8 +603,6 @@ namespace TVSPlayer {
                 Thread.Sleep(500);
             }
         }
-
-
 
     }
 

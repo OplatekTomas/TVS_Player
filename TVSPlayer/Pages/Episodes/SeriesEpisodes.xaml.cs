@@ -290,19 +290,36 @@ namespace TVSPlayer {
             return null;
         }
 
-        private async void PlayNextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+        private void PlayNextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            PlayNextEp();
+        }
+
+        private async void PlayNextEp() {
             List<Episode> episodes = Database.GetEpisodes(series.id);
-            var ep = episodes.Where(x => !x.finised && x.airedSeason > 0 && x.files.Where(y => y.Type == Episode.ScannedFile.FileType.Video).ToList().Count > 0).OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList().FirstOrDefault();
-            if (ep != null) { 
-            var sf = GetFileToPlay(ep, series);
-                if (!Settings.UseWinDefaultPlayer) {
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                    await Task.Run(() => {
-                        Thread.Sleep(500);
-                    });
-                    MainWindow.AddPage(new LocalPlayer(series, ep, sf));
+            var eps = episodes.Where(x => x.airedSeason > 0 && x.files.Where(y => y.Type == Episode.ScannedFile.FileType.Video).ToList().Count > 0).OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList();
+            if (eps != null) {
+                var ep = eps.Where(x => x.finised != true).ToList().FirstOrDefault();
+                if (ep != null) {
+                    var sf = GetFileToPlay(ep, series);
+                    if (!Settings.UseWinDefaultPlayer) {
+                        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                        await Task.Run(() => {
+                            Thread.Sleep(500);
+                        });
+                        MainWindow.AddPage(new LocalPlayer(series, ep, sf));
+                    } else {
+                        Process.Start(sf.NewName);
+                    }
                 } else {
-                    Process.Start(sf.NewName);
+                    var result = await MessageBox.Show("All episodes are finished.\nStart again?", "", MessageBoxButtons.YesNoCancel);
+                    if (result == MessageBoxResult.Yes) {
+                        foreach (var episode in episodes) {
+                            episode.finised = false;
+                            episode.continueAt = 0;
+                            Database.EditEpisode(series.id, episode.id, episode);
+                        }
+                        PlayNextEp();
+                    }
                 }
             }
         }

@@ -275,6 +275,7 @@ namespace TVSPlayer
                     GoBack();
                     break;
             }
+            e.Handled = true;
         }
 
         private void StackPanel_MouseEnter(object sender, MouseEventArgs e) {
