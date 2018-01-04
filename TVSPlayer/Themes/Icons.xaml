@@ -32,6 +32,7 @@
     <BitmapImage x:Key="NoBanner" UriSource="pack://application:,,,/Icons/banner-dark.png" />
     <BitmapImage x:Key="CogIcon" UriSource="pack://application:,,,/Icons/ico-cog-light.png" />
     <BitmapImage x:Key="StatisticIcon" UriSource="pack://application:,,,/Icons/ico-statistics-light.png" />
+    <BitmapImage x:Key="NoActor" UriSource="pack://application:,,,/Icons/actor-dark.png" />
 
 
 </ResourceDictionary>

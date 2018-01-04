@@ -26,6 +26,7 @@ namespace TVSPlayer {
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.RemovePage();
+            MainWindow.SetPage(new Library());
         }
 
         private void Reload_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -34,6 +35,8 @@ namespace TVSPlayer {
             anim.Begin(ReloadImage);         
             if (MainWindow.CheckConnection()) {
                 MainWindow.RemovePage();
+                MainWindow.SetPage(new Library());
+
             }
         }
 

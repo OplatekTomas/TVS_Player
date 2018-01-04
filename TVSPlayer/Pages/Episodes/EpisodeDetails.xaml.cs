@@ -38,9 +38,9 @@ namespace TVSPlayer
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
-            EPName.Text = EpisodeName.Text = episode.episodeName;
             Season.Text = Helper.GenerateName(episode);
             Rating.Text = episode.siteRating + "/10";
+            EpisodeName.Text = episode.episodeName;
             if (!String.IsNullOrEmpty(episode.firstAired)) {
                 Airdate.Text = DateTime.ParseExact(episode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
             }
@@ -69,6 +69,7 @@ namespace TVSPlayer
                 }
             }
             if (episode.files.Count > 0) {
+                Downloaded.Text = "No";
                 foreach (var item in episode.files) {
                     if (item.Type == TVS.API.Episode.ScannedFile.FileType.Video) {
                         Downloaded.Text = "Yes";
@@ -77,6 +78,11 @@ namespace TVSPlayer
                 }
             }
             Overview.Text = episode.overview;
+            if (episode.continueAt > 0) {
+                Continue.Text = Helper.GetTime(episode.continueAt);
+            } else {
+                Continue.Text = "-";
+            }
         }
 
         private void EPName_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

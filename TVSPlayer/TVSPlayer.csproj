@@ -635,6 +635,7 @@
     <Resource Include="Icons\banner-dark.png" />
     <Resource Include="Icons\ico-statistics-dark.png" />
     <Resource Include="Icons\ico-statistics-light.png" />
+    <Resource Include="Icons\actor-dark.png" />
     <Content Include="torrent.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

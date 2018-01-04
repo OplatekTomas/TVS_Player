@@ -59,46 +59,16 @@ namespace TVSPlayer {
             var sb = (Storyboard)Application.Current.FindResource("OpacityDown");
             var clone = sb.Clone();
             clone.Completed += (s, ev) => {
-                if (episodeView.DetailsGrid.Children.Count == 2) {
-                    episodeView.DetailsGrid.Children.RemoveAt(1);
-                }
-                EpisodeDetails epDetails = new EpisodeDetails(episode);
-                epDetails.Opacity = 0;
-                epDetails.Height = 400;
-                epDetails.BackIcon.MouseUp += (se, eve) => Remove(epDetails, episodeView);
-                epDetails.ScrollView.PreviewMouseWheel += (se, eve) => {
-                    if (eve.Delta > 0) {
-                        episodeView.ScrollView.LineUp();
-                        episodeView.ScrollView.LineUp();
-                        episodeView.ScrollView.LineUp();
-                    } else {
-                        episodeView.ScrollView.LineDown();
-                        episodeView.ScrollView.LineDown();
-                        episodeView.ScrollView.LineDown();
-                    }
-                };
-                episodeView.DetailsGrid.Children.Add(epDetails);
-                var sboard = (Storyboard)Application.Current.FindResource("OpacityUp");
-                sboard.Begin(epDetails);
+                episodeView.DetailsGrid.Children.RemoveRange(0, episodeView.DetailsGrid.Children.Count);
+                episodeView.DetailsGrid.Children.Add(new EpisodeDetails(episode));
+                Storyboard up = (Storyboard)Application.Current.FindResource("OpacityUp");
+                up.Begin(episodeView.DetailsGrid);
             };
-            if (episodeView.DetailsGrid.Children.Count == 1) {
-                clone.Begin(episodeView.SeriesDetails);
-            } else {
-                clone.Begin((FrameworkElement)episodeView.DetailsGrid.Children[1]);
-            }
+            clone.Begin(episodeView.DetailsGrid);
             episodeView.ScrollView.ScrollToTop();
         }
 
-        private static void Remove(EpisodeDetails details,SeriesEpisodes episodeView) {
-            var sb = (Storyboard)Application.Current.FindResource("OpacityDown");
-            var clone = sb.Clone();
-            clone.Completed += (s, ev) => {
-                episodeView.DetailsGrid.Children.Remove(details);
-                var sboard = (Storyboard)Application.Current.FindResource("OpacityUp");
-                sboard.Begin(episodeView.SeriesDetails);
-            };
-            clone.Begin(details);
-        }
+       
 
     }
 }

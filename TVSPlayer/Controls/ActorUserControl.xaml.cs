@@ -30,12 +30,11 @@ namespace TVSPlayer
         Actor actor;
 
         private async void BackgroundGrid_Loaded(object sender, RoutedEventArgs e) {
+            Opacity = 0;
             if (!String.IsNullOrEmpty(actor.image)) {
                 ActorFace.Source = await Database.LoadImage(new Uri("https://www.thetvdb.com/banners/"+actor.image));
-                var sb = (Storyboard)FindResource("OpacityDown");
-                sb.Begin(LoadingText);
-            } else {
-                LoadingText.Text = "No image..";
+                var sb = (Storyboard)FindResource("OpacityUp");
+                sb.Begin(this);
             }
         }
 

@@ -251,6 +251,7 @@ namespace TVSPlayer
             episode.finised = Player.MediaDuration - 3000000000 < Player.MediaPosition ? true : false;
             Database.EditEpisode(series.id, episode.id, episode);
             MainWindow.RemovePage();
+            SeriesEpisodes.TryRefresh();
             Mouse.OverrideCursor = null;
         }
 

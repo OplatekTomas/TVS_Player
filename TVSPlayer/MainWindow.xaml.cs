@@ -119,6 +119,7 @@ namespace TVSPlayer {
         }
         Dimensions dimensions;
         PlayerState currentState = PlayerState.Normal;
+
         public static void SwitchState(PlayerState state ,bool reset = false) {
             Window main = Application.Current.MainWindow;
             ((MainWindow)main).ViewSwitcher(state ,reset);
@@ -192,6 +193,11 @@ namespace TVSPlayer {
         public static string GetSearchBarText() {
             Window main = Application.Current.MainWindow;
             return ((MainWindow)main).SearchBox.Text;
+        }
+
+        public static string GetCurrentFrameContentName() {
+            Window main = Application.Current.MainWindow;
+            return ((MainWindow)main).ActiveContent.Content.GetType().Name;
         }
 
         /// <summary>
@@ -524,7 +530,6 @@ namespace TVSPlayer {
         private async void TestFunctions() {
             await this.ShowSearcher();
         }
-
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
             if (true) {

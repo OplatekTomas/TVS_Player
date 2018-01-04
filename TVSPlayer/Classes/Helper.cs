@@ -51,6 +51,26 @@ namespace TVSPlayer {
         }
 
         /// <summary>
+        /// Get string in format h:mm:ss from player media lenght or current position
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetTime(long value) {
+            int minutes, seconds, hours;
+            minutes = seconds = hours = 0;
+            value = value / 10000000;
+            hours = Convert.ToInt32(Math.Floor((double)(value / 60 / 60)));
+            minutes = Convert.ToInt32(Math.Floor((double)(value / 60 - 60 * hours)));
+
+            seconds = Convert.ToInt32(Math.Floor((double)(value - ((60 * 60 * hours) + (60 * minutes)))));
+            string hoursString = hours > 0 ? hours + ":" : "";
+            string minutesString = minutes >= 10 ? minutes.ToString() + ":" : "0" + minutes + ":";
+            string secondsString = seconds >= 10 ? seconds.ToString() : "0" + seconds;
+            return hoursString + minutesString + secondsString;
+        }
+
+
+        /// <summary>
         /// Cheks if TVSPlyer is already running
         /// </summary>
         /// <returns></returns>
