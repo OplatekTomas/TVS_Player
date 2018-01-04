@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,7 +87,7 @@ namespace TVSPlayer
         }
 
         private void WatchAll_MouseUp(object sender, MouseButtonEventArgs e) {
-            var eps = Database.GetEpisodes(owner.series.id);
+            var eps = Database.GetEpisodes(owner.series.id).Where( x=> !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) < DateTime.Now);
             foreach (var ep in eps) {
                 ep.finised = true;
                 Database.EditEpisode(owner.series.id, ep.id, ep);
