@@ -156,20 +156,22 @@ namespace TVSPlayer {
        
 
         private async void LoadBackground() {
-            BitmapImage bmp = await Database.GetFanArt(series.id);
-            Dispatcher.Invoke(() => {
-                if (bmp != null) {
-                    hasBackground = true;
-                    BackgroundImage.Source = bmp;
-                    Darkener.Visibility = Visibility.Visible;
-                    var sb = (Storyboard)FindResource("BlurImage");
-                    sb.Begin();
-                    var sboard = (Storyboard)FindResource("OpacityUp");
-                    sboard.Begin(BackgroundImage);
-                } else {
-                    BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
-                }
-            }, DispatcherPriority.Send);
+            if (!Settings.PerformanceMode) { 
+                BitmapImage bmp = await Database.GetFanArt(series.id);
+                Dispatcher.Invoke(() => {
+                    if (bmp != null) {
+                        hasBackground = true;
+                        BackgroundImage.Source = bmp;
+                        Darkener.Visibility = Visibility.Visible;
+                        var sb = (Storyboard)FindResource("BlurImage");
+                        sb.Begin();
+                        var sboard = (Storyboard)FindResource("OpacityUp");
+                        sboard.Begin(BackgroundImage);
+                    } else {
+                        BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
+                    }
+                }, DispatcherPriority.Send);
+            }
         }
 
         public void LoadSeasons() {
