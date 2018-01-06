@@ -528,7 +528,7 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            await this.ShowSearcher();
+            Helper.SetPerformanceMode();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -540,6 +540,7 @@ namespace TVSPlayer {
                     Settings.Load();
                     if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
+                        Helper.SetPerformanceMode();
                         Settings.LastCheck = DateTime.Now;
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {

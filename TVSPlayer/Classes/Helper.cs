@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
 using TVS.API;
+using System.Management;
 
 namespace TVSPlayer {
     class Helper {
@@ -69,7 +70,6 @@ namespace TVSPlayer {
             return hoursString + minutesString + secondsString;
         }
 
-
         /// <summary>
         /// Cheks if TVSPlyer is already running
         /// </summary>
@@ -110,6 +110,26 @@ namespace TVSPlayer {
         /// </summary>
         public static void EnableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+        }
+
+        /// <summary>
+        /// Only use this on first launch. If only Intel GPU is present some UI elements won't load
+        /// </summary>
+        public static void SetPerformanceMode() {
+            ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_VideoController");
+            ManagementObjectCollection collection = mos.Get();
+            bool quality = false;
+            foreach (var gpu in collection) {
+                string name = gpu["Name"].ToString();
+                if (gpu["Name"].ToString().ToLower().Contains("radeon") || gpu["Name"].ToString().ToLower().Contains("nvidia")) {
+                    quality = true;
+                }
+            }
+            if (quality) {
+                Settings.PerformanceMode = false;
+            } else {
+                Settings.PerformanceMode = true;
+            }
         }
 
 
