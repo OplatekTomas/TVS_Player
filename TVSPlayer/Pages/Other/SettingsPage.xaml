@@ -40,6 +40,13 @@
                             </TransformGroup>
                         </CheckBox.RenderTransform>
                     </CheckBox>
+                    <CheckBox x:Name="PerformanceMode" FontWeight="SemiBold" Background="{DynamicResource LighterBG}" BorderThickness="0" Margin="5,10,5,5" Content="Prefer performance to UI design" Foreground="{DynamicResource TextColor}" Click="PerformanceMode_Click" >
+                        <CheckBox.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.35" ScaleY="1.35"/>
+                            </TransformGroup>
+                        </CheckBox.RenderTransform>
+                    </CheckBox>
                 </StackPanel>
                 <StackPanel Margin="175,0,20,0">
                     <TextBlock x:Name="LibraryLocation" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5" />

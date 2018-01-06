@@ -122,21 +122,23 @@ namespace TVSPlayer
 
         private async void LoadBackground() {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Task.Run( async () => {
-                BitmapImage bmp = await Database.GetFanArt(series.id);
-                Dispatcher.Invoke(() => {
-                    if (bmp != null) {
-                        BackgroundImage.Source = bmp;
-                        Darkener.Visibility = Visibility.Visible;
-                        var sb = (Storyboard)FindResource("BlurImage");
-                        sb.Begin();
-                        var sboard = (Storyboard)FindResource("OpacityUp");
-                        sboard.Begin(BackgroundImage);
-                    } else {
-                        BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
-                    }
-                }, DispatcherPriority.Send);
-            });
+            if (!Settings.PerformanceMode) { 
+                Task.Run( async () => {
+                    BitmapImage bmp = await Database.GetFanArt(series.id);
+                    Dispatcher.Invoke(() => {
+                        if (bmp != null) {
+                            BackgroundImage.Source = bmp;
+                            Darkener.Visibility = Visibility.Visible;
+                            var sb = (Storyboard)FindResource("BlurImage");
+                            sb.Begin();
+                            var sboard = (Storyboard)FindResource("OpacityUp");
+                            sboard.Begin(BackgroundImage);
+                        } else {
+                            BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
+                        }
+                    }, DispatcherPriority.Send);
+                });
+            }
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
         }

@@ -46,6 +46,7 @@ namespace TVSPlayer
             DownQuality.SelectedIndex = (int)Settings.DownloadQuality;
             StreamQuality.SelectedIndex = (int)Settings.StreamQuality;
             UseBuildIn.IsChecked = Settings.UseWinDefaultPlayer;
+            PerformanceMode.IsChecked = Settings.PerformanceMode;
             CacheFolder.TextChanged += CacheFolder_TextChanged;
             Dir1Box.TextChanged += Dir1Box_TextChanged;
             Dir2Box.TextChanged += Dir2Box_TextChanged;
@@ -168,6 +169,10 @@ namespace TVSPlayer
 
         private void UseBuildIn_Click(object sender, RoutedEventArgs e) {
             Settings.UseWinDefaultPlayer = (bool)UseBuildIn.IsChecked;
+        }
+
+        private void PerformanceMode_Click(object sender, RoutedEventArgs e) {
+            Settings.PerformanceMode = (bool)PerformanceMode.IsChecked;
         }
     }
 }
