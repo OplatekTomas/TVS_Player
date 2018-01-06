@@ -28,16 +28,21 @@ namespace TVSPlayer
     /// </summary>
     public partial class EpisodeDetails : UserControl
     {
-        public EpisodeDetails(Episode episode)
+        public EpisodeDetails(Episode episode, bool showBackButton = true)
         {
             InitializeComponent();
             this.episode = episode;
+            showBack = showBackButton;
+
         }
 
+        bool showBack;
         Episode episode;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
+            if (showBack) {
+                EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
+            }
             Season.Text = Helper.GenerateName(episode);
             Rating.Text = episode.siteRating + "/10";
             EpisodeName.Text = episode.episodeName;

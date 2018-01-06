@@ -40,8 +40,8 @@ namespace TVSPlayer {
             MainWindow.SetPage(new Library());
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e) {
-            Task.Run(async () => {
+        private async void Grid_Loaded(object sender, RoutedEventArgs e) {
+            await Task.Run(async () => {
                 foreach (Episode ep in episodes) {
                     bool isLoaded = true;
                     Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
@@ -62,7 +62,7 @@ namespace TVSPlayer {
                             Panel.Children.Add(epv);
                             Storyboard sb = (Storyboard)FindResource("OpacityUp");
                             sb.Begin(epv);
-                        }, DispatcherPriority.Send);
+                        });
                     }
                 }
             });
