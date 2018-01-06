@@ -510,11 +510,11 @@ namespace TVSPlayer {
                 Thread.Sleep(500);
             });
             //This code runs after all API calls are done and stuff is saved
-            ProgressBarPage prog = new ProgressBarPage(ids.Count);
+            List<Series> seriesList = Database.GetSeries();
+            ProgressBarPage prog = new ProgressBarPage(seriesList.Count);
             AddPage(prog);
             total = 0;
             await Task.Run(() => {
-                List<Series> seriesList = Database.GetSeries();
                 foreach (Series series in seriesList) {
                     Renamer.FindAndRename(series);
                     Dispatcher.Invoke(new Action(() => {
@@ -524,6 +524,7 @@ namespace TVSPlayer {
                 }
                 Thread.Sleep(1000);
             });
+            RemoveAllPages();
             SetPage(new Library());
         }
 
