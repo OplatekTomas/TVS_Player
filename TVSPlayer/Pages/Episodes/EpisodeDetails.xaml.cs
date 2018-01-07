@@ -41,6 +41,7 @@ namespace TVSPlayer
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             if (showBack) {
+                Back.Visibility = Visibility.Visible;
                 EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
             }
             Season.Text = Helper.GenerateName(episode);
@@ -207,6 +208,40 @@ namespace TVSPlayer
             MainWindow.RemovePage();
             TorrentDownloader td = new TorrentDownloader(tor);
             await td.Stream();
+        }
+
+        private void NextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var episodes = Database.GetEpisodes((int)episode.seriesId);
+            var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason).Max(x => x.airedEpisodeNumber);
+            Episode newEp = null;
+            if (highestEp == episode.airedEpisodeNumber) {
+                newEp = episodes.Where(x => x.airedSeason == episode.airedSeason + 1 && x.airedEpisodeNumber == 1).FirstOrDefault();
+            } else {
+                newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber + 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+            }
+            if (newEp != null) {
+                SeriesEpisodes.SetDetails(newEp);
+            }
+        }
+
+        private void PreviousEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (!(episode.airedSeason == 1 && episode.airedEpisodeNumber == 1)) { 
+                var episodes = Database.GetEpisodes((int)episode.seriesId);
+                Episode newEp = null;
+                if (1 == episode.airedEpisodeNumber) {
+                    var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1).Max(x => x.airedEpisodeNumber);
+                    newEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1 && x.airedEpisodeNumber == highestEp).FirstOrDefault();
+                } else {
+                    newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber - 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+                }
+                if (newEp != null) {
+                    SeriesEpisodes.SetDetails(newEp);
+                }
+            }
+        }
+
+        private void Back_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SeriesEpisodes.TryRefresh();
         }
     }
 }

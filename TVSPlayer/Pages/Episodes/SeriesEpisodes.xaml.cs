@@ -102,6 +102,18 @@ namespace TVSPlayer {
             }, DispatcherPriority.Send);
         }
 
+        private void ShowNextEpAnimated() {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += async (s, ev) => {
+                await ShowNextEp();
+                Storyboard up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsGrid);
+            };
+            clone.Begin(DetailsGrid);
+
+        }
+
         private async Task ShowNextEp() {
             DetailsGrid.Children.RemoveRange(0, DetailsGrid.Children.Count);
             await Task.Run( async () => {
@@ -169,8 +181,27 @@ namespace TVSPlayer {
         public static void TryRefresh() {
             if (MainWindow.GetCurrentFrameContentName() == "SeriesEpisodes") {
                 Window main = Application.Current.MainWindow;
-                ((SeriesEpisodes)((MainWindow)main).ActiveContent.Content).ShowNextEp();
+                ((SeriesEpisodes)((MainWindow)main).ActiveContent.Content).ShowNextEpAnimated();
             }
+        }
+
+        public static void SetDetails(Episode episode) {
+            Window main = Application.Current.MainWindow;
+            ((SeriesEpisodes)((MainWindow)main).ActiveContent.Content).SetDetailsPrivate(episode);
+
+        }
+
+        private void SetDetailsPrivate(Episode episode) {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                DetailsGrid.Children.RemoveRange(0, DetailsGrid.Children.Count);
+                DetailsGrid.Children.Add(new EpisodeDetails(episode));
+                Storyboard up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsGrid);
+            };
+            clone.Begin(DetailsGrid);
+          
         }
 
         bool isRunning = false;
@@ -272,8 +303,6 @@ namespace TVSPlayer {
                 searchValues.Add(episode, episode.episodeName);
             }
         }
-
-
 
         private void Image_MouseEnter(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = Cursors.Hand;
