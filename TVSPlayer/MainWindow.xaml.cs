@@ -306,8 +306,11 @@ namespace TVSPlayer {
                 SearchBox.TextChanged -= lastHandler;
             }
             if (custom.SearchBarEvent != null) {
+                SearchButton.Visibility = Visibility.Visible;
                 lastHandler = custom.SearchBarEvent;
                 SearchBox.TextChanged += custom.SearchBarEvent;
+            } else {
+                SearchButton.Visibility = Visibility.Collapsed;
             }
             if (custom.Buttons != null) {
                 CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
