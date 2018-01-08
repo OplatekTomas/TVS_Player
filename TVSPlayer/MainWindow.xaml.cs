@@ -532,7 +532,7 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            Helper.SetPerformanceMode();
+
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {

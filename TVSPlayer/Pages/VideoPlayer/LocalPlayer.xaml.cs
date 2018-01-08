@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +40,7 @@ namespace TVSPlayer
         DispatcherTimer positionUpdate = new DispatcherTimer();
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+
             Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
@@ -62,7 +64,16 @@ namespace TVSPlayer
             Return();
         }
 
+
+        private void RenderSubtitles() {
+            var list = new SrtParser().ParseStream(File.Open(@"D:\TVSTests\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
+            foreach (var item in list[1].Lines) {
+                SubtitlePanel.Children.Add(item);
+            }
+        }
+
         private void MediaOpenedEvent() {
+            RenderSubtitles();
             VideoSlider.Maximum = Player.MediaDuration;
             if (!episode.finised) { Player.MediaPosition = episode.continueAt; }
             episode.finised = false;

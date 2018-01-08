@@ -18,6 +18,7 @@
             <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" Margin="45,0,0,3" />
         </Grid>
         <player:MediaUriElement x:Name="Player" />
+        <StackPanel x:Name="SubtitlePanel" VerticalAlignment="Bottom" Margin="0,50"></StackPanel>
         <Grid x:Name="BottomBar" Background="{StaticResource TransparentStaticBG}" Height="100" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
