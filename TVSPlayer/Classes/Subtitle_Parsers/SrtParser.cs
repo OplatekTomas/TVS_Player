@@ -55,22 +55,85 @@ namespace TVSPlayer {
             panel.HorizontalAlignment = HorizontalAlignment.Center;
             panel.Orientation = Orientation.Horizontal;
             panel.Margin = new Thickness(0, 0, 0, 10);
-            var block = GetTextBlock();
+            var block = GetTextBlock(line);
             Regex rgx = new Regex("<.*>.*</.*>", RegexOptions.IgnoreCase);
             var matches = rgx.Matches(line);
             if (matches.Count > 0) {
-                foreach (var match in matches) {
-
-                }
+                EditText(line).ForEach(x => panel.Children.Add(x));
             } else {
-                block.Text = line;
                 panel.Children.Add(block);
             }
             return panel;
         }
 
-        private TextBlock EditText(TextBlock block, string text) {
+        private List<TextBlock> EditText(string text) {
+            List<TextBlock> blocks = new List<TextBlock>();
+            List<string> toApply = new List<string>();
+            string temp = text;
+            var block = GetTextBlock();
+            List<string> tags = new List<string>() { "<i>", "<b>", "<font color=\"#[0-9a-zA-Z]{3,8}\">", "</i>", "</b>", "</font>" };
+            while (!String.IsNullOrEmpty(text)) {
+                for (int x = 0; x < tags.Count(); x++) {
+                    var match = Regex.Match(text, tags[x]);
+                    if (match.Success && match.Index == 0) {
+                        blocks.Add(block);
+                        block = GetTextBlock();
+                        text = text.Remove(0, match.Length);
+                        switch (x) {
+                            case 0:
+                                toApply.Add("i");
+                                break;
+                            case 1:
+                                toApply.Add("b");
+                                break;
+                            case 2:
+                                var color = match.Value.Remove(0, 13);
+                                toApply.Add(color.Remove(match.Length - 15, 2));
+                                break;
+                            case 3:
+                                toApply.Remove("i");
+                                break;
+                            case 4:
+                                toApply.Remove("b");
+                                break;
+                            case 5:
+                                for (int i = toApply.Count() - 1; i >= 0; i--) {
+                                    if (toApply[i].StartsWith("#")) toApply.Remove(toApply[i]);
+                                }
+                                break;
+                        }
+                    }
+                }
+                if (toApply.Contains("i")) {
+                    block.FontStyle = FontStyles.Italic;
+                }
+                if (toApply.Contains("b")) {
+                    block.FontWeight = FontWeights.Bold;
+                }
+                Match m = null;
+                if (toApply.Any(x => (m = Regex.Match(x, "#[0-9a-zA-Z]{3,8}")).Success)) {
+                    block.Foreground = GetColorFromHex(m.Value);
+                }
+                if (text.Count() > 0) {
+                    block.Text += text[0];
+                    text = text.Remove(0, 1);
+                }
 
+            }
+            for (int i = blocks.Count; i >= 0; i++) {
+                if (String.IsNullOrEmpty(blocks[i].Text)) {
+                    blocks.Remove(blocks[i]);
+                }
+            }
+            return new List<TextBlock>();
+        }
+
+
+
+        private TextBlock GetTextBlock(string text) {
+            var block = GetTextBlock();
+            block.Text = text;
+            return block;
         }
 
         private TextBlock GetTextBlock() {
