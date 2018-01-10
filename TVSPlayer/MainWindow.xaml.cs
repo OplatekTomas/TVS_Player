@@ -532,11 +532,10 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-          //  new SrtParser().ParseStream(File.Open(@"D:\TVSTests\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) {
+            if (true) {
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
