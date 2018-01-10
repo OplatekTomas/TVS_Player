@@ -66,10 +66,15 @@ namespace TVSPlayer
 
 
         private void RenderSubtitles() {
-            var list = new SrtParser().ParseStream(File.Open(@"C:\users\tomas\Documents\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
-            foreach (var item in list[9].Lines) {
-                SubtitlePanel.Children.Add(item);
+            var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
+            if (sub != null) {
+                var fullList = Subtitles.ParseSubtitles(sub.NewName);
+
             }
+        }
+
+        private long GetMiliseconds(long value) {
+            return value / 10000;
         }
 
         private void MediaOpenedEvent() {

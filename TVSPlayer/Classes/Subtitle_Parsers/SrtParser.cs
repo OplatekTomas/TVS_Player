@@ -24,7 +24,8 @@ namespace TVSPlayer {
 
         // Methods -------------------------------------------------------------------------
 
-        public List<Subtitles> ParseStream(Stream srtStream, Encoding encoding) {
+        public List<Subtitles> ParseStream(string file, Encoding encoding) {
+            var srtStream = File.Open(file, FileMode.Open);
             srtStream.Position = 0;
             var reader = new StreamReader(srtStream, encoding, true);
             var items = new List<Subtitles>();
@@ -47,6 +48,7 @@ namespace TVSPlayer {
                     items.Add(item);
                 }
             }
+            srtStream.Close();
             return items;
         }
 
@@ -79,6 +81,7 @@ namespace TVSPlayer {
                         blocks.Add(block);
                         block = GetTextBlock();
                         text = text.Remove(0, match.Length);
+                        text = '\u00AD' + text;
                         switch (x) {
                             case 0:
                                 toApply.Add("i");
