@@ -54,7 +54,9 @@ namespace TVSPlayer {
             string name = SelectFolderText.Text;
             var result = await Task.Run(()=> Series.Search(name));
             if (name == SelectFolderText.Text) {
-                FillUI(result);
+                if (result != null) { 
+                   FillUI(result);
+                }
             }
         }
         List<Series> oldList = new List<Series>();

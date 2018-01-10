@@ -118,14 +118,14 @@ namespace TVSPlayer {
                     block.Text += text[0];
                     text = text.Remove(0, 1);
                 }
-
             }
-            for (int i = blocks.Count; i >= 0; i++) {
+            blocks.Add(block);
+            for (int i = blocks.Count - 1; i >= 0; i--) {
                 if (String.IsNullOrEmpty(blocks[i].Text)) {
                     blocks.Remove(blocks[i]);
                 }
             }
-            return new List<TextBlock>();
+            return blocks;
         }
 
 
@@ -150,7 +150,11 @@ namespace TVSPlayer {
         }
 
         private Brush GetColorFromHex(string hex) {
-            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+            try {
+                return new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+            } catch (Exception) {
+                return Brushes.Black;
+            }
         }
 
         /// <summary>

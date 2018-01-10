@@ -66,8 +66,8 @@ namespace TVSPlayer
 
 
         private void RenderSubtitles() {
-            var list = new SrtParser().ParseStream(File.Open(@"D:\TVSTests\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
-            foreach (var item in list[1].Lines) {
+            var list = new SrtParser().ParseStream(File.Open(@"C:\users\tomas\Documents\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
+            foreach (var item in list[9].Lines) {
                 SubtitlePanel.Children.Add(item);
             }
         }

@@ -55,7 +55,7 @@ namespace TVSPlayer {
                             epv.VerticalAlignment = VerticalAlignment.Top;
                             epv.CoverGrid.MouseLeftButtonUp += (s, ev) => CoverGridMouseUp(episode);
                             epv.Opacity = 0;
-                            if (bmp != null) { 
+                            if (bmp != null) {
                                 epv.ThumbImage.Source = bmp;
                             }
                             epv.Margin = new Thickness(5, 0, 10, 0);
