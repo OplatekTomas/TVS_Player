@@ -125,7 +125,7 @@ namespace TVSPlayer {
                     blocks.Remove(blocks[i]);
                 }
             }
-            return new List<TextBlock>();
+            return blocks;
         }
 
 

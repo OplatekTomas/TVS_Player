@@ -532,7 +532,7 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            new SrtParser().ParseStream(File.Open(@"D:\TVSTests\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
+          //  new SrtParser().ParseStream(File.Open(@"D:\TVSTests\Sample.srt", FileMode.Open), System.Text.Encoding.Default);
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
