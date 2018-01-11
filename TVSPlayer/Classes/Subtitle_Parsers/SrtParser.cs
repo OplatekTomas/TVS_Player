@@ -75,35 +75,37 @@ namespace TVSPlayer {
             var block = GetTextBlock();
             List<string> tags = new List<string>() { "<i>", "<b>", "<font color=\"#[0-9a-zA-Z]{3,8}\">", "</i>", "</b>", "</font>" };
             while (!String.IsNullOrEmpty(text)) {
-                for (int x = 0; x < tags.Count(); x++) {
-                    var match = Regex.Match(text, tags[x]);
-                    if (match.Success && match.Index == 0) {
-                        blocks.Add(block);
-                        block = GetTextBlock();
-                        text = text.Remove(0, match.Length);
-                        text = '\u00AD' + text;
-                        switch (x) {
-                            case 0:
-                                toApply.Add("i");
-                                break;
-                            case 1:
-                                toApply.Add("b");
-                                break;
-                            case 2:
-                                var color = match.Value.Remove(0, 13);
-                                toApply.Add(color.Remove(match.Length - 15, 2));
-                                break;
-                            case 3:
-                                toApply.Remove("i");
-                                break;
-                            case 4:
-                                toApply.Remove("b");
-                                break;
-                            case 5:
-                                for (int i = toApply.Count() - 1; i >= 0; i--) {
-                                    if (toApply[i].StartsWith("#")) toApply.Remove(toApply[i]);
-                                }
-                                break;
+                if (text[0] == '<') {
+                    for (int x = 0; x < tags.Count(); x++) {
+                        var match = Regex.Match(text, tags[x]);
+                        if (match.Success && match.Index == 0) {
+                            blocks.Add(block);
+                            block = GetTextBlock();
+                            text = text.Remove(0, match.Length);
+                            text = '\u00AD' + text;
+                            switch (x) {
+                                case 0:
+                                    toApply.Add("i");
+                                    break;
+                                case 1:
+                                    toApply.Add("b");
+                                    break;
+                                case 2:
+                                    var color = match.Value.Remove(0, 13);
+                                    toApply.Add(color.Remove(match.Length - 15, 2));
+                                    break;
+                                case 3:
+                                    toApply.Remove("i");
+                                    break;
+                                case 4:
+                                    toApply.Remove("b");
+                                    break;
+                                case 5:
+                                    for (int i = toApply.Count() - 1; i >= 0; i--) {
+                                        if (toApply[i].StartsWith("#")) toApply.Remove(toApply[i]);
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }

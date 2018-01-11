@@ -548,8 +548,8 @@ namespace TVSPlayer {
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {
                         SetPage(new Library());
-                        UpdateDatabase.StartUpdateBackground();
-                        TorrentDownloader.ContinueUnfinished();
+                        //UpdateDatabase.StartUpdateBackground();
+                        //TorrentDownloader.ContinueUnfinished();
                     }
                 }
             } else {

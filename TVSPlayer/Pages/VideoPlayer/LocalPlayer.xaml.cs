@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -65,12 +66,55 @@ namespace TVSPlayer
         }
 
 
-        private void RenderSubtitles() {
+        private void LoadSubtitles() {
+            
             var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
             if (sub != null) {
-                var fullList = Subtitles.ParseSubtitles(sub.NewName);
-
+                var subtitles = Subtitles.ParseSubtitles(sub.NewName);
+                if (subtitles?.Count > 0) {
+                    RenderSubs(subtitles);
+                }
             }
+        }
+
+        private void RenderSubs(List<Subtitles> subtitles) {
+            int index = 0;
+            long position = 0;
+            int temp = 0;
+            bool isLoaded = IsLoaded;
+            Task.Run(async () => {
+                while (isLoaded) {
+                    Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                    //Get index of next sub
+                    while (!(subtitles[index].StartTime < position && subtitles[index + 1].StartTime > position)) {
+                        Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                        if (subtitles[index].StartTime < position) {
+                            index++;
+                        } else if (subtitles[index].StartTime > position) {
+                            index--;
+                        }
+                    }
+                    Dispatcher.Invoke(() => {
+                        foreach (var line in subtitles[index].Lines) {
+                            if (!SubtitlePanel.Children.Contains(line)) {
+                                SubtitlePanel.Children.Add(line);
+                            }
+                        }
+                    }, DispatcherPriority.Send);
+                    while (subtitles[index].EndTime >= position) {
+                        Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                        await Task.Delay(5);
+                        if (subtitles[index].StartTime > position) {
+                            break;
+                        }
+                    }
+                    Dispatcher.Invoke(() => {
+                        SubtitlePanel.Children.Clear();
+                    }, DispatcherPriority.Send);
+                    await Task.Delay(1);
+                    Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
+                }
+            });
         }
 
         private long GetMiliseconds(long value) {
@@ -78,7 +122,7 @@ namespace TVSPlayer
         }
 
         private void MediaOpenedEvent() {
-            RenderSubtitles();
+            LoadSubtitles();
             VideoSlider.Maximum = Player.MediaDuration;
             if (!episode.finised) { Player.MediaPosition = episode.continueAt; }
             episode.finised = false;

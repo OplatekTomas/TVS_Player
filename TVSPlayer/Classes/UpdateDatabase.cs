@@ -53,12 +53,12 @@ namespace TVSPlayer
         /// <returns></returns>
         public async static Task Update() {
             if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) {
-                await Task.Run(() => {
+                await Task.Run(async () => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
                     ids = ids.Where(x => series.Any(y => y.id == x)).ToList();
                     foreach (int id in ids) {
-                        UpdateFullSeries(id);
+                       await UpdateFullSeries(id);
                     }
                 });
                 await DownloadLastWeek();             
