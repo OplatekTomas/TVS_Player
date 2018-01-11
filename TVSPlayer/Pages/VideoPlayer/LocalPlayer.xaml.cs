@@ -80,12 +80,10 @@ namespace TVSPlayer
         private void RenderSubs(List<Subtitles> subtitles) {
             int index = 0;
             long position = 0;
-            int temp = 0;
             bool isLoaded = IsLoaded;
             Task.Run(async () => {
                 while (isLoaded) {
                     Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
-                    //Get index of next sub
                     while (!(subtitles[index].StartTime < position && subtitles[index + 1].StartTime > position)) {
                         Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
                         if (subtitles[index].StartTime < position) {
