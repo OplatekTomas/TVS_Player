@@ -92,13 +92,15 @@ namespace TVSPlayer
                             index--;
                         }
                     }
-                    Dispatcher.Invoke(() => {
-                        foreach (var line in subtitles[index].Lines) {
-                            if (!SubtitlePanel.Children.Contains(line)) {
-                                SubtitlePanel.Children.Add(line);
+                    if (subtitles[index].EndTime >= position) { 
+                        Dispatcher.Invoke(() => {
+                            foreach (var line in subtitles[index].Lines) {
+                                if (!SubtitlePanel.Children.Contains(line)) {
+                                    SubtitlePanel.Children.Add(line);
+                                }
                             }
-                        }
-                    }, DispatcherPriority.Send);
+                        }, DispatcherPriority.Send);
+                    }
                     while (subtitles[index].EndTime >= position) {
                         Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
                         await Task.Delay(5);
