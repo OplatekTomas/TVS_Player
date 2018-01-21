@@ -70,14 +70,14 @@ namespace TVSPlayer
             
             var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
             if (sub != null) {
-                var subtitles = Subtitles.ParseSubtitles(sub.NewName);
+                var subtitles = Subtitles.ParseSubtitleItems(sub.NewName);
                 if (subtitles?.Count > 0) {
                     RenderSubs(subtitles);
                 }
             }
         }
 
-        private void RenderSubs(List<Subtitles> subtitles) {
+        private void RenderSubs(List<SubtitleItem> subtitles) {
             int index = 0;
             long position = 0;
             bool isLoaded = IsLoaded;

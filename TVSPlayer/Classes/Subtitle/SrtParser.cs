@@ -24,15 +24,15 @@ namespace TVSPlayer {
 
         // Methods -------------------------------------------------------------------------
 
-        public List<Subtitles> ParseStream(string file, Encoding encoding) {
+        public List<SubtitleItem> ParseStream(string file, Encoding encoding) {
             var srtStream = File.Open(file, FileMode.Open);
             srtStream.Position = 0;
             var reader = new StreamReader(srtStream, encoding, true);
-            var items = new List<Subtitles>();
+            var items = new List<SubtitleItem>();
             var srtSubParts = GetSrtSubTitleParts(reader).ToList();
             foreach (var srtSubPart in srtSubParts) {
                 var lines = srtSubPart.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Select(s => s.Trim()).Where(l => !String.IsNullOrEmpty(l)).ToList();
-                var item = new Subtitles();
+                var item = new SubtitleItem();
                 foreach (var line in lines) {
                     if (item.StartTime == 0 && item.EndTime == 0) {
                         if (TryParseTimecodeLine(line, out double startTc, out double endTc)) {

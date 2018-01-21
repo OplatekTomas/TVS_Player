@@ -532,10 +532,11 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
+            Subtitles.GetSubtitles(new Episode.ScannedFile() { OriginalName = "Stranger.Things.S02E09.iNTERNAL.1080p.WEB.x264-STRiFE[rarbg]" });
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (false) {
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());

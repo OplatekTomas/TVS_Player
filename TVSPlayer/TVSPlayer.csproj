@@ -243,8 +243,8 @@
     <Compile Include="Pages\Statistics\Statistics.xaml.cs">
       <DependentUpon>Statistics.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Subtitle_Parsers\SrtParser.cs" />
-    <Compile Include="Classes\Subtitle_Parsers\Subtitles.cs" />
+    <Compile Include="Classes\Subtitle\SrtParser.cs" />
+    <Compile Include="Classes\Subtitle\Subtitles.cs" />
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Compile Include="Pages\TorrentDownloader\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
