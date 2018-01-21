@@ -46,14 +46,24 @@ namespace TVSPlayer
         }
 
         public async static Task<MessageBoxResult> Show(string text, string header, MessageBoxButtons? buttons) {
+            //Přidání stránky s vlastním MessageBoxem
             MainWindow.AddPage(new MessageBox(text, header, buttons));
+            //Navrácení nového Tasku, u kterého se čeká než se dokončí
             return await Task.Run(() => {
+                //Kontrola jestli se result rovná null
                 while (result == null) {
-                    Thread.Sleep(50);
+                    //Zastavení Tasku na 50ms
+                    Task.Delay(50);
                 }
-                Application.Current.Dispatcher.Invoke(() => { MainWindow.RemovePage(); }, System.Windows.Threading.DispatcherPriority.Send);
+                //Odebrání okna MessageBoxu. Použít pouze MainWindow.RemovePage(); 
+                //je nemožné z důvodu, že funkce upravuje UI a neběží na UI vlákně
+                Application.Current.Dispatcher.Invoke(() => {
+                    MainWindow.RemovePage();
+                }, System.Windows.Threading.DispatcherPriority.Send);
                 var temp = result;
+                //Nastavení result na null
                 result = null;
+                //přetypování a vrácení výsledku
                 return (MessageBoxResult)temp;
             });
         }

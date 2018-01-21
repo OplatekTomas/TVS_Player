@@ -60,6 +60,7 @@ namespace TVSPlayer
                 foreach (Series series in allSeries) {
                     BitmapImage bmp = await Database.GetSelectedPoster(series.id);
                     Dispatcher.Invoke(() => {
+                        if (series.id == 321239) { };
                         SeriesInLibrary poster = new SeriesInLibrary(series);
                         poster.PosterImage.Source = bmp;
                         poster.Height = Properties.Settings.Default.LibrarySize;

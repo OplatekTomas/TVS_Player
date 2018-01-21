@@ -42,15 +42,166 @@ namespace TVSPlayer {
             ((MainWindow)main).SetLibrary();
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e) {
+        private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             PageCustomization pg = new PageCustomization();
             pg.Buttons = new EpisodeButtons(this);
             pg.SearchBarEvent += async (s, ev) => { Search(); };
             pg.MainTitle = series.seriesName;
             MainWindow.SetPageCustomization(pg);
+            await ShowNextEp();
             Task.Run(() => LoadBackground());
             Task.Run(() => LoadSeasons());
-            Task.Run(() => LoadInfo());
+        }       
+
+
+        private async void LoadBackground() {
+            if (!Settings.PerformanceMode) { 
+                BitmapImage bmp = await Database.GetFanArt(series.id);
+                Dispatcher.Invoke(() => {
+                    if (bmp != null) {
+                        hasBackground = true;
+                        BackgroundImage.Source = bmp;
+                        Darkener.Visibility = Visibility.Visible;
+                        var sb = (Storyboard)FindResource("BlurImage");
+                        sb.Begin();
+                        var sboard = (Storyboard)FindResource("OpacityUp");
+                        sboard.Begin(BackgroundImage);
+                    } else {
+                        BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
+                    }
+                }, DispatcherPriority.Send);
+            }
+        }
+
+        public void LoadSeasons() {
+            List<Episode> eps = Database.GetEpisodes(series.id);
+            GenerateSearch(eps);
+            List<List<Episode>> sorted = new List<List<Episode>>();
+            for (int i = 1; ; i++) {
+                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
+                if (Properties.Settings.Default.EpisodeSort) list.Reverse();
+                if (list.Count != 0) {
+                    sorted.Add(list);
+                } else {
+                    break;
+                }
+            }
+            if (Properties.Settings.Default.EpisodeSort) { 
+                sorted.Reverse();
+            }
+            Dispatcher.Invoke(() => {
+                SecondPanel.Children.RemoveRange(0, SecondPanel.Children.Count);
+                foreach (var list in sorted) {
+                    SeasonView sv = new SeasonView(list, series, this);
+                    sv.ScrollView.PreviewMouseWheel += (s, ev) => Scroll(ev);
+                    sv.Height = 195;
+                    sv.Margin = new Thickness(0, 0, 35, 20);
+                    SecondPanel.Children.Add(GenerateText("Season " + list[0].airedSeason));
+                    SecondPanel.Children.Add(sv);
+                }
+            }, DispatcherPriority.Send);
+        }
+
+        private void ShowNextEpAnimated() {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += async (s, ev) => {
+                await ShowNextEp();
+                Storyboard up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsGrid);
+            };
+            clone.Begin(DetailsGrid);
+
+        }
+
+        private async Task ShowNextEp() {
+            DetailsGrid.Children.RemoveRange(0, DetailsGrid.Children.Count);
+            await Task.Run( async () => {
+                List<Episode> episodes = Database.GetEpisodes(series.id);
+                var eps = episodes.Where(x => x.airedSeason > 0).ToList().OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList();
+                if (eps != null) {
+                    var ep = eps.Where(x => x.finised != true).ToList().FirstOrDefault();
+                    if (ep != null) {
+                        ep = Database.GetEpisode(series.id, ep.id, true);
+                        await Dispatcher.Invoke(async () => {
+                            var details = new EpisodeDetails(ep, false);
+                            details.EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(ep.seriesId.ToString()), ep.id);
+                            DetailsGrid.Children.Add(details);
+                        },DispatcherPriority.Send);
+                    } else {
+                        ep = Database.GetEpisode(series.id, eps[0].id, true);
+                        await Dispatcher.Invoke( async () => {
+                            var details = new EpisodeDetails(ep, false);
+                            details.EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(ep.seriesId.ToString()), ep.id);
+                            DetailsGrid.Children.Add(details);
+                        },DispatcherPriority.Send);
+                    }
+                }
+            });
+        }
+
+        private void Scroll(MouseWheelEventArgs ev) {
+            if (ev.Delta > 0) {
+                ScrollView.LineUp();
+                ScrollView.LineUp();
+                ScrollView.LineUp();
+            } else {
+                ScrollView.LineDown();
+                ScrollView.LineDown();
+                ScrollView.LineDown();
+            }
+        }
+
+        private TextBlock GenerateText(string textblockText) {
+            TextBlock text = new TextBlock();
+            text.FontSize = 24;
+            text.Foreground = (Brush)FindResource("TextColor");
+            text.Margin = new Thickness(0, 0, 0, 10);
+            text.Text = textblockText;
+            return text;
+        }
+
+        public static ScannedFile GetFileToPlay(Episode episode, Series series) {
+            List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
+            foreach (var item in episode.files) {
+                if (item.Type == Episode.ScannedFile.FileType.Video) {
+                    list.Add(item);
+                }
+            }
+            List<FileInfo> infoList = new List<FileInfo>();
+            foreach (var item in list) {
+                infoList.Add(new FileInfo(item.NewName));
+            }
+            FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
+            if (info != null) {
+                return list.Where(x => x.NewName == info.FullName).FirstOrDefault();
+            }
+            return null;
+        }
+        public static void TryRefresh() {
+            if (MainWindow.GetCurrentFrameContentName() == "SeriesEpisodes") {
+                Window main = Application.Current.MainWindow;
+                ((SeriesEpisodes)((MainWindow)main).ActiveContent.Content).ShowNextEpAnimated();
+            }
+        }
+
+        public static void SetDetails(Episode episode) {
+            Window main = Application.Current.MainWindow;
+            ((SeriesEpisodes)((MainWindow)main).ActiveContent.Content).SetDetailsPrivate(episode);
+
+        }
+
+        private void SetDetailsPrivate(Episode episode) {
+            Storyboard sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                DetailsGrid.Children.RemoveRange(0, DetailsGrid.Children.Count);
+                DetailsGrid.Children.Add(new EpisodeDetails(episode));
+                Storyboard up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsGrid);
+            };
+            clone.Begin(DetailsGrid);
+          
         }
 
         bool isRunning = false;
@@ -65,7 +216,7 @@ namespace TVSPlayer {
                 });
             }
             isRunning = false;
-            searchTask = Task.Run( async() => {
+            searchTask = Task.Run(async () => {
                 text = text.Trim();
                 if (!String.IsNullOrEmpty(text)) {
                     Dispatcher.Invoke(() => {
@@ -98,7 +249,7 @@ namespace TVSPlayer {
                         SecondPanel.Visibility = Visibility.Visible;
                     });
                 }
-            });    
+            });
         }
 
         private async void SearchClickEvent(Episode episode) {
@@ -150,160 +301,6 @@ namespace TVSPlayer {
             episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString()) && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
             foreach (var episode in episodes) {
                 searchValues.Add(episode, episode.episodeName);
-            }
-        }
-
-        private async void LoadInfo() {
-            BitmapImage bmp = await Database.GetSelectedPoster(series.id);
-            List<Episode> list = Database.GetEpisodes(series.id);
-            GenerateSearch(list);
-            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
-            int episodeCount, downloadedEpisodes, seasonsCount;
-            episodeCount = downloadedEpisodes = seasonsCount = 0;
-            foreach (Episode ep in list) {
-                if (ep.airedSeason != 0) {
-                    episodeCount++;
-                }
-                if (ep.airedSeason > seasonsCount) {
-                    seasonsCount++;
-                }
-                if (ep.files.Count > 0) {
-                    downloadedEpisodes++;
-                }
-            }
-            Dispatcher.Invoke(() => {
-                DefaultPoster.Source = bmp;
-                if (nextEpisode != null) {
-                    NextDate.Text = DateTime.ParseExact(nextEpisode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1).ToString("dd. MM. yyyy");
-                } else {
-                    NextDate.Text = "-";
-                }
-                if (!String.IsNullOrEmpty(series.firstAired)) {
-                    Premiered.Text = DateTime.ParseExact(series.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
-                }
-                genres.Text = "";
-                for (int i = 0; i < series.genre.Count; i++) {
-                    if (i != series.genre.Count - 1) {
-                        genres.Text += series.genre[i] + ", ";
-                    } else {
-                        genres.Text += series.genre[i];
-                    }
-                }
-                showName.Text = series.seriesName;
-                Status.Text = series.status;
-                Schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
-                Rating.Text = series.siteRating + "/10";
-                SeasonCount.Text = seasonsCount.ToString();
-                EpisodeCount.Text = episodeCount.ToString();
-                EpisodesOffline.Text = downloadedEpisodes.ToString();
-            });
-
-        }
-
-        private async void LoadBackground() {
-            BitmapImage bmp = await Database.GetFanArt(series.id);
-            Dispatcher.Invoke(() => {
-                if (bmp != null) {
-                    hasBackground = true;
-                    BackgroundImage.Source = bmp;
-                    Darkener.Visibility = Visibility.Visible;
-                    var sb = (Storyboard)FindResource("BlurImage");
-                    sb.Begin();
-                    var sboard = (Storyboard)FindResource("OpacityUp");
-                    sboard.Begin(BackgroundImage);
-                } else {
-                    BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
-                }
-            }, DispatcherPriority.Send);
-        }
-
-        public void LoadSeasons() {
-            List<Episode> eps = Database.GetEpisodes(series.id);
-            List<List<Episode>> sorted = new List<List<Episode>>();
-            for (int i = 1; ; i++) {
-                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
-                if (Properties.Settings.Default.EpisodeSort) list.Reverse();
-                if (list.Count != 0) {
-                    sorted.Add(list);
-                } else {
-                    break;
-                }
-            }
-            if (Properties.Settings.Default.EpisodeSort) sorted.Reverse();
-            Dispatcher.Invoke(() => {
-                SecondPanel.Children.RemoveRange(0, SecondPanel.Children.Count);
-                foreach (var list in sorted) {
-                    SeasonView sv = new SeasonView(list, series, this);
-                    sv.ScrollView.PreviewMouseWheel += (s, ev) => Scroll(ev);
-                    sv.Height = 195;
-                    sv.Margin = new Thickness(0, 0, 35, 20);
-                    SecondPanel.Children.Add(GenerateText("Season " + list[0].airedSeason));
-                    SecondPanel.Children.Add(sv);
-                }
-            }, DispatcherPriority.Send);
-        }
-
-        private TextBlock GenerateText(string textblockText) {
-            TextBlock text = new TextBlock();
-            text.FontSize = 24;
-            text.Foreground = (Brush)FindResource("TextColor");
-            text.Margin = new Thickness(0, 0, 0, 10);
-            text.Text = textblockText;
-            return text;
-        }
-
-        private void Scroll(MouseWheelEventArgs ev) {
-            if (ev.Delta > 0) {
-                ScrollView.LineUp();
-                ScrollView.LineUp();
-                ScrollView.LineUp();
-            } else {
-                ScrollView.LineDown();
-                ScrollView.LineDown();
-                ScrollView.LineDown();
-            }
-        }
-
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e) {
-
-        }
-
-        private void showName_MouseUp(object sender, MouseButtonEventArgs e) {
-
-        }
-
-        public static ScannedFile GetFileToPlay(Episode episode, Series series) {
-            List<Episode.ScannedFile> list = new List<Episode.ScannedFile>();
-            foreach (var item in episode.files) {
-                if (item.Type == Episode.ScannedFile.FileType.Video) {
-                    list.Add(item);
-                }
-            }
-            List<FileInfo> infoList = new List<FileInfo>();
-            foreach (var item in list) {
-                infoList.Add(new FileInfo(item.NewName));
-            }
-            FileInfo info = infoList.OrderByDescending(ex => ex.Length).FirstOrDefault();
-            if (info != null) {
-                return list.Where(x => x.NewName == info.FullName).FirstOrDefault();
-            }
-            return null;
-        }
-
-        private async void PlayNextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            List<Episode> episodes = Database.GetEpisodes(series.id);
-            var ep = episodes.Where(x => !x.finised && x.airedSeason > 0 && x.files.Where(y => y.Type == Episode.ScannedFile.FileType.Video).ToList().Count > 0).OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList().FirstOrDefault();
-            if (ep != null) { 
-            var sf = GetFileToPlay(ep, series);
-                if (!Settings.UseWinDefaultPlayer) {
-                    GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-                    await Task.Run(() => {
-                        Thread.Sleep(500);
-                    });
-                    MainWindow.AddPage(new LocalPlayer(series, ep, sf));
-                } else {
-                    Process.Start(sf.NewName);
-                }
             }
         }
 

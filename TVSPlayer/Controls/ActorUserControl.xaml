@@ -6,13 +6,12 @@
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="310">
-    <Grid Background="{DynamicResource BackgroundBrush}" x:Name="BackgroundGrid" Loaded="BackgroundGrid_Loaded">
+    <Grid x:Name="BackgroundGrid" Loaded="BackgroundGrid_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="3.75*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="LoadingText" HorizontalAlignment="Center" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Loading..."  FontSize="{Binding ActualHeight, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/21}" />
-        <Image x:Name="ActorFace" VerticalAlignment="Top" Margin="5,5,5,0"  >
+        <Image x:Name="ActorFace" VerticalAlignment="Top" Margin="5,5,5,0" Source="{DynamicResource NoActor}" >
             <Image.Effect>
                 <DropShadowEffect BlurRadius="10" Opacity="0.5" ShadowDepth="4" />
             </Image.Effect>

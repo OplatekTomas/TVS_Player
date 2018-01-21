@@ -163,7 +163,10 @@ namespace TVSPlayer {
                     torrents = await Torrent.Search(series, episode);
                 }
                 foreach (var item in tq) {
-                    torrents.AddRange(await Torrent.Search(series, episode, item));
+                    var result = await Torrent.Search(series, episode, item);
+                    if (result != null) {
+                        torrents.AddRange(result);
+                    }
                 }
                 torrents = torrents.OrderByDescending(x => x.Seeders).ToList();
                 MainWindow.RemovePage();

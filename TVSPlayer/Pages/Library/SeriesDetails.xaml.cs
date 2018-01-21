@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TVS.API;
 
 namespace TVSPlayer
@@ -37,6 +39,8 @@ namespace TVSPlayer
             PageCustomization pg = new PageCustomization();
             pg.MainTitle = series.seriesName +  " - Details";
             MainWindow.SetPageCustomization(pg);
+            LoadBackground();
+            Task.Run(() => LoadInfo());
             List<Actor> actors = Database.GetActors(series.id);
             Task.Run(() => {
                 foreach (Actor actor in actors) {
@@ -64,29 +68,78 @@ namespace TVSPlayer
                     sb.Begin(PosterImage);
                 });
             });
-            Task.Run(() => {
-                Dispatcher.Invoke(() => {
-                    genres.Text = "";
-                    for (int i = 0; i < series.genre.Count; i++) {
-                        if (i != series.genre.Count - 1) {
-                            genres.Text += series.genre[i] + ", ";
-                        } else {
-                            genres.Text += series.genre[i];
-                        }
-                    }
-                    showName.Text = series.seriesName;
-                    schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
-                    network.Text = series.network;
-                    stat.Text = series.status;
-                    prem.Text = series.firstAired;
-                    len.Text = series.runtime;
-                    summary.Text = series.overview;
-                    agerating.Text = series.rating;
-                    rating.Text = series.siteRating + "/10";
 
-                },System.Windows.Threading.DispatcherPriority.Send);
-               
+
+        }
+
+        private void LoadInfo() {
+            List<Episode> list = Database.GetEpisodes(series.id);
+            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
+            int episodeCount, downloadedEpisodes, seasonsCount;
+            episodeCount = downloadedEpisodes = seasonsCount = 0;
+            foreach (Episode ep in list) {
+                if (ep.airedSeason != 0) {
+                    episodeCount++;
+                }
+                if (ep.airedSeason > seasonsCount) {
+                    seasonsCount++;
+                }
+                if (ep.files.Count > 0) {
+                    downloadedEpisodes++;
+                }
+            }
+            Dispatcher.Invoke(() => {
+                if (nextEpisode != null) {
+                    NextDate.Text = DateTime.ParseExact(nextEpisode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1).ToString("dd. MM. yyyy");
+                } else {
+                    NextDate.Text = "-";
+                }
+                if (!String.IsNullOrEmpty(series.firstAired)) {
+                    Prem.Text = DateTime.ParseExact(series.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                }
+                Genres.Text = "";
+                for (int i = 0; i < series.genre.Count; i++) {
+                    if (i != series.genre.Count - 1) {
+                        Genres.Text += series.genre[i] + ", ";
+                    } else {
+                        Genres.Text += series.genre[i];
+                    }
+                }
+                ShowName.Text = series.seriesName;
+                Schedule.Text = series.airsDayOfWeek + " at " + series.airsTime;
+                Network.Text = series.network;
+                Stat.Text = series.status;
+                Len.Text = series.runtime;
+                Summary.Text = series.overview;
+                Agerating.Text = series.rating;
+                Rating.Text = series.siteRating + "/10";
+                SeasonCount.Text = seasonsCount.ToString();
+                EpisodeCount.Text = episodeCount.ToString();
+                EpisodesOffline.Text = downloadedEpisodes.ToString();
             });
+
+        }
+
+        private async void LoadBackground() {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if (!Settings.PerformanceMode) { 
+                Task.Run( async () => {
+                    BitmapImage bmp = await Database.GetFanArt(series.id);
+                    Dispatcher.Invoke(() => {
+                        if (bmp != null) {
+                            BackgroundImage.Source = bmp;
+                            Darkener.Visibility = Visibility.Visible;
+                            var sb = (Storyboard)FindResource("BlurImage");
+                            sb.Begin();
+                            var sboard = (Storyboard)FindResource("OpacityUp");
+                            sboard.Begin(BackgroundImage);
+                        } else {
+                            BackButton.SetResourceReference(Image.SourceProperty, "BackIcon");
+                        }
+                    }, DispatcherPriority.Send);
+                });
+            }
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
         }
 

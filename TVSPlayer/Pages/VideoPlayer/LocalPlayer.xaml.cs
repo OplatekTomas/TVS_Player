@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +41,7 @@ namespace TVSPlayer
         DispatcherTimer positionUpdate = new DispatcherTimer();
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
+
             Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
@@ -62,7 +65,64 @@ namespace TVSPlayer
             Return();
         }
 
+
+        private void LoadSubtitles() {
+            
+            var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
+            if (sub != null) {
+                var subtitles = Subtitles.ParseSubtitleItems(sub.NewName);
+                if (subtitles?.Count > 0) {
+                    RenderSubs(subtitles);
+                }
+            }
+        }
+
+        private void RenderSubs(List<SubtitleItem> subtitles) {
+            int index = 0;
+            long position = 0;
+            bool isLoaded = IsLoaded;
+            Task.Run(async () => {
+                while (isLoaded) {
+                    Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                    while (!(subtitles[index].StartTime < position && subtitles[index + 1].StartTime > position)) {
+                        Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                        if (subtitles[index].StartTime < position) {
+                            index++;
+                        } else if (subtitles[index].StartTime > position) {
+                            index--;
+                        }
+                    }
+                    if (subtitles[index].EndTime >= position) { 
+                        Dispatcher.Invoke(() => {
+                            foreach (var line in subtitles[index].Lines) {
+                                if (!SubtitlePanel.Children.Contains(line)) {
+                                    SubtitlePanel.Children.Add(line);
+                                }
+                            }
+                        }, DispatcherPriority.Send);
+                    }
+                    while (subtitles[index].EndTime >= position) {
+                        Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                        await Task.Delay(5);
+                        if (subtitles[index].StartTime > position) {
+                            break;
+                        }
+                    }
+                    Dispatcher.Invoke(() => {
+                        SubtitlePanel.Children.Clear();
+                    }, DispatcherPriority.Send);
+                    await Task.Delay(1);
+                    Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
+                }
+            });
+        }
+
+        private long GetMiliseconds(long value) {
+            return value / 10000;
+        }
+
         private void MediaOpenedEvent() {
+            LoadSubtitles();
             VideoSlider.Maximum = Player.MediaDuration;
             if (!episode.finised) { Player.MediaPosition = episode.continueAt; }
             episode.finised = false;
@@ -251,6 +311,7 @@ namespace TVSPlayer
             episode.finised = Player.MediaDuration - 3000000000 < Player.MediaPosition ? true : false;
             Database.EditEpisode(series.id, episode.id, episode);
             MainWindow.RemovePage();
+            SeriesEpisodes.TryRefresh();
             Mouse.OverrideCursor = null;
         }
 
@@ -275,10 +336,7 @@ namespace TVSPlayer
                     GoBack();
                     break;
             }
-        }
-
-        private void PlayerPage_LostFocus(object sender, RoutedEventArgs e) {
-            Focus();
+            e.Handled = true;
         }
 
         private void StackPanel_MouseEnter(object sender, MouseEventArgs e) {
@@ -287,6 +345,10 @@ namespace TVSPlayer
 
         private void StackPanel_MouseLeave(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = null;
+        }
+
+        private void VideoSlider_GotFocus(object sender, RoutedEventArgs e) {
+            Focus();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace TVSPlayer
         /// Starts checking if all files are where they are supposed to be and if database is updated
         /// </summary>
         public async static void StartUpdateBackground(bool startNow = true) {
-            if (!startNow) {
+            if (startNow) {
                 await CheckFiles();
                 await Update();
             }
@@ -53,22 +53,22 @@ namespace TVSPlayer
         /// <returns></returns>
         public async static Task Update() {
             if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) {
-                await Task.Run(() => {
+                await Task.Run(async () => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
                     ids = ids.Where(x => series.Any(y => y.id == x)).ToList();
                     foreach (int id in ids) {
-                        UpdateFullSeries(id);
+                       await UpdateFullSeries(id);
                     }
                 });
-                await DownloadLastWeek();
-                await Task.Run(() => {
-                    foreach (Series series in Database.GetSeries()) {
-                        Renamer.FindAndRename(series);
-                    }
-                });
+                await DownloadLastWeek();             
                 Settings.LastCheck = DateTime.Now;
             }
+            await Task.Run(() => {
+                foreach (Series series in Database.GetSeries()) {
+                    Renamer.FindAndRename(series);
+                }
+            });
         }
 
         private async static Task DownloadLastWeek() {

@@ -50,39 +50,40 @@ namespace TVSPlayer {
             SelectFolderText.TextChanged += SelectFolderText_TextChanged;
         }
 
-        Task<List<Series>> task;
-        private void SelectFolderText_TextChanged(object sender, TextChangedEventArgs e) {
+        private async void SelectFolderText_TextChanged(object sender, TextChangedEventArgs e) {
             string name = SelectFolderText.Text;
-            if (task != null && task.Status != TaskStatus.RanToCompletion && task.Status == TaskStatus.Running) {
-                task.ContinueWith((t) => { });
+            var result = await Task.Run(()=> Series.Search(name));
+            if (name == SelectFolderText.Text) {
+                if (result != null) { 
+                   FillUI(result);
+                }
             }
-            task = new Task<List<Series>>(() => Series.Search(name));
-            task.ContinueWith((t) => {
-                FillUI(task.Result);
-            });
-            task.Start();
         }
+        List<Series> oldList = new List<Series>();
         private void FillUI(List<Series> list) {
-            ClearList();
-            if (list != null) { 
-                Task.Run(() => {
+            Task.Run(() => {
+                if (list.Where(y => oldList.Any(z => z.id == y.id)).ToList().Count == 0) {
+                    oldList = list;
+                    Dispatcher.Invoke(() => ClearList(),DispatcherPriority.Send);
                     foreach (Series sh in list) {
                         Dispatcher.Invoke(new Action(() => {
                             SearchShowResult sr = new SearchShowResult(sh.id);
-                            sr.Height = 50;
+                            sr.ReleaseDate.Text = "Release date: " + sh.firstAired;
+                            sr.Height = 70;
                             sr.Opacity = 0;
                             Storyboard MoveUp = FindResource("OpacityUp") as Storyboard;
                             MoveUp.Begin(sr);
                             sr.SeriesName.Text = sh.seriesName;
                             sr.Confirm.MouseLeftButtonUp += (se, e) => {
-                                show = sh; };
+                                show = sh;
+                            };
                             panel.Children.Add(sr);
                         }), DispatcherPriority.Send);
                         Thread.Sleep(7);
                     }
+                }
+            });
 
-                });
-            }
         }
 
         private void BackButton_MouseUp(object sender, MouseButtonEventArgs e) {
@@ -94,7 +95,6 @@ namespace TVSPlayer {
                 foreach (SearchShowResult child in children) {
                     Storyboard OpacityDown = FindResource("OpacityDown") as Storyboard;
                     OpacityDown.Begin(child);
-                    Thread.Sleep(1);
                 }
                 panel.Children.Clear();
 

@@ -28,19 +28,25 @@ namespace TVSPlayer
     /// </summary>
     public partial class EpisodeDetails : UserControl
     {
-        public EpisodeDetails(Episode episode)
+        public EpisodeDetails(Episode episode, bool showBackButton = true)
         {
             InitializeComponent();
             this.episode = episode;
+            showBack = showBackButton;
+
         }
 
+        bool showBack;
         Episode episode;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
-            EPName.Text = EpisodeName.Text = episode.episodeName;
+            if (showBack) {
+                Back.Visibility = Visibility.Visible;
+                EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
+            }
             Season.Text = Helper.GenerateName(episode);
             Rating.Text = episode.siteRating + "/10";
+            EpisodeName.Text = episode.episodeName;
             if (!String.IsNullOrEmpty(episode.firstAired)) {
                 Airdate.Text = DateTime.ParseExact(episode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
             }
@@ -69,6 +75,7 @@ namespace TVSPlayer
                 }
             }
             if (episode.files.Count > 0) {
+                Downloaded.Text = "No";
                 foreach (var item in episode.files) {
                     if (item.Type == TVS.API.Episode.ScannedFile.FileType.Video) {
                         Downloaded.Text = "Yes";
@@ -77,6 +84,11 @@ namespace TVSPlayer
                 }
             }
             Overview.Text = episode.overview;
+            if (episode.continueAt > 0) {
+                Continue.Text = Helper.GetTime(episode.continueAt);
+            } else {
+                Continue.Text = "-";
+            }
         }
 
         private void EPName_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -141,7 +153,8 @@ namespace TVSPlayer
 
         private async void Download_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.AddPage(new PleaseWait());
-            Torrent torrent = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.DownloadQuality);
+            var ser = Database.GetSeries((int)episode.seriesId);
+            Torrent torrent = await Torrent.SearchSingle(ser, episode, Settings.DownloadQuality);
             if (torrent != null) {
                 TorrentDownloader downloader = new TorrentDownloader(torrent);
                 await downloader.Download();
@@ -195,6 +208,40 @@ namespace TVSPlayer
             MainWindow.RemovePage();
             TorrentDownloader td = new TorrentDownloader(tor);
             await td.Stream();
+        }
+
+        private void NextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var episodes = Database.GetEpisodes((int)episode.seriesId);
+            var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason).Max(x => x.airedEpisodeNumber);
+            Episode newEp = null;
+            if (highestEp == episode.airedEpisodeNumber) {
+                newEp = episodes.Where(x => x.airedSeason == episode.airedSeason + 1 && x.airedEpisodeNumber == 1).FirstOrDefault();
+            } else {
+                newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber + 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+            }
+            if (newEp != null) {
+                SeriesEpisodes.SetDetails(newEp);
+            }
+        }
+
+        private void PreviousEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (!(episode.airedSeason == 1 && episode.airedEpisodeNumber == 1)) { 
+                var episodes = Database.GetEpisodes((int)episode.seriesId);
+                Episode newEp = null;
+                if (1 == episode.airedEpisodeNumber) {
+                    var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1).Max(x => x.airedEpisodeNumber);
+                    newEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1 && x.airedEpisodeNumber == highestEp).FirstOrDefault();
+                } else {
+                    newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber - 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+                }
+                if (newEp != null) {
+                    SeriesEpisodes.SetDetails(newEp);
+                }
+            }
+        }
+
+        private void Back_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SeriesEpisodes.TryRefresh();
         }
     }
 }

@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:TVSPlayer"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
-      Title="SeriesEpisodes" SizeChanged="Page_SizeChanged">
+      Title="SeriesEpisodes">
     <Page.Resources>
         <Storyboard x:Key="BlurImage">
             <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="ImageEffect" DecelerationRatio="0.9" Duration="0:0:0.300" />
@@ -33,51 +33,7 @@
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}"></Style>
             </ScrollViewer.Resources>
             <StackPanel Margin="30,0,5,0" x:Name="Panel">
-                <Grid Height="400" x:Name="DetailsGrid">
-                    <Grid x:Name="SeriesDetails">
-                        <StackPanel Orientation="Horizontal">
-                            <Image HorizontalAlignment="Left" x:Name="DefaultPoster" Height="380" Margin="10,0,0,20">
-                                <Image.Effect>
-                                    <DropShadowEffect BlurRadius="10" Opacity=".5" />
-                                </Image.Effect>
-                            </Image>
-                            <Grid Grid.Column="2" Margin="25,20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="250"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="showName"  MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave"  MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
-                                <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="#F5F5F5" Grid.ColumnSpan="3" />
-                                <StackPanel>
-                                    <TextBlock  Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Usual schedule:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Status:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Premiered:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock  Text="Rating: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <Grid HorizontalAlignment="Left" Margin="0,30" x:Name="PlayNextEpisode" MouseLeftButtonUp="PlayNextEpisode_MouseLeftButtonUp" ToolTip="Play next episode or continue">
-                                        <Image Source="/Icons/ico-play-light.png" Height="35"  MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave"  />
-                                    </Grid>
-
-                                </StackPanel>
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock  x:Name="NextDate" Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="Schedule"  Text="Usual schedule:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="Status"  Text="Status:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="Premiered"  Text="Premiered:" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="SeasonCount"  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="EpisodeCount"  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="EpisodesOffline"  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-                                    <TextBlock x:Name="Rating"  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
-
-                                </StackPanel>
-                                <Grid Grid.ColumnSpan="2"/>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+                <Grid Height="375" x:Name="DetailsGrid" />
                 <VirtualizingStackPanel VirtualizingPanel.IsVirtualizing="True" x:Name="SecondPanel" VirtualizationMode="Recycling" />
                 <StackPanel x:Name="SearchResultPanel" Margin="10,0" />
             </StackPanel>

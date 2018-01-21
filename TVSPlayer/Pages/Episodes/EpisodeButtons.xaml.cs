@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,25 +33,7 @@ namespace TVSPlayer
 
         private void SeriesDetails_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.SetPage(new SeriesDetails(owner.series, new SeriesEpisodes(owner.series)));
-        }
-
-        private async void SelectPoster_MouseUp(object sender, MouseButtonEventArgs e) {
-            Poster poster = await MainWindow.SelectPoster(owner.series.id);
-            await Task.Run(async () => {
-                owner.series.defaultPoster = poster;
-                Database.EditSeries(owner.series.id, owner.series);
-                Dispatcher.Invoke(() => {
-                    Storyboard sb = (Storyboard)FindResource("OpacityDown");
-                    sb.Begin(owner.DefaultPoster);
-                }, DispatcherPriority.Send);
-                BitmapImage bmp = await Database.GetSelectedPoster(owner.series.id);
-                Dispatcher.Invoke(() => {
-                    owner.DefaultPoster.Source = bmp;
-                    Storyboard sb = (Storyboard)FindResource("OpacityUp");
-                    sb.Begin(owner.DefaultPoster);
-                }, DispatcherPriority.Send);
-            });
-        }
+        }     
 
         private void SwitchAutoDownload_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             DownloadSwitcher();
@@ -101,6 +84,14 @@ namespace TVSPlayer
             Properties.Settings.Default.EpisodeSort = !Properties.Settings.Default.EpisodeSort;
             Properties.Settings.Default.Save();
             await Task.Run(() => owner.LoadSeasons());
+        }
+
+        private void WatchAll_MouseUp(object sender, MouseButtonEventArgs e) {
+            var eps = Database.GetEpisodes(owner.series.id).Where( x=> !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) < DateTime.Now);
+            foreach (var ep in eps) {
+                ep.finised = true;
+                Database.EditEpisode(owner.series.id, ep.id, ep);
+            }
         }
     }
 }

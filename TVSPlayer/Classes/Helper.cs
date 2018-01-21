@@ -6,8 +6,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TVS.API;
+using System.Management;
 
 namespace TVSPlayer {
     class Helper {
@@ -50,6 +52,25 @@ namespace TVSPlayer {
         }
 
         /// <summary>
+        /// Get string in format h:mm:ss from player media lenght or current position
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetTime(long value) {
+            int minutes, seconds, hours;
+            minutes = seconds = hours = 0;
+            value = value / 10000000;
+            hours = Convert.ToInt32(Math.Floor((double)(value / 60 / 60)));
+            minutes = Convert.ToInt32(Math.Floor((double)(value / 60 - 60 * hours)));
+
+            seconds = Convert.ToInt32(Math.Floor((double)(value - ((60 * 60 * hours) + (60 * minutes)))));
+            string hoursString = hours > 0 ? hours + ":" : "";
+            string minutesString = minutes >= 10 ? minutes.ToString() + ":" : "0" + minutes + ":";
+            string secondsString = seconds >= 10 ? seconds.ToString() : "0" + seconds;
+            return hoursString + minutesString + secondsString;
+        }
+
+        /// <summary>
         /// Cheks if TVSPlyer is already running
         /// </summary>
         /// <returns></returns>
@@ -76,18 +97,40 @@ namespace TVSPlayer {
             if (IsIconic(handle)) {
                 ShowWindow(handle, SW_RESTORE);
             }
-
             SetForegroundWindow(handle);
         }
-
+        /// <summary>
+        /// Disables Windows screen saver
+        /// </summary>
         public static void DisableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS);
         }
-
+        /// <summary>
+        /// Enables Windows screen saver
+        /// </summary>
         public static void EnableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
 
+        /// <summary>
+        /// Only use this on first launch. If only Intel GPU is present some UI elements won't load
+        /// </summary>
+        public static void SetPerformanceMode() {
+            ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_VideoController");
+            ManagementObjectCollection collection = mos.Get();
+            bool quality = false;
+            foreach (var gpu in collection) {
+                string name = gpu["Name"].ToString();
+                if (gpu["Name"].ToString().ToLower().Contains("radeon") || gpu["Name"].ToString().ToLower().Contains("nvidia")) {
+                    quality = true;
+                }
+            }
+            if (quality) {
+                Settings.PerformanceMode = false;
+            } else {
+                Settings.PerformanceMode = true;
+            }
+        }
 
 
         [DllImport("kernel32.dll")]
@@ -113,7 +156,11 @@ namespace TVSPlayer {
     }
 
     static class Extensions{
-       
+
+        public static Color ToMediaColor(this System.Drawing.Color color) {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
         /// <summary>
         /// Waits for all Tasks in IEnumerable to complete
         /// </summary>

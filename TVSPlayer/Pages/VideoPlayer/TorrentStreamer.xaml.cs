@@ -19,6 +19,7 @@ using Microsoft.WindowsAPICodePack.Shell;
 using NReco.VideoInfo;
 using TVS.API;
 using TVS.Notification;
+using static System.Environment;
 
 namespace TVSPlayer {
     /// <summary>
@@ -38,6 +39,7 @@ namespace TVSPlayer {
             Helper.DisableScreenSaver();
             MainWindow.videoPlayback = true;
             media = new FFProbe();
+            media.ToolPath = Environment.GetFolderPath(SpecialFolder.ApplicationData);
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
             VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             Focus();
@@ -49,13 +51,15 @@ namespace TVSPlayer {
                 });
                 file = GetSource();
                 if (file != null && downloader.Status.Progress > 0.01) {
-                    var duration = media.GetMediaInfo(file).Duration.TotalSeconds;
-                    var downloaded = duration * downloader.Status.Progress;
-                    if (File.Exists(file) && duration != 0 && downloaded > 10) {
-                        Player.Source = new Uri(file);
-                        Player.Stop();
-                        break;
-                    }
+                    try {
+                        var duration = media.GetMediaInfo(file).Duration.TotalSeconds;
+                        var downloaded = duration * downloader.Status.Progress;
+                        if (File.Exists(file) && duration != 0 && downloaded > 10) {
+                            Player.Source = new Uri(file);
+                            Player.Stop();
+                            break;
+                        }
+                    } catch (Exception) { }
                 }
                
             }

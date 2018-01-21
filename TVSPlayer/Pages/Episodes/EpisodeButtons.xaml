@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="40" Width="150">
+             d:DesignHeight="40" Width="155">
     <Grid Loaded="Grid_Loaded">
         <StackPanel Orientation="Horizontal" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
             <Grid Margin="8,0" ToolTip="Sort episodes" x:Name="SortButton" MouseLeftButtonUp="SortButton_MouseLeftButtonUp">
@@ -18,8 +18,8 @@
             <Grid Margin="7,0" ToolTip="Show series details" x:Name="SeriesDetails" MouseUp="SeriesDetails_MouseUp">
                 <Image Source="{DynamicResource QuestionIcon}" Height="22" />
             </Grid>
-            <Grid Margin="5,0" ToolTip="Select series poster" x:Name="SelectPoster" MouseUp="SelectPoster_MouseUp">
-                <Image Source="{DynamicResource PosterIcon}" Height="25" />
+            <Grid Margin="5,0" ToolTip="Mark all as watched" x:Name="WatchAll" MouseUp="WatchAll_MouseUp">
+                <Image Source="{DynamicResource CheckIcon}" Height="25" />
             </Grid>
         </StackPanel>  
     </Grid>
