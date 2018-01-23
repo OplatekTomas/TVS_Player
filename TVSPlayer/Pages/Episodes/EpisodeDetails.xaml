@@ -10,7 +10,7 @@
         <Grid x:Name="Back" Visibility="Collapsed" Margin="7,0" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Return" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" MouseLeftButtonUp="Back_MouseLeftButtonUp">
             <Image Source="/Icons/ico-back-light.png" Width="25" HorizontalAlignment="Left" />
         </Grid>
-        <ScrollViewer Margin="0,40,0,0"  VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" x:Name="ScrollView" PreviewMouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp" PreviewMouseMove="scrollViewer_PreviewMouseMove">
+        <ScrollViewer Margin="0,40,0,0"  VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" x:Name="ScrollView">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
             </ScrollViewer.Resources>
@@ -36,6 +36,9 @@
                                 <Grid x:Name="Stream" Margin="7,0" ToolTip="Streams episode using torrent" MouseLeftButtonUp="Stream_MouseLeftButtonUp">
                                     <Image Source="/Icons/ico-broadcast-light.png" Width="30" />
                                 </Grid>
+                                <Grid x:Name="SubtitlesIcon" Margin="7,0" ToolTip="Download subtitles" MouseLeftButtonUp="Subtitles_MouseLeftButtonUp">
+                                    <Image Source="/Icons/ico-subtitles-light.png" Width="30" />
+                                </Grid>
                                 <Grid x:Name="Remove" Margin="7,0" ToolTip="Deletes all files for episode" MouseLeftButtonUp="Remove_MouseLeftButtonUp">
                                     <Image Source="/Icons/ico-remove-light.png" Width="27" />
                                 </Grid>
@@ -45,42 +48,54 @@
                             </StackPanel>
                         </Grid>
                     </Grid>
-
-                    <StackPanel Margin="30,0" VerticalAlignment="Top">
-
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="18" Foreground="#F5F5F5" Text="Episode name: " />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Info: " />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Rating:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Air date:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Directors:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Guest stars:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Downloaded:" />
-                        <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Continue at:" />
-
-                    </StackPanel>
-                    <StackPanel Margin="30,0,0,0" MaxWidth="250" VerticalAlignment="Top">
-
-                        <TextBlock x:Name="EpisodeName" TextDecorations="Underline" Margin="0,3" FontSize="18" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" Foreground="#F5F5F5" Text="" MouseLeftButtonDown="EPName_MouseLeftButtonUp" />
-                        <TextBlock x:Name="Season" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Rating" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Airdate" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Writers" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Directors" Margin="0,3" FontSize="16" TextTrimming="CharacterEllipsis" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="GuestStars" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Downloaded" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-                        <TextBlock x:Name="Continue" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
-
-                    </StackPanel>
-                    <Grid Margin="40,3" MinWidth="300" Width="{Binding ActualWidth, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/2.3}">
-                        <TextBlock FontSize="16" FontWeight="Bold" Foreground="#F5F5F5" Text="Overview: "  />
-                        <ScrollViewer Margin="0,25,0,0">
+                    <Grid Margin="30,0" x:Name="SubtitlesContent" Opacity="0" Visibility="Collapsed">
+                        <Grid x:Name="SubtitlesBack" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Return" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" MouseLeftButtonUp="SubtitlesBack_MouseLeftButtonUp">
+                            <Image Source="/Icons/ico-back-light.png" Width="25" HorizontalAlignment="Left" />
+                        </Grid>
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Foreground="#F5F5F5" Text="Sample" FontSize="18" Margin="30,0" x:Name="FileName" />
+                        <ScrollViewer Margin="30,40,0,0">
                             <ScrollViewer.Resources>
                                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                             </ScrollViewer.Resources>
-                            <TextBlock FontSize="16" x:Name="Overview" Foreground="#F5F5F5" TextWrapping="Wrap"  />
+                            <StackPanel Orientation="Vertical" x:Name="SubsPanel" Width="350">
+
+                            </StackPanel>
                         </ScrollViewer>
                     </Grid>
+                    <StackPanel Orientation="Horizontal" x:Name="DetailsContent" Visibility="Visible">
+                        <StackPanel Margin="30,0" VerticalAlignment="Top">
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="18" Foreground="#F5F5F5" Text="Episode name: " />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Info: " />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Rating:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Air date:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Writers:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Directors:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Guest stars:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Downloaded:" />
+                            <TextBlock Margin="0,3" FontWeight="Bold" FontSize="16" Foreground="#F5F5F5" Text="Continue at:" />
+                        </StackPanel>
+                        <StackPanel Margin="30,0,0,0" MaxWidth="250" VerticalAlignment="Top">
+                            <TextBlock x:Name="EpisodeName" TextDecorations="Underline" Margin="0,3" FontSize="18" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" Foreground="#F5F5F5" Text="" MouseLeftButtonDown="EPName_MouseLeftButtonUp" />
+                            <TextBlock x:Name="Season" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Rating" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Airdate" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Writers" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Directors" Margin="0,3" FontSize="16" TextTrimming="CharacterEllipsis" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="GuestStars" TextTrimming="CharacterEllipsis" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Downloaded" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                            <TextBlock x:Name="Continue" Margin="0,3" FontSize="16" Foreground="#F5F5F5" Text="" />
+                        </StackPanel>
+                        <Grid Margin="40,3" MinWidth="300" Width="{Binding ActualWidth, ElementName=BackgroundGrid,Converter={local:MathConverter}, ConverterParameter=x/2.3}">
+                            <TextBlock FontSize="16" FontWeight="Bold" Foreground="#F5F5F5" Text="Overview: "  />
+                            <ScrollViewer Margin="0,25,0,0">
+                                <ScrollViewer.Resources>
+                                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
+                                </ScrollViewer.Resources>
+                                <TextBlock FontSize="16" x:Name="Overview" Foreground="#F5F5F5" TextWrapping="Wrap"  />
+                            </ScrollViewer>
+                        </Grid>
+                    </StackPanel>
+
                 </StackPanel>
             </Grid>
         </ScrollViewer>

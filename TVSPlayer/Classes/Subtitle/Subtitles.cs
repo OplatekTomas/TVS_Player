@@ -16,11 +16,9 @@ namespace TVSPlayer {
         public double EndTime { get; set; }
         public List<StackPanel> Lines { get; set; } = new List<StackPanel>();
     }
-    public enum Language { English, Czech, Other };
     public class Subtitles {
-        public Language Language { get; set; }
-        public string FileName { get; set; }
-        public Episode Episode { get; set; }
+        public string Language { get; set; }
+        public Episode.ScannedFile OriginalFile { get; set; }
         public HttpWebRequest DownloadLink { get; set; }
         public string Version { get; set; }
 
@@ -36,29 +34,35 @@ namespace TVSPlayer {
             return subs;
         }
 
-        public static List<Subtitles> GetSubtitles(Episode.ScannedFile file) {
-            List<Subtitles> subList = new List<Subtitles>();
-            HtmlWeb htmlWeb = new HtmlWeb();
-            HtmlDocument htmlDocument = htmlWeb.Load("http://www.addic7ed.com/search.php?search=" + Path.GetFileNameWithoutExtension(file.OriginalName) + "&anti_cache=" + DateTime.Now.ToString());
-            var items = htmlDocument.DocumentNode.SelectNodes("//div[@id='container95m']");
-            items.RemoveAt(items.Count-1);
-            foreach (var item in items) {
-                Subtitles subs = new Subtitles();
-                var data = item.ChildNodes[1].ChildNodes[3].ChildNodes[3].ChildNodes[1];
-                subs.Version = data.ChildNodes[1].ChildNodes[1].InnerText.Remove(data.ChildNodes[1].ChildNodes[1].InnerText.IndexOf(',')).Remove(0, 8);
-                string url = "http://www.addic7ed.com";
-                if (data.ChildNodes[4].ChildNodes[8].ChildNodes[2].Name == "a") {
-                    url += data.ChildNodes[4].ChildNodes[8].ChildNodes[2].Attributes[1].Value;
-                } else {
-                    url+= data.ChildNodes[4].ChildNodes[8].ChildNodes[5].Attributes[1].Value;
+        public async static Task<List<Subtitles>> GetSubtitles(Episode.ScannedFile file) {
+            return await Task.Run(() => {
+                List<Subtitles> subList = new List<Subtitles>();
+                HtmlWeb htmlWeb = new HtmlWeb();
+                string name = String.IsNullOrEmpty(file.OriginalName) ? Path.GetFileNameWithoutExtension(file.NewName) : Path.GetFileNameWithoutExtension(file.OriginalName);
+                HtmlDocument htmlDocument = htmlWeb.Load("http://www.addic7ed.com/search.php?search=" + name + "&anti_cache=" + DateTime.Now.ToString());
+                var items = htmlDocument.DocumentNode.SelectNodes("//div[@id='container95m']");
+                if (items != null) { 
+                    items.RemoveAt(items.Count - 1);
+                    foreach (var item in items) {
+                        Subtitles subs = new Subtitles();
+                        subs.OriginalFile = file;
+                        var data = item.ChildNodes[1].ChildNodes[3].ChildNodes[3].ChildNodes[1];
+                        subs.Version = data.ChildNodes[1].ChildNodes[1].InnerText.Remove(data.ChildNodes[1].ChildNodes[1].InnerText.IndexOf(',')).Remove(0, 8);
+                        string url = "http://www.addic7ed.com";
+                        if (data.ChildNodes[4].ChildNodes[8].ChildNodes[2].Name == "a") {
+                            url += data.ChildNodes[4].ChildNodes[8].ChildNodes[2].Attributes[1].Value;
+                        } else {
+                            url += data.ChildNodes[4].ChildNodes[8].ChildNodes[5].Attributes[1].Value;
+                        }
+                        var request = (HttpWebRequest)WebRequest.Create(url);
+                        request.Referer = htmlWeb.ResponseUri.ToString();
+                        subs.DownloadLink = request;
+                        subs.Language = data.ChildNodes[4].ChildNodes[4].InnerText.Replace("    \n\t\t\t", "");
+                        subList.Add(subs);
+                    }
                 }
-                var request = (HttpWebRequest)WebRequest.Create(url);
-                request.Referer = htmlWeb.ResponseUri.ToString();
-                subs.DownloadLink = request;
-                subList.Add(subs);
-            }
-
-            return subList;
+                return subList;
+            });          
         }
 
         public static Encoding GetEncoding(string filename) {

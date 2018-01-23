@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using TVS.API;
 using TVS.Notification;
@@ -116,10 +117,6 @@ namespace TVSPlayer
 
         private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             ScrollView.ReleaseMouseCapture();
-        }
-
-        private void BackIcon_MouseUp(object sender, MouseButtonEventArgs e) {
-
         }
 
         private async void Play_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -242,6 +239,55 @@ namespace TVSPlayer
 
         private void Back_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SeriesEpisodes.TryRefresh();
+        }
+
+        private void Subtitles_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SubsPanel.Children.Clear();
+            var sb = (Storyboard)FindResource("OpacityDown");
+            var up = (Storyboard)FindResource("OpacityUp");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                up.Begin(SubtitlesContent);
+                SubtitlesContent.Visibility = Visibility.Visible;
+                DetailsContent.Visibility = Visibility.Collapsed;
+                Task.Run(async () => {
+                    var file = episode.files.Where(x => x.Type == ScannedFile.FileType.Video).FirstOrDefault();
+                    if (file != null) {
+                        Dispatcher.Invoke(() => { FileName.Text = String.IsNullOrEmpty(file.OriginalName) ? Path.GetFileNameWithoutExtension(file.NewName) : Path.GetFileNameWithoutExtension(file.OriginalName); });
+                        var list = await Subtitles.GetSubtitles(file);
+                        foreach (var item in list) {
+                            Dispatcher.Invoke(() => {
+                                SubtitleControl sc = new SubtitleControl() { Opacity = 0, Height = 60 };
+                                sc.Lang.Text = item.Language;
+                                sc.Version.Text = item.Version;
+                                sc.Download.MouseLeftButtonUp += (sa, eva) => DownloadSubs(item.DownloadLink);
+                                SubsPanel.Children.Add(sc);
+                                up.Begin(sc);
+                            });
+                            await Task.Delay(16);
+                        }
+                    }
+                });
+            };
+            clone.Begin(DetailsContent);
+        }
+
+        private async void DownloadSubs(HttpWebRequest request) {
+            var result = await request.GetResponseAsync();
+        }
+
+        private void SubtitlesBack_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SubsPanel.Children.Clear();
+            var sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                SubtitlesContent.Visibility = Visibility.Collapsed;
+                DetailsContent.Visibility = Visibility.Visible;
+                var up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsContent);
+
+            };
+            clone.Begin(SubtitlesContent);
         }
     }
 }
