@@ -258,8 +258,8 @@ namespace TVSPlayer
                         foreach (var item in list) {
                             Dispatcher.Invoke(() => {
                                 SubtitleControl sc = new SubtitleControl() { Opacity = 0, Height = 60 };
-                                sc.Lang.Text = item.Language;
-                                sc.Version.Text = item.Version;
+                                sc.Lang.Text += item.Language;
+                                sc.Version.Text += item.Version;
                                 sc.Download.MouseLeftButtonUp += (sa, eva) => DownloadSubs(item.DownloadLink);
                                 SubsPanel.Children.Add(sc);
                                 up.Begin(sc);
@@ -274,6 +274,8 @@ namespace TVSPlayer
 
         private async void DownloadSubs(HttpWebRequest request) {
             var result = await request.GetResponseAsync();
+            StreamReader reader = new StreamReader(result.GetResponseStream());
+            string text = await reader.ReadToEndAsync();
         }
 
         private void SubtitlesBack_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

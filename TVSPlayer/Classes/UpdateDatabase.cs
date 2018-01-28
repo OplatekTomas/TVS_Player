@@ -66,7 +66,7 @@ namespace TVSPlayer
             }
             await Task.Run(() => {
                 foreach (Series series in Database.GetSeries()) {
-                    Renamer.FindAndRename(series);
+                    //Renamer.FindAndRename(series);
                 }
             });
         }

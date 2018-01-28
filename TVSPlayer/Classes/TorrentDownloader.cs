@@ -181,7 +181,7 @@ namespace TVSPlayer {
         /// </summary>
         public void StopAndMove() {
             TorrentSource.Name = Handle.TorrentFile.Name;
-            Renamer.MoveAfterDownload(this);
+            //Renamer.MoveAfterDownload(this);
             TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
             TorrentSource.HasFinished = true;
             TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);

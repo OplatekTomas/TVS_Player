@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using TVS.API;
 using System.Management;
+using System.IO;
 
 namespace TVSPlayer {
     class Helper {
@@ -34,6 +35,10 @@ namespace TVSPlayer {
                 name = episode.airedEpisodeNumber < 10 ? series.seriesName + " - S0" + episode.airedSeason + "E0" + episode.airedEpisodeNumber + " - " + episode.episodeName : name = series.seriesName + " - S0" + episode.airedSeason + "E" + episode.airedEpisodeNumber + " - " + episode.episodeName;
             } else if (episode.airedSeason >= 10) {
                 name = episode.airedEpisodeNumber < 10 ? series.seriesName + " - S" + episode.airedSeason + "E0" + episode.airedEpisodeNumber + " - " + episode.episodeName : series.seriesName + " - S" + episode.airedSeason + "E" + episode.airedEpisodeNumber + " - " + episode.episodeName;
+            }
+            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            foreach (char c in invalid) {
+                name = name.Replace(c.ToString(), "");
             }
             return name;
         }

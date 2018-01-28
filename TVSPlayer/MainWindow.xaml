@@ -51,7 +51,7 @@
                     <RowDefinition Height="80px" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Grid>
+                <Grid x:Name="Logo" MouseLeftButtonDown="Logo_MouseLeftButtonDown">
                     <Image Source="Icons/LogoWide.png" Margin="10"/>
                 </Grid>
                 <StackPanel Grid.Row="2">

@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="250">
     <Grid>
-        <TextBlock x:Name="Lang" VerticalAlignment="Top" Foreground="#F5F5F5" FontSize="18" Margin="5">Language: </TextBlock>
-        <TextBlock Margin="10,5" x:Name="Version" VerticalAlignment="Bottom" Foreground="#F5F5F5" FontSize="14">Version: </TextBlock>
+        <TextBlock x:Name="Lang" VerticalAlignment="Top" Foreground="#F5F5F5" FontSize="18" Margin="5" Text="Language: "></TextBlock>
+        <TextBlock Margin="10,5" x:Name="Version" VerticalAlignment="Bottom" Foreground="#F5F5F5" FontSize="14" Text="Version: "></TextBlock>
         <Grid x:Name="Download" HorizontalAlignment="Right" Width="27"  Margin="0,0,15,0" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <Image Source="../Icons/ico-download-light.png" />
         </Grid>

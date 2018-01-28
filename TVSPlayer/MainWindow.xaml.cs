@@ -513,30 +513,31 @@ namespace TVSPlayer {
                 Thread.Sleep(500);
             });
             //This code runs after all API calls are done and stuff is saved
-            ProgressBarPage prog = new ProgressBarPage(ids.Count);
-            AddPage(prog);
-            total = 0;
+            PleaseWait pleaseWait = new PleaseWait();
+            /*AddPage(pleaseWait);
             await Task.Run(() => {
+                var list = Database.GetSeries().Where(x => ids.Any(y=>y.Item1 == x.id)).ToList();
+                Renamer.FindAndRenameOptimized(list);
                 foreach (int id in ids.Select(x=>x.Item1)) {
                     var series = Database.GetSeries(id);
                     Renamer.FindAndRename(series);
-                    Dispatcher.Invoke(new Action(() => {
-                        total++;
-                        prog.SetValue(total);
-                    }), DispatcherPriority.Send);
                 }
-                Thread.Sleep(1000);
-            });
+                Thread.Sleep(500);
+            });*/
             RemoveAllPages();
             SetPage(new Library());
         }
 
         private async void TestFunctions() {
-            Subtitles.GetSubtitles(new Episode.ScannedFile() { OriginalName = "Stranger.Things.S02E09.iNTERNAL.1080p.WEB.x264-STRiFE[rarbg]" });
+            Stopwatch ne = new Stopwatch();
+            var list = Database.GetSeries();
+            ne.Start();
+            await Renamer.ScanAndRename(Database.GetSeries()); 
+            ne.Stop();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (false) {
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
@@ -614,6 +615,9 @@ namespace TVSPlayer {
             }
         }
 
+        private void Logo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://github.com/Kaharonus/TVS-Player/");
+        }
     }
 
     
