@@ -34,10 +34,52 @@ namespace TVSPlayer {
                             var result = await Rename(file);
                             info.Episode = AddToDatabase(info.Episode, result);
                         }
+                        Database.EditEpisode(series.id, info.Episode.id, info.Episode);
                     }
                     files.RemoveAll(x => filesWithInfo.SelectMany(f => f.Files).Where(f => !f.fromLibrary).Any(y => y.origFile == x.origFile));
                 }
             });
+        }
+
+        public async static Task RenameAfterDownload(TorrentDownloader torrent) {
+            await Task.Run(async () => {
+                string path = torrent.Status.SavePath + "\\" + torrent.Status.Name;
+                TorrentDownloader.TorrentSession.RemoveTorrent(torrent.Handle);
+                bool moved = false;
+                while (!moved) {
+                    try {
+                        if (File.Exists(path)) {
+                            Directory.CreateDirectory(Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\");
+                            File.Move(path, Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\" + Path.GetFileName(path));
+                            path = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path) + "\\";
+                        }
+                        var files = FilterSeries(torrent.TorrentSource.Series, GetFilesInDirectory(path));
+                        var episode = Database.GetEpisode(torrent.TorrentSource.Series.id, torrent.TorrentSource.Episode.id);
+                        foreach (var item in files) {
+                            var result = await Rename(item);
+                            episode = AddToDatabase(episode, result);
+                        }
+                        Database.EditEpisode(torrent.TorrentSource.Series.id, episode.id, episode);
+                        Directory.Delete(path, true);
+                        moved = true;
+                    } catch (IOException e) {
+                       await Task.Delay(100);
+                    }
+                }
+            });
+           
+        }
+
+        public async static Task RenameSingle(string file, Series series, Episode episode) {
+            var sfi = new ScannedFileInfo();
+            sfi.origFile = file;            
+            sfi.extension = Path.GetExtension(file);
+            sfi.series = series;
+            sfi.episode = episode;
+            sfi.type = GetFileType(file);
+            var result = await Rename(sfi);
+            episode = AddToDatabase(episode, sfi);
+            Database.EditEpisode(series.id, episode.id, episode);
         }
 
         private static Episode AddToDatabase(Episode episode, ScannedFileInfo sfi) {
@@ -56,11 +98,19 @@ namespace TVSPlayer {
             return episode;
         }
 
+        private static ScannedFile Convert(ScannedFileInfo info) {
+            ScannedFile sf = new ScannedFile();
+            sf.OriginalName = info.origFile;
+            sf.NewName = info.newFile;
+            sf.Type = info.type;
+            return sf;
+        }
+
         private async static Task<ScannedFileInfo> Rename(ScannedFileInfo info) {
             info.newFile = GetPath(info);
             if (info.newFile != info.origFile) {
                 try {
-                    //File.Move(info.origFile, info.newFile);
+                    File.Move(info.origFile, info.newFile);
                 } catch (IOException) {
                     MessageBoxResult result = await MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Errror", MessageBoxButtons.YesNoCancel);
                     if (result == MessageBoxResult.Yes) {
@@ -69,20 +119,6 @@ namespace TVSPlayer {
                 }
             }
             return info;
-        }
-
-        private static ScannedFile Convert(ScannedFileInfo info) {
-            string[] subtitleTypes = new string[] { ".srt", ".sub" };
-            ScannedFile sf = new ScannedFile();
-            sf.OriginalName = info.origFile;
-            sf.NewName = info.newFile;
-            sf.Type = ScannedFile.FileType.Video;
-            foreach (string type in subtitleTypes) {
-                if (info.extension == type) {
-                    sf.Type = ScannedFile.FileType.Subtitles;
-                }
-            }
-            return sf;
         }
 
         private static string GetPath(ScannedFileInfo info) {
@@ -141,7 +177,6 @@ namespace TVSPlayer {
                 if (info != null) {
                     var episode = dictionary.FirstOrDefault(x => x.Episode.airedEpisodeNumber == info.Item2 && x.Episode.airedSeason == info.Item1);
                     if (episode != null) {
-                        file.series = series;
                         file.episode = episode.Episode;
                         dictionary[dictionary.IndexOf(episode)].Files.Add(file);
                     }
@@ -172,6 +207,7 @@ namespace TVSPlayer {
             List<ScannedFileInfo> newFiles = new List<ScannedFileInfo>();
             foreach (var file in files) {
                 if (CheckAliases(file, series) || CheckAliasesParentDir(file, series)) {
+                    file.series = series;
                     newFiles.Add(file);
                 }
 
@@ -212,6 +248,18 @@ namespace TVSPlayer {
             return false;
         }
 
+        private static ScannedFile.FileType GetFileType(string file) {
+            string[] subExtension = new string[] { ".srt", ".sub" };
+            string[] videoExtensions = new string[] { ".mkv", ".avi", ".mp4", ".m4v", ".mov", ".wmv", ".flv" };
+            var ext = Path.GetExtension(file);
+            if (videoExtensions.Any(x => x == ext)) {
+                return ScannedFile.FileType.Video;
+            } else if (subExtension.Any(x => x == ext)) {
+                return ScannedFile.FileType.Subtitles;
+            }
+            return ScannedFile.FileType.Video;
+        }
+
         private static List<ScannedFileInfo> FilterExtensions(List<ScannedFileInfo> list) {
             string[] subExtension = new string[] { ".srt", ".sub" };
             string[] videoExtensions = new string[] { ".mkv", ".avi", ".mp4", ".m4v", ".mov", ".wmv", ".flv" };
@@ -248,13 +296,25 @@ namespace TVSPlayer {
 
         }
 
+        private static List<ScannedFileInfo> GetFilesInDirectory(string path) {
+            List<ScannedFileInfo> files = new List<ScannedFileInfo>();
+            List<string> paths = new List<string>();
+            paths.AddRange(Directory.GetFiles(path, "*", SearchOption.AllDirectories));
+            foreach (var file in paths) {
+                ScannedFileInfo sfi = new ScannedFileInfo();
+                sfi.origFile = file;
+                files.Add(sfi);
+            }
+            return FilterExtensions(files);
+
+        }
+
         private static List<ScannedFileInfo> GetFilesInScanDirs() {
             List<string> paths = new List<string>();
             List<ScannedFileInfo> files = new List<ScannedFileInfo>();
-            /*if (Directory.Exists(Settings.FirstScanLocation)) paths.AddRange(Directory.GetFiles(Settings.FirstScanLocation, "*", SearchOption.AllDirectories));
+            if (Directory.Exists(Settings.FirstScanLocation)) paths.AddRange(Directory.GetFiles(Settings.FirstScanLocation, "*", SearchOption.AllDirectories));
             if (Directory.Exists(Settings.SecondScanLocation)) paths.AddRange(Directory.GetFiles(Settings.SecondScanLocation, "*", SearchOption.AllDirectories));
-            if (Directory.Exists(Settings.ThirdScanLocation)) paths.AddRange(Directory.GetFiles(Settings.ThirdScanLocation, "*", SearchOption.AllDirectories));*/
-            paths.AddRange(Directory.GetFiles(@"D:\TVSTests\ImportFolder", "*", SearchOption.AllDirectories));
+            if (Directory.Exists(Settings.ThirdScanLocation)) paths.AddRange(Directory.GetFiles(Settings.ThirdScanLocation, "*", SearchOption.AllDirectories));
             foreach (var path in paths) {
                 ScannedFileInfo sfi = new ScannedFileInfo();
                 sfi.origFile = path;

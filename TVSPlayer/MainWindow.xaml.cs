@@ -514,16 +514,9 @@ namespace TVSPlayer {
             });
             //This code runs after all API calls are done and stuff is saved
             PleaseWait pleaseWait = new PleaseWait();
-            /*AddPage(pleaseWait);
-            await Task.Run(() => {
-                var list = Database.GetSeries().Where(x => ids.Any(y=>y.Item1 == x.id)).ToList();
-                Renamer.FindAndRenameOptimized(list);
-                foreach (int id in ids.Select(x=>x.Item1)) {
-                    var series = Database.GetSeries(id);
-                    Renamer.FindAndRename(series);
-                }
-                Thread.Sleep(500);
-            });*/
+            AddPage(pleaseWait);
+            var seriesList = Database.GetSeries().Where(x => ids.Any(y => y.Item1 == x.id)).ToList();
+            await Renamer.ScanAndRename(seriesList);
             RemoveAllPages();
             SetPage(new Library());
         }
@@ -537,7 +530,7 @@ namespace TVSPlayer {
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) {
+            if (true) {
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());

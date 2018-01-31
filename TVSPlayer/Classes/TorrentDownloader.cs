@@ -6,7 +6,6 @@ using Ragnar;
 using System.Threading.Tasks;
 using Ookii.Dialogs.Wpf;
 using Microsoft.Win32;
-using Ragnar;
 using System.Threading;
 using TVS.Notification;
 using System.Windows.Threading;
@@ -179,9 +178,9 @@ namespace TVSPlayer {
         /// <summary>
         /// Stops torrent and moves it to the right directory
         /// </summary>
-        public void StopAndMove() {
+        public async void StopAndMove() {
             TorrentSource.Name = Handle.TorrentFile.Name;
-            //Renamer.MoveAfterDownload(this);
+            await Renamer.RenameAfterDownload(this);
             TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
             TorrentSource.HasFinished = true;
             TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);

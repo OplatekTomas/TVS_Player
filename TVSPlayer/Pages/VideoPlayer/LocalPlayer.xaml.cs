@@ -66,8 +66,7 @@ namespace TVSPlayer
         }
 
 
-        private void LoadSubtitles() {
-            
+        private void LoadSubtitles() {         
             var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
             if (sub != null) {
                 var subtitles = Subtitles.ParseSubtitleItems(sub.NewName);

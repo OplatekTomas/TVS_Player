@@ -64,11 +64,7 @@ namespace TVSPlayer
                 await DownloadLastWeek();             
                 Settings.LastCheck = DateTime.Now;
             }
-            await Task.Run(() => {
-                foreach (Series series in Database.GetSeries()) {
-                    //Renamer.FindAndRename(series);
-                }
-            });
+            await Renamer.ScanAndRename(Database.GetSeries());
         }
 
         private async static Task DownloadLastWeek() {

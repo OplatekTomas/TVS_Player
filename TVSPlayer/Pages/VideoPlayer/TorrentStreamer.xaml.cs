@@ -163,9 +163,9 @@ namespace TVSPlayer {
                 var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
                 string[] fileExtension = new string[7] { ".mkv", ".m4v", ".avi", ".mp4", ".mov", ".wmv", ".flv" };
                 foreach (var file in files) {
-                    /*if (Renamer.IsMatchToIdentifiers(file) && fileExtension.Contains(Path.GetExtension(file).ToLower())) {
+                    if (Renamer.IsMatchToIdentifiers(file) && fileExtension.Contains(Path.GetExtension(file).ToLower())) {
                         return file;
-                    }*/
+                    }
                 }
             }
             return null;
