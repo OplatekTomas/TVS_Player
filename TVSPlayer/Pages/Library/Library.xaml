@@ -16,7 +16,7 @@
         <Grid Grid.Row="0">
             <!--<Slider x:Name="Scale" Minimum="224" Maximum="548" />-->
         </Grid>
-        <TextBlock Foreground="{DynamicResource TextColor}" x:Name="LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" Text="Loading..." Grid.Row="1" Panel.ZIndex="5" />
+        <TextBlock Foreground="{DynamicResource TextColor}" x:Name="LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" Text="Loading" Grid.Row="1" Panel.ZIndex="5" />
         <ScrollViewer Margin="5,0,5,10" Grid.Row="1" ScrollViewer.CanContentScroll="False" ScrollViewer.PanningMode="VerticalOnly">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>

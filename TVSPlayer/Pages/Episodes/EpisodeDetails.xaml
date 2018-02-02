@@ -52,14 +52,16 @@
                         <Grid x:Name="SubtitlesBack" HorizontalAlignment="Left" VerticalAlignment="Top" ToolTip="Return" MouseEnter="EpisodeName_MouseEnter" MouseLeave="EpisodeName_MouseLeave" MouseLeftButtonUp="SubtitlesBack_MouseLeftButtonUp">
                             <Image Source="/Icons/ico-back-light.png" Width="25" HorizontalAlignment="Left" />
                         </Grid>
-                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Foreground="#F5F5F5" Text="Sample" FontSize="18" Margin="30,0" x:Name="FileName" />
+                        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Foreground="#F5F5F5" FontSize="18" Margin="30,0" x:Name="FileName" />
                         <ScrollViewer Margin="30,40,0,0">
                             <ScrollViewer.Resources>
                                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                             </ScrollViewer.Resources>
-                            <StackPanel Orientation="Vertical" x:Name="SubsPanel" Width="350">
-
-                            </StackPanel>
+                            <Grid Width="450">
+                                <TextBlock x:Name="StatusText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#F5F5F5" FontSize="18" Text="Loading"></TextBlock>
+                                <StackPanel Orientation="Vertical" x:Name="SubsPanel">
+                                </StackPanel>
+                            </Grid>
                         </ScrollViewer>
                     </Grid>
                     <StackPanel Orientation="Horizontal" x:Name="DetailsContent" Visibility="Visible">

@@ -255,6 +255,15 @@ namespace TVSPlayer
                     if (file != null) {
                         Dispatcher.Invoke(() => { FileName.Text = String.IsNullOrEmpty(file.OriginalName) ? Path.GetFileNameWithoutExtension(file.NewName) : Path.GetFileNameWithoutExtension(file.OriginalName); });
                         var list = await Subtitles.GetSubtitles(file);
+                        if (list.Count > 0) {
+                            Dispatcher.Invoke(() => {
+                                StatusText.Visibility = Visibility.Collapsed;
+                            });
+                        } else {
+                            Dispatcher.Invoke(() => {
+                                StatusText.Text = "No results";
+                            });
+                        }
                         foreach (var item in list) {
                             Dispatcher.Invoke(() => {
                                 SubtitleControl sc = new SubtitleControl() { Opacity = 0, Height = 60 };
@@ -266,6 +275,10 @@ namespace TVSPlayer
                             });
                             await Task.Delay(16);
                         }
+                    } else {
+                        Dispatcher.Invoke(() => {
+                            StatusText.Text = "No video files";
+                        });
                     }
                 });
             };

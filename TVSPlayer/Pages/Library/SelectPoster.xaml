@@ -20,7 +20,7 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="1" Grid.Column="1" Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
-            <TextBlock Text="Loading... " Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="26" x:Name="LoadingText" />
+            <TextBlock Text="Loading" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="26" x:Name="LoadingText" />
             <ScrollViewer Margin="5,10,5,40">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
