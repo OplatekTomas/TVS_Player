@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using TVS.API;
 using static TVS.API.Episode;
 
@@ -36,7 +37,9 @@ namespace TVSPlayer {
                         }
                         Database.EditEpisode(series.id, info.Episode.id, info.Episode);
                     }
-                    files.RemoveAll(x => filesWithInfo.SelectMany(f => f.Files).Where(f => !f.fromLibrary).Any(y => y.origFile == x.origFile));
+                    var allFiles = filesWithInfo.SelectMany(f => f.Files);
+                    var filter = allFiles.Where(f => !f.fromLibrary);
+                    files.RemoveAll(x => filter.Any(y => y.origFile == x.origFile));
                 }
             });
         }
@@ -112,9 +115,12 @@ namespace TVSPlayer {
                 try {
                     File.Move(info.origFile, info.newFile);
                 } catch (IOException) {
-                    MessageBoxResult result = await MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Errror", MessageBoxButtons.YesNoCancel);
+                    MessageBoxResult result = MessageBoxResult.Cancel;
+                    await Application.Current.Dispatcher.Invoke(async () => {
+                        result = await MessageBox.Show("File " + info.origFile + " is probably in use. \n\nTry again?", "Error", MessageBoxButtons.YesNoCancel);
+                    });
                     if (result == MessageBoxResult.Yes) {
-                        return Rename(info).Result;
+                        return await Rename(info);
                     }
                 }
             }

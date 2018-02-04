@@ -258,7 +258,7 @@
     <Compile Include="Pages\VideoPlayer\TorrentStreamer.xaml.cs">
       <DependentUpon>TorrentStreamer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpdateApplication.cs" />
+    <Compile Include="Classes\UpdateApplication.cs" />
     <Page Include="Pages\Other\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
