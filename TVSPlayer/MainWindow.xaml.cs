@@ -522,24 +522,24 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            Stopwatch ne = new Stopwatch();
-            var list = Database.GetSeries();
-            ne.Start();
-            await Renamer.ScanAndRename(Database.GetSeries()); 
-            ne.Stop();
+            UpdateApplication.StartUpdate();
+
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (false) {
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else {
                     Settings.Load();
+                    if (Settings.UpdateOnStartup) {
+                        
+                    }
                     if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
                         Helper.SetPerformanceMode();
-                        Settings.LastCheck = DateTime.Now;
+                        Settings.LastCheck = Settings.LastUpdate = DateTime.Now;
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {
                         SetPage(new Library());

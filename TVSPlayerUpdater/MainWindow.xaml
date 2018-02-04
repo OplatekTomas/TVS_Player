@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" BorderThickness="0">
     <Grid Background="#FF333333" Loaded="Grid_Loaded" >
-        
+         <ProgressBar Foreground="#2196F3" BorderThickness="0" Background="#FF444444" Height="20" Margin="10" Maximum="100" x:Name="Progress" /> 
     </Grid>
 </Window>
