@@ -17,10 +17,10 @@ using System.Reflection;
 using System.Security.Permissions;
 using System.IO.Compression;
 using System.Net;
-using Newtonsoft.Json.Linq;
 using System.Windows.Threading;
-using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Web.Script.Serialization;
+using System.Collections;
 
 namespace TVSPlayerUpdater {
     /// <summary>
@@ -32,26 +32,34 @@ namespace TVSPlayerUpdater {
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
-            bool update = false;
-            string path = null;
-            bool clean = false;
-            var args = Environment.GetCommandLineArgs();
-            for (int i = 0; i != args.Length; ++i) {
-                if (args[i].Contains("-Update")) {
-                    update = true;
-                    path = args[i + 1];
+            if (false) {
+                bool update = false;
+                string path = null;
+                bool clean = false;
+                var args = Environment.GetCommandLineArgs();
+                for (int i = 0; i != args.Length; ++i) {
+                    if (args[i].Contains("-Update")) {
+                        update = true;
+                        path = args[i + 1];
+                    }
+                    if (args[i] == "-Clean") {
+                        clean = true;
+                    }
                 }
-                if (args[i] == "-Clean") {
-                    clean = true;
+                if (update) {
+                    RunUpdate(path);
+                } else if (clean) {
+                    RunClean();
+                } else {
+                    RunCopy();
                 }
-            }
-            if (update) {
-                RunUpdate(path);
-            } else if (clean) {
-                RunClean();
             } else {
-                RunCopy();
+                Test();
             }
+        }
+
+        private async void Test() {
+            await Update();
         }
 
         private void RunUpdate(string path) {
@@ -86,30 +94,30 @@ namespace TVSPlayerUpdater {
             Close();
         }
 
-        private void test() {
-        }
+
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
         private void RunAsAdmin() {
             Update();
         }
 
-        private async void Update() {
+        private async Task Update() {
             await Task.Run(() => {
                 WebClient wc = new WebClient();
                 wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
                 var response = wc.DownloadString("https://api.github.com/repos/Kaharonus/TVS-Player/releases");
-                var jo = JArray.Parse(response)[0]["assets"];
-                List<Asset> assets = new List<Asset>();
-                foreach (var token in jo) {
-                    assets.Add(token.ToObject<Asset>());
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                var unParsed = serializer.Deserialize<List<Dictionary<string, object>>>(response)[0]["assets"];
+                var dictionary = ((ArrayList)unParsed).Cast<Dictionary<string,object>>().ToList().Where(x=>x["name"].ToString().Contains("standalone")).FirstOrDefault();
+                if (dictionary != null) {
+                    string url = dictionary["browser_download_url"].ToString();
+                    WebClient downloadClient = new WebClient();
+                    downloadClient.DownloadProgressChanged += (s, ev) => ProgressChanged(ev);
+                    var path = Path.GetTempPath() + "\\TVSPlayerUpdate.tvsp";
+                    downloadClient.DownloadFileCompleted += (s, ev) => DownloadCompleted(path);
+                    downloadClient.DownloadFileAsync(new Uri(url), path);
                 }
-                WebClient downloadClient = new WebClient();
-                downloadClient.DownloadProgressChanged += (s, ev) => ProgressChanged(ev);
-                var path = Path.GetTempPath() + "\\TVSPlayerUpdate.tvsp";
-                downloadClient.DownloadFileCompleted += (s, ev) => DownloadCompleted(path);
-                downloadClient.DownloadFileAsync(new Uri(assets[0].browser_download_url), path);
             });
 
         }
@@ -129,13 +137,13 @@ namespace TVSPlayerUpdater {
             File.Delete(path);
             var settingsPath = @"C:\Users\Public\Documents\TVS-Player\Settings.tvsp";
             StreamReader sr = new StreamReader(settingsPath);
-            var array = JArray.Parse(sr.ReadToEnd());
-            var lastUpdate = array.Where(x => x[0].ToString() == "lastUpdate").FirstOrDefault();
-            int index = array.IndexOf(lastUpdate);
-            lastUpdate[1] = DateTime.Now;
-            array[15] = lastUpdate;
-            sr.Close();
-            var json = JsonConvert.SerializeObject(array);
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            var list = serializer.Deserialize<List<string[]>>(sr.ReadToEnd());
+            var item = list.Where(x => x[0] == "lastUpdate").FirstOrDefault();
+            int index = list.IndexOf(item);
+            item[1] = DateTime.Now.ToString();
+            list[index] = item;
+            string json = serializer.Serialize(list).Replace(@"\\", @"\");
             File.WriteAllText(settingsPath, json);
         }
 
@@ -155,13 +163,5 @@ namespace TVSPlayerUpdater {
             }
         }
 
-    }
-
-    public class Asset {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string state { get; set; }
-        public int size { get; set; }
-        public string browser_download_url { get; set; }
     }
 }
