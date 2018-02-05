@@ -108,8 +108,8 @@ namespace TVSPlayerUpdater {
                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
                 var response = wc.DownloadString("https://api.github.com/repos/Kaharonus/TVS-Player/releases");
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var unParsed = serializer.Deserialize<List<Dictionary<string, object>>>(response)[0]["assets"];
-                var dictionary = ((ArrayList)unParsed).Cast<Dictionary<string,object>>().ToList().Where(x=>x["name"].ToString().Contains("standalone")).FirstOrDefault();
+                var unParsed = serializer.Deserialize<List<Dictionary<string, object>>>(response).OrderByDescending(x=>x["published_at"]).ToList()[0]["assets"];
+                var dictionary = ((ArrayList)unParsed).Cast<Dictionary<string,object>>().ToList().Where(x=>x["name"].ToString().ToLower().Contains("standalone")).FirstOrDefault();
                 if (dictionary != null) {
                     string url = dictionary["browser_download_url"].ToString();
                     WebClient downloadClient = new WebClient();
