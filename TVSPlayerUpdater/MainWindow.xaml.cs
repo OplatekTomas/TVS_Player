@@ -32,7 +32,7 @@ namespace TVSPlayerUpdater {
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) {
+            if (true) {
                 bool update = false;
                 string path = null;
                 bool clean = false;
@@ -59,18 +59,15 @@ namespace TVSPlayerUpdater {
         }
 
         private async void Test() {
-            await Update();
+            await Update("");
         }
 
-        private void RunUpdate(string path) {
-            /*if (!CanWrite()) {
-                RunAsAdmin();
+        private async void RunUpdate(string path) {
+            if (!CanWrite()) {
+                RunAsAdmin(path);
             } else {
-                Update();
-            }*/
-            MessageBox.Show("Update");
-            Process.Start(path, "-Clean");
-            Close();
+                await Update(path);
+            }
         }
 
         private void RunCopy() {
@@ -78,15 +75,12 @@ namespace TVSPlayerUpdater {
             if (File.Exists(path)) {
                 File.Delete(path);
             }
-            MessageBox.Show("Copy");
-
             File.Copy(Assembly.GetExecutingAssembly().Location, path);
             Process.Start(path, "-Update \"" + Assembly.GetExecutingAssembly().Location+"\"");
-            Close();
+            Environment.Exit(0);
         }
 
         private void RunClean() {
-            MessageBox.Show("Clean");
             var path = Path.GetTempPath() + "\\TVSPlayerUpdater.exe";
             if (File.Exists(path)) {
                 File.Delete(path);
@@ -97,11 +91,12 @@ namespace TVSPlayerUpdater {
 
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-        private void RunAsAdmin() {
-            Update();
+        private void RunAsAdmin(string path) {
+            Update(path);
         }
 
-        private async Task Update() {
+        private async Task Update(string path) {
+            this.Activate();
             await Task.Run(() => {
                 WebClient wc = new WebClient();
                 wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
@@ -114,36 +109,51 @@ namespace TVSPlayerUpdater {
                     string url = dictionary["browser_download_url"].ToString();
                     WebClient downloadClient = new WebClient();
                     downloadClient.DownloadProgressChanged += (s, ev) => ProgressChanged(ev);
-                    var path = Path.GetTempPath() + "\\TVSPlayerUpdate.tvsp";
                     downloadClient.DownloadFileCompleted += (s, ev) => DownloadCompleted(path);
-                    downloadClient.DownloadFileAsync(new Uri(url), path);
+                    downloadClient.DownloadFileAsync(new Uri(url), Path.GetTempPath() + "\\TVSPlayerUpdate.zip");
                 }
             });
 
         }
 
-        private void DownloadCompleted(string path) {
-            string dir = Path.GetTempPath() + "\\TVSPlayerUpdate";
-            Directory.CreateDirectory(dir);
-            ZipFile.ExtractToDirectory(path, dir);
-            foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)) {
-                try {
-                    File.Move(file, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + Path.GetFileName(file));
-                } catch (Exception e) {
-
-                }
+        private void DownloadCompleted(string orig) {
+           
+            if (!Debugger.IsAttached) {
+                //Debugger.Launch();
             }
-            Directory.Delete(dir);
-            File.Delete(path);
+            MessageBox.Show("...");
+            DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(orig));
+            foreach (FileInfo file in di.GetFiles()) {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories()) {
+                dir.Delete(true);
+            }
+            ZipFile.ExtractToDirectory(Path.GetTempPath() + "\\TVSPlayerUpdate.zip", Path.GetDirectoryName(orig));
+            File.Delete(Path.GetTempPath() + "\\TVSPlayerUpdate.zip");
+            
+            Process.Start(orig, "-Clean");
+            Dispatcher.Invoke(() => {
+                Close();
+            });
+        }
+
+        private void EditSettings() {
             var settingsPath = @"C:\Users\Public\Documents\TVS-Player\Settings.tvsp";
             StreamReader sr = new StreamReader(settingsPath);
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-            var list = serializer.Deserialize<List<string[]>>(sr.ReadToEnd());
-            var item = list.Where(x => x[0] == "lastUpdate").FirstOrDefault();
-            int index = list.IndexOf(item);
-            item[1] = DateTime.Now.ToString();
-            list[index] = item;
-            string json = serializer.Serialize(list).Replace(@"\\", @"\");
+            string temp = sr.ReadToEnd();
+            sr.Close();
+            var list = serializer.Deserialize<List<string[]>>(temp);
+            var lastUpdate = list.Where(x => x[0] == "lastUpdate").FirstOrDefault();
+            var onStartup = list.Where(x => x[0] == "updateOnStartup").FirstOrDefault();
+            int indexStartup = list.IndexOf(onStartup);
+            int indexUpdate = list.IndexOf(lastUpdate);
+            lastUpdate[1] = DateTime.Now.ToString();
+            onStartup[1] = "false";
+            list[indexStartup] = onStartup;
+            list[indexUpdate] = lastUpdate;
+            string json = serializer.Serialize(list);
             File.WriteAllText(settingsPath, json);
         }
 

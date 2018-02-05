@@ -123,7 +123,11 @@ namespace TVSPlayer {
                                     try {
                                         field.SetValue(null, Convert.ChangeType(a[i, 1], field.FieldType));
                                     } catch (InvalidCastException e) {
-                                        field.SetValue(null, (TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
+                                        try {
+                                            field.SetValue(null, (TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
+                                        } catch (ArgumentException ex) {
+                                            field.SetValue(null, DateTime.Parse(a[i, i].ToString()));
+                                        }
                                     }
                                 }
                             } catch (IndexOutOfRangeException) {
