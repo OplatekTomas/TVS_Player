@@ -85,14 +85,15 @@ namespace TVSPlayerUpdater {
             if (File.Exists(path)) {
                 File.Delete(path);
             }
+            Process.Start(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\TVSPlayer.exe");
             Close();
         }
 
 
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
-        private void RunAsAdmin(string path) {
-            Update(path);
+        private async void RunAsAdmin(string path) {
+             await Update(path);
         }
 
         private async Task Update(string path) {
