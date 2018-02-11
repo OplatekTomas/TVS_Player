@@ -78,7 +78,7 @@ namespace TVSPlayer {
             GenerateSearch(eps);
             List<List<Episode>> sorted = new List<List<Episode>>();
             for (int i = 1; ; i++) {
-                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && DateTime.ParseExact(a.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
+                List<Episode> list = eps.Where(a => a.airedSeason == i && !String.IsNullOrEmpty(a.firstAired) && Helper.ParseAirDate(a.firstAired).AddDays(1) < DateTime.Now).ToList();
                 if (Properties.Settings.Default.EpisodeSort) list.Reverse();
                 if (list.Count != 0) {
                     sorted.Add(list);
@@ -120,7 +120,7 @@ namespace TVSPlayer {
                 List<Episode> episodes = Database.GetEpisodes(series.id);
                 var eps = episodes.Where(x => x.airedSeason > 0).ToList().OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList();
                 if (eps != null) {
-                    var ep = eps.Where(x => x.finised != true).ToList().FirstOrDefault();
+                    var ep = eps.Where(x => x.finished != true).ToList().FirstOrDefault();
                     if (ep != null) {
                         ep = Database.GetEpisode(series.id, ep.id, true);
                         await Dispatcher.Invoke(async () => {
@@ -298,7 +298,7 @@ namespace TVSPlayer {
         }
 
         private void GenerateSearch(List<Episode> episodes) {
-            episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString()) && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList();
+            episodes = episodes.Where(x => x.airedSeason.ToString() != "0" && !String.IsNullOrEmpty(x.airedSeason.ToString()) && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).ToList();
             foreach (var episode in episodes) {
                 searchValues.Add(episode, episode.episodeName);
             }

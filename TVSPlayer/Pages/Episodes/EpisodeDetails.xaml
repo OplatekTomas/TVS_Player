@@ -39,6 +39,9 @@
                                 <Grid x:Name="SubtitlesIcon" Margin="7,0" ToolTip="Download subtitles" MouseLeftButtonUp="Subtitles_MouseLeftButtonUp">
                                     <Image Source="/Icons/ico-subtitles-light.png" Width="30" />
                                 </Grid>
+                                <Grid x:Name="MarkAllPrevious" Margin="7,0,7,0" ToolTip="Mark all previous episodes as watched" MouseLeftButtonUp="MarkAllPrevious_MouseLeftButtonUp">
+                                    <Image Source="/Icons/ico-checked-light.png" Width="32" />
+                                </Grid>
                                 <Grid x:Name="Remove" Margin="7,0" ToolTip="Deletes all files for episode" MouseLeftButtonUp="Remove_MouseLeftButtonUp">
                                     <Image Source="/Icons/ico-remove-light.png" Width="27" />
                                 </Grid>

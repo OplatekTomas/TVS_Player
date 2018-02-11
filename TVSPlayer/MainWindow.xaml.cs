@@ -522,24 +522,22 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            //UpdateApplication.StartUpdate();
-            Settings.LastUpdate = DateTime.Now;
+            await UpdateApplication.CheckForUpdates();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) { 
+            if (true) { 
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else {
                     Settings.Load();
-                    if (Settings.UpdateOnStartup) {
-                        
-                    }
+                    UpdateApplication.StartUpdate();
+                    UpdateApplication.CheckForUpdates();
                     if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
                         Helper.SetPerformanceMode();
-                        Settings.LastCheck = Settings.LastUpdate = DateTime.Now;
+                        Settings.LastCheck = DateTime.Now;
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {
                         SetPage(new Library());
@@ -579,7 +577,7 @@ namespace TVSPlayer {
                 try {
                     LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
                     player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
-                    player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    player.episode.finished = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                     Database.EditEpisode(player.series.id, player.episode.id, player.episode);
                     player.Player.Stop();
                     player.Player.Close();
@@ -588,7 +586,7 @@ namespace TVSPlayer {
                     var series = Database.GetSeries(player.downloader.TorrentSource.Series.id);
                     var ep = Database.GetEpisode(player.downloader.TorrentSource.Series.id, player.downloader.TorrentSource.Episode.id);
                     ep.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
-                    ep.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    ep.finished = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                     if (player.downloader.Status.IsSeeding) {
                         player.downloader.StopAndMove();
                     } else {

@@ -87,9 +87,9 @@ namespace TVSPlayer
         }
 
         private void WatchAll_MouseUp(object sender, MouseButtonEventArgs e) {
-            var eps = Database.GetEpisodes(owner.series.id).Where( x=> !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) < DateTime.Now);
+            var eps = Database.GetEpisodes(owner.series.id).Where( x=> !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired) < DateTime.Now);
             foreach (var ep in eps) {
-                ep.finised = true;
+                ep.finished = true;
                 Database.EditEpisode(owner.series.id, ep.id, ep);
             }
         }

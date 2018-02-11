@@ -65,7 +65,7 @@ namespace TVSPlayer
                 Settings.LastCheck = DateTime.Now;
             }
             await Renamer.ScanAndRename(Database.GetSeries());
-        }
+         }
 
         private async static Task DownloadLastWeek() {
             await Task.Run(async() => {
@@ -73,7 +73,7 @@ namespace TVSPlayer
                 var episodes = new Dictionary<Series,List<Episode>>();
                 foreach (var se in series) {
                     //adds episodes that dont have files and have been released in last week
-                    episodes.Add(se, Database.GetEpisodes(se.id).Where(x => x.files.Count == 0 && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-7) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList());
+                    episodes.Add(se, Database.GetEpisodes(se.id).Where(x => x.files.Count == 0 && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired) > DateTime.Now.AddDays(-7) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).ToList());
                 }
                 foreach (var combination in episodes) {
                     foreach (var episode in combination.Value) {
@@ -110,12 +110,13 @@ namespace TVSPlayer
             });
         }
 
-        private static async Task UpdateEpisodes(int id) {
+        public static async Task UpdateEpisodes(int id) {
             await Task.Run(() => {
                 var list = Episode.GetEpisodes(id);
                 foreach (var episode in list) {
                     var ep = Database.GetEpisode(id, episode.id);
                     if (ep != null) {
+                        if (ep.airedSeason == 3 && ep.airedEpisodeNumber == 5) { }
                         if (ep.Compare(episode)) {
                             ep.Update(episode);
                             Database.EditEpisode(id, ep.id, ep);

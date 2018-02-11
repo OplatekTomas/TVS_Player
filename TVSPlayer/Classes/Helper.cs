@@ -11,9 +11,12 @@ using System.Windows.Threading;
 using TVS.API;
 using System.Management;
 using System.IO;
+using System.Reflection;
+using System.Globalization;
 
 namespace TVSPlayer {
     class Helper {
+
         /// <summary>
         /// Path to cached data
         /// </summary>
@@ -93,6 +96,10 @@ namespace TVSPlayer {
             }
         }
 
+        public static DateTime ParseAirDate(string date) {
+            return DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
         /// <summary>
         /// Brings any process to front
         /// </summary>
@@ -104,12 +111,14 @@ namespace TVSPlayer {
             }
             SetForegroundWindow(handle);
         }
+
         /// <summary>
         /// Disables Windows screen saver
         /// </summary>
         public static void DisableScreenSaver() {
             SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS);
         }
+
         /// <summary>
         /// Enables Windows screen saver
         /// </summary>

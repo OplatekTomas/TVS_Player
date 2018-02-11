@@ -21,6 +21,7 @@ using System.Windows.Threading;
 using System.Diagnostics;
 using System.Web.Script.Serialization;
 using System.Collections;
+using System.Security.AccessControl;
 
 namespace TVSPlayerUpdater {
     /// <summary>
@@ -63,7 +64,11 @@ namespace TVSPlayerUpdater {
         }
 
         private async void RunUpdate(string path) {
-            if (!CanWrite()) {
+            if (!Debugger.IsAttached) {
+                //Debugger.Launch();
+            }
+            Dispatcher.Invoke(() => { CurrentText.Text = "Downloading Update"; });
+            if (!CanWrite(Path.GetDirectoryName(path))) {
                 RunAsAdmin(path);
             } else {
                 await Update(path);
@@ -80,7 +85,7 @@ namespace TVSPlayerUpdater {
             Environment.Exit(0);
         }
 
-        private void RunClean() {
+        private void RunClean() {   
             var path = Path.GetTempPath() + "\\TVSPlayerUpdater.exe";
             if (File.Exists(path)) {
                 File.Delete(path);
@@ -91,16 +96,20 @@ namespace TVSPlayerUpdater {
 
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"BUILTIN\Administrators")]
         private async void RunAsAdmin(string path) {
-             await Update(path);
+            Process p = new Process();
+            p.StartInfo.FileName = Assembly.GetExecutingAssembly().Location;
+            p.StartInfo.Verb = "runas";
+            p.StartInfo.Arguments = "-Update \"" + path + "\"";
+            p.Start();
+            Close();
         }
 
         private async Task Update(string path) {
             this.Activate();
             await Task.Run(() => {
                 WebClient wc = new WebClient();
-                wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
+                wc.Headers.Add("user-agent", "TVS-Player/alpha_build");
                 wc.Headers.Add("Accept", "application/vnd.github.v3+json");
                 var response = wc.DownloadString("https://api.github.com/repos/Kaharonus/TVS-Player/releases");
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
@@ -117,11 +126,8 @@ namespace TVSPlayerUpdater {
 
         }
 
-        private void DownloadCompleted(string orig) {
-           
-            if (!Debugger.IsAttached) {
-                //Debugger.Launch();
-            }
+        private void DownloadCompleted(string orig) {          
+            Dispatcher.Invoke(() => { CurrentText.Text = "Extracting update"; });
             MessageBox.Show("...");
             DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(orig));
             foreach (FileInfo file in di.GetFiles()) {
@@ -132,11 +138,19 @@ namespace TVSPlayerUpdater {
             }
             ZipFile.ExtractToDirectory(Path.GetTempPath() + "\\TVSPlayerUpdate.zip", Path.GetDirectoryName(orig));
             File.Delete(Path.GetTempPath() + "\\TVSPlayerUpdate.zip");
-            
+            EditSettings();
             Process.Start(orig, "-Clean");
             Dispatcher.Invoke(() => {
                 Close();
             });
+        }
+
+        private void ProgressChanged(DownloadProgressChangedEventArgs progress) {
+            Dispatcher.Invoke(() => {
+                StatsText.Text = progress.ProgressPercentage + "%";
+                Progress.Value = progress.ProgressPercentage;
+            }, DispatcherPriority.Send);
+
         }
 
         private void EditSettings() {
@@ -146,32 +160,25 @@ namespace TVSPlayerUpdater {
             string temp = sr.ReadToEnd();
             sr.Close();
             var list = serializer.Deserialize<List<string[]>>(temp);
-            var lastUpdate = list.Where(x => x[0] == "lastUpdate").FirstOrDefault();
             var onStartup = list.Where(x => x[0] == "updateOnStartup").FirstOrDefault();
             int indexStartup = list.IndexOf(onStartup);
-            int indexUpdate = list.IndexOf(lastUpdate);
-            lastUpdate[1] = DateTime.Now.ToString();
             onStartup[1] = "false";
             list[indexStartup] = onStartup;
-            list[indexUpdate] = lastUpdate;
             string json = serializer.Serialize(list);
             File.WriteAllText(settingsPath, json);
         }
 
-        private void ProgressChanged(DownloadProgressChangedEventArgs progress) {
-            Dispatcher.Invoke(() => {
-                Progress.Value = progress.ProgressPercentage;
-            }, DispatcherPriority.Send);
-
-        }
-
-        private bool CanWrite() {
+        public static bool CanWrite(string destDir) {
             try {
-                System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(Assembly.GetExecutingAssembly().Location);
+                byte[] data = new byte[5 * 1024 * 1024];
+                Random rng = new Random();
+                rng.NextBytes(data);
+                File.WriteAllBytes(destDir + "\\AdminTest.tvsp", data);
                 return true;
-            } catch (UnauthorizedAccessException) {
+            } catch (UnauthorizedAccessException e) {
                 return false;
             }
+            
         }
 
     }

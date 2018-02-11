@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVSPlayerUpdater"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" BorderThickness="0">
+        Title="MainWindow" Height="200" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" BorderThickness="0">
     <Grid Background="#FF333333" Loaded="Grid_Loaded" >
-         <ProgressBar Foreground="#2196F3" BorderThickness="0" Background="#FF444444" Height="20" Margin="10" Maximum="100" x:Name="Progress" /> 
+        <TextBlock Foreground="#F5F5F5" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,45,10,0" TextAlignment="Center" FontSize="30" Text="Please wait"></TextBlock>
+        <ProgressBar Foreground="#2196F3" BorderThickness="0" VerticalAlignment="Center" Background="#FF444444" Height="8" Margin="10,0,10,0" Maximum="100" x:Name="Progress" />
+        <TextBlock x:Name="CurrentText" Foreground="#F5F5F5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,50,10,0" TextAlignment="Center" FontSize="16" Text="Creating updater"></TextBlock>
+        <TextBlock x:Name="StatsText" Foreground="#F5F5F5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,53,10,0" TextAlignment="Center" FontSize="14" Text="-"></TextBlock>
+
     </Grid>
 </Window>

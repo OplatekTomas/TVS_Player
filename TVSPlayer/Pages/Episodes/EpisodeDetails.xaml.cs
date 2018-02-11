@@ -49,7 +49,7 @@ namespace TVSPlayer
             Rating.Text = episode.siteRating + "/10";
             EpisodeName.Text = episode.episodeName;
             if (!String.IsNullOrEmpty(episode.firstAired)) {
-                Airdate.Text = DateTime.ParseExact(episode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                Airdate.Text =Helper.ParseAirDate(episode.firstAired).ToString("dd. MM. yyyy");
             }
             Writers.Text = null;
             for (int i = 0; i < episode.writers.Count; i++) {
@@ -209,7 +209,7 @@ namespace TVSPlayer
 
         private void NextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             var episodes = Database.GetEpisodes((int)episode.seriesId);
-            var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason).Max(x => x.airedEpisodeNumber);
+            var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
             Episode newEp = null;
             if (highestEp == episode.airedEpisodeNumber) {
                 newEp = episodes.Where(x => x.airedSeason == episode.airedSeason + 1 && x.airedEpisodeNumber == 1).FirstOrDefault();
@@ -307,6 +307,21 @@ namespace TVSPlayer
 
             };
             clone.Begin(SubtitlesContent);
+        }
+
+        private async void MarkAllPrevious_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var result = await MessageBox.Show("Mark all previous episodes including this one as watched?","",MessageBoxButtons.YesNoCancel);
+            if (result == MessageBoxResult.Yes) {
+                var serId = (int)episode.seriesId;
+                var episodes = Database.GetEpisodes(serId);
+                var thisSeason = episodes.Where(x => x.airedSeason == episode.airedSeason && x.airedEpisodeNumber <= episode.airedEpisodeNumber);
+                episodes = episodes.Where(x => x.airedSeason < episode.airedSeason).ToList();
+                episodes.AddRange(thisSeason);
+                foreach (var episode in episodes) {
+                    episode.finished = true;
+                    Database.EditEpisode(serId, episode.id, episode);
+                }
+            }
         }
     }
 }

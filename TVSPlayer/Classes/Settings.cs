@@ -26,7 +26,6 @@ namespace TVSPlayer {
         private static TorrentQuality streamquality;
         private static bool useWinDefaultPlayer;
         private static bool performanceMode;
-        private static DateTime lastUpdate;
         private static bool updateOnStartup;
 
         public static string Library { get { return library; } set { library = value; SaveSettings(); } }
@@ -44,7 +43,6 @@ namespace TVSPlayer {
         public static bool StreamedBefore { get { return stremedBefore; } set { stremedBefore = value; SaveSettings(); } }
         public static bool UseWinDefaultPlayer { get { return useWinDefaultPlayer; } set { useWinDefaultPlayer = value; SaveSettings(); } }
         public static bool PerformanceMode { get { return performanceMode; } set { performanceMode = value; SaveSettings(); } }
-        public static DateTime LastUpdate { get { return lastUpdate; } set { lastUpdate = value; SaveSettings(); } }
         public static bool UpdateOnStartup { get { return updateOnStartup; } set { updateOnStartup = value; SaveSettings(); } }
 
 
@@ -123,11 +121,7 @@ namespace TVSPlayer {
                                     try {
                                         field.SetValue(null, Convert.ChangeType(a[i, 1], field.FieldType));
                                     } catch (InvalidCastException e) {
-                                        try {
-                                            field.SetValue(null, (TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
-                                        } catch (ArgumentException ex) {
-                                            field.SetValue(null, DateTime.Parse(a[i, i].ToString()));
-                                        }
+                                        field.SetValue(null, (TorrentQuality)Enum.ToObject(typeof(TorrentQuality), a[i, 1]));
                                     }
                                 }
                             } catch (IndexOutOfRangeException) {

@@ -220,7 +220,7 @@ namespace TVSPlayer
                 List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
                 foreach (Episode e in li) {
                     if (!String.IsNullOrEmpty(e.firstAired)) {
-                        DateTime dt = DateTime.ParseExact(e.firstAired,"yyyy-MM-dd",CultureInfo.InvariantCulture).AddDays(1);
+                        DateTime dt = Helper.ParseAirDate(e.firstAired).AddDays(1);
                         if (dt < DateTime.Now) {
                             ep = e;
                             break;
@@ -281,7 +281,7 @@ namespace TVSPlayer
                 List<Episode> li = Database.GetEpisodes(sil.series.id).OrderBy(x => x.firstAired).Reverse().ToList(); ;
                 foreach (Episode e in li) {
                     if (!String.IsNullOrEmpty(e.firstAired)) {
-                        DateTime dt = DateTime.ParseExact(e.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1);
+                        DateTime dt = Helper.ParseAirDate(e.firstAired).AddDays(1);
                         if (dt < DateTime.Now) {
                             ep = e;
                             break;

@@ -123,8 +123,8 @@ namespace TVSPlayer
         private void MediaOpenedEvent() {
             LoadSubtitles();
             VideoSlider.Maximum = Player.MediaDuration;
-            if (!episode.finised) { Player.MediaPosition = episode.continueAt; }
-            episode.finised = false;
+            if (!episode.finished) { Player.MediaPosition = episode.continueAt; }
+            episode.finished = false;
             fileLenght = GetTime(Player.MediaDuration);
             positionUpdate.Interval = new TimeSpan(0, 0, 1);
             positionUpdate.Tick += new EventHandler(UpdatePosition);
@@ -307,7 +307,7 @@ namespace TVSPlayer
             MainWindow.videoPlayback = false;
             MainWindow.SwitchState(MainWindow.PlayerState.Normal);
             episode.continueAt = Player.MediaPosition - 50000000 > 0 ? Player.MediaPosition - 50000000 : 0;
-            episode.finised = Player.MediaDuration - 3000000000 < Player.MediaPosition ? true : false;
+            episode.finished = Player.MediaDuration - 3000000000 < Player.MediaPosition ? true : false;
             Database.EditEpisode(series.id, episode.id, episode);
             MainWindow.RemovePage();
             SeriesEpisodes.TryRefresh();

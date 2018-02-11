@@ -74,7 +74,7 @@ namespace TVSPlayer
 
         private void LoadInfo() {
             List<Episode> list = Database.GetEpisodes(series.id);
-            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && DateTime.ParseExact(ep.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
+            var nextEpisode = list.Where(ep => !String.IsNullOrEmpty(ep.firstAired) && Helper.ParseAirDate(ep.firstAired) > DateTime.Now).OrderBy(e => e.firstAired).ToList().FirstOrDefault();
             int episodeCount, downloadedEpisodes, seasonsCount;
             episodeCount = downloadedEpisodes = seasonsCount = 0;
             foreach (Episode ep in list) {
