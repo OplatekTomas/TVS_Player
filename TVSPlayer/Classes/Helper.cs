@@ -169,7 +169,7 @@ namespace TVSPlayer {
 
     }
 
-    static class Extensions{
+    static class Extensions {
 
         public static Color ToMediaColor(this System.Drawing.Color color) {
             return Color.FromArgb(color.A, color.R, color.G, color.B);
@@ -182,5 +182,49 @@ namespace TVSPlayer {
         public static void WaitAll(this IEnumerable<Task> tasks) {
             Task.WaitAll(tasks.ToArray());
         }
+
+
+        #region MoreLINQ MaxBy Extension Method 
+
+        /*
+         * Copyright MoreLINQ 2018
+         * https://github.com/morelinq/MoreLINQ/blob/master/MoreLinq/MaxBy.cs       
+         * */
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
+           Func<TSource, TKey> selector) {
+            return source.MaxBy(selector, null);
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> selector, IComparer<TKey> comparer) {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            comparer = comparer ?? Comparer<TKey>.Default;
+            return ExtremumBy(source, selector, (x, y) => comparer.Compare(x, y));
+        }
+
+        static TSource ExtremumBy<TSource, TKey>(IEnumerable<TSource> source,
+            Func<TSource, TKey> selector, Func<TKey, TKey, int> comparer) {
+            using (var sourceIterator = source.GetEnumerator()) {
+                if (!sourceIterator.MoveNext())
+                    throw new InvalidOperationException("Sequence contains no elements");
+
+                var extremum = sourceIterator.Current;
+                var key = selector(extremum);
+                while (sourceIterator.MoveNext()) {
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
+                    if (comparer(candidateProjected, key) > 0) {
+                        extremum = candidate;
+                        key = candidateProjected;
+                    }
+                }
+
+                return extremum;
+            }
+        }
+        #endregion
     }
 }

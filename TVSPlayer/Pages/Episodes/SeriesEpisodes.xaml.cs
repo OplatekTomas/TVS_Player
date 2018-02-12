@@ -51,11 +51,11 @@ namespace TVSPlayer {
             await ShowNextEp();
             Task.Run(() => LoadBackground());
             Task.Run(() => LoadSeasons());
-        }       
+        }
 
 
         private async void LoadBackground() {
-            if (!Settings.PerformanceMode) { 
+            if (!Settings.PerformanceMode) {
                 BitmapImage bmp = await Database.GetFanArt(series.id);
                 Dispatcher.Invoke(() => {
                     if (bmp != null) {
@@ -86,7 +86,7 @@ namespace TVSPlayer {
                     break;
                 }
             }
-            if (Properties.Settings.Default.EpisodeSort) { 
+            if (Properties.Settings.Default.EpisodeSort) {
                 sorted.Reverse();
             }
             Dispatcher.Invoke(() => {
@@ -116,25 +116,25 @@ namespace TVSPlayer {
 
         private async Task ShowNextEp() {
             DetailsGrid.Children.RemoveRange(0, DetailsGrid.Children.Count);
-            await Task.Run( async () => {
+            await Task.Run(async () => {
                 List<Episode> episodes = Database.GetEpisodes(series.id);
-                var eps = episodes.Where(x => x.airedSeason > 0).ToList().OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList();
+                var eps = episodes.Where(x => x.airedSeason > 0 && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(-1) < DateTime.Now).ToList().OrderBy(x => x.airedSeason).ThenBy(x => x.airedEpisodeNumber).ToList();
                 if (eps != null) {
-                    var ep = eps.Where(x => x.finished != true).ToList().FirstOrDefault();
+                    var ep = eps.Where(x => !x.finished).ToList().FirstOrDefault();
                     if (ep != null) {
                         ep = Database.GetEpisode(series.id, ep.id, true);
                         await Dispatcher.Invoke(async () => {
                             var details = new EpisodeDetails(ep, false);
                             details.EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(ep.seriesId.ToString()), ep.id);
                             DetailsGrid.Children.Add(details);
-                        },DispatcherPriority.Send);
+                        }, DispatcherPriority.Send);
                     } else {
-                        ep = Database.GetEpisode(series.id, eps[0].id, true);
-                        await Dispatcher.Invoke( async () => {
+                        ep = eps.Where(x => x.airedSeason == eps.Max(y => y.airedSeason)).MaxBy(x => x.airedEpisodeNumber);
+                        await Dispatcher.Invoke(async () => {
                             var details = new EpisodeDetails(ep, false);
                             details.EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(ep.seriesId.ToString()), ep.id);
                             DetailsGrid.Children.Add(details);
-                        },DispatcherPriority.Send);
+                        }, DispatcherPriority.Send);
                     }
                 }
             });
@@ -201,7 +201,7 @@ namespace TVSPlayer {
                 up.Begin(DetailsGrid);
             };
             clone.Begin(DetailsGrid);
-          
+
         }
 
         bool isRunning = false;

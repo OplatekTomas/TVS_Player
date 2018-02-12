@@ -28,6 +28,9 @@
                 <TextBlock Text="psantosl" MouseUp="TextBlock_MouseUp_37" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" /> for
                 <TextBlock Text="ConsoleToast" MouseUp="TextBlock_MouseUp_36" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" /> which I edited for my use
             </TextBlock>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Margin="0,5" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}" >morelinq for their 
+                <TextBlock Text="MoreLINQ" MouseUp="TextBlock_MouseUp_39" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" /> project
+            </TextBlock>
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Margin="0,5" TextWrapping="Wrap" Foreground="{DynamicResource TextColor}" >
                 <TextBlock Text="Fermam Aziz" MouseUp="TextBlock_MouseUp" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" /> from <TextBlock Text="www.flaticon.com" MouseUp="FlatIcon_MouseUp" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" TextDecorations="Underline" /> for
                 <TextBlock Text="Cog icon" MouseUp="TextBlock_MouseUp_1" TextDecorations="Underline" MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave" />
