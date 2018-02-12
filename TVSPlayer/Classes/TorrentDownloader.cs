@@ -14,6 +14,7 @@ using System.IO;
 using TVS.API;
 using static TVS.API.Episode;
 using System.Windows;
+using HtmlAgilityPack;
 
 namespace TVSPlayer {
     public class TorrentDownloader {
@@ -82,6 +83,14 @@ namespace TVSPlayer {
         /// </summary>
         /// <returns></returns>
         public async Task<TorrentDownloader> Download() {
+            if (String.IsNullOrEmpty(TorrentSource.Magnet)) { 
+                await Task.Run(() => {
+                    HtmlWeb htmlWeb = new HtmlWeb();
+                    HtmlDocument htmlDocument = htmlWeb.Load(TorrentSource.URL);
+                    List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
+                    TorrentSource.Magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;
+                });
+            }
             var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
             if (torrs.Count == 0) {
                 var downloader = await Task.Run(() => {

@@ -522,11 +522,14 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
+            var series = Database.GetSeries(121361);
+            var episode = Database.GetEpisode(121361, 6, 10);
+            await Torrent.Search(series, episode);
             //await UpdateApplication.CheckForUpdates();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (false) { 
+            if (true) { 
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());

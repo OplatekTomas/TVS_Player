@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("TVSPlayerUpdater")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Update application for TVS-Player")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TVSPlayerUpdater")]

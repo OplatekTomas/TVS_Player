@@ -62,10 +62,7 @@ namespace TVSPlayer {
                     if (t.Name.Contains("2160p")) {
                         t.Quality = TorrentQuality.UHD;
                     }
-                    t.URL = url = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
-                    htmlDocument = htmlWeb.Load(url);
-                    List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
-                    t.Magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;
+                    t.URL = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
                     t.Seeders = Int32.Parse(row.ChildNodes[3].InnerText);
                     t.Leech = Int32.Parse(row.ChildNodes[5].InnerText);
                     t.Size = row.ChildNodes[9].ChildNodes[0].InnerText;
