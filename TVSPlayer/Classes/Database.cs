@@ -13,6 +13,7 @@ using TVS.API;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Windows;
+using static System.Environment;
 
 namespace TVSPlayer {
     class Database {
@@ -308,7 +309,7 @@ namespace TVSPlayer {
             string json = JsonConvert.SerializeObject(list);
             WriteToFile(db + id + "\\Episodes.tvsp", json);
         }
-        
+
         /// <summary>
         /// Returns thumbnail for episode. Also takes care of caching.
         /// </summary>
@@ -316,7 +317,7 @@ namespace TVSPlayer {
         /// <param name="epId">TVDb id of Episode</param>
         /// <returns>BitmapImage with thumbnail or null in case of errors</returns>
         public static async Task<BitmapImage> GetEpisodeThumbnail(int id, int epId) {
-            return await Task.Run(async() => {
+            return await Task.Run(async () => {
                 Episode ep = GetEpisode(id, epId, true);
                 if (!String.IsNullOrEmpty(ep.thumbnail) && File.Exists(ep.thumbnail)) {
                     return await LoadImage(ep.thumbnail);
@@ -331,11 +332,16 @@ namespace TVSPlayer {
                 } else if (ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).Count() > 0) {
                     string file = ep.files.Where(x => x.Type == Episode.ScannedFile.FileType.Video).ToList()[0].NewName;
                     var ffmpeg = new FFMpegConverter();
+                    ffmpeg.FFMpegToolPath = Environment.GetFolderPath(SpecialFolder.ApplicationData);
                     string path = db + id + "\\Thumbnails\\" + ep.id + ".jpg";
-                    ffmpeg.GetVideoThumbnail(file, path, 5); 
-                    ep.thumbnail = path;
-                    EditEpisode(id, epId, ep);
-                    return await LoadImage(ep.thumbnail);
+                    try {
+                        ffmpeg.GetVideoThumbnail(file, path, 10);
+                        ep.thumbnail = path;
+                        EditEpisode(id, epId, ep);
+                        return await LoadImage(ep.thumbnail);
+                    } catch (FFMpegException) {
+
+                    }
                 }
                 return null;
             });

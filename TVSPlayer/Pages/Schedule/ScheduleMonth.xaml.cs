@@ -30,7 +30,7 @@ namespace TVSPlayer {
         Dictionary<Episode, Series> episodes;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            episodes = episodes.Where(x => DateTime.ParseExact(x.Key.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).Month == dateTime.Month && DateTime.ParseExact(x.Key.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).Year == dateTime.Year).ToDictionary(x => x.Key, x => x.Value);
+            episodes = episodes.Where(x => Helper.ParseAirDate(x.Key.firstAired).Month == dateTime.Month && Helper.ParseAirDate(x.Key.firstAired).Year == dateTime.Year).ToDictionary(x => x.Key, x => x.Value);
             GenerateResults();
 
         }
@@ -44,7 +44,7 @@ namespace TVSPlayer {
                     ScheduleDay sd = null;
                     if ((!(day < start) || week != 1) && current <= numberOfDays) {
                         dateTime = new DateTime(dateTime.Year, dateTime.Month, current);
-                        var eps = episodes.Where(x => DateTime.ParseExact(x.Key.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).Day == dateTime.Day).ToDictionary(x => x.Key, x => x.Value);
+                        var eps = episodes.Where(x => Helper.ParseAirDate(x.Key.firstAired).Day == dateTime.Day).ToDictionary(x => x.Key, x => x.Value);
                         sd = new ScheduleDay(eps);
                         int count = 0;
                         var se = eps.GroupBy(s => s.Value).Select(g => g.First()).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);

@@ -14,7 +14,8 @@ namespace TVSPlayer
     public static class APIExtensions {
 
         /// <summary>
-        /// Compares episode API values (not programmer added)
+        /// Compares episode API values (not custom added)
+        /// Only those values that are not empty in parameter are compared
         /// </summary>
         /// <param name="current"></param>
         /// <param name="episode"></param>
@@ -22,7 +23,7 @@ namespace TVSPlayer
         public static bool Compare(this Episode current, Episode episode) {
             var currentDictionary = GenerateDictionary(current);
             var dictionary = GenerateDictionary(episode);
-            var result = currentDictionary.Where(x => dictionary[x.Key] != x.Value && dictionary[x.Key] != null && dictionary["siteRating"] != "0").ToDictionary(x=>x.Key,x=>x.Value);
+            var result = currentDictionary.Where(x => dictionary[x.Key] != currentDictionary[x.Key] && !String.IsNullOrEmpty(dictionary[x.Key]) && x.Key != "siteRating").ToDictionary(x=>x.Key,x=>x.Value);
             return result.Count > 0 ? true : false;
         }
 
@@ -35,7 +36,7 @@ namespace TVSPlayer
         public static bool Compare(this Series current, Series series) {
             var currentDictionary = GenerateDictionary(current);
             var dictionary = GenerateDictionary(series);
-            var result = currentDictionary.Where(x => dictionary[x.Key] != x.Value).ToDictionary(x => x.Key, x => x.Value);
+            var result = currentDictionary.Where(x => dictionary[x.Key] != currentDictionary[x.Key]).ToDictionary(x => x.Key, x => x.Value);
             return result.Count > 0 ? true : false;
         }
 
@@ -48,7 +49,7 @@ namespace TVSPlayer
         public static bool Compare(this Actor current, Actor actor) {
             var currentDictionary = GenerateDictionary(current);
             var dictionary = GenerateDictionary(actor);
-            var result = currentDictionary.Where(x => dictionary[x.Key] != x.Value).ToDictionary(x => x.Key, x => x.Value);
+            var result = currentDictionary.Where(x => dictionary[x.Key] != currentDictionary[x.Key]).ToDictionary(x => x.Key, x => x.Value);
             return result.Count > 0 ? true : false;
         }
 
@@ -61,7 +62,7 @@ namespace TVSPlayer
         public static bool Compare(this Poster current, Poster poster) {
             var currentDictionary = GenerateDictionary(current);
             var dictionary = GenerateDictionary(poster);
-            var result = currentDictionary.Where(x => dictionary[x.Key] != x.Value).ToDictionary(x => x.Key, x => x.Value);
+            var result = currentDictionary.Where(x => dictionary[x.Key] != currentDictionary[x.Key]).ToDictionary(x => x.Key, x => x.Value);
             return result.Count > 0 ? true : false;
         }
 

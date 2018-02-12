@@ -98,14 +98,14 @@ namespace TVSPlayer {
             this.series = series;
             Panel.Children.Clear();
             var epi = Database.GetEpisodes(series.id);
-            int season = (int)epi.Where(x => !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).Max(x => x.airedSeason);
-            int episode = (int)epi.Where(x => x.airedSeason == season && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
+            int season = (int)epi.Where(x => !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedSeason);
+            int episode = (int)epi.Where(x => x.airedSeason == season && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
             this.episode = Database.GetEpisode(series.id, season, episode);
             EpisodeInput.Text = episode.ToString();
             SeasonInput.Text = season.ToString();
             EpisodeInput.TextChanged += async (s, ev) => {
                 if (!String.IsNullOrEmpty(SeasonInput.Text) && Int32.TryParse(SeasonInput.Text, out int result)) {
-                    int ep = (int)epi.Where(x => x.airedSeason == result && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
+                    int ep = (int)epi.Where(x => x.airedSeason == result && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
                     if (!(await IsBetween(EpisodeInput.Text, ep))) {
                         EpisodeInput.Text = "";
                         this.episode = null;
@@ -163,7 +163,10 @@ namespace TVSPlayer {
                     torrents = await Torrent.Search(series, episode);
                 }
                 foreach (var item in tq) {
-                    torrents.AddRange(await Torrent.Search(series, episode, item));
+                    var result = await Torrent.Search(series, episode, item);
+                    if (result != null) {
+                        torrents.AddRange(result);
+                    }
                 }
                 torrents = torrents.OrderByDescending(x => x.Seeders).ToList();
                 MainWindow.RemovePage();

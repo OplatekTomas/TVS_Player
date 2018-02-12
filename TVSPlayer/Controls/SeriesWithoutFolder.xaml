@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVSPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="1280" x:Name="MainPart">
+             d:DesignHeight="70" d:DesignWidth="1280" x:Name="MainPart">
     <UserControl.Resources>
         <Storyboard x:Key="OpenDetails">
             <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,400" AccelerationRatio="0.5" DecelerationRatio="0.5" Duration="0:0:0:0.25"></ThicknessAnimation>
@@ -25,7 +25,9 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Text="Game of thrones" FontSize="26" Margin="5,-1,0,0" />
+        <TextBlock x:Name="SeriesName" Foreground="{DynamicResource TextColor}" VerticalAlignment="Top" Text="Game of thrones" FontSize="26" Margin="5,5,100,0" />
+        <TextBlock x:Name="ReleaseDate" Foreground="{DynamicResource TextColor}" VerticalAlignment="Bottom" Text="Release date: " FontSize="18" Margin="7,5,100,5" />
+
         <Grid VerticalAlignment="Center" HorizontalAlignment="Right" Width="30" Height="30" x:Name="Confirm" MouseEnter="Detail_MouseEnter" MouseLeave="Detail_MouseLeave">
             <Image Source="{DynamicResource ForwardIcon}" />
         </Grid>

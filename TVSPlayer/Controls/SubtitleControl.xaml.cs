@@ -13,15 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TVSPlayer
-{
+namespace TVSPlayer {
     /// <summary>
-    /// Interaction logic for BlankPage.xaml
+    /// Interaction logic for SubtitleControl.xaml
     /// </summary>
-    public partial class BlankPage : Page
-    {
-        public BlankPage(){
+    public partial class SubtitleControl : UserControl {
+        public SubtitleControl() {
             InitializeComponent();
+        }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Grid_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
         }
     }
 }

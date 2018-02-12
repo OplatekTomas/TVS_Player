@@ -14,6 +14,9 @@
         <Storyboard x:Key="GoAway">
             <DoubleAnimation To="0" Storyboard.TargetProperty="Width" Duration="0:0:0:0.30" AccelerationRatio="0.5" DecelerationRatio="0.5" />
         </Storyboard>
+        <Storyboard x:Key="BlurImage">
+            <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="ImageEffect" DecelerationRatio="0.9" Duration="0:0:0.300" />
+        </Storyboard>
     </Page.Resources>
     <Grid Background="{DynamicResource BackgroundBrush}" Loaded="Grid_Loaded">
         <Grid.RowDefinitions>
@@ -21,6 +24,13 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
+        <Image x:Name="BackgroundImage" Grid.RowSpan="3" Margin="-100" Opacity="0" RenderOptions.BitmapScalingMode="NearestNeighbor" >
+            <Image.Effect>
+                <BlurEffect Radius="0" RenderingBias="Performance" x:Name="ImageEffect" />
+            </Image.Effect>
+        </Image>
+        <Grid Grid.RowSpan="3" Background="#CC202020" Visibility="Hidden" x:Name="Darkener" Opacity="1" />
+
         <Grid HorizontalAlignment="Left" Margin="6,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
             <Image Source="{DynamicResource BackIcon}" />
         </Grid>
@@ -34,41 +44,48 @@
                     <DropShadowEffect Opacity="0.5" />
                 </Image.Effect>
             </Image>
-            <Grid Grid.Column="2" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="showName" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
-                <TextBlock x:Name="genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
-                <TextBlock x:Name="rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
-                <StackPanel>
-                    <TextBlock  Text="Schedule:" Margin="0,75,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Network:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Status:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Premiered:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Episode Length:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Rating:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock  Text="Summary:" Margin="0,10,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <TextBlock x:Name="schedule" Margin="0,75,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock x:Name="network" Text="HBO" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock x:Name="stat" Text="Running" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock x:Name="prem" Text="12.01.0354" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock x:Name="len" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                    <TextBlock x:Name="agerating" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
-                </StackPanel>
-                <Grid Grid.ColumnSpan="2">
-                    <ScrollViewer Margin="0,235,15,0" VerticalScrollBarVisibility="Visible">
-                        <ScrollViewer.Resources>
-                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
-                        </ScrollViewer.Resources>
-                        <TextBlock x:Name="summary" TextWrapping="Wrap" Text="Summary:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" Margin="0,0,5,0" />
-                    </ScrollViewer>
+            <ScrollViewer Grid.Column="2" Margin="10">
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
+                </ScrollViewer.Resources>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="225"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="ShowName" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" MouseUp="showName_MouseUp" TextDecorations="Underline" Text="SampleShowName" FontSize="22" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                    <TextBlock x:Name="Genres"  Margin="0,30" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                    <TextBlock x:Name="Rating" Text="9.3/10" Margin="10,0" HorizontalAlignment="Right" FontSize="18" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="3" />
+                    <StackPanel>
+                        <TextBlock  Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Schedule:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Network:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Status:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Premiered:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Episode Length:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Rating:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock  Text="Summary:" Margin="0,10,0,0" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock  x:Name="NextDate" Text="Next episode:" Margin="0,75,0,0" FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Schedule" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Network" Text="HBO" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Stat" Text="Running" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Prem" Text="12.01.0354" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Len" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="SeasonCount"  Text="Number of seasons: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="EpisodeCount"  Text="Number of episodes: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="EpisodesOffline"  Text="Episodes available offline: " FontSize="16" Foreground="#F5F5F5" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="Agerating" Text="60 minutes" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" />
+                    </StackPanel>
+                    <Grid Grid.ColumnSpan="2">
+                        <TextBlock x:Name="Summary" TextWrapping="Wrap" Text="Summary:" FontSize="16" Foreground="{DynamicResource TextColor}" Grid.ColumnSpan="2" Margin="0,320,15,0" />
+                    </Grid>
                 </Grid>
-            </Grid>
+            </ScrollViewer>
         </Grid>
         <Grid Grid.Row="2" Margin="0,0,0,20">
             <Grid x:Name="RightArrow" MouseLeftButtonUp="RightArrow_MouseLeftButtonUp" HorizontalAlignment="Left" Width="0" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">

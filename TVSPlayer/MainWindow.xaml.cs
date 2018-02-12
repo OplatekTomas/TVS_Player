@@ -119,6 +119,7 @@ namespace TVSPlayer {
         }
         Dimensions dimensions;
         PlayerState currentState = PlayerState.Normal;
+
         public static void SwitchState(PlayerState state ,bool reset = false) {
             Window main = Application.Current.MainWindow;
             ((MainWindow)main).ViewSwitcher(state ,reset);
@@ -192,6 +193,11 @@ namespace TVSPlayer {
         public static string GetSearchBarText() {
             Window main = Application.Current.MainWindow;
             return ((MainWindow)main).SearchBox.Text;
+        }
+
+        public static string GetCurrentFrameContentName() {
+            Window main = Application.Current.MainWindow;
+            return ((MainWindow)main).ActiveContent.Content.GetType().Name;
         }
 
         /// <summary>
@@ -300,8 +306,11 @@ namespace TVSPlayer {
                 SearchBox.TextChanged -= lastHandler;
             }
             if (custom.SearchBarEvent != null) {
+                SearchButton.Visibility = Visibility.Visible;
                 lastHandler = custom.SearchBarEvent;
                 SearchBox.TextChanged += custom.SearchBarEvent;
+            } else {
+                SearchButton.Visibility = Visibility.Collapsed;
             }
             if (custom.Buttons != null) {
                 CustomContent.Children.RemoveRange(0, CustomContent.Children.Count);
@@ -366,21 +375,21 @@ namespace TVSPlayer {
         private void SettingsSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new SettingsPage());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = DownloadsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = DownloadsSelected.Opacity = StatisticsSelected.Opacity = 0;
             SettingsSelected.Opacity = 1;
         }
 
         private void AboutSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new AboutView());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = DownloadsSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = DownloadsSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             AboutSelected.Opacity = 1;
         }
 
         private void ScheduleSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new Schedule());
             HideSideBar();
-            LibrarySelected.Opacity = DownloadsSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = DownloadsSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             ScheduleSelected.Opacity = 1;
         }
 
@@ -391,8 +400,15 @@ namespace TVSPlayer {
         private void DownloadsSidebar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             SetPage(new DownloadsView());
             HideSideBar();
-            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = StatisticsSelected.Opacity = 0;
             DownloadsSelected.Opacity = 1;
+        }
+
+        private void StatisticsSideBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SetPage(new Statistics());
+            HideSideBar();
+            LibrarySelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = DownloadsSelected.Opacity = 0;
+            StatisticsSelected.Opacity = 1;
         }
 
         private void SideButton_MouseEnter(object sender, MouseEventArgs e) {
@@ -407,7 +423,7 @@ namespace TVSPlayer {
             SetPage(new Library());
             HideSideBar();
             LibrarySelected.Opacity = 1;
-            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity = 0;
+            DownloadsSelected.Opacity = ScheduleSelected.Opacity = AboutSelected.Opacity = SettingsSelected.Opacity  = StatisticsSelected.Opacity = 0;
         }
 
         #endregion
@@ -497,39 +513,33 @@ namespace TVSPlayer {
                 Thread.Sleep(500);
             });
             //This code runs after all API calls are done and stuff is saved
-            ProgressBarPage prog = new ProgressBarPage(ids.Count);
-            AddPage(prog);
-            total = 0;
-            await Task.Run(() => {
-                List<Series> seriesList = Database.GetSeries();
-                foreach (Series series in seriesList) {
-                    Renamer.FindAndRename(series);
-                    Dispatcher.Invoke(new Action(() => {
-                        total++;
-                        prog.SetValue(total);
-                    }), DispatcherPriority.Send);
-                }
-                Thread.Sleep(1000);
-            });
+            PleaseWait pleaseWait = new PleaseWait();
+            AddPage(pleaseWait);
+            var seriesList = Database.GetSeries().Where(x => ids.Any(y => y.Item1 == x.id)).ToList();
+            await Renamer.ScanAndRename(seriesList);
+            RemoveAllPages();
             SetPage(new Library());
         }
 
         private async void TestFunctions() {
-            var torr = await Torrent.SearchSingle(Database.GetSeries(295685), Database.GetEpisode(295685, 3, 8), TorrentQuality.HD);
-            TorrentDownloader td = new TorrentDownloader(torr);
-            td.Stream();
+            var series = Database.GetSeries(121361);
+            var episode = Database.GetEpisode(121361, 6, 10);
+            await Torrent.Search(series, episode);
+            //await UpdateApplication.CheckForUpdates();
         }
 
-
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) {
+            if (true) { 
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
                 } else {
                     Settings.Load();
+                    UpdateApplication.StartUpdate();
+                    UpdateApplication.CheckForUpdates();
                     if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
+                        Helper.SetPerformanceMode();
                         Settings.LastCheck = DateTime.Now;
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {
@@ -570,7 +580,7 @@ namespace TVSPlayer {
                 try {
                     LocalPlayer player = (LocalPlayer)((Frame)ContentOnTop.Children[ContentOnTop.Children.Count - 1]).Content;
                     player.episode.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
-                    player.episode.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    player.episode.finished = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                     Database.EditEpisode(player.series.id, player.episode.id, player.episode);
                     player.Player.Stop();
                     player.Player.Close();
@@ -579,7 +589,7 @@ namespace TVSPlayer {
                     var series = Database.GetSeries(player.downloader.TorrentSource.Series.id);
                     var ep = Database.GetEpisode(player.downloader.TorrentSource.Series.id, player.downloader.TorrentSource.Episode.id);
                     ep.continueAt = player.Player.MediaPosition - 50000000 > 0 ? player.Player.MediaPosition - 50000000 : 0;
-                    ep.finised = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
+                    ep.finished = player.Player.MediaDuration - 3000000000 < player.Player.MediaPosition ? true : false;
                     if (player.downloader.Status.IsSeeding) {
                         player.downloader.StopAndMove();
                     } else {
@@ -599,8 +609,9 @@ namespace TVSPlayer {
             }
         }
 
-
-
+        private void Logo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://github.com/Kaharonus/TVS-Player/");
+        }
     }
 
     

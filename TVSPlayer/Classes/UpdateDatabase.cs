@@ -16,7 +16,7 @@ namespace TVSPlayer
         /// Starts checking if all files are where they are supposed to be and if database is updated
         /// </summary>
         public async static void StartUpdateBackground(bool startNow = true) {
-            if (!startNow) {
+            if (startNow) {
                 await CheckFiles();
                 await Update();
             }
@@ -53,23 +53,19 @@ namespace TVSPlayer
         /// <returns></returns>
         public async static Task Update() {
             if (Settings.LastCheck.AddDays(1).Date <= DateTime.Now.Date) {
-                await Task.Run(() => {
+                await Task.Run(async () => {
                     List<int> ids = Series.GetUpdates(Settings.LastCheck);
                     List<Series> series = Database.GetSeries();
                     ids = ids.Where(x => series.Any(y => y.id == x)).ToList();
                     foreach (int id in ids) {
-                        UpdateFullSeries(id);
+                       await UpdateFullSeries(id);
                     }
                 });
-                await DownloadLastWeek();
-                await Task.Run(() => {
-                    foreach (Series series in Database.GetSeries()) {
-                        Renamer.FindAndRename(series);
-                    }
-                });
+                await DownloadLastWeek();             
                 Settings.LastCheck = DateTime.Now;
             }
-        }
+            await Renamer.ScanAndRename(Database.GetSeries());
+         }
 
         private async static Task DownloadLastWeek() {
             await Task.Run(async() => {
@@ -77,7 +73,7 @@ namespace TVSPlayer
                 var episodes = new Dictionary<Series,List<Episode>>();
                 foreach (var se in series) {
                     //adds episodes that dont have files and have been released in last week
-                    episodes.Add(se, Database.GetEpisodes(se.id).Where(x => x.files.Count == 0 && !String.IsNullOrEmpty(x.firstAired) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture) > DateTime.Now.AddDays(-7) && DateTime.ParseExact(x.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).AddDays(1) < DateTime.Now).ToList());
+                    episodes.Add(se, Database.GetEpisodes(se.id).Where(x => x.files.Count == 0 && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired) > DateTime.Now.AddDays(-7) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).ToList());
                 }
                 foreach (var combination in episodes) {
                     foreach (var episode in combination.Value) {
@@ -91,8 +87,11 @@ namespace TVSPlayer
             });
         }
 
+        public async static Task UpdateFullSeries(Series series) {
+            await UpdateFullSeries(series.id);
+        }
 
-        private async static Task UpdateFullSeries(int id) {
+        public async static Task UpdateFullSeries(int id) {
             await Task.Run(() => {
                 List<Task> tasks = new List<Task>();
                 tasks.Add(UpdateSeries(id));
@@ -117,8 +116,9 @@ namespace TVSPlayer
         private static async Task UpdateEpisodes(int id) {
             await Task.Run(() => {
                 var list = Episode.GetEpisodes(id);
+                var oldList = Database.GetEpisodes(id);
                 foreach (var episode in list) {
-                    var ep = Database.GetEpisode(id, episode.id);
+                    var ep = oldList.Where(x => x.id == episode.id).FirstOrDefault();
                     if (ep != null) {
                         if (ep.Compare(episode)) {
                             ep.Update(episode);
@@ -134,8 +134,9 @@ namespace TVSPlayer
         private static async Task UpdateActors(int id) {
             await Task.Run(() => {
                 var list = Actor.GetActors(id);
+                var oldList = Database.GetActors(id);
                 foreach (var actor in list) {
-                    var ac = Database.GetActor(id, actor.id);
+                    var ac = oldList.Where(x => x.id == actor.id).FirstOrDefault();
                     if (ac != null) {
                         if (ac.Compare(actor)) {
                             ac.Update(actor);
@@ -152,8 +153,9 @@ namespace TVSPlayer
         private static async Task UpdatePosters(int id) {
             await Task.Run(() => {
                 var list = Poster.GetPosters(id);
+                var oldList = Database.GetPosters(id);
                 foreach (var poster in list) {
-                    var po = Database.GetPoster(id,poster.id);
+                    var po = oldList.Where(x => x.id == poster.id).FirstOrDefault();
                     if (po != null) {
                         if (po.Compare(poster)) {
                             po.Update(poster);
@@ -163,7 +165,9 @@ namespace TVSPlayer
                         Database.AddPoster(id, poster);
                     }
                 }
-
+                //Remove results that got deleted
+                oldList.Where(x => !list.Any(y => y.id == x.id)).ToList().ForEach(x =>
+                                Database.RemovePoster(id, x.id));
             });
         }
 

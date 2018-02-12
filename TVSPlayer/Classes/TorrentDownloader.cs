@@ -6,7 +6,6 @@ using Ragnar;
 using System.Threading.Tasks;
 using Ookii.Dialogs.Wpf;
 using Microsoft.Win32;
-using Ragnar;
 using System.Threading;
 using TVS.Notification;
 using System.Windows.Threading;
@@ -15,6 +14,7 @@ using System.IO;
 using TVS.API;
 using static TVS.API.Episode;
 using System.Windows;
+using HtmlAgilityPack;
 
 namespace TVSPlayer {
     public class TorrentDownloader {
@@ -83,6 +83,14 @@ namespace TVSPlayer {
         /// </summary>
         /// <returns></returns>
         public async Task<TorrentDownloader> Download() {
+            if (String.IsNullOrEmpty(TorrentSource.Magnet)) { 
+                await Task.Run(() => {
+                    HtmlWeb htmlWeb = new HtmlWeb();
+                    HtmlDocument htmlDocument = htmlWeb.Load(TorrentSource.URL);
+                    List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
+                    TorrentSource.Magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;
+                });
+            }
             var torrs = torrents.Where(x => x.TorrentSource.Magnet == TorrentSource.Magnet).ToList();
             if (torrs.Count == 0) {
                 var downloader = await Task.Run(() => {
@@ -179,9 +187,9 @@ namespace TVSPlayer {
         /// <summary>
         /// Stops torrent and moves it to the right directory
         /// </summary>
-        public void StopAndMove() {
+        public async void StopAndMove() {
             TorrentSource.Name = Handle.TorrentFile.Name;
-            Renamer.MoveAfterDownload(this);
+            await Renamer.RenameAfterDownload(this);
             TorrentSource.FinishedAt = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
             TorrentSource.HasFinished = true;
             TorrentDatabase.Edit(TorrentSource.Magnet, TorrentSource);

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using TVS.API;
 using TVS.Notification;
@@ -28,21 +29,27 @@ namespace TVSPlayer
     /// </summary>
     public partial class EpisodeDetails : UserControl
     {
-        public EpisodeDetails(Episode episode)
+        public EpisodeDetails(Episode episode, bool showBackButton = true)
         {
             InitializeComponent();
             this.episode = episode;
+            showBack = showBackButton;
+
         }
 
+        bool showBack;
         Episode episode;
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
-            EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
-            EPName.Text = EpisodeName.Text = episode.episodeName;
+            if (showBack) {
+                Back.Visibility = Visibility.Visible;
+                EpisodeThumb.Source = await Database.GetEpisodeThumbnail(Int32.Parse(episode.seriesId.ToString()), episode.id);
+            }
             Season.Text = Helper.GenerateName(episode);
             Rating.Text = episode.siteRating + "/10";
+            EpisodeName.Text = episode.episodeName;
             if (!String.IsNullOrEmpty(episode.firstAired)) {
-                Airdate.Text = DateTime.ParseExact(episode.firstAired, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd. MM. yyyy");
+                Airdate.Text =Helper.ParseAirDate(episode.firstAired).ToString("dd. MM. yyyy");
             }
             Writers.Text = null;
             for (int i = 0; i < episode.writers.Count; i++) {
@@ -69,6 +76,7 @@ namespace TVSPlayer
                 }
             }
             if (episode.files.Count > 0) {
+                Downloaded.Text = "No";
                 foreach (var item in episode.files) {
                     if (item.Type == TVS.API.Episode.ScannedFile.FileType.Video) {
                         Downloaded.Text = "Yes";
@@ -77,6 +85,11 @@ namespace TVSPlayer
                 }
             }
             Overview.Text = episode.overview;
+            if (episode.continueAt > 0) {
+                Continue.Text = Helper.GetTime(episode.continueAt);
+            } else {
+                Continue.Text = "-";
+            }
         }
 
         private void EPName_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -104,10 +117,6 @@ namespace TVSPlayer
 
         private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             ScrollView.ReleaseMouseCapture();
-        }
-
-        private void BackIcon_MouseUp(object sender, MouseButtonEventArgs e) {
-
         }
 
         private async void Play_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
@@ -141,7 +150,8 @@ namespace TVSPlayer
 
         private async void Download_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.AddPage(new PleaseWait());
-            Torrent torrent = await Torrent.SearchSingle(Database.GetSeries((int)episode.seriesId), episode, Settings.DownloadQuality);
+            var ser = Database.GetSeries((int)episode.seriesId);
+            Torrent torrent = await Torrent.SearchSingle(ser, episode, Settings.DownloadQuality);
             if (torrent != null) {
                 TorrentDownloader downloader = new TorrentDownloader(torrent);
                 await downloader.Download();
@@ -195,6 +205,123 @@ namespace TVSPlayer
             MainWindow.RemovePage();
             TorrentDownloader td = new TorrentDownloader(tor);
             await td.Stream();
+        }
+
+        private void NextEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var episodes = Database.GetEpisodes((int)episode.seriesId);
+            var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
+            Episode newEp = null;
+            if (highestEp == episode.airedEpisodeNumber) {
+                newEp = episodes.Where(x => x.airedSeason == episode.airedSeason + 1 && x.airedEpisodeNumber == 1).FirstOrDefault();
+            } else {
+                newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber + 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+            }
+            if (newEp != null) {
+                SeriesEpisodes.SetDetails(newEp);
+            }
+        }
+
+        private void PreviousEpisode_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (!(episode.airedSeason == 1 && episode.airedEpisodeNumber == 1)) { 
+                var episodes = Database.GetEpisodes((int)episode.seriesId);
+                Episode newEp = null;
+                if (1 == episode.airedEpisodeNumber) {
+                    var highestEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1).Max(x => x.airedEpisodeNumber);
+                    newEp = episodes.Where(x => x.airedSeason == episode.airedSeason - 1 && x.airedEpisodeNumber == highestEp).FirstOrDefault();
+                } else {
+                    newEp = episodes.Where(x => x.airedEpisodeNumber == episode.airedEpisodeNumber - 1 && x.airedSeason == episode.airedSeason).FirstOrDefault();
+                }
+                if (newEp != null) {
+                    SeriesEpisodes.SetDetails(newEp);
+                }
+            }
+        }
+
+        private void Back_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SeriesEpisodes.TryRefresh();
+        }
+
+        private void Subtitles_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SubsPanel.Children.Clear();
+            var sb = (Storyboard)FindResource("OpacityDown");
+            var up = (Storyboard)FindResource("OpacityUp");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                up.Begin(SubtitlesContent);
+                SubtitlesContent.Visibility = Visibility.Visible;
+                DetailsContent.Visibility = Visibility.Collapsed;
+                Task.Run(async () => {
+                    var file = episode.files.Where(x => x.Type == ScannedFile.FileType.Video).FirstOrDefault();
+                    if (file != null) {
+                        Dispatcher.Invoke(() => { FileName.Text = String.IsNullOrEmpty(file.OriginalName) ? Path.GetFileNameWithoutExtension(file.NewName) : Path.GetFileNameWithoutExtension(file.OriginalName); });
+                        var list = await Subtitles.GetSubtitles(file);
+                        if (list.Count > 0) {
+                            Dispatcher.Invoke(() => {
+                                StatusText.Visibility = Visibility.Collapsed;
+                            });
+                        } else {
+                            Dispatcher.Invoke(() => {
+                                StatusText.Text = "No results";
+                            });
+                        }
+                        foreach (var item in list) {
+                            Dispatcher.Invoke(() => {
+                                SubtitleControl sc = new SubtitleControl() { Opacity = 0, Height = 60 };
+                                sc.Lang.Text += item.Language;
+                                sc.Version.Text += item.Version;
+                                sc.Download.MouseLeftButtonUp += (sa, eva) => DownloadSubs(item.DownloadLink);
+                                SubsPanel.Children.Add(sc);
+                                up.Begin(sc);
+                            });
+                            await Task.Delay(16);
+                        }
+                    } else {
+                        Dispatcher.Invoke(() => {
+                            StatusText.Text = "No video files";
+                        });
+                    }
+                });
+            };
+            clone.Begin(DetailsContent);
+        }
+
+        private async void DownloadSubs(HttpWebRequest request) {
+            HttpWebResponse result = (HttpWebResponse)(await request.GetResponseAsync());
+            StreamReader reader = new StreamReader(result.GetResponseStream());
+            string text = await reader.ReadToEndAsync();
+            reader.Close();
+            var tempFile = Path.GetTempPath() + "\\TVSTemp.srt";
+            File.WriteAllText(tempFile, text,Encoding.GetEncoding(result.CharacterSet));
+            await Renamer.RenameSingle(tempFile, Database.GetSeries((int)episode.seriesId), episode);            
+        }
+
+        private void SubtitlesBack_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            SubsPanel.Children.Clear();
+            var sb = (Storyboard)FindResource("OpacityDown");
+            var clone = sb.Clone();
+            clone.Completed += (s, ev) => {
+                SubtitlesContent.Visibility = Visibility.Collapsed;
+                DetailsContent.Visibility = Visibility.Visible;
+                var up = (Storyboard)FindResource("OpacityUp");
+                up.Begin(DetailsContent);
+
+            };
+            clone.Begin(SubtitlesContent);
+        }
+
+        private async void MarkAllPrevious_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            var result = await MessageBox.Show("Mark all previous episodes including this one as watched?","",MessageBoxButtons.YesNoCancel);
+            if (result == MessageBoxResult.Yes) {
+                var serId = (int)episode.seriesId;
+                var episodes = Database.GetEpisodes(serId);
+                var thisSeason = episodes.Where(x => x.airedSeason == episode.airedSeason && x.airedEpisodeNumber <= episode.airedEpisodeNumber);
+                episodes = episodes.Where(x => x.airedSeason < episode.airedSeason).ToList();
+                episodes.AddRange(thisSeason);
+                foreach (var episode in episodes) {
+                    episode.finished = true;
+                    Database.EditEpisode(serId, episode.id, episode);
+                }
+            }
         }
     }
 }

@@ -62,10 +62,7 @@ namespace TVSPlayer {
                     if (t.Name.Contains("2160p")) {
                         t.Quality = TorrentQuality.UHD;
                     }
-                    t.URL = url = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
-                    htmlDocument = htmlWeb.Load(url);
-                    List<HtmlNode> a = htmlDocument.DocumentNode.SelectNodes("//ul").ToList();
-                    t.Magnet = a[5].ChildNodes[7].ChildNodes[0].Attributes[1].Value;
+                    t.URL = "http://1337x.to" + row.ChildNodes[1].ChildNodes[1].Attributes[0].Value;
                     t.Seeders = Int32.Parse(row.ChildNodes[3].InnerText);
                     t.Leech = Int32.Parse(row.ChildNodes[5].InnerText);
                     t.Size = row.ChildNodes[9].ChildNodes[0].InnerText;
@@ -85,7 +82,7 @@ namespace TVSPlayer {
         /// <param name="quality">Quality to search for</param>
         /// <returns></returns>
         public async static Task<List<Torrent>> Search(Series series, Episode episode, TorrentQuality quality) {
-            return (await Search(series, episode)).Where(x => x.Quality == quality).ToList();
+            return (await Search(series, episode))?.Where(x => x.Quality == quality).ToList();
         }
 
         /// <summary>
@@ -95,7 +92,7 @@ namespace TVSPlayer {
         /// <param name="episode">Episode to search for</param>
         /// <returns>The one with most seeders</returns>
         public async static Task<Torrent> SearchSingle(Series series, Episode episode) {
-            return (await Search(series, episode)).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            return (await Search(series, episode))?.OrderByDescending(x => x.Seeders).FirstOrDefault();
         }
 
         /// <summary>
@@ -106,8 +103,11 @@ namespace TVSPlayer {
         /// <param name="quality">Quality to search for</param>
         /// <returns>The one with most seeders</returns>
         public async static Task<Torrent> SearchSingle(Series series, Episode episode, TorrentQuality quality) {
-            var tor = (await Search(series, episode)).Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
-            return tor;
+            var tor = await Search(series, episode);
+            if (tor != null) {
+                return tor.Where(x => x.Quality == quality).OrderByDescending(x => x.Seeders).FirstOrDefault();
+            }
+            return null;
         }
 
         private static string GetUrl(string show, int? season, int? episode) {
