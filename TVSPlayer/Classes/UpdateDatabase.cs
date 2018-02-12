@@ -87,8 +87,11 @@ namespace TVSPlayer
             });
         }
 
+        public async static Task UpdateFullSeries(Series series) {
+            await UpdateFullSeries(series.id);
+        }
 
-        private async static Task UpdateFullSeries(int id) {
+        public async static Task UpdateFullSeries(int id) {
             await Task.Run(() => {
                 List<Task> tasks = new List<Task>();
                 tasks.Add(UpdateSeries(id));
@@ -110,13 +113,13 @@ namespace TVSPlayer
             });
         }
 
-        public static async Task UpdateEpisodes(int id) {
+        private static async Task UpdateEpisodes(int id) {
             await Task.Run(() => {
                 var list = Episode.GetEpisodes(id);
+                var oldList = Database.GetEpisodes(id);
                 foreach (var episode in list) {
-                    var ep = Database.GetEpisode(id, episode.id);
+                    var ep = oldList.Where(x => x.id == episode.id).FirstOrDefault();
                     if (ep != null) {
-                        if (ep.airedSeason == 3 && ep.airedEpisodeNumber == 5) { }
                         if (ep.Compare(episode)) {
                             ep.Update(episode);
                             Database.EditEpisode(id, ep.id, ep);
@@ -131,8 +134,9 @@ namespace TVSPlayer
         private static async Task UpdateActors(int id) {
             await Task.Run(() => {
                 var list = Actor.GetActors(id);
+                var oldList = Database.GetActors(id);
                 foreach (var actor in list) {
-                    var ac = Database.GetActor(id, actor.id);
+                    var ac = oldList.Where(x => x.id == actor.id).FirstOrDefault();
                     if (ac != null) {
                         if (ac.Compare(actor)) {
                             ac.Update(actor);
@@ -149,8 +153,9 @@ namespace TVSPlayer
         private static async Task UpdatePosters(int id) {
             await Task.Run(() => {
                 var list = Poster.GetPosters(id);
+                var oldList = Database.GetPosters(id);
                 foreach (var poster in list) {
-                    var po = Database.GetPoster(id,poster.id);
+                    var po = oldList.Where(x => x.id == poster.id).FirstOrDefault();
                     if (po != null) {
                         if (po.Compare(poster)) {
                             po.Update(poster);
@@ -160,7 +165,9 @@ namespace TVSPlayer
                         Database.AddPoster(id, poster);
                     }
                 }
-
+                //Remove results that got deleted
+                oldList.Where(x => !list.Any(y => y.id == x.id)).ToList().ForEach(x =>
+                                Database.RemovePoster(id, x.id));
             });
         }
 

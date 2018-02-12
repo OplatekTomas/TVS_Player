@@ -286,12 +286,12 @@ namespace TVSPlayer
         }
 
         private async void DownloadSubs(HttpWebRequest request) {
-            var result = await request.GetResponseAsync();
+            HttpWebResponse result = (HttpWebResponse)(await request.GetResponseAsync());
             StreamReader reader = new StreamReader(result.GetResponseStream());
             string text = await reader.ReadToEndAsync();
             reader.Close();
             var tempFile = Path.GetTempPath() + "\\TVSTemp.srt";
-            File.WriteAllText(tempFile, text);
+            File.WriteAllText(tempFile, text,Encoding.GetEncoding(result.CharacterSet));
             await Renamer.RenameSingle(tempFile, Database.GetSeries((int)episode.seriesId), episode);            
         }
 

@@ -522,11 +522,11 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            await UpdateApplication.CheckForUpdates();
+            //await UpdateApplication.CheckForUpdates();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
-            if (true) { 
+            if (false) { 
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
                     AddPage(new StartupInternetError());
