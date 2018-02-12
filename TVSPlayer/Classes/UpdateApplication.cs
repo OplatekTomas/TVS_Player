@@ -23,7 +23,7 @@ namespace TVSPlayer {
                     var response = wc.DownloadString("https://api.github.com/repos/Kaharonus/TVS-Player/releases");
                     var jo = JArray.Parse(response).OrderByDescending(x => x["published_at"]).FirstOrDefault();
                     var newDate = DateTime.Parse(jo["published_at"].ToString());
-                    if (GetBuildDateTime().AddDays(-1) < newDate) {
+                    if (GetBuildDateTime() < newDate) {
                         Settings.UpdateOnStartup = true;
                         NotificationSender sender = new NotificationSender("Update available: \"" + jo["tag_name"] + "\"", "Update will be installed on next application launch. Click here to update now");
                         sender.ClickedEvent += (s, ev) => {
