@@ -128,7 +128,7 @@ namespace TVSPlayerUpdater {
 
         private void DownloadCompleted(string orig) {          
             Dispatcher.Invoke(() => { CurrentText.Text = "Extracting update"; });
-            MessageBox.Show("...");
+            //MessageBox.Show("...");
             DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(orig));
             foreach (FileInfo file in di.GetFiles()) {
                 file.Delete();
@@ -162,7 +162,7 @@ namespace TVSPlayerUpdater {
             var list = serializer.Deserialize<List<string[]>>(temp);
             var onStartup = list.Where(x => x[0] == "updateOnStartup").FirstOrDefault();
             int indexStartup = list.IndexOf(onStartup);
-            onStartup[1] = "false";
+            onStartup[1] = "False";
             list[indexStartup] = onStartup;
             string json = serializer.Serialize(list);
             File.WriteAllText(settingsPath, json);
