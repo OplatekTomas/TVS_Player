@@ -60,7 +60,7 @@
                             <ScrollViewer.Resources>
                                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" ></Style>
                             </ScrollViewer.Resources>
-                            <Grid Width="450">
+                            <Grid Width="550">
                                 <TextBlock x:Name="StatusText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#F5F5F5" FontSize="18" Text="Loading"></TextBlock>
                                 <StackPanel Orientation="Vertical" x:Name="SubsPanel">
                                 </StackPanel>
