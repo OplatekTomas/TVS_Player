@@ -58,6 +58,7 @@ namespace TVSPlayer {
                         }
                         var files = FilterSeries(torrent.TorrentSource.Series, GetFilesInDirectory(path));
                         var episode = Database.GetEpisode(torrent.TorrentSource.Series.id, torrent.TorrentSource.Episode.id);
+                        files.ForEach(x => x.episode = episode);
                         foreach (var item in files) {
                             var result = await Rename(item);
                             episode = AddToDatabase(episode, result);

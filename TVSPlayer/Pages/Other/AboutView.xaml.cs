@@ -14,15 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TVSPlayer
-{
+namespace TVSPlayer {
     /// <summary>
     /// Interaction logic for AboutView.xaml
     /// </summary>
-    public partial class AboutView : Page
-    {
-        public AboutView()
-        {
+    public partial class AboutView : Page {
+        public AboutView() {
             InitializeComponent();
         }
 
@@ -196,6 +193,10 @@ namespace TVSPlayer
 
         private void TextBlock_MouseUp_40(object sender, MouseButtonEventArgs e) {
             Process.Start("https://www.ikriv.com/dev/wpf/MathConverter/");
+        }
+
+        private void TextBlock_MouseUp_39(object sender, MouseButtonEventArgs e) {
+            Process.Start("https://github.com/morelinq/MoreLINQ");
         }
     }
 }
