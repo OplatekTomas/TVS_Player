@@ -28,9 +28,17 @@ namespace TVSPlayer {
         public static List<Series> GetSeries() {
             string original = ReadFromFile(Helper.data + "Series.tvsp");
             List<Series> list = new List<Series>();
-            if (!String.IsNullOrEmpty(original)) {
-                JArray jo = JArray.Parse(original);
-                list = jo.ToObject<List<Series>>();
+            int count = 0;
+            while (count < 3) {
+                if (!String.IsNullOrEmpty(original)) {
+                    try {
+                        JArray jo = JArray.Parse(original);
+                        list = jo.ToObject<List<Series>>();
+                        break;
+                    } catch (JsonReaderException) { }
+                }
+                original = RecoverFile(db + "Series.tvsp");
+                count++;
             }
             return list.OrderBy(s => s.seriesName).ToList();
         }
@@ -138,11 +146,19 @@ namespace TVSPlayer {
         public static List<Episode> GetEpisodes(int id) {
             string orig = ReadFromFile(db + id + "\\Episodes.tvsp");
             List<Episode> eps = new List<Episode>();
-            if (!String.IsNullOrEmpty(orig)) {
-                JArray jo = JArray.Parse(orig);
-                eps = jo.ToObject<List<Episode>>();
+            int count = 0;
+            while (count < 3) {
+                if (!String.IsNullOrEmpty(orig)) {
+                    try {
+                        JArray jo = JArray.Parse(orig);
+                        eps = jo.ToObject<List<Episode>>();
+                        break;
+                    } catch (JsonReaderException) { }
+                }
+                orig = RecoverFile(db + id + "\\Episodes.tvsp");
+                count++;
             }
-            return eps.OrderBy(s => s.airedSeason).ThenBy(s=>s.airedEpisodeNumber).ToList();
+            return eps.OrderBy(s => s.airedSeason).ThenBy(s => s.airedEpisodeNumber).ToList();
         }
         
         /// <summary>
@@ -359,9 +375,17 @@ namespace TVSPlayer {
         public static List<Actor> GetActors(int id) {
             string orig = ReadFromFile(db + id + "\\Actors.tvsp");
             List<Actor> eps = new List<Actor>();
-            if (!String.IsNullOrEmpty(orig)) {
-                JArray jo = JArray.Parse(orig);
-                eps = jo.ToObject<List<Actor>>();
+            int count = 0;
+            while (count < 3) {
+                if (!String.IsNullOrEmpty(orig)) {
+                    try {
+                        JArray jo = JArray.Parse(orig);
+                        eps = jo.ToObject<List<Actor>>();
+                        break;
+                    } catch (JsonReaderException) { }
+                }
+                orig = RecoverFile(db + id + "\\Actors.tvsp");
+                count++;
             }
             return eps.OrderBy(s => s.sortOrder).ToList();
 
@@ -442,7 +466,6 @@ namespace TVSPlayer {
             WriteToFile(db + id + "\\Actors.tvsp", json);
         }
 
-
         /// <summary>
         /// Edits Actor in database
         /// </summary>
@@ -488,9 +511,17 @@ namespace TVSPlayer {
         public static List<Poster> GetPosters(int id) {
             string orig = ReadFromFile(db + id + "\\Posters.tvsp");
             List<Poster> eps = new List<Poster>();
-            if (!String.IsNullOrEmpty(orig)) {
-                JArray jo = JArray.Parse(orig);
-                eps = jo.ToObject<List<Poster>>();
+            int count = 0;
+            while (count < 3) {
+                if (!String.IsNullOrEmpty(orig)) {
+                    try {
+                        JArray jo = JArray.Parse(orig);
+                        eps = jo.ToObject<List<Poster>>();
+                        break;
+                    } catch (JsonReaderException) { }
+                }
+                orig = RecoverFile(db + id + "\\Posters.tvsp");
+                count++;
             }
             return eps;
         }
@@ -687,9 +718,19 @@ namespace TVSPlayer {
             }
             return false;
         }
-      
+
         #endregion
 
+
+        public static string RecoverFile(string file) {
+            string temp = file + "temp";
+            if (File.Exists(temp)) {
+                File.Delete(file);
+                File.Move(temp, file);
+                return ReadFromFile(file);
+            }
+            return null;
+        }
 
         /// <summary>
         /// Reads from file, is safe - waits for file not to be used if it is used
@@ -726,6 +767,7 @@ namespace TVSPlayer {
                     if (!Directory.Exists(Path.GetDirectoryName(path))) {
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
                     }
+                    File.Copy(path, path + "temp", true);
                     StreamWriter sw = new StreamWriter(path);
                     sw.Write(json);
                     sw.Close();

@@ -139,7 +139,7 @@ namespace TVSPlayer
                     await Task.Run(() => {
                         Thread.Sleep(500);
                     });
-                    MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode, sf));
+                    MainWindow.AddPage(new LocalPlayer(Database.GetSeries((int)episode.seriesId), episode));
                 } else {
                     Process.Start(sf.NewName);
                 }

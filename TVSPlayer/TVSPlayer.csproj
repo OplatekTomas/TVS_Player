@@ -248,6 +248,9 @@
     <Compile Include="Controls\SubtitleControl.xaml.cs">
       <DependentUpon>SubtitleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\VideoPlayer\SelectVideoFile.xaml.cs">
+      <DependentUpon>SelectVideoFile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Themes\ThemeSwitcher.cs" />
     <Compile Include="Pages\TorrentDownloader\TorrentUserControl.xaml.cs">
       <DependentUpon>TorrentUserControl.xaml</DependentUpon>
@@ -436,6 +439,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SubtitleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\VideoPlayer\SelectVideoFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

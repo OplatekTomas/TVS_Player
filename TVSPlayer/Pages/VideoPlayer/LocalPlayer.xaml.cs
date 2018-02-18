@@ -27,13 +27,14 @@ namespace TVSPlayer
     /// </summary>
     public partial class LocalPlayer : Page
     {
-        public LocalPlayer(Series series, Episode episode, ScannedFile scannedFile)
+        public LocalPlayer(Series series, Episode episode)
         {
             InitializeComponent();
             this.series = series;
-            this.episode = episode;
-            this.scannedFile = scannedFile;
+            this.episode = Database.GetEpisode(series.id, episode.id);
+            this.scannedFile = GetFile(this.episode);
         }
+
         public Series series;
         public Episode episode;
         ScannedFile scannedFile;
@@ -55,8 +56,17 @@ namespace TVSPlayer
             Player.Source = new Uri(scannedFile.NewName);
         }
 
+        private ScannedFile GetFile(Episode episode) {
+            var files = episode.files.Where(x => x.Type == ScannedFile.FileType.Video).ToList();
+            if (files.Count == 1) {
+                return files[0];
+            }
+
+        }
+
         private void MediaFailedEvent() {
-            Dispatcher.Invoke(() => {
+            Dispatcher.Invoke( async () => {
+                await MessageBox.Show("Playback failed.", "Error");
                 Return();
             }, DispatcherPriority.Send);
         }
