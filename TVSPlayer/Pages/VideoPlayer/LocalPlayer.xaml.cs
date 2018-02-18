@@ -32,7 +32,6 @@ namespace TVSPlayer
             InitializeComponent();
             this.series = series;
             this.episode = Database.GetEpisode(series.id, episode.id);
-            this.scannedFile = GetFile(this.episode);
         }
 
         public Series series;
@@ -41,8 +40,8 @@ namespace TVSPlayer
         string fileLenght;
         DispatcherTimer positionUpdate = new DispatcherTimer();
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e) {
-
+        private async void Grid_Loaded(object sender, RoutedEventArgs e) {
+            scannedFile = await GetFile(episode);
             Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
@@ -56,12 +55,17 @@ namespace TVSPlayer
             Player.Source = new Uri(scannedFile.NewName);
         }
 
-        private ScannedFile GetFile(Episode episode) {
+        private async Task<ScannedFile> GetFile(Episode episode) {
             var files = episode.files.Where(x => x.Type == ScannedFile.FileType.Video).ToList();
             if (files.Count == 1) {
                 return files[0];
             }
-
+            SelectVideoFile select = new SelectVideoFile(files);
+            var result = await select.Show();
+            if (result != null) {
+                return result;
+            }
+            return null;
         }
 
         private void MediaFailedEvent() {
