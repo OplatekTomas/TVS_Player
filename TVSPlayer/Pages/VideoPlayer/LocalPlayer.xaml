@@ -16,6 +16,8 @@
                 <Image Source="{StaticResource BackIcon}" />
             </Grid>
             <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" Margin="45,0,0,3" />
+            <TextBlock x:Name="CurrentStatus" Foreground="#F5F5F5" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16" Margin="0,0,10,3" />
+
         </Grid>
         <player:MediaUriElement x:Name="Player" />
         <StackPanel x:Name="SubtitlePanel" VerticalAlignment="Bottom" Margin="0,50"></StackPanel>

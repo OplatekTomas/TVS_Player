@@ -18,7 +18,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using TVS.API;
+using static System.Environment;
 using static TVS.API.Episode;
+using NReco.VideoInfo;
+using NReco.VideoConverter;
 
 namespace TVSPlayer
 {
@@ -42,6 +45,7 @@ namespace TVSPlayer
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             scannedFile = await GetFile(episode);
+            LoadSubtitles();
             Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
@@ -80,15 +84,41 @@ namespace TVSPlayer
         }
 
 
-        private void LoadSubtitles() {         
-            var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
-            if (sub != null) {
-                var subtitles = Subtitles.ParseSubtitleItems(sub.NewName);
-                if (subtitles?.Count > 0) {
-                    RenderSubs(subtitles);
+        private async Task LoadSubtitles() {
+            List<SubtitleItem> subs = new List<SubtitleItem>();
+            CurrentStatus.Text = "Loading subtitles";
+            await Task.Run(() => {
+                FFProbe probe = new FFProbe();
+                probe.ToolPath = Environment.GetFolderPath(SpecialFolder.ApplicationData);
+                var info = probe.GetMediaInfo(scannedFile.NewName);
+                var streams = info.Streams.Where(x => x.CodecType == "subtitle").ToList();
+                var single = streams.Where(x => x.CodecName == "srt").FirstOrDefault();
+                if (single != null) {
+                    FFMpegConverter converter = new FFMpegConverter();
+                    converter.FFMpegToolPath = probe.ToolPath;
+                    Stream str = new MemoryStream();
+                    OutputSettings output = new OutputSettings();
+                    converter.ConvertMedia(scannedFile.NewName, str, "srt");
+                    str.Position = 0;
+                    StreamReader sr = new StreamReader(str);
+                    string text = sr.ReadToEnd();
+                    Dispatcher.Invoke(() => {
+                        subs = Subtitles.ParseSubtitleItems(text, "." + single.CodecName);
+                    });
+                } else {
+                    var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
+                    if (sub != null) {
+                        subs = Subtitles.ParseSubtitleItems(sub.NewName);
+                    }
                 }
+            });
+            
+            CurrentStatus.Text = "";
+            if (subs?.Count > 0) {
+                RenderSubs(subs);
             }
         }
+
 
         private void RenderSubs(List<SubtitleItem> subtitles) {
             int index = 0;
@@ -135,7 +165,6 @@ namespace TVSPlayer
         }
 
         private void MediaOpenedEvent() {
-            LoadSubtitles();
             VideoSlider.Maximum = Player.MediaDuration;
             if (!episode.finished) { Player.MediaPosition = episode.continueAt; }
             episode.finished = false;
