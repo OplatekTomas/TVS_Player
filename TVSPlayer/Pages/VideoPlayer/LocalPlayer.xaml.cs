@@ -15,7 +15,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using TVS.API;
 using static System.Environment;
@@ -28,10 +27,8 @@ namespace TVSPlayer
     /// <summary>
     /// Interaction logic for LocalPlayer.xaml
     /// </summary>
-    public partial class LocalPlayer : Page
-    {
-        public LocalPlayer(Series series, Episode episode)
-        {
+    public partial class LocalPlayer : Page {
+        public LocalPlayer(Series series, Episode episode) {
             InitializeComponent();
             this.series = series;
             this.episode = Database.GetEpisode(series.id, episode.id);
@@ -42,15 +39,16 @@ namespace TVSPlayer
         ScannedFile scannedFile;
         string fileLenght;
         DispatcherTimer positionUpdate = new DispatcherTimer();
+        List<FoundSubtitle> allSubtitles = new List<FoundSubtitle>();
+        List<SubtitleItem> subtitles = new List<SubtitleItem>();
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             scannedFile = await GetFile(episode);
-            LoadSubtitles();
+            LoadSidebar();
             Helper.DisableScreenSaver();
             MainWindow.HideContent();
             MainWindow.videoPlayback = true;
             PlayerPage.Focus();
-            EpisodeName.Text = Helper.GenerateName(series, episode);
             VolumeSlider.Value = Player.Volume = Properties.Settings.Default.Volume;
             VolumeSlider.ValueChanged += VolumeSlider_ValueChanged;
             Player.MediaFailed += (s, ev) => MediaFailedEvent();
@@ -73,7 +71,7 @@ namespace TVSPlayer
         }
 
         private void MediaFailedEvent() {
-            Dispatcher.Invoke( async () => {
+            Dispatcher.Invoke(async () => {
                 await MessageBox.Show("Playback failed.", "Error");
                 Return();
             }, DispatcherPriority.Send);
@@ -84,77 +82,139 @@ namespace TVSPlayer
         }
 
 
-        private async Task LoadSubtitles() {
+        private async Task LoadSidebar() {
             List<SubtitleItem> subs = new List<SubtitleItem>();
-            CurrentStatus.Text = "Loading subtitles";
+            CurrentStatus.Text = "Loading info";
             await Task.Run(() => {
                 FFProbe probe = new FFProbe();
                 probe.ToolPath = Environment.GetFolderPath(SpecialFolder.ApplicationData);
                 var info = probe.GetMediaInfo(scannedFile.NewName);
-                var streams = info.Streams.Where(x => x.CodecType == "subtitle").ToList();
-                var single = streams.Where(x => x.CodecName == "srt").FirstOrDefault();
+                var video = info.Streams.Where(x => x.CodecType == "video").FirstOrDefault();
+                var audio = info.Streams.Where(x => x.CodecType == "audio").FirstOrDefault();
+                Dispatcher.Invoke(() => {
+                    EpisodeName.Text = episode.episodeName;
+                    SeriesNumber.Text = Helper.GenerateName(episode);
+                    Framerate.Text = "Framerate: " + video.FrameRate.ToString("##.##");
+                    Resolution.Text = "Resolution: " + video.Width + "x" + video.Height;
+                    VideoCodec.Text = "Video codec: " + video.CodecLongName;
+                    PixelFormat.Text = "Pixel format: " + video.PixelFormat;
+                    AudioCodec.Text = "Audio codec: " + audio.CodecLongName;
+                });
+                var single = info.Streams.Where(x => x.CodecType == "subtitle").Where(x => x.CodecName == "srt").FirstOrDefault();
                 if (single != null) {
                     FFMpegConverter converter = new FFMpegConverter();
                     converter.FFMpegToolPath = probe.ToolPath;
                     Stream str = new MemoryStream();
-                    OutputSettings output = new OutputSettings();
                     converter.ConvertMedia(scannedFile.NewName, str, "srt");
-                    str.Position = 0;
-                    StreamReader sr = new StreamReader(str);
-                    string text = sr.ReadToEnd();
-                    Dispatcher.Invoke(() => {
-                        subs = Subtitles.ParseSubtitleItems(text, "." + single.CodecName);
-                    });
+                    FoundSubtitle fs = new FoundSubtitle(str);
+                    fs.Version = "Packed with video";
+                    allSubtitles.Add(fs);
                 } else {
-                    var sub = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles).FirstOrDefault();
-                    if (sub != null) {
-                        subs = Subtitles.ParseSubtitleItems(sub.NewName);
+                    var subtitles = episode.files.Where(x => x.Type == ScannedFile.FileType.Subtitles);
+                    foreach (var sub in subtitles) {
+                        FoundSubtitle fs = new FoundSubtitle(sub.NewName);
+                        fs.Version = sub.OriginalName;
+                        allSubtitles.Add(fs);
                     }
                 }
+                LoadSideBarSubs();
+                
             });
-            
             CurrentStatus.Text = "";
-            if (subs?.Count > 0) {
-                RenderSubs(subs);
+            RenderSubs();
+        }
+
+        private void LoadSideBarSubs() {
+            foreach (var item in allSubtitles) {
+                Dispatcher.Invoke(() => {
+                    SubtitlePicker picker = new SubtitlePicker(item);
+                    picker.Version.Text =  Path.GetFileNameWithoutExtension(item.Version);
+                    picker.MouseLeftButtonUp += (s, ev) => SelectSubtitiles(picker);
+                    SubtitleSelectionPanel.Children.Add(picker);
+                });
+
+            }
+            Dispatcher.Invoke(() => {
+                SubtitlePicker toLoad = null;
+                foreach (SubtitlePicker pick in SubtitleSelectionPanel.Children) {
+                    if (pick.Subtitle.Stream != null) {
+                        toLoad = pick;
+                    }
+                }
+                if (toLoad == null && SubtitleSelectionPanel.Children.Count > 0) {
+                    toLoad = (SubtitlePicker)SubtitleSelectionPanel.Children[0];
+                }
+                SelectSubtitiles(toLoad);
+            });         
+        }
+
+        private void SelectSubtitiles(SubtitlePicker picker) {
+            if (picker.Subtitle.File != null) {
+                var lines = Subtitles.ParseSubtitleItems(picker.Subtitle.File);
+                if (lines.Count > 1) {
+                    subtitles = lines;
+                }
+            } else if (picker.Subtitle.Stream != null) {
+                picker.Subtitle.Stream.Position = 0;
+                var lines = Subtitles.ParseSubtitleItems(new StreamReader(picker.Subtitle.Stream).ReadToEnd(), ".srt");
+                if (lines.Count > 1) {
+                    subtitles = lines;
+                }
+            }
+            NoSubtitles.ItemSelected.Opacity = 0;
+            int index = SubtitleSelectionPanel.Children.IndexOf(picker);
+            picker.ItemSelected.Opacity = 1;
+            foreach (SubtitlePicker pick in SubtitleSelectionPanel.Children) {
+                if (SubtitleSelectionPanel.Children.IndexOf(pick) != index) {
+                    pick.ItemSelected.Opacity = 0;
+                }
             }
         }
 
-
-        private void RenderSubs(List<SubtitleItem> subtitles) {
+        private void RenderSubs() {
             int index = 0;
             long position = 0;
             bool isLoaded = IsLoaded;
             Task.Run(async () => {
                 while (isLoaded) {
-                    Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
-                    while (!(subtitles[index].StartTime < position && subtitles[index + 1].StartTime > position)) {
+                    var subtitles = this.subtitles;
+                    if (subtitles.Count > 1) {
                         Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
-                        if (subtitles[index].StartTime < position) {
-                            index++;
-                        } else if (subtitles[index].StartTime > position) {
-                            index--;
-                        }
-                    }
-                    if (subtitles[index].EndTime >= position) { 
-                        Dispatcher.Invoke(() => {
-                            foreach (var line in subtitles[index].Lines) {
-                                if (!SubtitlePanel.Children.Contains(line)) {
-                                    SubtitlePanel.Children.Add(line);
-                                }
+                        while (!(subtitles[index].StartTime < position && subtitles[index + 1].StartTime > position)) {
+                            Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                            if (subtitles[index].StartTime < position) {
+                                index++;
+                            } else if (subtitles[index].StartTime > position) {
+                                index--;
                             }
-                        }, DispatcherPriority.Send);
-                    }
-                    while (subtitles[index].EndTime >= position) {
-                        Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
-                        await Task.Delay(5);
-                        if (subtitles[index].StartTime > position) {
-                            break;
                         }
+                        if (subtitles[index].EndTime >= position) {
+                            Dispatcher.Invoke(() => {
+                                foreach (var line in subtitles[index].Lines) {
+                                    if (!SubtitlePanel.Children.Contains(line)) {
+                                        foreach (TextBlock childElement in line.Children) {
+                                            childElement.FontSize = Settings.SubtitleSize > 20 ? Settings.SubtitleSize : 36;
+                                        }
+                                        SubtitlePanel.Children.Add(line);
+                                    }
+                                }
+                            }, DispatcherPriority.Send);
+                        }
+                        while (subtitles[index].EndTime >= position) {
+                            Dispatcher.Invoke(() => { position = GetMiliseconds(Player.MediaPosition); });
+                            await Task.Delay(5);
+                            if (subtitles[index].StartTime > position) {
+                                break;
+                            }
+                        }
+                        Dispatcher.Invoke(() => {
+                            SubtitlePanel.Children.Clear();
+                        }, DispatcherPriority.Send);
+                        await Task.Delay(1);
+                    } else {
+                        index = 0;
+                        await Task.Delay(500);
                     }
-                    Dispatcher.Invoke(() => {
-                        SubtitlePanel.Children.Clear();
-                    }, DispatcherPriority.Send);
-                    await Task.Delay(1);
                     Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
                 }
             });
@@ -259,21 +319,6 @@ namespace TVSPlayer
             }
         }
 
-        private void VideoSlider_MouseWheel(object sender, MouseWheelEventArgs e) {
-            if (e.Delta > 0) {
-                GoForward();
-            } else {
-                GoBack();
-            }
-        }
-
-        private void BackIcon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            GoBack();
-        }
-
-        private void ForwardIcon_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            GoForward();
-        }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             Properties.Settings.Default.Volume = Player.Volume = VolumeSlider.Value;
@@ -391,6 +436,48 @@ namespace TVSPlayer
 
         private void VideoSlider_GotFocus(object sender, RoutedEventArgs e) {
             Focus();
+        }
+
+        private void SubtitlesIcon_MouseUp(object sender, MouseButtonEventArgs e) {
+            RightPanel.Visibility = Hider.Visibility = Visibility.Visible;
+            var sb = ((Storyboard)FindResource("OpacityUp"));
+            sb.Begin(RightPanel);
+            ThicknessAnimation thicc = new ThicknessAnimation(new Thickness(0), new TimeSpan(0, 0, 0, 0, 300));
+            RightPanel.BeginAnimation(MarginProperty, thicc);
+        }
+
+        private void HideSideBar_MouseUp(object sender, MouseButtonEventArgs e) {
+            var sb = ((Storyboard)FindResource("OpacityDown")).Clone();
+            sb.Completed += (s, ev) => {
+                RightPanel.Visibility = Hider.Visibility = Visibility.Hidden;
+            };
+            sb.Begin(RightPanel);
+            ThicknessAnimation thicc = new ThicknessAnimation(new Thickness(0,0,-250,0), new TimeSpan(0, 0, 0, 0, 300));
+            RightPanel.BeginAnimation(MarginProperty, thicc);
+        }
+
+        private void SubtitleSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+            Settings.SubtitleSize = (int)SubtitleSlider.Value;
+        }
+
+        public class FoundSubtitle {
+            public FoundSubtitle(Stream stream) {
+                Stream = stream;
+            }
+            public FoundSubtitle(string file) {
+                File = file;
+            }
+            public string File { get; set; }
+            public Stream Stream { get; set; }
+            public string Version { get; set; }
+        }
+
+        private void NoSubtitles_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            NoSubtitles.ItemSelected.Opacity = 1;           
+            foreach (SubtitlePicker pick in SubtitleSelectionPanel.Children) {
+                pick.ItemSelected.Opacity = 0;
+            }
+            subtitles = new List<SubtitleItem>();
         }
     }
 }

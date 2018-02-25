@@ -9,7 +9,7 @@
       Title="SelectVideoFile">
 
     <Grid Loaded="Grid_Loaded" Background="#00000000">
-        <ScrollViewer Margin="0,45,0,100">
+        <ScrollViewer Margin="0,45,0,75">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" />
             </ScrollViewer.Resources>

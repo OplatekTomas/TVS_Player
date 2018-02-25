@@ -269,7 +269,7 @@ namespace TVSPlayer
                                 SubtitleControl sc = new SubtitleControl() { Opacity = 0, Height = 60 };
                                 sc.Lang.Text += item.Language;
                                 sc.Version.Text += item.Version;
-                                sc.Download.MouseLeftButtonUp += (sa, eva) => DownloadSubs(item.DownloadLink);
+                                sc.Download.MouseLeftButtonUp += (sa, eva) => DownloadSubs(item);
                                 SubsPanel.Children.Add(sc);
                                 up.Begin(sc);
                             });
@@ -285,13 +285,13 @@ namespace TVSPlayer
             clone.Begin(DetailsContent);
         }
 
-        private async void DownloadSubs(HttpWebRequest request) {
+        private async void DownloadSubs(Subtitles subtitles) {
             MainWindow.AddPage(new PleaseWait());
-            HttpWebResponse result = (HttpWebResponse)(await request.GetResponseAsync());
+            HttpWebResponse result = (HttpWebResponse)(await subtitles.DownloadLink.GetResponseAsync());
             StreamReader reader = new StreamReader(result.GetResponseStream());
             string text = await reader.ReadToEndAsync();
             reader.Close();
-            var tempFile = Path.GetTempPath() + "\\TVSTemp.srt";
+            var tempFile = Path.GetTempPath() + "\\" + subtitles.Language + " - " + subtitles.Version + ".srt";
             File.WriteAllText(tempFile, text,Encoding.GetEncoding(result.CharacterSet));
             await Renamer.RenameSingle(tempFile, Database.GetSeries((int)episode.seriesId), episode);
             MainWindow.RemovePage();

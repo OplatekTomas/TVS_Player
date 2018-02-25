@@ -166,7 +166,6 @@ namespace TVSPlayer {
             TextBlock block = new TextBlock();
             block.Effect = effect;
             block.HorizontalAlignment = HorizontalAlignment.Center;
-            block.FontSize = 36;
             block.Foreground = GetColorFromHex("#F5F5F5");
             return block;
         }
