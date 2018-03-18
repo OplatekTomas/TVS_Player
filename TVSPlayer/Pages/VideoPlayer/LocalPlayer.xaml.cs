@@ -100,8 +100,9 @@ namespace TVSPlayer
                     PixelFormat.Text = "Pixel format: " + video.PixelFormat;
                     AudioCodec.Text = "Audio codec: " + audio.CodecLongName;
                 });
-                var single = info.Streams.Where(x => x.CodecType == "subtitle").Where(x => x.CodecName == "srt").FirstOrDefault();
-                if (single != null) {
+                var multiple = info.Streams.Where(x => x.CodecType == "subtitle").Where(x => x.CodecName == "srt");
+                var single = multiple.FirstOrDefault();
+                if (single != null && multiple.Count() > 1) {
                     FFMpegConverter converter = new FFMpegConverter();
                     converter.FFMpegToolPath = probe.ToolPath;
                     Stream str = new MemoryStream();
@@ -144,7 +145,9 @@ namespace TVSPlayer
                 if (toLoad == null && SubtitleSelectionPanel.Children.Count > 0) {
                     toLoad = (SubtitlePicker)SubtitleSelectionPanel.Children[0];
                 }
-                SelectSubtitiles(toLoad);
+                if (toLoad != null) { 
+                    SelectSubtitiles(toLoad);
+                }
             });         
         }
 
