@@ -13,6 +13,8 @@ using System.Management;
 using System.IO;
 using System.Reflection;
 using System.Globalization;
+using System.Windows.Media.Imaging;
+using System.Drawing;
 
 namespace TVSPlayer {
     class Helper {
@@ -171,8 +173,19 @@ namespace TVSPlayer {
 
     static class Extensions {
 
-        public static Color ToMediaColor(this System.Drawing.Color color) {
-            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        public static System.Windows.Media.Color ToMediaColor(this System.Drawing.Color color) {
+            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public static BitmapImage ToBitmapImage(this Bitmap src) {
+            MemoryStream ms = new MemoryStream();
+            src.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            return image;
         }
 
         /// <summary>

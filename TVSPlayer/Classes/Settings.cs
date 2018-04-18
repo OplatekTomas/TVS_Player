@@ -27,6 +27,7 @@ namespace TVSPlayer {
         private static bool useWinDefaultPlayer;
         private static bool performanceMode;
         private static bool updateOnStartup;
+        private static int subtitleSize;
 
         public static string Library { get { return library; } set { library = value; SaveSettings(); } }
         public static bool AutoDownload { get { return autodownload; } set { autodownload = value; SaveSettings(); } }
@@ -44,6 +45,7 @@ namespace TVSPlayer {
         public static bool UseWinDefaultPlayer { get { return useWinDefaultPlayer; } set { useWinDefaultPlayer = value; SaveSettings(); } }
         public static bool PerformanceMode { get { return performanceMode; } set { performanceMode = value; SaveSettings(); } }
         public static bool UpdateOnStartup { get { return updateOnStartup; } set { updateOnStartup = value; SaveSettings(); } }
+        public static int SubtitleSize { get { return subtitleSize; } set { subtitleSize = value; SaveSettings(); } }
 
 
 

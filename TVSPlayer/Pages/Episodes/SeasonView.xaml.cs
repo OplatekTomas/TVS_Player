@@ -94,7 +94,7 @@ namespace TVSPlayer {
                     await Task.Run(() => {
                         Thread.Sleep(500);
                     });
-                    MainWindow.AddPage(new LocalPlayer(series, episode, sf));
+                    MainWindow.AddPage(new LocalPlayer(series, episode));
                 } else {
                     Process.Start(sf.NewName);
                 }

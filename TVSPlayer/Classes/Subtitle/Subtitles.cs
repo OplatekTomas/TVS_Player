@@ -22,12 +22,22 @@ namespace TVSPlayer {
         public HttpWebRequest DownloadLink { get; set; }
         public string Version { get; set; }
 
+        public static List<SubtitleItem> ParseSubtitleItems(string text, string extension) {
+            List<SubtitleItem> subs = new List<SubtitleItem>();
+            switch (extension) {
+                case ".srt":
+                    subs.AddRange(new SrtParser().ParseText(text));
+                    break;
+            }
+            return subs;
+        }
+
         public static List<SubtitleItem> ParseSubtitleItems(string file) {
             List<SubtitleItem> subs = new List<SubtitleItem>();
             if (File.Exists(file)) {
                 switch (Path.GetExtension(file)) {
                     case ".srt":
-                        subs.AddRange(new SrtParser().ParseStream(file, GetEncoding(file)));
+                        subs.AddRange(new SrtParser().ParseFile(file, GetEncoding(file)));
                         break;
                 }
             }

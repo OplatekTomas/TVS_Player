@@ -11,45 +11,66 @@
 
 
     <Grid Background="Black" Loaded="Grid_Loaded" >
-        <Grid Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="45" VerticalAlignment="Top" x:Name="TopBar">
+        <Grid Panel.ZIndex="5" Background="{StaticResource TransparentStaticBG}" Height="40" VerticalAlignment="Top" x:Name="TopBar">
             <Grid HorizontalAlignment="Left" Margin="6,8,0,8" x:Name="BackButton" MouseUp="BackButton_MouseUp" Panel.ZIndex="3" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
-                <Image Source="{StaticResource BackIcon}" />
+                <Image Source="/Icons/ico-back-light.png" />
             </Grid>
-            <TextBlock x:Name="EpisodeName" Foreground="#F5F5F5" VerticalAlignment="Center" FontSize="20" Margin="45,0,0,3" />
+            <TextBlock x:Name="CurrentStatus" Foreground="#F5F5F5" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="16" Margin="0,0,50,3" />
+            <Grid MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"  HorizontalAlignment="Right" Margin="0,8,10,8" VerticalAlignment="Center" ToolTip="Player Settings" x:Name="SubtitlesIcon" MouseUp="SubtitlesIcon_MouseUp">
+                <Image Source="/Icons/ico-cog-light.png" />
+            </Grid>
         </Grid>
-        <player:MediaUriElement x:Name="Player" />
-        <StackPanel x:Name="SubtitlePanel" VerticalAlignment="Bottom" Margin="0,50"></StackPanel>
-        <Grid x:Name="BottomBar" Background="{StaticResource TransparentStaticBG}" Height="100" VerticalAlignment="Bottom">
+        <Grid x:Name="RightPanel" HorizontalAlignment="Right" Width="250" Background="#AA000000" Panel.ZIndex="10" Margin="0,0,-250,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="11*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Slider VerticalAlignment="Top" MouseWheel="VideoSlider_MouseWheel" GotFocus="VideoSlider_GotFocus" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="10,10,10,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
-            <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,0" FontSize="16" />
-            <Grid VerticalAlignment="Bottom" Grid.RowSpan="2">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,0,0,20" VerticalAlignment="Center">
-                    <Slider x:Name="VolumeSlider" GotFocus="VideoSlider_GotFocus" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.RowSpan="2" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
-                    <Grid Height="35" Margin="20,0" x:Name="BackIcon" MouseLeftButtonUp="BackIcon_MouseLeftButtonUp">
-                        <Image Source="/Icons/ico-back-light.png" />
-                    </Grid>
-                    <Grid Height="35" x:Name="PlayIcon" MouseLeftButtonUp="PlayIcon_MouseLeftButtonUp">
-                        <Image x:Name="ActualPlayIcon" Source="/Icons/ico-pause-light.png" />
-                    </Grid>
-                    <Grid Height="35"  Margin="20,0" x:Name="ForwardIcon" MouseLeftButtonUp="ForwardIcon_MouseLeftButtonUp">
-                        <Image Source="/Icons/ico-forward-light.png" />
-                    </Grid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,120,20" VerticalAlignment="Center" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
-                    <Grid Height="30"  HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="Picture in Picture" x:Name="AlwaysTopIcon" MouseUp="AlwaysTopIcon_MouseUp">
-                        <Image Source="/Icons/ico-windows-light.png" />
-                    </Grid>
-                    <Grid Height="25"  Margin="20,0,0,0"  HorizontalAlignment="Right"  VerticalAlignment="Center" x:Name="FullScreenIcon" MouseUp="FullscreenIcon_MouseUp" ToolTip="Go Fullscren"  Width="25">
-                        <Image Source="/Icons/ico-fullscreen-light.png" />
-                    </Grid>
-                </StackPanel>
+            <Grid Height="27" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"  HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" ToolTip="Player Settings" x:Name="HideSideBar" MouseUp="HideSideBar_MouseUp">
+                <Image Source="/Icons/ico-forward-light.png" />
             </Grid>
+            <ScrollViewer Margin="10,0,0,0" Grid.Row="1">
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource DarkerScrollBar}" />
+                </ScrollViewer.Resources>
+                <StackPanel>
+                    <TextBlock Foreground="#F5F5F5" FontSize="20" FontWeight="Bold" x:Name="EpisodeName" TextWrapping="Wrap" />
+                    <TextBlock Foreground="#F5F5F5" FontSize="18" FontWeight="Bold" x:Name="SeriesNumber"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" x:Name="Resolution"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" x:Name="Framerate" />
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" x:Name="VideoCodec" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" x:Name="AudioCodec" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" x:Name="PixelFormat" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" TextWrapping="Wrap"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="18" FontWeight="Bold" Text="Subtitles"/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" Text="Subtitle font size:"/>
+                    <Slider Style="{DynamicResource Horizontal_Slider}" x:Name="SubtitleSlider" Value="36" Thumb.DragCompleted="SubtitleSlider_DragCompleted" Minimum="20" Maximum="70" TickFrequency="1" IsSnapToTickEnabled="True"></Slider>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" Text=""/>
+                    <TextBlock Foreground="#F5F5F5" FontSize="16" Text="Select subtitles:"/>
+                    <local:SubtitlePicker Margin="0,5,0,0" x:Name="NoSubtitles" MouseLeftButtonUp="NoSubtitles_MouseLeftButtonUp" />
+                    <StackPanel x:Name="SubtitleSelectionPanel" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid x:Name="Hider" Background="Transparent" Visibility="Collapsed" Panel.ZIndex="9" MouseUp="HideSideBar_MouseUp" />
+
+        <player:MediaUriElement x:Name="Player" />
+        <StackPanel x:Name="SubtitlePanel" VerticalAlignment="Bottom" Margin="0,50"/>
+
+        <Grid x:Name="BottomBar"  Background="{StaticResource TransparentStaticBG}" Height="75" VerticalAlignment="Bottom">
+            <Slider VerticalAlignment="Top" Value="0" GotFocus="VideoSlider_GotFocus" IsMoveToPointEnabled="True" Style="{StaticResource Horizontal_Slider_Bigger}" Margin="0,0,0,0" x:Name="VideoSlider" PreviewMouseDown="VideoSlider_PreviewMouseDown" PreviewMouseUp="VideoSlider_PreviewMouseUp" />
+            <TextBlock Text="-/-" x:Name="CurrentTime" Foreground="#F5F5F5" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,10,10,3" FontSize="16" />
+            <Grid MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="PlayIcon" MouseLeftButtonUp="PlayIcon_MouseLeftButtonUp" Margin="20,10,0,0">
+                <Image x:Name="ActualPlayIcon" Source="/Icons/ico-pause-light.png" />
+            </Grid>
+            <Slider HorizontalAlignment="Left" Margin="75,10,0,0" x:Name="VolumeSlider" GotFocus="VideoSlider_GotFocus" Style="{StaticResource Horizontal_Slider}" Width="150" Minimum="0.5" VerticalAlignment="Center" Maximum="1" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,130,0" VerticalAlignment="Center" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                <Grid Height="30"  HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="Picture in Picture" x:Name="AlwaysTopIcon" MouseUp="AlwaysTopIcon_MouseUp">
+                    <Image Source="/Icons/ico-windows-light.png" />
+                </Grid>
+                <Grid Height="25"  Margin="15,0,0,0"  HorizontalAlignment="Right"  VerticalAlignment="Center" x:Name="FullScreenIcon" MouseUp="FullscreenIcon_MouseUp" ToolTip="Go Fullscren"  Width="25">
+                    <Image Source="/Icons/ico-fullscreen-light.png" />
+                </Grid>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

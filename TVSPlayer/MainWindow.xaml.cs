@@ -522,10 +522,12 @@ namespace TVSPlayer {
         }
 
         private async void TestFunctions() {
-            var series = Database.GetSeries(121361);
-            var episode = Database.GetEpisode(121361, 6, 10);
-            await Torrent.Search(series, episode);
-            //await UpdateApplication.CheckForUpdates();
+            var eps = Database.GetEpisodes(73255);
+            Task.Run(() => {
+                Database.EditEpisode(73255, eps[0].id, eps[0]);
+            });
+            await Task.Delay(50);
+            Process.GetCurrentProcess().Kill();
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {

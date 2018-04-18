@@ -501,7 +501,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Ellipse Height="10" Width="10" Fill="{DynamicResource AccentColor}"></Ellipse>
+                    <Rectangle x:Name="Rect" Height="3" Width="3" Fill="{DynamicResource AccentColor}"></Rectangle>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Rect" Property="Width" Value="7"/>
+                            <Setter TargetName="Rect" Property="Height" Value="7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -552,7 +558,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
                     <Grid>
-                        <Border SnapsToDevicePixels="True" Background="#333333"  BorderThickness="1" BorderBrush="#333333" Height="5"/>
+                        <Border SnapsToDevicePixels="True" Background="#333333"  BorderThickness="1" BorderBrush="#333333" Height="3"/>
                         <Border SnapsToDevicePixels="True" Background="#01000000" Height="15"/>
                     </Grid>
                 </ControlTemplate>
@@ -581,7 +587,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Ellipse Height="15" Width="15" Fill="{DynamicResource AccentColor}"></Ellipse>
+                    <Rectangle x:Name="Rect" Height="5" Width="5" Fill="{DynamicResource AccentColor}"></Rectangle>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Rect" Property="Width" Value="10"/>
+                            <Setter TargetName="Rect" Property="Height" Value="10"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

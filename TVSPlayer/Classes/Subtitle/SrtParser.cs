@@ -24,8 +24,7 @@ namespace TVSPlayer {
 
         // Methods -------------------------------------------------------------------------
 
-        public List<SubtitleItem> ParseStream(string file, Encoding encoding) {
-            var srtStream = File.Open(file, FileMode.Open);
+        private List<SubtitleItem> ParseStream(Stream srtStream, Encoding encoding) {
             srtStream.Position = 0;
             var reader = new StreamReader(srtStream, encoding, true);
             var items = new List<SubtitleItem>();
@@ -50,6 +49,24 @@ namespace TVSPlayer {
             }
             srtStream.Close();
             return items;
+        }
+
+        public List<SubtitleItem> ParseFile(string file, Encoding encoding) {
+            var srtStream = File.Open(file, FileMode.Open);
+            return ParseStream(srtStream, encoding);
+        }
+
+        public List<SubtitleItem> ParseText(string text) {
+            return ParseStream(GenerateStreamFromString(text), new UTF8Encoding());
+        }
+
+        public static Stream GenerateStreamFromString(string s) {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         private StackPanel GetPanel(string line) {
@@ -149,7 +166,6 @@ namespace TVSPlayer {
             TextBlock block = new TextBlock();
             block.Effect = effect;
             block.HorizontalAlignment = HorizontalAlignment.Center;
-            block.FontSize = 36;
             block.Foreground = GetColorFromHex("#F5F5F5");
             return block;
         }
