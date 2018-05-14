@@ -82,6 +82,7 @@ namespace TVSPlayer {
                 Dispatcher.Invoke(() => { isLoaded = IsLoaded; });
                 while (isLoaded) {
                     var list = TorrentDatabase.Load().Where(x => x.HasFinished).ToList();
+                    list.Reverse();
                     if (list.Count > uielements.Count) {
                         var torrents = new List<Torrent>();
                         uielements.Values.ToList().ForEach(x => torrents.Add(x));

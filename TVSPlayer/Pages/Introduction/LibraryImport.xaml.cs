@@ -167,7 +167,7 @@ namespace TVSPlayer
             }
             Settings.Library = SelectFolderText.Text;
             await MainWindow.CreateDatabase(ids);
-            MainWindow.RemovePage();
+            MainWindow.RemoveAllPages();
         }
 
         private void AddSeries_MouseEnter(object sender, MouseEventArgs e) {

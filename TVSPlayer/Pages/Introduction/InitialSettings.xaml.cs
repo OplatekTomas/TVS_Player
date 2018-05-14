@@ -150,7 +150,7 @@ namespace TVSPlayer {
 
         private void Back_MouseUp(object sender, MouseButtonEventArgs e) {
             MainWindow.RemovePage();
-            MainWindow.AddPage(new SelectThemeStartUp());
+            MainWindow.AddPage(new Intro());
         }
 
         private void Grid_MouseEnter(object sender, MouseEventArgs e) {

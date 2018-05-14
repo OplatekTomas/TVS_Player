@@ -501,13 +501,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Rectangle x:Name="Rect" Height="3" Width="3" Fill="{DynamicResource AccentColor}"></Rectangle>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Rect" Property="Width" Value="7"/>
-                            <Setter TargetName="Rect" Property="Height" Value="7"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                    <Rectangle x:Name="Rect" Height="7" Width="7" Fill="{DynamicResource AccentColor}"></Rectangle>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

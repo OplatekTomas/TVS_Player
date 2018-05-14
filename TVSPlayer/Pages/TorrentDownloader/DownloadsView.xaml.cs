@@ -94,36 +94,39 @@ namespace TVSPlayer {
 
         private Series series;
         private Episode episode;
+        private List<Episode> epi;
+        int season;
         private void Clicked(Series series) {
-            this.series = series;
             Panel.Children.Clear();
-            var epi = Database.GetEpisodes(series.id);
-            int season = (int)epi.Where(x => !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedSeason);
+            this.series = series;
+            epi = Database.GetEpisodes(series.id);
+            season = (int)epi.Where(x => !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedSeason);
             int episode = (int)epi.Where(x => x.airedSeason == season && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
             this.episode = Database.GetEpisode(series.id, season, episode);
-            EpisodeInput.Text = episode.ToString();
             SeasonInput.Text = season.ToString();
-            EpisodeInput.TextChanged += async (s, ev) => {
-                if (!String.IsNullOrEmpty(SeasonInput.Text) && Int32.TryParse(SeasonInput.Text, out int result)) {
-                    int ep = (int)epi.Where(x => x.airedSeason == result && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
-                    if (!(await IsBetween(EpisodeInput.Text, ep))) {
-                        EpisodeInput.Text = "";
-                        this.episode = null;
-                    } else {
-                        if (!String.IsNullOrEmpty(EpisodeInput.Text)) {
-                            this.episode = Database.GetEpisode(series.id, result, Int32.Parse(EpisodeInput.Text));
-                        }
-                    }
-                }
-
-            };
+            EpisodeInput.Text = episode.ToString();
+            EpisodeInput.TextChanged += (s, ev) => EpisodeInputChanged();
             SeasonInput.TextChanged += async (s, ev) => {
-                if (!(await IsBetween(SeasonInput.Text, season))) {
+                if (!String.IsNullOrEmpty(SeasonInput.Text) && !(await IsBetween(SeasonInput.Text, season))) {
                     SeasonInput.Text = "";
                     this.episode = null;
                 }
             };
 
+        }
+
+        private async void EpisodeInputChanged(){
+            if (!String.IsNullOrEmpty(SeasonInput.Text) && Int32.TryParse(SeasonInput.Text, out int result)) {
+                int ep = (int)epi.Where(x => x.airedSeason == result && !String.IsNullOrEmpty(x.firstAired) && Helper.ParseAirDate(x.firstAired).AddDays(1) < DateTime.Now).Max(x => x.airedEpisodeNumber);
+                if (!(await IsBetween(EpisodeInput.Text, ep))) {
+                    EpisodeInput.Text = "";
+                    this.episode = null;
+                } else {
+                    if (!String.IsNullOrEmpty(EpisodeInput.Text)) {
+                        this.episode = Database.GetEpisode(series.id, result, Int32.Parse(EpisodeInput.Text));
+                    }
+                }
+            }
         }
 
         private async Task<bool> IsBetween(string text, int maxValue) {
