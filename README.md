@@ -1,5 +1,5 @@
 # TVS-Player
-## Current version: 0.5 Alpha
+## Current version: 0.5.1 Alpha
 ## [Download](https://github.com/Kaharonus/TVS-Player/releases)
 
 #### TVS-Player is Windows only desktop app written in C# & WPF that maintains your library of TV Shows.
