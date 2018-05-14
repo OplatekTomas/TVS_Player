@@ -111,7 +111,7 @@ namespace TVSPlayer {
                 }
                 Settings.Library = FolderLocation.Text;
                 await MainWindow.CreateDatabase(ids);
-                MainWindow.RemovePage();
+                MainWindow.RemoveAllPages();
             } else {
                 await MessageBox.Show("Directory does not exist");
             }

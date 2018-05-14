@@ -348,6 +348,7 @@ namespace TVSPlayer {
             for (int i = 0; i < ContentOnTop.Children.Count; i++) {
                 PageRemover();
             }
+            ContentOnTop.Children.Clear();
         }
 
         private void PageRemover() {
@@ -531,6 +532,8 @@ namespace TVSPlayer {
         }
 
         private void BaseGrid_Loaded(object sender, RoutedEventArgs e) {
+            //Application.Current.Resources["TransparentBG"] = new SolidColorBrush(SystemParameters.WindowGlassColor);
+
             if (true) { 
                 NotificationSender.ShortCutCreator.TryCreateShortcut("TVSPlayer.app", "TVS-Player");
                 if (!CheckConnection()) {
@@ -539,13 +542,13 @@ namespace TVSPlayer {
                     Settings.Load();
                     UpdateApplication.StartUpdate();
                     UpdateApplication.CheckForUpdates();
+                    SetPage(new Library());
                     if (String.IsNullOrEmpty(Settings.Library)) {
                         AddPage(new Intro());
                         Helper.SetPerformanceMode();
                         Settings.LastCheck = DateTime.Now;
                         UpdateDatabase.StartUpdateBackground(false);
                     } else {
-                        SetPage(new Library());
                         UpdateDatabase.StartUpdateBackground();
                         TorrentDownloader.ContinueUnfinished();
                     }

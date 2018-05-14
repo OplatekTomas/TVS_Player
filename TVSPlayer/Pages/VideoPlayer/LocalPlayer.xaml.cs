@@ -102,7 +102,7 @@ namespace TVSPlayer
                 });
                 var multiple = info.Streams.Where(x => x.CodecType == "subtitle").Where(x => x.CodecName == "srt");
                 var single = multiple.FirstOrDefault();
-                if (single != null && multiple.Count() > 1) {
+                if (single != null) {
                     FFMpegConverter converter = new FFMpegConverter();
                     converter.FFMpegToolPath = probe.ToolPath;
                     Stream str = new MemoryStream();
@@ -179,6 +179,7 @@ namespace TVSPlayer
             long position = 0;
             bool isLoaded = IsLoaded;
             Task.Run(async () => {
+                await Task.Delay(500);
                 while (isLoaded) {
                     var subtitles = this.subtitles;
                     if (subtitles.Count > 1) {
