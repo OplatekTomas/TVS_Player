@@ -1,4 +1,4 @@
-# TVS-Player
+# TVS-Player (deprecated)
 ## Current version: 0.5.1 Alpha
 ## [Download](https://github.com/Kaharonus/TVS-Player/releases)
 
