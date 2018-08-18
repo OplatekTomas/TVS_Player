@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TVS_Player">
+    <Style x:Key="Font">
+        <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
+    </Style>
+    <Style x:Key="Hatten">
+        <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
+    </Style>
+</ResourceDictionary>

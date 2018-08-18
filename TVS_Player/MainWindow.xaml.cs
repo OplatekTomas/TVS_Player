@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using TVS_Player_Base;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 
 namespace TVS_Player {
 
@@ -24,13 +25,44 @@ namespace TVS_Player {
         public MainWindow() => InitializeComponent();
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
-            bool connected = await Api.Connect("192.168.1.83", 5850);
-            Api.Disconnected += (s, ev) => { MessageBox.Show("Disconnected"); };
-            await Api.Login("test", "test");
+
         }
 
-        private async void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            var result = await Api.Search("sky");
+        private void MoveWindow(object sender, MouseButtonEventArgs e) {
+            DragMove();
+        }
+        private void HandPointer(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void NormalPointer(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
+
+        private void TopBar_MouseEnter(object sender, MouseEventArgs e) {
+            SearchBar.BeginStoryboard((Storyboard)FindResource("FadeInSearchBar"));
+        }
+
+        private void TopBar_MouseLeave(object sender, MouseEventArgs e) {
+            SearchBar.BeginStoryboard((Storyboard)FindResource("FadeOutSearchBar"));
+        }
+
+        private void MinimizeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void ExitButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            Close();
+        }
+
+        private void MaximizeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (WindowState == WindowState.Maximized) {
+                WindowState = WindowState.Normal;
+            } else {
+                MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
+                WindowState = WindowState.Maximized;
+            }
         }
     }
 }
