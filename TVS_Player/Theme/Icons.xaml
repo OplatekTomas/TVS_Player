@@ -4,5 +4,7 @@
     <BitmapImage x:Key="Close" UriSource="pack://application:,,,/Resources/Icons/close.png" />
     <BitmapImage x:Key="Minimize" UriSource="pack://application:,,,/Resources/Icons/minimize.png" />
     <BitmapImage x:Key="Maximize" UriSource="pack://application:,,,/Resources/Icons/maximize.png" />
+    <BitmapImage x:Key="Search" UriSource="pack://application:,,,/Resources/Icons/search.png" />
+    <BitmapImage x:Key="Back" UriSource="pack://application:,,,/Resources/Icons/go-back.png" />
 
 </ResourceDictionary>

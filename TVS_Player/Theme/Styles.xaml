@@ -4,7 +4,4 @@
     <Style x:Key="Font">
         <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
     </Style>
-    <Style x:Key="Hatten">
-        <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
-    </Style>
 </ResourceDictionary>

@@ -24,8 +24,8 @@ namespace TVS_Player {
 
         public MainWindow() => InitializeComponent();
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e) {
-
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            MainContent.Content = new Login();
         }
 
         private void MoveWindow(object sender, MouseButtonEventArgs e) {
@@ -63,6 +63,10 @@ namespace TVS_Player {
                 MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
                 WindowState = WindowState.Maximized;
             }
+        }
+
+        private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            View.GoBack();
         }
     }
 }

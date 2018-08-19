@@ -7,67 +7,96 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280" 
         Loaded="Window_Loaded" WindowStyle="None"
-        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" ShowInTaskbar="True" MinWidth="800" MinHeight="480" Style="{StaticResource Font}">
-    <Grid Background="{DynamicResource Background}" >
-        <Grid x:Name="TopBar" Height="45" Margin="5" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Margin="10,0" Background="#F5F5F5" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Left" Width="123" Height="26" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="33"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,0,2" CornerRadius="1" />
-                    <Grid Grid.Column="1" MouseDown="MoveWindow" Background="Transparent">
-                        <TextBlock HorizontalAlignment="Left" Margin="5,0" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Foreground="#777">TVS_Player</TextBlock>
-                    </Grid>
-                </Grid>
-            </Border>
-            <Grid Grid.Column="1" Background="Transparent" MouseEnter="TopBar_MouseEnter" MouseLeave="TopBar_MouseLeave">
-                <Border Background="#F5F5F5" CornerRadius="11" x:Name="SearchBar" Height="26" Margin="10,-75,10,10">
+        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" ShowInTaskbar="True" MinWidth="800" MinHeight="480" Style="{StaticResource Font}" VisualTextRenderingMode="ClearType" Background="Transparent">
+    <Border CornerRadius="3"  Background="{DynamicResource Background}">
+        <Grid>
+            <!--#region TopBar-->
+            <Grid x:Name="TopBar" Height="45" Margin="5" VerticalAlignment="Top" Panel.ZIndex="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BackBar" Grid.Column="0" Margin="10,0" Width="107" Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Left" Height="26" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.5" Direction="300" BlurRadius="10" />
+                    </Border.Effect>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="35"/>
+                            <ColumnDefinition Width="1*" MaxWidth="7" x:Name="BackButtonWidth"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-
+                        <Grid Background="Transparent" x:Name="BackButton" Opacity="0" MouseLeftButtonUp="BackButton_MouseLeftButtonUp">
+                            <Image Source="{StaticResource Back}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
+                            <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,0,2" CornerRadius="1" />
                         </Grid>
-                        <Grid Grid.Column="1">
+                        <Grid Grid.Column="1" MouseDown="MoveWindow" Background="Transparent" >
+                            <TextBlock HorizontalAlignment="Left" Margin="5,0" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Foreground="{StaticResource TopBarTextColor}">TVS_Player</TextBlock>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Grid Grid.Column="1" Background="Transparent" MouseEnter="TopBar_MouseEnter" MouseLeave="TopBar_MouseLeave">
+                    <Border Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" x:Name="SearchBar" Height="26" Margin="10,-100,10,0">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity=".75" Direction="320" BlurRadius="10" />
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Background="Transparent">
+                                <Image Source="{StaticResource Search}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
+                                <TextBox Background="{StaticResource TopBarBackgrdound}" FontSize="16" Foreground="{StaticResource TopBarTextColor}" BorderThickness="0" Margin="5,2,5,0"></TextBox>
+                                <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
+                            </Grid>
+                            <Grid Grid.Column="2">
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Border Grid.Column="2" Margin="10,0" Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="26">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.5" Direction="300" BlurRadius="10" />
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Background="Transparent" x:Name="MinimizeButton" MouseLeftButtonUp="MinimizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                            <Image Source="{StaticResource Minimize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
+                        </Grid>
+                        <Grid Grid.Column="1" Background="Transparent" x:Name="MaximizeButton" MouseLeftButtonUp="MaximizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
                             <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
+                            <Image Source="{StaticResource Maximize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
                             <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
                         </Grid>
-                        <Grid Grid.Column="2">
-
+                        <Grid Grid.Column="2" Background="Transparent" x:Name="ExitButton" MouseLeftButtonUp="ExitButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                            <Image Source="{StaticResource Close}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
                         </Grid>
                     </Grid>
                 </Border>
             </Grid>
-            <Border Grid.Column="2" Margin="10,10" Background="#F5F5F5" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="26">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0" Background="Transparent" x:Name="MinimizeButton" MouseLeftButtonUp="MinimizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                        <Image Source="{StaticResource Minimize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                    </Grid>
-                    <Grid Grid.Column="1" Background="Transparent" x:Name="MaximizeButton" MouseLeftButtonUp="MaximizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                        <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
-                        <Image Source="{StaticResource Maximize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                        <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
-                    </Grid>
-                    <Grid Grid.Column="2" Background="Transparent" x:Name="ExitButton" MouseLeftButtonUp="ExitButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                        <Image Source="{StaticResource Close}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                    </Grid>
+            <!--#endregion-->
+
+            <Grid>
+                <Grid x:Name="MainContentBlur">
+                    <Frame x:Name="MainContent" NavigationUIVisibility="Hidden" Background="Transparent" Panel.ZIndex="1" />
+                    <Image x:Name="MainContentOld" Panel.ZIndex="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
-            </Border>
+                <Grid Panel.ZIndex="5" Background="#AA000000" Opacity="0" Visibility="Hidden" />
+                <Grid x:Name="TopContent" Panel.ZIndex="10">
+                    
+                </Grid>
+            </Grid>
+            
         </Grid>
-    </Grid>
+    </Border>
 </Window>

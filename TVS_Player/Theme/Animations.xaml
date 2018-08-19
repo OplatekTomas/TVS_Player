@@ -2,11 +2,17 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TVS_Player">
     <Storyboard x:Key="FadeInSearchBar">
-        <ThicknessAnimation To="10" Duration="0:0:0.2" Storyboard.TargetProperty="Margin" DecelerationRatio="0.75" />
+        <ThicknessAnimation To="10,0,10,0" Duration="0:0:0.2" Storyboard.TargetProperty="Margin" DecelerationRatio="0.75" />
         <DoubleAnimation To="1" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" DecelerationRatio="0.75" />
     </Storyboard>
     <Storyboard x:Key="FadeOutSearchBar">
-        <ThicknessAnimation To="10,-75,10,10" Duration="0:0:0.2" Storyboard.TargetProperty="Margin" DecelerationRatio="0.75" />
+        <ThicknessAnimation To="10,-100,10,0" Duration="0:0:0.2" Storyboard.TargetProperty="Margin" AccelerationRatio="0.75" />
+        <DoubleAnimation To="0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" AccelerationRatio="0.75" />
+    </Storyboard>
+    <Storyboard  x:Key="FadeIn">
+        <DoubleAnimation To="1" Duration="0:0:0.2" From="0" Storyboard.TargetProperty="Opacity" DecelerationRatio="0.75" />
+    </Storyboard>
+    <Storyboard x:Key="FadeOut">
         <DoubleAnimation To="0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" DecelerationRatio="0.75" />
     </Storyboard>
 </ResourceDictionary>
