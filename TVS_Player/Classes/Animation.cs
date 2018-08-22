@@ -27,7 +27,7 @@ namespace TVS_Player{
             }
         }
 
-        private static Storyboard FindResource(string name) {
+        public static Storyboard FindResource(string name) {
             return (Storyboard)Application.Current.FindResource(name);
         }
     }

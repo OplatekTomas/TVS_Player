@@ -10,5 +10,7 @@
 
     <Grid Background="{DynamicResource Background}">
         <Button Height="30" Width="100" Click="Button_Click" />
+        <Button Height="30" Width="100" Margin="0,70,0,0" Click="Button_Click_1" />
+
     </Grid>
 </Page>

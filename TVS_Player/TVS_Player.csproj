@@ -59,7 +59,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Animation.cs" />
+    <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\ServerFinder.cs" />
     <Compile Include="Classes\View.cs" />
+    <Compile Include="Views\UserControls\BackButton.xaml.cs">
+      <DependentUpon>BackButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServerSelector.xaml.cs">
+      <DependentUpon>ServerSelector.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\UserControls\BackButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -99,6 +111,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Theme\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServerSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,21 +16,25 @@ using System.Windows.Shapes;
 namespace TVS_Player
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for BackButton.xaml
     /// </summary>
-    public partial class Login : Page
+    public partial class BackButton : UserControl
     {
-        public Login()
+        public BackButton()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            View.AddPage(new ServerSelector());
+        private void Border_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            View.SetPage(new Library());
+        private void Border_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            View.RemovePage();
         }
     }
 }

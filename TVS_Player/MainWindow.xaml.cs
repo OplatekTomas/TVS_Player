@@ -24,7 +24,7 @@ namespace TVS_Player {
 
         public MainWindow() => InitializeComponent();
 
-        private void Window_Loaded(object sender, RoutedEventArgs e) {
+        private async void Window_Loaded(object sender, RoutedEventArgs e) {
             MainContent.Content = new Login();
         }
 
@@ -53,7 +53,9 @@ namespace TVS_Player {
         }
 
         private void ExitButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            Close();
+            Animate.FadeOut(this,()=> {
+                Close();
+            });
         }
 
         private void MaximizeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {

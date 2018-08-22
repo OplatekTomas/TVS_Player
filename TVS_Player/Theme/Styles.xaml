@@ -4,4 +4,41 @@
     <Style x:Key="Font">
         <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
     </Style>
+
+
+    <Style x:Key="StyledTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border Background="{DynamicResource TopBarBackgrdound}" CornerRadius="3" Height="26">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.3" Direction="300" />
+                        </Border.Effect>
+                        <Grid Margin="3,0" VerticalAlignment="Center">
+                            <TextBox Text="{Binding Path=Text,
+                                                    RelativeSource={RelativeSource TemplatedParent}, 
+                                                    Mode=TwoWay,
+                                                    UpdateSourceTrigger=PropertyChanged}"
+                                     x:Name="textSource" 
+                                     Background="Transparent" Foreground="{DynamicResource TextColor}"
+                                     Panel.ZIndex="2"  BorderThickness="0" />
+                            <TextBox Text="{TemplateBinding Tag}" Background="Transparent" Panel.ZIndex="1" BorderThickness="0">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}">
+                                        <Setter Property="Foreground" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
+                                                <Setter Property="Foreground" Value="{DynamicResource TopBarTextColor}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

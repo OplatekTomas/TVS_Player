@@ -15,4 +15,5 @@
     <Storyboard x:Key="FadeOut">
         <DoubleAnimation To="0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" DecelerationRatio="0.75" />
     </Storyboard>
+
 </ResourceDictionary>

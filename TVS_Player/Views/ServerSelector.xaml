@@ -1,0 +1,70 @@
+﻿<Page x:Class="TVS_Player.ServerSelector"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ServerSelector">
+
+    <Grid Background="Transparent">
+        <Grid.Effect>
+            <DropShadowEffect Opacity="0.5" BlurRadius="10" Direction="300" />
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" Grid.Row="1" Background="{StaticResource Background}" CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <StackPanel  HorizontalAlignment="Left" Margin="10,10" VerticalAlignment="Top"  Orientation="Horizontal">
+                        <local:BackButton VerticalAlignment="Center" />
+                        <TextBlock Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Margin="10,0" Text="Please select a server" FontSize="14" />
+                    </StackPanel>
+                    <Grid Height="26" Margin="10,10" VerticalAlignment="Top" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Margin="5,0" Style="{StaticResource StyledTextBox}" Tag="Address" FontSize="16" VerticalAlignment="Center" />
+                        <TextBox Margin="5,0" Grid.Column="1" Style="{StaticResource StyledTextBox}" Tag="Port" Background="Transparent" BorderThickness="0"  FontSize="16" VerticalAlignment="Center" Foreground="{DynamicResource TopBarTextColor}"></TextBox>
+                        <Border Grid.Column="2" Background="{DynamicResource TopBarBackgrdound}" Margin="5,0" CornerRadius="3" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Border.Effect>
+                                <DropShadowEffect Opacity="0.3" Direction="300" />
+                            </Border.Effect>
+                            <TextBlock Background="Transparent" Text="Connect" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TopBarTextColor}" />
+                        </Border>
+                    </Grid>
+
+                </StackPanel>
+                <Border Grid.Row="1" Background="{StaticResource BackgroundDark}" Margin="10,0,10,10"  CornerRadius="2">
+                    <Border Background="Transparent" BorderBrush="{StaticResource BackgroundDark}" BorderThickness="1" Margin="-1" CornerRadius="3">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="2" BlurRadius="10"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
+                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
+                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
+                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
+
+                        </StackPanel>
+                    </Border>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

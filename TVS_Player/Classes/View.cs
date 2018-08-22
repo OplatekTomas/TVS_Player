@@ -12,16 +12,50 @@ using System.Windows.Media.Imaging;
 namespace TVS_Player
 {
     class View {
-        private static List<(bool onTop, Page page)> Pages { get; set; } = new List<(bool onTop, Page page)>();
+        private static List<Page> Pages { get; set; } = new List<Page>();
+        private static int PagesOnTopCount { get; set; } = 0;
+
         static MainWindow Main { get; } = (MainWindow)Application.Current.MainWindow;
 
         public static void AddPage(Page page) {
-            throw new NotImplementedException();
+            Grid baseGrid = new Grid();
+            Grid hider = new Grid {
+                Background = Helper.StringToBrush("#7000")
+            };
+            Frame content = new Frame() {
+                Content = page,
+                Margin = new Thickness(0, Main.ActualHeight, 0, Main.ActualHeight * -1)
+            };
+            baseGrid.Children.Add(hider);
+            baseGrid.Children.Add(content);
+            Main.TopContent.Children.Add(baseGrid);
+            ((Storyboard)Main.FindResource("BlurBackground")).Begin();
+            AnimateLocal(content, content.Margin, new Thickness(0));
+            Animate.FadeIn(baseGrid);
+            PagesOnTopCount++;
+            HandleBackButton();
         }
 
+
         public static void RemovePage() {
-            throw new NotImplementedException();
+            if (Main.TopContent.Children.Count > 0) {
+                var grid = (Grid)Main.TopContent.Children[Main.TopContent.Children.Count - 1];
+                Animate.FadeOut(grid);
+                AnimateLocal((Frame)grid.Children[1], ((Frame)grid.Children[1]).Margin, new Thickness(0,Main.ActualHeight*-1,0,0),()=> {
+                    Main.TopContent.Children.Remove(grid);
+
+                });               
+                PagesOnTopCount--;
+                HandleBackButton();
+            }
+            if (Main.TopContent.Children.Count - 1 == 0) {
+                ((Storyboard)Main.FindResource("UnBlurBackground")).Begin();
+            }
         }
+
+        public static void RemoveAllPages() {
+        }
+
         public static void SetSearchBarVisibility(bool visible) {
             if (visible) {
                 Main.SearchBar.Visibility = Visibility.Visible;
@@ -31,7 +65,7 @@ namespace TVS_Player
         }
 
         public static void SetPage(Page page) {
-            AddToPages(false, (Page)Main.MainContent.Content);
+            AddToPages((Page)Main.MainContent.Content);
             Main.MainContentOld.Source = RenderBitmap(Main.MainContent);
             Main.MainContent.Content = page;
             Panel.SetZIndex(Main.MainContent, 1);
@@ -48,20 +82,20 @@ namespace TVS_Player
 
 
         public static void GoBack() {
+            var page = Pages.Last();
+            RemoveLast();
             Main.MainContentOld.Source = RenderBitmap(Main.MainContent);
             Panel.SetZIndex(Main.MainContent, 2);
             Panel.SetZIndex(Main.MainContentOld, 1);
             var anim = new ThicknessAnimation(new Thickness(0, Main.ActualHeight * -1, 0, 0), TimeSpan.FromMilliseconds(1));
             anim.Completed += (s, ev) => {
-                Main.MainContent.Content = Pages.Last().page;
+                Main.MainContent.Content = page;
                 AnimateLocal(Main.MainContent, Main.MainContent.Margin, new Thickness(0), () => {
                     Main.MainContentOld.Source = null;
-                    RemoveLast();
                 });
                 Animate.FadeIn(Main.MainContent);
             };
             Main.MainContent.BeginAnimation(Page.MarginProperty, anim);
-
         }
 
         public static void ClearHistory() {
@@ -69,8 +103,8 @@ namespace TVS_Player
             HandleBackButton();
         }
 
-        private static void AddToPages(bool onTop, Page page) {
-            Pages.Add((onTop, page));
+        private static void AddToPages(Page page) {
+            Pages.Add(page);
             HandleBackButton();
         }
 
@@ -80,7 +114,7 @@ namespace TVS_Player
         }
 
         private static void HandleBackButton() {
-            if (Pages.Count > 0) {
+            if (Pages.Count > 0 && PagesOnTopCount == 0) {
                 ShowBackButton();
             } else {
                 HideBackButton();
@@ -107,15 +141,12 @@ namespace TVS_Player
             double topRight = 0;
             int width = (int)element.ActualWidth;
             int height = (int)element.ActualHeight;
-            double dpiX = 96;
-            double dpiY = 96;
-            PixelFormat pixelFormat = PixelFormats.Default;
-            VisualBrush elementBrush = new VisualBrush(element);
+            double dpi = 96;
             DrawingVisual visual = new DrawingVisual();
             DrawingContext dc = visual.RenderOpen();
-            dc.DrawRectangle(elementBrush, null, new Rect(topLeft, topRight, width, height));
+            dc.DrawRectangle(new VisualBrush(element), null, new Rect(topLeft, topRight, width, height));
             dc.Close();
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(width, height, dpiX, dpiY, pixelFormat);
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
             bitmap.Render(visual);
             return bitmap;
         }

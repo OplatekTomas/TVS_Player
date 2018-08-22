@@ -13,24 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TVS_Player
-{
+namespace TVS_Player {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for ServerSelector.xaml
     /// </summary>
-    public partial class Login : Page
-    {
-        public Login()
-        {
+    public partial class ServerSelector : Page {
+        public ServerSelector() {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            View.AddPage(new ServerSelector());
+        private void Border_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            View.SetPage(new Library());
+        private void Border_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
         }
     }
 }

@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TVS_Player">
     <SolidColorBrush x:Key="Background" Color="#FF333333" />
+    <SolidColorBrush x:Key="BackgroundDark" Color="#F222" />
     <SolidColorBrush x:Key="TextColor" Color="#F5F5F5" />
     <SolidColorBrush x:Key="TopBarTextColor" Color="#D5D5D5" />
-
     <SolidColorBrush x:Key="AccentColor" Color="#2196F3" />
     <SolidColorBrush x:Key="TopBarBackgrdound" Color="#444" />
 </ResourceDictionary>

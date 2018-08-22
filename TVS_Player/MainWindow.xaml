@@ -5,9 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280" 
+        Title="MainWindow" Height="720" Width="1280"  MinHeight="480" MinWidth="800"
         Loaded="Window_Loaded" WindowStyle="None"
-        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" ShowInTaskbar="True" MinWidth="800" MinHeight="480" Style="{StaticResource Font}" VisualTextRenderingMode="ClearType" Background="Transparent">
+        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" ShowInTaskbar="True" Style="{StaticResource Font}" VisualTextRenderingMode="ClearType" Background="Transparent">
+    <Window.Resources>
+        <Storyboard x:Key="BlurBackground">
+            <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="GridBlur" DecelerationRatio="0.75" Duration="0:0:0.200" />
+        </Storyboard>
+        <Storyboard x:Key="UnBlurBackground">
+            <DoubleAnimation Storyboard.TargetProperty="Radius" To="0" Storyboard.TargetName="GridBlur" DecelerationRatio="0.75" Duration="0:0:0.200" />
+        </Storyboard>
+    </Window.Resources>
     <Border CornerRadius="3"  Background="{DynamicResource Background}">
         <Grid>
             <!--#region TopBar-->
@@ -87,14 +95,17 @@
             <!--#endregion-->
 
             <Grid>
-                <Grid x:Name="MainContentBlur">
+                <Grid>
+                    <Grid.Effect>
+                        <BlurEffect x:Name="GridBlur" Radius="0" />
+                    </Grid.Effect>
                     <Frame x:Name="MainContent" NavigationUIVisibility="Hidden" Background="Transparent" Panel.ZIndex="1" />
                     <Image x:Name="MainContentOld" Panel.ZIndex="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
-                <Grid Panel.ZIndex="5" Background="#AA000000" Opacity="0" Visibility="Hidden" />
-                <Grid x:Name="TopContent" Panel.ZIndex="10">
-                    
+                <Grid Margin="2,0,-2,0">
+                    <Grid x:Name="TopContent" Panel.ZIndex="10" />
                 </Grid>
+
             </Grid>
             
         </Grid>
