@@ -13,6 +13,10 @@ namespace TVS_Player{
             StartAnimation(FindResource("FadeIn"), control, continueWith);
         }
 
+        public static void ResetMargin(FrameworkElement control, Action continueWith = null) {
+            StartAnimation(FindResource("ResetMargin"), control, continueWith);
+        }
+
         public static void FadeOut(FrameworkElement control, Action continueWith = null) {
             StartAnimation(FindResource("FadeOut"), control, continueWith);
         }

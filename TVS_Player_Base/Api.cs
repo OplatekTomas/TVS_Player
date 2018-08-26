@@ -24,6 +24,8 @@ namespace TVS_Player_Base {
             Client = new HttpClient();
             Client.BaseAddress = new Uri("http://" + ip + ":" + port + "/");
             if (IsOpen(ip, port) && await IsReady()) {
+                Ip = ip;
+                Port = port;
                 IsConnected = true;
             } else {
                 Client.Dispose();
@@ -38,7 +40,9 @@ namespace TVS_Player_Base {
                     Version = jObject["Version"].ToString();
                     return true;
                 }
-            } catch { }
+            } catch(Exception e) {
+                return false;
+            }
             return false;
         }
 
@@ -79,6 +83,7 @@ namespace TVS_Player_Base {
 
         public static void Login(string token) {
             Token = token;
+            Client.DefaultRequestHeaders.Add("AuthToken", Token);
         }
 
         public static async Task<bool> PostData(string requestUrl, string content) {

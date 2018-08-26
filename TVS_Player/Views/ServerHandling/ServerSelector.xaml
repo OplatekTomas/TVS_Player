@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:TVS_Player"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ServerSelector">
+      Title="ServerSelector" Style="{StaticResource ProductFont}">
 
-    <Grid Background="Transparent">
+    <Grid Background="Transparent" Loaded="Grid_Loaded">
         <Grid.Effect>
             <DropShadowEffect Opacity="0.5" BlurRadius="10" Direction="300" />
         </Grid.Effect>
@@ -25,41 +25,38 @@
         <Border Grid.Column="1" Grid.Row="1" Background="{StaticResource Background}" CornerRadius="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="85"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <StackPanel>
-                    <StackPanel  HorizontalAlignment="Left" Margin="10,10" VerticalAlignment="Top"  Orientation="Horizontal">
-                        <local:BackButton VerticalAlignment="Center" />
-                        <TextBlock Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Margin="10,0" Text="Please select a server" FontSize="14" />
-                    </StackPanel>
-                    <Grid Height="26" Margin="10,10" VerticalAlignment="Top" >
+                    <TextBlock Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Margin="10,10,0,0" Text="Please select a server" FontSize="18" />
+                    <Grid Height="26" Margin="5,10" VerticalAlignment="Top" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Margin="5,0" Style="{StaticResource StyledTextBox}" Tag="Address" FontSize="16" VerticalAlignment="Center" />
-                        <TextBox Margin="5,0" Grid.Column="1" Style="{StaticResource StyledTextBox}" Tag="Port" Background="Transparent" BorderThickness="0"  FontSize="16" VerticalAlignment="Center" Foreground="{DynamicResource TopBarTextColor}"></TextBox>
-                        <Border Grid.Column="2" Background="{DynamicResource TopBarBackgrdound}" Margin="5,0" CornerRadius="3" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                        <TextBox x:Name="Address" Margin="5,0" Style="{StaticResource StyledTextBox}" Tag="Address" VerticalAlignment="Center" />
+                        <TextBox x:Name="Port" Margin="5,0" Grid.Column="1" Style="{StaticResource StyledTextBox}" Tag="Port" Background="Transparent" BorderThickness="0" VerticalAlignment="Center"></TextBox>
+                        <Border MouseLeftButtonUp="Border_MouseLeftButtonUp" Grid.Column="2" Background="{DynamicResource TopBarBackground}" Margin="5,0" CornerRadius="3" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
                             <Border.Effect>
                                 <DropShadowEffect Opacity="0.3" Direction="300" />
                             </Border.Effect>
-                            <TextBlock Background="Transparent" Text="Connect" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TopBarTextColor}" />
+                            <TextBlock  Background="Transparent" Text="Connect" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextColor}" />
                         </Border>
                     </Grid>
 
                 </StackPanel>
-                <Border Grid.Row="1" Background="{StaticResource BackgroundDark}" Margin="10,0,10,10"  CornerRadius="2">
+                <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,0,0,0" x:Name="ScanningNetworkGrid">
+                    <local:Loading x:Name="LoadingIcon" Height="14" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBlock Text="Scanning network" FontSize="14" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="{DynamicResource TextColor}" />
+                </Grid>
+                <Border x:Name="ResultsBorder" Grid.Row="1" Background="{StaticResource BackgroundDark}" Margin="10,25,10,10"  CornerRadius="2">
                     <Border Background="Transparent" BorderBrush="{StaticResource BackgroundDark}" BorderThickness="1" Margin="-1" CornerRadius="3">
                         <Border.Effect>
                             <DropShadowEffect ShadowDepth="2" BlurRadius="10"/>
                         </Border.Effect>
-                        <StackPanel>
-                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
-                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
-                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
-                            <Border Height="30" Margin="5,5,5,0" Background="{DynamicResource Background}" CornerRadius="3" />
+                        <StackPanel x:Name="ResultPanel">
 
                         </StackPanel>
                     </Border>

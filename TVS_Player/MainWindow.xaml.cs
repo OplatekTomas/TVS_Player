@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using TVS_Player_Base;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using TVS_Player.Properties;
 
 namespace TVS_Player {
 
@@ -22,53 +23,36 @@ namespace TVS_Player {
     /// </summary>
     public partial class MainWindow : Window {
 
-        public MainWindow() => InitializeComponent();
+        public MainWindow() {
+            InitializeComponent();
+        }
+
+        private void HandPointer(object sender, MouseEventArgs e) => Mouse.OverrideCursor = Cursors.Hand;
+
+        private void NormalPointer(object sender, MouseEventArgs e) => Mouse.OverrideCursor = null;
+
+        private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => View.GoBack();
+
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
-            MainContent.Content = new Login();
+            await HandleDefaultView();
         }
 
-        private void MoveWindow(object sender, MouseButtonEventArgs e) {
-            DragMove();
-        }
-        private void HandPointer(object sender, MouseEventArgs e) {
-            Mouse.OverrideCursor = Cursors.Hand;
-        }
-
-        private void NormalPointer(object sender, MouseEventArgs e) {
-            Mouse.OverrideCursor = null;
-        }
-
-
-        private void TopBar_MouseEnter(object sender, MouseEventArgs e) {
-            SearchBar.BeginStoryboard((Storyboard)FindResource("FadeInSearchBar"));
-        }
-
-        private void TopBar_MouseLeave(object sender, MouseEventArgs e) {
-            SearchBar.BeginStoryboard((Storyboard)FindResource("FadeOutSearchBar"));
-        }
-
-        private void MinimizeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void ExitButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            Animate.FadeOut(this,()=> {
-                Close();
-            });
-        }
-
-        private void MaximizeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if (WindowState == WindowState.Maximized) {
-                WindowState = WindowState.Normal;
+        private async Task HandleDefaultView() {
+            View.SetPageCustomization(View._defaultCustomization);
+            if (string.IsNullOrEmpty(Settings.Default.ServerIp) && Settings.Default.ServerPort == default || !await Api.Connect(Settings.Default.ServerIp, Settings.Default.ServerPort)) {
+                View.AddPage(new ServerSelector());
+                MainContent.Content = new Login();
+            } else if (string.IsNullOrEmpty(Settings.Default.AuthToken)) {
+                MainContent.Content = new Login();
             } else {
-                MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
-                WindowState = WindowState.Maximized;
+                Api.Login(Settings.Default.AuthToken);
+                MainContent.Content = new Library();
             }
         }
 
-        private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            View.GoBack();
+        private void Window_Unloaded(object sender, RoutedEventArgs e) {
+
         }
     }
 }

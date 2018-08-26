@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
              Height="26" Width="26">
-    <Border Background="{DynamicResource TopBarBackgrdound}" CornerRadius="13" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" MouseLeftButtonUp="Border_MouseLeftButtonUp">
+    <Border Background="{DynamicResource TopBarBackground}" CornerRadius="13" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" MouseLeftButtonUp="Border_MouseLeftButtonUp">
         <Border.Effect>
             <DropShadowEffect Opacity="0.5" Direction="300" BlurRadius="10" />
         </Border.Effect>

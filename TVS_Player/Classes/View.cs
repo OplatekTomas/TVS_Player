@@ -5,19 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace TVS_Player
-{
+namespace TVS_Player {
+
+    class ViewCustomization {
+        public TextChangedEventHandler SearchAction { get; set; }
+        /// <summary>
+        /// true - always, false - hidden, null - normal
+        /// </summary>
+        public bool? SearchBarVisible { get; set; }
+
+    }
+
     class View {
-        private static List<Page> Pages { get; set; } = new List<Page>();
+        
+        private static List<Type> Pages { get; set; } = new List<Type>();
         private static int PagesOnTopCount { get; set; } = 0;
 
         static MainWindow Main { get; } = (MainWindow)Application.Current.MainWindow;
 
-        public static void AddPage(Page page) {
+        public static void AddPage(Page page) {         
             Grid baseGrid = new Grid();
             Grid hider = new Grid {
                 Background = Helper.StringToBrush("#7000")
@@ -34,6 +45,7 @@ namespace TVS_Player
             Animate.FadeIn(baseGrid);
             PagesOnTopCount++;
             HandleBackButton();
+            SetPageCustomization(_defaultCustomization);
         }
 
 
@@ -51,21 +63,16 @@ namespace TVS_Player
             if (Main.TopContent.Children.Count - 1 == 0) {
                 ((Storyboard)Main.FindResource("UnBlurBackground")).Begin();
             }
+            SetPageCustomization(_defaultCustomization);
         }
 
         public static void RemoveAllPages() {
         }
 
-        public static void SetSearchBarVisibility(bool visible) {
-            if (visible) {
-                Main.SearchBar.Visibility = Visibility.Visible;
-            } else {
-                Main.SearchBar.Visibility = Visibility.Collapsed;
-            }
-        }
 
         public static void SetPage(Page page) {
-            AddToPages((Page)Main.MainContent.Content);
+            Pages.Add(((Page)Main.MainContent.Content).GetType());
+            HandleBackButton();
             Main.MainContentOld.Source = RenderBitmap(Main.MainContent);
             Main.MainContent.Content = page;
             Panel.SetZIndex(Main.MainContent, 1);
@@ -78,8 +85,8 @@ namespace TVS_Player
                 await Task.Delay(500);
                 Animate.FadeIn(Main.MainContentOld);
             });
+            SetPageCustomization(_defaultCustomization);          
         }
-
 
         public static void GoBack() {
             var page = Pages.Last();
@@ -89,22 +96,58 @@ namespace TVS_Player
             Panel.SetZIndex(Main.MainContentOld, 1);
             var anim = new ThicknessAnimation(new Thickness(0, Main.ActualHeight * -1, 0, 0), TimeSpan.FromMilliseconds(1));
             anim.Completed += (s, ev) => {
-                Main.MainContent.Content = page;
+                Main.MainContent.Content = Activator.CreateInstance(page);
                 AnimateLocal(Main.MainContent, Main.MainContent.Margin, new Thickness(0), () => {
                     Main.MainContentOld.Source = null;
                 });
                 Animate.FadeIn(Main.MainContent);
             };
             Main.MainContent.BeginAnimation(Page.MarginProperty, anim);
+            SetPageCustomization(_defaultCustomization);
         }
+
+        private static TextChangedEventHandler _lastEvent;
+        public static readonly ViewCustomization _defaultCustomization = new ViewCustomization() {
+            SearchBarVisible = null
+        };
+        public static void SetPageCustomization(ViewCustomization custom) {
+            if (_lastEvent != default) {
+                Main.SearchBarText.TextChanged -= _lastEvent;
+            }
+            Main.TopBar.MouseEnter -= TopBar_MouseEnter;
+            Main.TopBar.MouseLeave -= TopBar_MouseLeave;
+            switch (custom.SearchBarVisible) {
+                case true:
+                    TopBar_MouseEnter();
+                    break;
+                case false:
+                    TopBar_MouseLeave();
+                    break;
+                case null:
+                    Main.TopBar.MouseEnter += TopBar_MouseEnter;
+                    Main.TopBar.MouseLeave += TopBar_MouseLeave;
+                    break;
+            }
+            if (custom.SearchAction != default) {
+                _lastEvent = custom.SearchAction;
+            }
+        }
+
+        private static void TopBar_MouseEnter(object sender, MouseEventArgs args) => TopBar_MouseEnter();
+
+        private static void TopBar_MouseLeave(object sender, MouseEventArgs args) => TopBar_MouseLeave();
+
+        private static void TopBar_MouseEnter() {
+            Main.SearchBar.BeginStoryboard((Storyboard)Main.FindResource("FadeInSearchBar"));
+        }
+
+        private static void TopBar_MouseLeave() {
+            Main.SearchBar.BeginStoryboard((Storyboard)Main.FindResource("FadeOutSearchBar"));
+        }
+
 
         public static void ClearHistory() {
             Pages.Clear();
-            HandleBackButton();
-        }
-
-        private static void AddToPages(Page page) {
-            Pages.Add(page);
             HandleBackButton();
         }
 
@@ -114,11 +157,14 @@ namespace TVS_Player
         }
 
         private static void HandleBackButton() {
+            Storyboard sb;
             if (Pages.Count > 0 && PagesOnTopCount == 0) {
-                ShowBackButton();
+                sb = (Storyboard)Main.FindResource("FadeInSearchBar");
             } else {
-                HideBackButton();
+                sb = (Storyboard)Main.FindResource("FadeOutSearchBar");
             }
+            Main.BackButton.BeginStoryboard(sb);
+
         }
 
         private static void AnimateLocal(FrameworkElement element, Thickness start, Thickness end, Action completed = null) {
@@ -137,40 +183,18 @@ namespace TVS_Player
         }
 
         private static RenderTargetBitmap RenderBitmap(FrameworkElement element) {
-            double topLeft = 0;
-            double topRight = 0;
             int width = (int)element.ActualWidth;
             int height = (int)element.ActualHeight;
             double dpi = 96;
             DrawingVisual visual = new DrawingVisual();
             DrawingContext dc = visual.RenderOpen();
-            dc.DrawRectangle(new VisualBrush(element), null, new Rect(topLeft, topRight, width, height));
-            dc.Close();
+            dc.DrawRectangle(new VisualBrush(element), null, new Rect(0, 0, width, height));
+            dc.Close();       
             RenderTargetBitmap bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
             bitmap.Render(visual);
             return bitmap;
         }
 
-        private static void ShowBackButton() {
-            Animate.FadeIn(Main.BackButton);
-            Storyboard sb = new Storyboard();
-            DoubleAnimation anim = new DoubleAnimation(33, TimeSpan.FromMilliseconds(200));
-            sb.Children.Add(anim);
-            Storyboard.SetTarget(anim, Main.BackButtonWidth);
-            Storyboard.SetTargetProperty(anim, new PropertyPath("(ColumnDefinition.MaxWidth)"));
-            sb.Begin();
-            Main.BackBar.BeginAnimation(Grid.WidthProperty, new DoubleAnimation(130, TimeSpan.FromMilliseconds(200)));
-        }
 
-        private static void HideBackButton() {
-            Animate.FadeOut(Main.BackButton);
-            Storyboard sb = new Storyboard();
-            DoubleAnimation anim = new DoubleAnimation(7, TimeSpan.FromMilliseconds(200));
-            sb.Children.Add(anim);
-            Storyboard.SetTarget(anim, Main.BackButtonWidth);
-            Storyboard.SetTargetProperty(anim, new PropertyPath("(ColumnDefinition.MaxWidth)"));
-            sb.Begin();
-            Main.BackBar.BeginAnimation(Grid.WidthProperty, new DoubleAnimation(107, TimeSpan.FromMilliseconds(200)));
-        }
     }
 }

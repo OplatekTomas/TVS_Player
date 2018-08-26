@@ -16,21 +16,13 @@ using System.Windows.Shapes;
 namespace TVS_Player
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for SeriesPoster.xaml
     /// </summary>
-    public partial class Login : Page
+    public partial class SeriesPoster : UserControl
     {
-        public Login()
+        public SeriesPoster()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            View.AddPage(new ServerSelector());
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e) {
-            View.SetPage(new Library());
         }
     }
 }

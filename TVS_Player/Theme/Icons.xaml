@@ -6,5 +6,8 @@
     <BitmapImage x:Key="Maximize" UriSource="pack://application:,,,/Resources/Icons/maximize.png" />
     <BitmapImage x:Key="Search" UriSource="pack://application:,,,/Resources/Icons/search.png" />
     <BitmapImage x:Key="Back" UriSource="pack://application:,,,/Resources/Icons/go-back.png" />
+    <BitmapImage x:Key="Connection" UriSource="pack://application:,,,/Resources/Icons/wifi.png" />
+    <BitmapImage x:Key="Reload" UriSource="pack://application:,,,/Resources/Icons/reload.png" />
+    <BitmapImage x:Key="LogoWide" UriSource="pack://application:,,,/Resources/LogoWide.png" />
 
 </ResourceDictionary>

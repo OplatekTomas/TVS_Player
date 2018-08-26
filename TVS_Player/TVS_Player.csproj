@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -62,21 +63,49 @@
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\ServerFinder.cs" />
     <Compile Include="Classes\View.cs" />
+    <Compile Include="Views\Library\SeriesPoster.xaml.cs">
+      <DependentUpon>SeriesPoster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServerHandling\Register.xaml.cs">
+      <DependentUpon>Register.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServerHandling\ServerResult.xaml.cs">
+      <DependentUpon>ServerResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\BackButton.xaml.cs">
       <DependentUpon>BackButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ServerSelector.xaml.cs">
+    <Compile Include="Views\ServerHandling\ServerSelector.xaml.cs">
       <DependentUpon>ServerSelector.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Library\SeriesPoster.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServerHandling\Register.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServerHandling\ServerResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\BackButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Login.xaml">
+    <Page Include="Views\ServerHandling\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Library.xaml">
+    <Page Include="Views\Library\Library.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,10 +129,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Login.xaml.cs">
+    <Compile Include="Views\ServerHandling\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Library.xaml.cs">
+    <Compile Include="Views\Library\Library.xaml.cs">
       <DependentUpon>Library.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
@@ -114,7 +143,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ServerSelector.xaml">
+    <Page Include="Views\ServerHandling\ServerSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,7 +185,9 @@
       <Name>TVS_Player_Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\wifi.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\close.png" />
     <Resource Include="Resources\Icons\maximize.png" />
@@ -165,6 +196,12 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\go-back.png" />
     <Resource Include="Resources\Icons\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\reload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LogoWide.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

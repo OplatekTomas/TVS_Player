@@ -35,12 +35,17 @@ namespace TVS_Player
 
 
         private async Task CheckAddress(string address) {
-            using (TcpClient tcpClient = new TcpClient()) {
-                try {
-                    await tcpClient.ConnectAsync(address, 5850);
-                    ServerFound.Invoke(address + ":" + 5850, new EventArgs());
-                } catch { }       
+            Ping ping = new Ping();
+            var res = await ping.SendPingAsync(address);
+            if (res.Status == IPStatus.Success) {
+                using (TcpClient tcpClient = new TcpClient()) {
+                    try {
+                        await tcpClient.ConnectAsync(address, 5850);
+                        ServerFound.Invoke(address + ":" + 5850, new EventArgs());
+                    } catch { }
+                }
             }
+
         }
 
         private double GetNumberOfIps(string mask) {

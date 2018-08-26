@@ -15,5 +15,10 @@
     <Storyboard x:Key="FadeOut">
         <DoubleAnimation To="0" Duration="0:0:0.2" Storyboard.TargetProperty="Opacity" DecelerationRatio="0.75" />
     </Storyboard>
-
+    <Storyboard x:Key="ResetMargin">
+        <ThicknessAnimation To="0" Duration="0:0:0.2" Storyboard.TargetProperty="Margin" DecelerationRatio="0.75" />
+    </Storyboard>
+    <Storyboard x:Key="Rotate">
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" FillBehavior="Stop" DecelerationRatio="0.75" AccelerationRatio="0.1" To="361" Duration="0:0:1"/>
+    </Storyboard>
 </ResourceDictionary>

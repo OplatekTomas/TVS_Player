@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280"  MinHeight="480" MinWidth="800"
-        Loaded="Window_Loaded" WindowStyle="None"
-        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" ShowInTaskbar="True" Style="{StaticResource Font}" VisualTextRenderingMode="ClearType" Background="Transparent">
+        Title="MainWindow" Height="720" Width="1305"  MinHeight="480" MinWidth="800"
+        Loaded="Window_Loaded"
+ ShowInTaskbar="True" VisualTextRenderingMode="ClearType" Style="{StaticResource ProductFont}">
     <Window.Resources>
         <Storyboard x:Key="BlurBackground">
             <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="GridBlur" DecelerationRatio="0.75" Duration="0:0:0.200" />
@@ -16,7 +16,7 @@
             <DoubleAnimation Storyboard.TargetProperty="Radius" To="0" Storyboard.TargetName="GridBlur" DecelerationRatio="0.75" Duration="0:0:0.200" />
         </Storyboard>
     </Window.Resources>
-    <Border CornerRadius="3"  Background="{DynamicResource Background}">
+    <Border  Background="{DynamicResource Background}">
         <Grid>
             <!--#region TopBar-->
             <Grid x:Name="TopBar" Height="45" Margin="5" VerticalAlignment="Top" Panel.ZIndex="50">
@@ -25,28 +25,16 @@
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <Border x:Name="BackBar" Grid.Column="0" Margin="10,0" Width="107" Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Left" Height="26" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                <Border x:Name="BackButton" Margin="10,-100,10,0" Height="26" HorizontalAlignment="Left" Background="{DynamicResource TopBarBackground}" CornerRadius="13" MouseEnter="HandPointer" MouseLeave="NormalPointer" MouseLeftButtonUp="BackButton_MouseLeftButtonUp">
                     <Border.Effect>
-                        <DropShadowEffect Opacity="0.5" Direction="300" BlurRadius="10" />
+                        <DropShadowEffect Direction="300" />
                     </Border.Effect>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" MaxWidth="7" x:Name="BackButtonWidth"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Background="Transparent" x:Name="BackButton" Opacity="0" MouseLeftButtonUp="BackButton_MouseLeftButtonUp">
-                            <Image Source="{StaticResource Back}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                            <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,0,2" CornerRadius="1" />
-                        </Grid>
-                        <Grid Grid.Column="1" MouseDown="MoveWindow" Background="Transparent" >
-                            <TextBlock HorizontalAlignment="Left" Margin="5,0" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Foreground="{StaticResource TopBarTextColor}">TVS_Player</TextBlock>
-                        </Grid>
-                    </Grid>
+                    <Image Source="{DynamicResource Back}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
                 </Border>
-                <Grid Grid.Column="1" Background="Transparent" MouseEnter="TopBar_MouseEnter" MouseLeave="TopBar_MouseLeave">
-                    <Border Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" x:Name="SearchBar" Height="26" Margin="10,-100,10,0">
+                <Grid Grid.Column="1" Background="Transparent">
+                    <Border Background="{StaticResource TopBarBackground}" CornerRadius="11" x:Name="SearchBar" Height="26" Margin="10,-100,10,0">
                         <Border.Effect>
-                            <DropShadowEffect Opacity=".75" Direction="320" BlurRadius="10" />
+                            <DropShadowEffect Direction="300" BlurRadius="10" />
                         </Border.Effect>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -59,38 +47,13 @@
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
-                                <TextBox Background="{StaticResource TopBarBackgrdound}" FontSize="16" Foreground="{StaticResource TopBarTextColor}" BorderThickness="0" Margin="5,2,5,0"></TextBox>
+                                <TextBox x:Name="SearchBarText" Background="{StaticResource TopBarBackground}" FontSize="16" Foreground="{StaticResource TextColor}" BorderThickness="0" Margin="5,2,5,0"></TextBox>
                                 <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
-                            </Grid>
-                            <Grid Grid.Column="2">
-
                             </Grid>
                         </Grid>
                     </Border>
                 </Grid>
-                <Border Grid.Column="2" Margin="10,0" Background="{StaticResource TopBarBackgrdound}" CornerRadius="11" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100" Height="26">
-                    <Border.Effect>
-                        <DropShadowEffect Opacity="0.5" Direction="300" BlurRadius="10" />
-                    </Border.Effect>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Background="Transparent" x:Name="MinimizeButton" MouseLeftButtonUp="MinimizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                            <Image Source="{StaticResource Minimize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                        </Grid>
-                        <Grid Grid.Column="1" Background="Transparent" x:Name="MaximizeButton" MouseLeftButtonUp="MaximizeButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                            <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
-                            <Image Source="{StaticResource Maximize}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                            <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
-                        </Grid>
-                        <Grid Grid.Column="2" Background="Transparent" x:Name="ExitButton" MouseLeftButtonUp="ExitButton_MouseLeftButtonUp" MouseEnter="HandPointer" MouseLeave="NormalPointer">
-                            <Image Source="{StaticResource Close}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                        </Grid>
-                    </Grid>
-                </Border>
+               
             </Grid>
             <!--#endregion-->
 

@@ -16,13 +16,23 @@ using System.Windows.Shapes;
 namespace TVS_Player
 {
     /// <summary>
-    /// Interaction logic for Library.xaml
+    /// Interaction logic for ServerResult.xaml
     /// </summary>
-    public partial class Library : Page
-    {
-        public Library()
-        {
+    public partial class ServerResult : UserControl {
+
+        public string Result { get; set; }
+
+        public ServerResult(string result) {
             InitializeComponent();
+            Address.Text = Result = result;
+        }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
         }
     }
 }
