@@ -55,8 +55,8 @@ namespace TVS_Player_Base {
             }
         }
 
-        public static async Task<object> Search(string query) {
-            return await GetDataArray("/api/Search?query=" + query);
+        public static async Task<HashSet<SearchResult>> Search(string query) {
+            return (await GetDataArray("/api/Search?query=" + query)).ToObject<HashSet<SearchResult>>();
         }
 
         public static async Task<(bool loggedin, string message, string token)> Login(string username, string password) {

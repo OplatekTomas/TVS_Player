@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TVS_Player_Base {
-    class Episode {
+    public class Episode {
         public int Id { get; set; }
         public int? AiredSeason { get; set; }
         public int? AiredEpisodeNumber { get; set; }
@@ -26,6 +26,7 @@ namespace TVS_Player_Base {
         public int? SiteRatingCount { get; set; }
         public string URL { get; set; }
         public bool FullInfo { get; set; }
+        public bool Watched { get; set; }
 
         public static async Task<List<Episode>> GetEpisodes(int seriesId) {
             return (await Api.GetDataArray("api/GetEpisodes?seriesId=" + seriesId)).ToObject<List<Episode>>();

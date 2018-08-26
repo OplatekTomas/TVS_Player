@@ -91,7 +91,9 @@
                       Margin="1,0,2,0"
                       Background="{DynamicResource TopBarBackground}"
                       BorderThickness="0" >
-                        <Border.Effect><DropShadowEffect BlurRadius="5" Opacity="0.5" Direction="300" /></Border.Effect>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" Opacity="0.5" Direction="300" />
+                        </Border.Effect>
                     </Border>
 
                 </ControlTemplate>
@@ -136,7 +138,7 @@
             </Grid.ColumnDefinitions>
             <Border
             Grid.ColumnSpan="3"
-            CornerRadius="0" />
+            />
             <Track
                 Name="PART_Track"
                 Grid.Column="1"
@@ -144,7 +146,7 @@
                 <Track.Thumb>
                     <Thumb
                         Style="{StaticResource ScrollBarThumb}"
-                        Margin="0,6,0,6" />
+                        Margin="0,0,0,6"  />
                 </Track.Thumb>
             </Track>
         </Grid>
@@ -154,7 +156,6 @@
     <Style x:Key="ScrollBar" TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
-
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>

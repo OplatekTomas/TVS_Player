@@ -9,21 +9,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using TVS_Player_Base;
 
 namespace TVS_Player {
 
     class ViewCustomization {
-        public TextChangedEventHandler SearchAction { get; set; }
         /// <summary>
         /// true - always, false - hidden, null - normal
         /// </summary>
         public bool? SearchBarVisible { get; set; }
-
     }
 
     class View {
         
-        private static List<Type> Pages { get; set; } = new List<Type>();
+        private static List<Page> Pages { get; set; } = new List<Page>();
         private static int PagesOnTopCount { get; set; } = 0;
 
         static MainWindow Main { get; } = (MainWindow)Application.Current.MainWindow;
@@ -66,14 +65,14 @@ namespace TVS_Player {
             SetPageCustomization(_defaultCustomization);
         }
 
-        public static void RemoveAllPages() {
+        public static async Task RemoveAllPages() {
         }
 
 
         public static void SetPage(Page page) {
-            Pages.Add(((Page)Main.MainContent.Content).GetType());
+            Pages.Add(((Page)Main.MainContent.Content));
             HandleBackButton();
-            Main.MainContentOld.Source = RenderBitmap(Main.MainContent);
+            Main.MainContentOld.Source = Helper.RenderElement(Main.MainContent);
             Main.MainContent.Content = page;
             Panel.SetZIndex(Main.MainContent, 1);
             Panel.SetZIndex(Main.MainContentOld, 2);
@@ -88,15 +87,17 @@ namespace TVS_Player {
             SetPageCustomization(_defaultCustomization);          
         }
 
+
+
         public static void GoBack() {
             var page = Pages.Last();
             RemoveLast();
-            Main.MainContentOld.Source = RenderBitmap(Main.MainContent);
+            Main.MainContentOld.Source = Helper.RenderElement(Main.MainContent);
             Panel.SetZIndex(Main.MainContent, 2);
             Panel.SetZIndex(Main.MainContentOld, 1);
             var anim = new ThicknessAnimation(new Thickness(0, Main.ActualHeight * -1, 0, 0), TimeSpan.FromMilliseconds(1));
             anim.Completed += (s, ev) => {
-                Main.MainContent.Content = Activator.CreateInstance(page);
+                Main.MainContent.Content = page;
                 AnimateLocal(Main.MainContent, Main.MainContent.Margin, new Thickness(0), () => {
                     Main.MainContentOld.Source = null;
                 });
@@ -106,14 +107,46 @@ namespace TVS_Player {
             SetPageCustomization(_defaultCustomization);
         }
 
-        private static TextChangedEventHandler _lastEvent;
+
+        public static void RenderSearchResult(HashSet<SearchResult> results) {
+            results = results.OrderByDescending(x => x.Type).ToHashSet();
+            if (results.Count > 25) {
+                results = results.Take(25).ToHashSet();
+            }
+            Main.SearchResultPanel.Children.Clear();
+            foreach (var item in results) {
+                SearchResultControl result = new SearchResultControl();
+                result.MouseLeftButtonUp += async (s, ev) => {
+                    if (result.ResultType.Text == "Series") {
+                        View.SetPage(new SeriesView(await Series.GetSeries(item.SeriesId)));
+                    } else {
+
+                    }
+                    TopBar_MouseLeave();
+                };
+                result.ResultName.Text = item.Name;
+                result.ResultType.Text = item.Type;
+                Main.SearchResultPanel.Children.Add(result);
+            }
+        }
+        public static void AnimateSearchResult(int count) {
+            if (count == 0) {
+                Animate.FadeOut(Main.SearchResultBar);
+                Main.SearchResultBar.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(new Thickness(5, -1, 5, 0), TimeSpan.FromMilliseconds(100)));
+            } else if (count > 0 && count < 6) {
+                Main.SearchResultBar.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(new Thickness(5, -1, 5, -17 + (-50 * count)), TimeSpan.FromMilliseconds(100)));
+                Main.SearchResultBar.BeginAnimation(UIElement.OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(200)));
+            } else {
+                Main.SearchResultBar.BeginAnimation(UIElement.OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(200)));
+                Main.SearchResultBar.BeginAnimation(FrameworkElement.MarginProperty, new ThicknessAnimation(new Thickness(5, -1, 5, -250), TimeSpan.FromMilliseconds(100)));
+            }
+        }
+
+
         public static readonly ViewCustomization _defaultCustomization = new ViewCustomization() {
             SearchBarVisible = null
         };
         public static void SetPageCustomization(ViewCustomization custom) {
-            if (_lastEvent != default) {
-                Main.SearchBarText.TextChanged -= _lastEvent;
-            }
             Main.TopBar.MouseEnter -= TopBar_MouseEnter;
             Main.TopBar.MouseLeave -= TopBar_MouseLeave;
             switch (custom.SearchBarVisible) {
@@ -128,9 +161,7 @@ namespace TVS_Player {
                     Main.TopBar.MouseLeave += TopBar_MouseLeave;
                     break;
             }
-            if (custom.SearchAction != default) {
-                _lastEvent = custom.SearchAction;
-            }
+
         }
 
         private static void TopBar_MouseEnter(object sender, MouseEventArgs args) => TopBar_MouseEnter();
@@ -143,8 +174,9 @@ namespace TVS_Player {
 
         private static void TopBar_MouseLeave() {
             Main.SearchBar.BeginStoryboard((Storyboard)Main.FindResource("FadeOutSearchBar"));
+            Main.SearchBarText.Text = "";
+            Keyboard.ClearFocus();
         }
-
 
         public static void ClearHistory() {
             Pages.Clear();
@@ -180,21 +212,6 @@ namespace TVS_Player {
                 animation.Completed += (s, ev) => completed();
             }
             element.BeginAnimation(Grid.MarginProperty, animation);
-        }
-
-        private static RenderTargetBitmap RenderBitmap(FrameworkElement element) {
-            int width = (int)element.ActualWidth;
-            int height = (int)element.ActualHeight;
-            double dpi = 96;
-            DrawingVisual visual = new DrawingVisual();
-            DrawingContext dc = visual.RenderOpen();
-            dc.DrawRectangle(new VisualBrush(element), null, new Rect(0, 0, width, height));
-            dc.Close();       
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(width, height, dpi, dpi, PixelFormats.Default);
-            bitmap.Render(visual);
-            return bitmap;
-        }
-
-
+        }       
     }
 }

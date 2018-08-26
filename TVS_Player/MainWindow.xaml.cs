@@ -36,6 +36,26 @@ namespace TVS_Player {
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
             await HandleDefaultView();
+            CreateSearchEvent();
+        }
+
+        private void ResetData() {
+            Settings.Default.AuthToken = Settings.Default.ServerIp = "";
+            Settings.Default.ServerPort = 0;
+            Settings.Default.Save();
+        }
+
+        private void CreateSearchEvent() {
+            SearchBarText.TextChanged += async (s, ev) => {
+                var count = 0;
+                if (SearchBarText.Text.Length > 1) {
+                    var results = await Api.Search(SearchBarText.Text);
+                    View.RenderSearchResult(results);
+                    count = results.Count;
+                }
+                View.AnimateSearchResult(count);
+            };
+
         }
 
         private async Task HandleDefaultView() {

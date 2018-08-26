@@ -63,6 +63,18 @@
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\ServerFinder.cs" />
     <Compile Include="Classes\View.cs" />
+    <Compile Include="Views\UserControls\SearchResultControl.xaml.cs">
+      <DependentUpon>SearchResultControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Library\EpisodePreview.xaml.cs">
+      <DependentUpon>EpisodePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Library\SeasonSelector.xaml.cs">
+      <DependentUpon>SeasonSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Library\SeriesView.xaml.cs">
+      <DependentUpon>SeriesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Library\SeriesPoster.xaml.cs">
       <DependentUpon>SeriesPoster.xaml</DependentUpon>
     </Compile>
@@ -81,6 +93,22 @@
     <Compile Include="Views\ServerHandling\ServerSelector.xaml.cs">
       <DependentUpon>ServerSelector.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\UserControls\SearchResultControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Library\EpisodePreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Library\SeasonSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Library\SeriesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Library\SeriesPoster.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -202,6 +230,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\LogoWide.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\go-forward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\border.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
