@@ -26,5 +26,9 @@ namespace TVS_Player_Base {
             return (await Api.GetDataObject("api/GetPoster?posterId=" + posterId)).ToObject<Poster>();
         }
 
+        public static async Task<Poster> GetBackground(int seriesId) {
+            return (await Api.GetDataObject("api/GetBackground?seriesId=" + seriesId)).ToObject<Poster>();
+        }
+
     }
 }

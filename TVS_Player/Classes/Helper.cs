@@ -54,6 +54,22 @@ namespace TVS_Player
             }
         }
 
+        public static DateTime ParseDate(string date) {
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime success)) {
+                return success;
+            } else {
+                return DateTime.Now;
+            }
+        }
+
+        public static string ParseDateToString(string date) {
+            if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime success)) {
+                return success.ToString("dd. MM. yyyy");
+            } else {
+                return "";
+            }
+        }
+
     }
     public static class Extensions {
         public static void Save(this BitmapImage image, string filePath) {

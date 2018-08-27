@@ -52,8 +52,12 @@ namespace TVS_Player {
             }
             SeasonController.Children.Add(selector);
             PosterImage.Source = await Helper.GetImage(series.URL);
+            Background.Source = await Helper.GetImage((await Poster.GetBackground(series.Id)).URL);
+            Animate.FadeIn(Background);
             resizeTimer.Elapsed += ResizingDone;
             EpisodePanel.SizeChanged += Page_SizeChanged;
+            var nextEp = episodes.Where(x => x.AiredSeason > 0 && !string.IsNullOrEmpty(x.FirstAired) && Helper.ParseDate(x.FirstAired) > DateTime.Now).OrderBy(x=>x.FirstAired).FirstOrDefault();
+            FillInText(nextEp);
         }
 
         private async Task RenderSeason(int season) {
@@ -73,6 +77,25 @@ namespace TVS_Player {
                     Animate.FadeIn(preview);
                 }
             }
+        }
+
+        private void FillInText(Episode nextEp) {
+            Genre.Text = "";
+            Rating.Text = series.SiteRating + "/10";
+            if (nextEp != null) {
+                NextEp.Text = Helper.ParseDateToString(nextEp.FirstAired) + " (" + Helper.ParseDate(nextEp.FirstAired).ToString("dddd") + ") @ " + series.AirsTime;
+            } else {
+                NextEpGrid.Visibility = Visibility.Collapsed;
+            }
+            Length.Text = series.Runtime.Length == 1 ? series.Runtime + " h" : series.Runtime + " min" ;
+            Network.Text = series.Network;
+            Status.Text = series.Status;
+            Imdb.MouseLeftButtonUp += (s,ev) => Process.Start("https://www.imdb.com/title/" + series.ImdbId);
+            for (int i = 0; i < series.Genre.Count; i++) {
+                Genre.Text += i == series.Genre.Count - 1 ? series.Genre[i] : series.Genre[i] + ", ";
+            }
+            Animate.FadeIn(MainText);
+
         }
 
 
@@ -126,6 +149,15 @@ namespace TVS_Player {
             }
             return (0, 0);
         }
+
+        private void Imdb_MouseEnter(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = Cursors.Hand;
+        }
+
+        private void Imdb_MouseLeave(object sender, MouseEventArgs e) {
+            Mouse.OverrideCursor = null;
+        }
+
     }
 
 }

@@ -6,59 +6,76 @@
       xmlns:local="clr-namespace:TVS_Player"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SeriesView">
-
-    <ScrollViewer Background="{StaticResource Background}" Margin="0,5">
-        <ScrollViewer.Resources>
-            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBar}" />
-        </ScrollViewer.Resources>
-
-        <Grid Loaded="Grid_Loaded">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="400"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <Border CornerRadius="0,0,5,0">
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,0.80" StartPoint="0.5,1.2">
-                        <GradientStop Color="Black" Offset="0.3" />
-                        <GradientStop Color="#00000000" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+      Title="SeriesView" Style="{StaticResource ProductFont}">
+    <Grid>
+        <Image x:Name="Background" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"  />
+        <ScrollViewer Background="AliceBlue" Style="{StaticResource ScrollBarOnTop}">
+            <Grid Loaded="Grid_Loaded">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="400"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
                 <Grid>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,0.50" StartPoint="0.5,1.2">
+                            <GradientStop Color="#DD000000" Offset="0.3" />
+                            <GradientStop Color="#00000000" Offset="0.9"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
-                    <Grid Margin="15,0,15,0">
-                        <Border  Margin="5" Height="309" Width="210" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5,5,6,6">
-                            <Border.Effect>
-                                <DropShadowEffect Opacity="0.5" Direction="300" />
-                            </Border.Effect>
-                            <Grid>
-                                <Border x:Name="Test" CornerRadius="5,5,6,6"  Background="{StaticResource TopBarBackground}" />
-                                <StackPanel>
-                                    <StackPanel.OpacityMask>
-                                        <VisualBrush Visual="{Binding ElementName=Test}" />
-                                    </StackPanel.OpacityMask>
-                                    <Image x:Name="PosterImage" RenderOptions.BitmapScalingMode="HighQuality" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                   
-                    </Grid>
+                    <Border Margin="20,50,20,5" Height="264" Width="180" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5,5,6,6">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.5" Direction="300" />
+                        </Border.Effect>
+                        <Grid>
+                            <Border x:Name="Test" CornerRadius="5,5,6,6"  Background="{StaticResource TopBarBackground}" />
+                            <StackPanel>
+                                <StackPanel.OpacityMask>
+                                    <VisualBrush Visual="{Binding ElementName=Test}" />
+                                </StackPanel.OpacityMask>
+                                <Image x:Name="PosterImage" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="25,5,0,15" HorizontalAlignment="Left" VerticalAlignment="Bottom" x:Name="MainText" Opacity="0">
+                        <TextBlock x:Name="Genre" Text="Fantasy, something, something else" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,0" VerticalAlignment="Center" ToolTip="Genres" />
+                        <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        <TextBlock x:Name="Rating" Text="" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="5,0" VerticalAlignment="Center"  ToolTip="Rating" />
+                        <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        <TextBlock x:Name="Length" Text="45 min" Foreground="{DynamicResource TextColor}" FontSize="14" Margin="5,0" VerticalAlignment="Center"  ToolTip="Episode length" />
+                        <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        <TextBlock x:Name="Network" Text="HBO" Foreground="{DynamicResource TextColor}" FontSize="14" Margin="5,0" VerticalAlignment="Center"  ToolTip="Network" />
+                        <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        <TextBlock x:Name="Status" Text="Canceled" Foreground="{DynamicResource TextColor}" FontSize="14" Margin="5,0" VerticalAlignment="Center"  ToolTip="Status" />
+                        <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        <Grid x:Name="NextEpGrid">
+                            <TextBlock x:Name="NextEp" Text="21. 3. 2019 (Monday) @ 12PM" Foreground="{DynamicResource TextColor}" FontSize="14" Margin="5,0" VerticalAlignment="Center"  ToolTip="Next episode" />
+                            <Grid Height="18" Background="{DynamicResource TextColor}" Width="1" />
+                        </Grid>
+
+                        <TextBlock x:Name="Imdb" Text="IMDb" Foreground="{DynamicResource TextColor}" TextDecorations="Underline" FontSize="14" Margin="5,0" VerticalAlignment="Center"  ToolTip="IMDb page" MouseEnter="Imdb_MouseEnter" MouseLeave="Imdb_MouseLeave" />
+                    </StackPanel>
                     <Grid Grid.Row="1" x:Name="SeasonController" />
+                </Grid>
+                <Grid Grid.Row="1" >
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,-0.2" >
+                            <GradientStop Color="#DD000000" Offset="0.3" />
+                            <GradientStop Color="#F000" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <WrapPanel x:Name="EpisodePanel" Margin="0,0,15,5">
+                        <WrapPanel.Effect>
+                            <DropShadowEffect  Opacity="1" Direction="300" />
+                        </WrapPanel.Effect>
+                    </WrapPanel >
 
                 </Grid>
-            </Border>
-            <Grid Grid.Row="1">
-                <WrapPanel x:Name="EpisodePanel">
-                    <WrapPanel.Effect>
-                        <DropShadowEffect  Opacity="0.5" />
-                    </WrapPanel.Effect>
-                </WrapPanel >
-
             </Grid>
-        </Grid>
-    </ScrollViewer>
+
+        </ScrollViewer>
+    </Grid>
 </Page>
