@@ -50,8 +50,11 @@ namespace TVS_Player {
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     FontSize = 14,
-                    Foreground = (Brush)FindResource("TextColor")
+                    Foreground = (Brush)FindResource("TextColor"),
+                    Margin = new Thickness(0, 0, 0, 10)
                 };
+                grid.MouseEnter += (s, ev) => Mouse.OverrideCursor = Cursors.Hand;
+                grid.MouseLeave += (s, ev) => Mouse.OverrideCursor = null;
                 grid.MouseLeftButtonUp += (s, ev) => { SelectSeason(SeasonPanel.Children.IndexOf((UIElement)s) + 1); };
                 grid.Children.Add(underline);
                 grid.Children.Add(text);

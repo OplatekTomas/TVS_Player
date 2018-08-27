@@ -5,16 +5,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
-             d:DesignHeight="180" d:DesignWidth="320">
+             d:DesignHeight="180" d:DesignWidth="320" Style="{StaticResource ProductFont}">
     <Border CornerRadius="5" Margin="5">
         <Grid>
-            <Border x:Name="Test" CornerRadius="5"  Background="{StaticResource TopBarBackground}"/>
-            <StackPanel>
-                <StackPanel.OpacityMask>
-                    <VisualBrush Visual="{Binding ElementName=Test}" />
-                </StackPanel.OpacityMask>
-                <Image x:Name="EpisodeThumbnail" RenderOptions.BitmapScalingMode="HighQuality" />
-            </StackPanel>
+            <Grid>
+                <Border x:Name="Test" CornerRadius="5"  Background="{StaticResource TopBarBackground}"/>
+                <StackPanel>
+                    <StackPanel.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=Test}" />
+                    </StackPanel.OpacityMask>
+                    <Image x:Name="EpisodeThumbnail" RenderOptions.BitmapScalingMode="HighQuality" />
+                </StackPanel>
+            </Grid>
+            <Border Height="40" Background="#BB000000" VerticalAlignment="Bottom" CornerRadius="5,5,5,5" >
+                <Grid Margin="5,5,5,3">
+                    <TextBlock FontSize="16" x:Name="EpisodeName" Foreground="{DynamicResource TextColor}" Text="Game of Tones" VerticalAlignment="Top" />
+                    <TextBlock  Foreground="{DynamicResource TextColor}" x:Name="EpisodeNumber" Text="Episode: " Margin="1,0,0,0" VerticalAlignment="Bottom" />
+
+                </Grid>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

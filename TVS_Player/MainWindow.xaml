@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TVS_Player"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280"  MinHeight="480" MinWidth="800"
+        mc:Ignorable="d" 
+        Title="TVS_Player" Height="720" Width="1280"  MinHeight="480" MinWidth="800"
         Loaded="Window_Loaded"
  ShowInTaskbar="True" VisualTextRenderingMode="ClearType" Style="{StaticResource ProductFont}">
     <Window.Resources>

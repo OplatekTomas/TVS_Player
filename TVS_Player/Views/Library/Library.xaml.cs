@@ -31,6 +31,7 @@ namespace TVS_Player
         Timer resizeTimer = new Timer(200);
 
         private async void FrameworkElement_OnLoaded(object sender, RoutedEventArgs e) {
+            SeriesPanel.Children.Clear();
             var list = await Series.GetSeries();
             var (width, height) = GetDimensions();
             foreach (var series in list) {

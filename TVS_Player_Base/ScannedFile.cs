@@ -15,7 +15,7 @@ namespace TVS_Player_Base {
         public int EpisodeId { get; set; }
 
         public static async Task<List<ScannedFile>> GetFiles(int episodeId) {
-            return (await Api.GetDataArray("api/GetFiles?episode=" + episodeId)).ToObject<List<ScannedFile>>();
+            return (await Api.GetDataArray("api/GetFiles?episodeId=" + episodeId)).ToObject<List<ScannedFile>>();
         }
 
         public static async Task<ScannedFile> GetFile(int episodeId, int fileId) {

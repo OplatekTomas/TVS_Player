@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              Height="40" d:DesignWidth="800" Style="{DynamicResource ProductFont}">
     <Grid Margin="5,0">
-        <ScrollViewer Background="{StaticResource Background}"  Margin="10,0" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Background="{StaticResource Background}" x:Name="MainScroll" Margin="10,0" CanContentScroll="False" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
             <ScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}"  BasedOn="{StaticResource ScrollBar}" />
             </ScrollViewer.Resources>

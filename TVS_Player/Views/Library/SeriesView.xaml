@@ -28,7 +28,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
                     <Grid Margin="15,0,15,0">
                         <Border  Margin="5" Height="309" Width="210" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5,5,6,6">
@@ -52,9 +52,9 @@
                 </Grid>
             </Border>
             <Grid Grid.Row="1">
-                <WrapPanel x:Name="EpisodePanel" Background="{DynamicResource Background}">
+                <WrapPanel x:Name="EpisodePanel">
                     <WrapPanel.Effect>
-                        <DropShadowEffect Direction="300" Opacity="0.5" />
+                        <DropShadowEffect  Opacity="0.5" />
                     </WrapPanel.Effect>
                 </WrapPanel >
 
