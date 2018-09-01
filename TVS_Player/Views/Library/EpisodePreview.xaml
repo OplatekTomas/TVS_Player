@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
              d:DesignHeight="180" d:DesignWidth="320" Style="{StaticResource ProductFont}">
-    <Border CornerRadius="5" Margin="5">
+    <Border Margin="15">
         <Grid>
             <Grid>
-                <Border x:Name="Test" CornerRadius="5"  Background="{StaticResource TopBarBackground}"/>
+                <Border x:Name="Test"   Background="{StaticResource TopBarBackground}"/>
                 <StackPanel>
                     <StackPanel.OpacityMask>
                         <VisualBrush Visual="{Binding ElementName=Test}" />
@@ -17,11 +17,10 @@
                     <Image x:Name="EpisodeThumbnail" RenderOptions.BitmapScalingMode="HighQuality" />
                 </StackPanel>
             </Grid>
-            <Border Height="43" Background="#BB000000" VerticalAlignment="Bottom" CornerRadius="5,5,5,5" >
+            <Border Height="43" Background="#BB000000" VerticalAlignment="Bottom" Margin="0,0,0,-1" CornerRadius="5,5,0,0" >
                 <Grid Margin="5,5,5,3">
                     <TextBlock FontSize="16" x:Name="EpisodeName" Foreground="{DynamicResource TextColor}" Text="Game of Tones" VerticalAlignment="Top" />
                     <TextBlock  Foreground="{DynamicResource TextColor}" x:Name="EpisodeNumber" Text="Episode: " Margin="1,0,0,0" VerticalAlignment="Bottom" />
-
                 </Grid>
             </Border>
         </Grid>

@@ -7,7 +7,7 @@
         mc:Ignorable="d" 
         Title="TVS_Player" Height="720" Width="1280"  MinHeight="480" MinWidth="800"
         Loaded="Window_Loaded"
- ShowInTaskbar="True" VisualTextRenderingMode="ClearType" Style="{StaticResource ProductFont}">
+ ShowInTaskbar="True" VisualTextRenderingMode="ClearType" Style="{StaticResource ProductFont}" Closing="Window_Closing">
     <Window.Resources>
         <Storyboard x:Key="BlurBackground">
             <DoubleAnimation Storyboard.TargetProperty="Radius" To="50" Storyboard.TargetName="GridBlur" DecelerationRatio="0.75" Duration="0:0:0.200" />

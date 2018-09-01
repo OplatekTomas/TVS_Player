@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,18 +36,21 @@ namespace TVS_Player
             var list = await Series.GetSeries();
             var (width, height) = GetDimensions();
             foreach (var series in list) {
-                SeriesPoster sp = new SeriesPoster();
+                SeriesPoster sp = new SeriesPoster {
+                    Height = height,
+                    Width = width
+                };
                 sp.MouseEnter += (s, ev) => ItemMouseEnter();
                 sp.MouseLeave += (s, ev) => ItemMouseLeave();
-                sp.Height = height;
-                sp.Width = width;
                 sp.MouseLeftButtonUp += (s, ev) => View.SetPage(new SeriesView(series));
-                sp.PosterImage.Source = await Helper.GetImage(series.URL);
-                SeriesPanel.Children.Add(sp);
+                var img = await Helper.GetImage(series.URL);
+                sp.PosterImage.Source = img;
+                    SeriesPanel.Children.Add(sp);
                 Animate.FadeIn(sp);
             }
             SizeChanged += Page_SizeChanged;
             resizeTimer.Elapsed += new ElapsedEventHandler(ResizingDone);
+
         }
 
         private void ItemMouseEnter() {

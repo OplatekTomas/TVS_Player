@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:TVS_Player"
              mc:Ignorable="d" 
              Height="294" Width="200">
-    <Border CornerRadius="5" Margin="5">
+    <Border Margin="5">
         <Grid>
-            <Border x:Name="Test" CornerRadius="5"  Background="{StaticResource TopBarBackground}"/>
+            <Border x:Name="Test" CornerRadius="5,5,6,6"  Background="{StaticResource TopBarBackground}"/>
             <StackPanel>
                 <StackPanel.OpacityMask>
                     <VisualBrush Visual="{Binding ElementName=Test}" />

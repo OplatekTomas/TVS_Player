@@ -63,6 +63,9 @@
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\ServerFinder.cs" />
     <Compile Include="Classes\View.cs" />
+    <Compile Include="Views\VideoPlayer\VideoPlayer.xaml.cs">
+      <DependentUpon>VideoPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\SearchResultControl.xaml.cs">
       <DependentUpon>SearchResultControl.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,10 @@
     <Compile Include="Views\ServerHandling\ServerSelector.xaml.cs">
       <DependentUpon>ServerSelector.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\VideoPlayer\VideoPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\SearchResultControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

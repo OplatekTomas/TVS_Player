@@ -19,16 +19,16 @@ namespace TVS_Player
         }
 
         public static async Task<BitmapImage> GetImage(string url) {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri("http://" + Api.Ip + ":" + Api.Port + url);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            while (bitmap.IsDownloading) {
-                await Task.Delay(5);
-            }
-            bitmap.Freeze();
-            return bitmap;
+            return await Task.Run(async () => {
+                var bytes = await new WebClient().DownloadDataTaskAsync(new Uri("http://" + Api.Ip + ":" + Api.Port + url));
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = new MemoryStream(bytes);
+                bitmap.EndInit();
+                bitmap.Freeze();
+                return bitmap;
+            });        
         }
 
         public static RenderTargetBitmap RenderElement(FrameworkElement element) {

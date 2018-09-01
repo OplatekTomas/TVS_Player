@@ -2,7 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:TVS_Player">
     <Style x:Key="ProductFont">
-        <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans" />
+        <Setter Property="TextElement.FontFamily" Value="pack://TVS_Player:,,,/Resources/Fonts/#Product Sans"  />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"  />
+
     </Style>
 
 

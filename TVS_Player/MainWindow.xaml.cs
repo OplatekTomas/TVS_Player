@@ -74,5 +74,8 @@ namespace TVS_Player {
         private void Window_Unloaded(object sender, RoutedEventArgs e) {
 
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        }
     }
 }

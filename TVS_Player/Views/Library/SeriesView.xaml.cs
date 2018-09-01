@@ -51,7 +51,6 @@ namespace TVS_Player {
                 selector.SelectSeason(1);
             }
             SeasonController.Children.Add(selector);
-            PosterImage.Source = await Helper.GetImage(series.URL);
             Background.Source = await Helper.GetImage((await Poster.GetBackground(series.Id)).URL);
             Animate.FadeIn(Background);
             resizeTimer.Elapsed += ResizingDone;
@@ -80,6 +79,7 @@ namespace TVS_Player {
         }
 
         private void FillInText(Episode nextEp) {
+            SeriesName.Text = series.SeriesName;
             Genre.Text = "";
             Rating.Text = series.SiteRating + "/10";
             if (nextEp != null) {
@@ -104,7 +104,7 @@ namespace TVS_Player {
             var test = files.FirstOrDefault(x => x.FileType == "Video" || x.FileType == 1.ToString());
             if (test != default) {
                 var pi = new ProcessStartInfo() {
-                    Arguments = "http://" + Settings.Default.ServerIp + ":" + Settings.Default.ServerPort + test.URL,
+                    Arguments = test.URL,
                     UseShellExecute = true,
                     FileName = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
                     Verb = "OPEN"
@@ -141,8 +141,8 @@ namespace TVS_Player {
         }
 
         private (double width, double height) GetDimensions() {
-            int numberOf = Convert.ToInt32(EpisodePanel.ActualWidth) / 350;
-            for (int i = 350; i >= 150; i--) {
+            int numberOf = Convert.ToInt32(EpisodePanel.ActualWidth) / 365;
+            for (int i = 365; i >= 165; i--) {
                 if (numberOf < Convert.ToInt32(EpisodePanel.ActualWidth) / i) {
                     return (i,(i*0.5625)+4.5);
                 }
