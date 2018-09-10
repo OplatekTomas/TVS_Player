@@ -23,7 +23,7 @@ namespace TVS_Player_Base {
         public static async Task<bool> Connect(string ip, int port) {          
             Client = new HttpClient();
             Client.BaseAddress = new Uri("http://" + ip + ":" + port + "/");
-            if (IsOpen(ip, port) && await IsReady()) {
+            if (await IsOpen(ip, port) && await IsReady()) {
                 Ip = ip;
                 Port = port;
                 IsConnected = true;
@@ -46,13 +46,25 @@ namespace TVS_Player_Base {
             return false;
         }
 
-        private static bool IsOpen(string ip, int port) {
-            try {
-                using (var client = new TcpClient(ip, port))
-                    return true;
-            } catch (SocketException ex) {
-                return false;
-            }
+        private static async Task<bool> IsOpen(string ip, int port) {
+            return await Task.Run(() => {
+                try {
+                    using (var client = new TcpClient()) {
+                        var result = client.BeginConnect(ip, port, null, null);
+                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                        if (!success) {
+                            return false;
+                        }
+
+                        client.EndConnect(result);
+                    }
+
+                } catch {
+                    return false;
+                }
+                return true;
+            });
+           
         }
 
         public static async Task<HashSet<SearchResult>> Search(string query) {

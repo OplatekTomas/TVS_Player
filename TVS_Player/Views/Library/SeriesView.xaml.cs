@@ -34,15 +34,18 @@ namespace TVS_Player {
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
             var episodes = await Episode.GetEpisodes(series.Id);
-            foreach (var ep in episodes) {
-                if (Helper.ParseDate(ep.FirstAired, out var result) && result < DateTime.Now) {
-                    if (EpisodesSorted.ContainsKey((int)ep.AiredSeason)) {
-                        EpisodesSorted[(int)ep.AiredSeason].Add(ep);
-                    } else {
-                        EpisodesSorted.Add((int)ep.AiredSeason, new List<Episode>() { ep });
+            if (EpisodesSorted.Count == 0) {
+                foreach (var ep in episodes) {                   
+                    if (Helper.ParseDate(ep.FirstAired, out var result) && result < DateTime.Now) {
+                        if (EpisodesSorted.ContainsKey((int)ep.AiredSeason)) {
+                            EpisodesSorted[(int)ep.AiredSeason].Add(ep);
+                        } else {
+                            EpisodesSorted.Add((int)ep.AiredSeason, new List<Episode>() { ep });
+                        }
                     }
                 }
             }
+           
             var selector = new SeasonSelector(EpisodesSorted.Keys.Max(), async (s, ev) => await RenderSeason((int)s));
             var notWatchedEp = episodes.FirstOrDefault(x => x.AiredSeason > 0 && !x.Watched);
             if (notWatchedEp == default) {
@@ -50,6 +53,7 @@ namespace TVS_Player {
             } else {
                 selector.SelectSeason(1);
             }
+            SeasonController.Children.Clear();
             SeasonController.Children.Add(selector);
             Background.Source = await Helper.GetImage((await Poster.GetBackground(series.Id)).URL);
             Animate.FadeIn(Background);
@@ -64,16 +68,19 @@ namespace TVS_Player {
             if (EpisodesSorted.ContainsKey(season)) {
                 var (width, height) = GetDimensions();
                 foreach (var item in EpisodesSorted[season].OrderBy(x=>x.AiredEpisodeNumber)) {
-                    EpisodePreview preview = new EpisodePreview {
-                        Height = height,
-                        Width = width
-                    };
-                    preview.EpisodeName.Text = item.EpisodeName;
-                    preview.MouseLeftButtonUp += async (s, ev) => await PlayEpisode(item);
-                    preview.EpisodeNumber.Text = "Episode: " + item.AiredEpisodeNumber;
-                    preview.EpisodeThumbnail.Source = await Helper.GetImage(item.URL);
-                    EpisodePanel.Children.Add(preview);
-                    Animate.FadeIn(preview);
+                    if (IsLoaded) {
+                        EpisodePreview preview = new EpisodePreview {
+                            Height = height,
+                            Width = width
+                        };
+                        preview.EpisodeName.Text = item.EpisodeName;
+                        preview.MouseLeftButtonUp += (s, ev) => View.AddPage(new VideoPlayer(item));
+
+                        preview.EpisodeNumber.Text = "Episode: " + item.AiredEpisodeNumber;
+                        preview.EpisodeThumbnail.Source = await Helper.GetImage(item.URL);
+                        EpisodePanel.Children.Add(preview);
+                        Animate.FadeIn(preview);
+                    }
                 }
             }
         }
@@ -96,21 +103,6 @@ namespace TVS_Player {
             }
             Animate.FadeIn(MainText);
 
-        }
-
-
-        private async Task PlayEpisode(Episode ep) {
-            var files = await ScannedFile.GetFiles(ep.Id);
-            var test = files.FirstOrDefault(x => x.FileType == "Video" || x.FileType == 1.ToString());
-            if (test != default) {
-                var pi = new ProcessStartInfo() {
-                    Arguments = test.URL,
-                    UseShellExecute = true,
-                    FileName = "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
-                    Verb = "OPEN"
-                };
-                Process.Start(pi);
-            }
         }
 
 
@@ -157,7 +149,6 @@ namespace TVS_Player {
         private void Imdb_MouseLeave(object sender, MouseEventArgs e) {
             Mouse.OverrideCursor = null;
         }
-
     }
 
 }

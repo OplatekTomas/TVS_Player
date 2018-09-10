@@ -36,17 +36,19 @@ namespace TVS_Player
             var list = await Series.GetSeries();
             var (width, height) = GetDimensions();
             foreach (var series in list) {
-                SeriesPoster sp = new SeriesPoster {
-                    Height = height,
-                    Width = width
-                };
-                sp.MouseEnter += (s, ev) => ItemMouseEnter();
-                sp.MouseLeave += (s, ev) => ItemMouseLeave();
-                sp.MouseLeftButtonUp += (s, ev) => View.SetPage(new SeriesView(series));
-                var img = await Helper.GetImage(series.URL);
-                sp.PosterImage.Source = img;
+                if (IsLoaded) {
+                    SeriesPoster sp = new SeriesPoster {
+                        Height = height,
+                        Width = width
+                    };
+                    sp.MouseEnter += (s, ev) => ItemMouseEnter();
+                    sp.MouseLeave += (s, ev) => ItemMouseLeave();
+                    sp.MouseLeftButtonUp += (s, ev) => View.SetPage(new SeriesView(series));
+                    var img = await Helper.GetImage(series.URL);
+                    sp.PosterImage.Source = img;
                     SeriesPanel.Children.Add(sp);
-                Animate.FadeIn(sp);
+                    Animate.FadeIn(sp);
+                }               
             }
             SizeChanged += Page_SizeChanged;
             resizeTimer.Elapsed += new ElapsedEventHandler(ResizingDone);

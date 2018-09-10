@@ -70,7 +70,7 @@ namespace TVS_Player {
 
 
         public static void SetPage(Page page) {
-            Pages.Add(((Page)Main.MainContent.Content));
+            Pages.Add((Page)Main.MainContent.Content);
             HandleBackButton();
             Main.MainContentOld.Source = Helper.RenderElement(Main.MainContent);
             Main.MainContent.Content = page;

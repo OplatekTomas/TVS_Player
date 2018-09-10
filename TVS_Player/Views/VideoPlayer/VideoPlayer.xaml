@@ -3,12 +3,17 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:video="clr-namespace:WPFMediaKit.DirectShow.Controls;assembly=WPFMediaKit"
       xmlns:local="clr-namespace:TVS_Player"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="VideoPlayer">
 
     <Grid Background="Black">
-        
+        <video:MediaUriElement x:Name="Player" Loaded="Player_Loaded" Unloaded="Player_Unloaded" PreviewMouseMove="Player_MouseMove" />
+        <Grid x:Name="TopBar" Height="45" VerticalAlignment="Top" Panel.ZIndex="10">
+            <local:BackButton HorizontalAlignment="Left" x:Name="BackBtn" Margin="5,0" />
+        </Grid>
+        <local:Loading Height="32" Width="32" x:Name="Loading" />
     </Grid>
 </Page>
