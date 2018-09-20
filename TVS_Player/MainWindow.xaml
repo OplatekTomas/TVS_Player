@@ -18,9 +18,8 @@
     </Window.Resources>
     <Grid Background="{DynamicResource Background}">
         <!--#region TopBar-->
-        <Grid x:Name="TopBar" Height="45" Margin="5,0,5,0" Background="Transparent" VerticalAlignment="Top" Panel.ZIndex="25">
-            <Grid>
-                <Grid.ColumnDefinitions>
+        <Grid x:Name="TopBar" Height="45" Margin="5,0,5,0" VerticalAlignment="Top" Panel.ZIndex="25">
+            <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="2*"/>
@@ -31,64 +30,82 @@
                     </Border.Effect>
                     <Image Source="{DynamicResource Back}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
                 </Border>
-                <Grid Grid.Column="1" Background="Transparent">
-                    <Grid Margin="10,0,10,0" VerticalAlignment="Center">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="26"/>
-                            <RowDefinition Height="*" MaxHeight="1"/>
-                        </Grid.RowDefinitions>
-                        <Border Background="{StaticResource TopBarBackground}" CornerRadius="11,11,11,11" Height="26" Margin="10,-100,10,0" x:Name="SearchBar" >
-                            <Border.Effect>
-                                <DropShadowEffect Direction="300" BlurRadius="10" />
-                            </Border.Effect>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="35"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="100"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" Background="Transparent">
-                                    <Image Source="{StaticResource Search}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
-                                </Grid>
-                                <Grid Grid.Column="1">
-                                    <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,-1,2" CornerRadius="1" />
-                                    <TextBox x:Name="SearchBarText" Background="{StaticResource TopBarBackground}" FontSize="16" Foreground="{StaticResource TextColor}" BorderThickness="0" Margin="5,2,5,0"></TextBox>
-                                    <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
-                                </Grid>
-                            </Grid>
-                        </Border>
-                        <Grid Grid.Row="1" Margin="5,-1,5,0" x:Name="SearchResultBar" Opacity="0">
+                <Grid Grid.Column="1" Background="Transparent" x:Name="CenterPartTopBar">
+                <Grid Margin="10,0,10,0" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26"/>
+                        <RowDefinition Height="*" MaxHeight="1"/>
+                    </Grid.RowDefinitions>
+                    <Border Background="{StaticResource TopBarBackground}" CornerRadius="11,11,11,11" Height="26" Margin="10,-100,10,0" x:Name="SearchBar" >
+                        <Border.Effect>
+                            <DropShadowEffect Direction="300" BlurRadius="10" />
+                        </Border.Effect>
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="115"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{StaticResource Border}" Margin="-0.5" HorizontalAlignment="Right" VerticalAlignment="Top" Width="11" Height="11" />
-                            <Border Grid.Column="1" Background="{DynamicResource TopBarBackground}" CornerRadius="0,0,11,11" >
-                                <Border Margin="10" Background="{DynamicResource Background}" CornerRadius="2">
-                                    <Border Background="Transparent" BorderBrush="{StaticResource Background}" BorderThickness="1" Margin="-1" CornerRadius="5">
-                                        <Border.Effect>
-                                            <DropShadowEffect ShadowDepth="4" BlurRadius="10"/>
-                                        </Border.Effect>
-                                        <ScrollViewer Background="{StaticResource Background}" Margin="2" VerticalScrollBarVisibility="Auto">
-                                            <ScrollViewer.Resources>
-                                                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBar}" />
-                                            </ScrollViewer.Resources>
-                                            <StackPanel x:Name="SearchResultPanel" />
+                            <Grid Grid.Column="0" Background="Transparent">
+                                <Image Source="{StaticResource Search}" RenderOptions.BitmapScalingMode="HighQuality" Margin="8.5" />
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Border HorizontalAlignment="Right" Background="#AAAAAA" Width="1" Margin="0,2,1,2" CornerRadius="1" />
+                                <TextBox x:Name="SearchBarText" Background="{StaticResource TopBarBackground}" FontSize="16" Foreground="{StaticResource TextColor}" BorderThickness="0" Margin="5,2,5,0" />
+                                <Border HorizontalAlignment="Left" Background="#AAAAAA" Width="1" Margin="-1,2,0,2" CornerRadius="1" />
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid x:Name="HomeButton" MouseLeftButtonUp="HomeButton_MouseLeftButtonUp" Grid.Column="0" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                                    <Image Source="{StaticResource Home}" Margin="7" RenderOptions.BitmapScalingMode="HighQuality" />
+                                </Grid>
+                                <Grid x:Name="CalendarButton" MouseLeftButtonUp="CalendarButton_MouseLeftButtonUp" Grid.Column="1" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                                    <Image Source="{StaticResource Calendar}" Margin="7" />
+                                </Grid>
+                                <Grid x:Name="DownloadButton" MouseLeftButtonUp="DownloadButton_MouseLeftButtonUp" Grid.Column="2" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                                    <Image Source="{StaticResource Download}" Margin="7" />
+                                </Grid>
+                                <Grid x:Name="SettingsButton" MouseLeftButtonUp="SettingsButton_MouseLeftButtonUp" Grid.Column="3" MouseEnter="HandPointer" MouseLeave="NormalPointer">
+                                    <Image Source="{StaticResource SettingsCog}" Margin="7" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <Grid Grid.Row="1" Margin="5,-1,5,0" x:Name="SearchResultBar" Opacity="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{StaticResource Border}" Margin="-0.5" HorizontalAlignment="Right" VerticalAlignment="Top" Width="11" Height="11" />
+                        <Border Grid.Column="1" Background="{DynamicResource TopBarBackground}" CornerRadius="0,0,11,11" >
+                            <Border Margin="10" Background="{DynamicResource Background}" CornerRadius="2">
+                                <Border Background="Transparent" BorderBrush="{StaticResource Background}" BorderThickness="1" Margin="-1" CornerRadius="5">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="4" BlurRadius="10"/>
+                                    </Border.Effect>
+                                    <ScrollViewer Background="{StaticResource Background}" Margin="2" VerticalScrollBarVisibility="Auto">
+                                        <ScrollViewer.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBar}" />
+                                        </ScrollViewer.Resources>
+                                        <StackPanel x:Name="SearchResultPanel" />
 
-                                        </ScrollViewer>
-                                    </Border>
+                                    </ScrollViewer>
                                 </Border>
                             </Border>
-                            <Image Grid.Column="2" Source="{StaticResource Border}" Margin="-0.5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="11" Height="11" RenderTransformOrigin="0.5,0.5" >
-                                <Image.RenderTransform>
-                                    <TransformGroup>
-                                        <RotateTransform Angle="270"/>
-                                    </TransformGroup>
-                                </Image.RenderTransform>
-                            </Image>
-                        </Grid>
-
+                        </Border>
+                        <Image Grid.Column="2" Source="{StaticResource Border}" Margin="-0.5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="11" Height="11" RenderTransformOrigin="0.5,0.5" >
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="270"/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
                     </Grid>
                 </Grid>
             </Grid>

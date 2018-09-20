@@ -6,10 +6,10 @@
     <Application.Resources>
         <ResourceDictionary p4:Name="Dictionaries" xmlns:p4="http://schemas.microsoft.com/winfx/2006/xaml">
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TVS_Player;component/Theme/Colors.xaml" />
-                <ResourceDictionary Source="/TVS_Player;component/Theme/Icons.xaml" />
-                <ResourceDictionary Source="/TVS_Player;component/Theme/Styles.xaml" />
-                <ResourceDictionary Source="/TVS_Player;component/Theme/Animations.xaml" />
+                <ResourceDictionary Source="/TVS_Player;component/Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/TVS_Player;component/Resources/Styles/Icons.xaml" />
+                <ResourceDictionary Source="/TVS_Player;component/Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="/TVS_Player;component/Resources/Styles/Animations.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

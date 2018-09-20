@@ -1,0 +1,51 @@
+﻿<Page x:Class="TVS_Player.Message"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TVS_Player"
+      mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="800"
+      Title="Message" Style="{StaticResource ProductFont}">
+    <!--<Grid Background="Transparent" Loaded="Grid_Loaded">
+        <Grid.Effect>
+            <DropShadowEffect Opacity="0.5" BlurRadius="10" Direction="300" />
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" Grid.Row="1" Background="{StaticResource Background}" CornerRadius="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="45"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <local:BackButton HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"  />
+                    <TextBlock Foreground="{DynamicResource TextColor}" VerticalAlignment="Top" Margin="45,15,0,0" Text="Header" FontSize="16" HorizontalAlignment="Left" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <local:BackButton HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"  />
+                    <TextBlock Foreground="{DynamicResource TextColor}" VerticalAlignment="Top" Margin="45,15,0,0" Text="Header" FontSize="16" HorizontalAlignment="Left" />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Border MouseLeftButtonUp="Border_MouseLeftButtonUp" Grid.Column="2" Background="{DynamicResource TopBarBackground}" Margin="5,0" CornerRadius="3" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Height="26">
+                        <Border.Effect>
+                            <DropShadowEffect Opacity="0.3" Direction="300" />
+                        </Border.Effect>
+                        <TextBlock  Background="Transparent" Text="Connect" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextColor}" />
+                    </Border>
+                </Grid>
+            </Grid>
+
+        </Border>
+    </Grid>-->
+</Page>

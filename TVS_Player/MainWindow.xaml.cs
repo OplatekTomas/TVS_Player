@@ -64,11 +64,14 @@ namespace TVS_Player {
             if (string.IsNullOrEmpty(Settings.Default.ServerIp) && Settings.Default.ServerPort == default || !await Api.Connect(Settings.Default.ServerIp, Settings.Default.ServerPort)) {
                 View.AddPage(new ServerSelector());
                 MainContent.Content = new Login();
+                View.CurrentPage = typeof(Login);
             } else if (string.IsNullOrEmpty(Settings.Default.AuthToken)) {
                 MainContent.Content = new Login();
+                View.CurrentPage = typeof(Login);
             } else {
                 Api.Login(Settings.Default.AuthToken);
                 MainContent.Content = new Library();
+                View.CurrentPage = typeof(Library);
             }
         }
 
@@ -77,6 +80,24 @@ namespace TVS_Player {
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        }
+
+        private void HomeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (View.CurrentPage != typeof(Library)) {
+                View.SetPage(new Library());
+            }
+        }
+
+        private void CalendarButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+        }
+
+        private void DownloadButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+        }
+
+        private void SettingsButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
         }
     }
 }

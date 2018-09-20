@@ -11,5 +11,14 @@
     <BitmapImage x:Key="Reload" UriSource="pack://application:,,,/Resources/Icons/reload.png" />
     <BitmapImage x:Key="LogoWide" UriSource="pack://application:,,,/Resources/LogoWide.png" />
     <BitmapImage x:Key="Border" UriSource="pack://application:,,,/Resources/Icons/border.png" />
+    <BitmapImage x:Key="Pause" UriSource="pack://application:,,,/Resources/Icons/pause.png" />
+    <BitmapImage x:Key="Play" UriSource="pack://application:,,,/Resources/Icons/play.png" />
+    <BitmapImage x:Key="VolumeMuted" UriSource="pack://application:,,,/Resources/Icons/volume-mute.png" />
+    <BitmapImage x:Key="VolumeNormal" UriSource="pack://application:,,,/Resources/Icons/volume-normal.png" />
+    <BitmapImage x:Key="SettingsCog" UriSource="pack://application:,,,/Resources/Icons/settings-cog.png" />
+    <BitmapImage x:Key="Fullscreen" UriSource="pack://application:,,,/Resources/Icons/fullscreen.png" />
+    <BitmapImage x:Key="Home" UriSource="pack://application:,,,/Resources/Icons/home.png" />
+    <BitmapImage x:Key="Download" UriSource="pack://application:,,,/Resources/Icons/download.png" />
+    <BitmapImage x:Key="Calendar" UriSource="pack://application:,,,/Resources/Icons/calendar.png" />
 
 </ResourceDictionary>

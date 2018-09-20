@@ -26,7 +26,7 @@ namespace TVS_Player_Base {
         public int? SiteRatingCount { get; set; }
         public string URL { get; set; }
         public bool FullInfo { get; set; }
-        public bool Watched { get; set; }
+        public bool Finished { get; set; }
 
         public static async Task<List<Episode>> GetEpisodes(int seriesId) {
             return (await Api.GetDataArray("api/GetEpisodes?seriesId=" + seriesId)).ToObject<List<Episode>>();

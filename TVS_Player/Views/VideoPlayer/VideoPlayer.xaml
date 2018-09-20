@@ -7,13 +7,46 @@
       xmlns:local="clr-namespace:TVS_Player"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="VideoPlayer">
+      Title="VideoPlayer" Style="{StaticResource ProductFont}">
 
     <Grid Background="Black">
-        <video:MediaUriElement x:Name="Player" Loaded="Player_Loaded" Unloaded="Player_Unloaded" PreviewMouseMove="Player_MouseMove" />
-        <Grid x:Name="TopBar" Height="45" VerticalAlignment="Top" Panel.ZIndex="10">
+        <video:MediaUriElement x:Name="Player" Loaded="Player_Loaded" Unloaded="Player_Unloaded" PreviewMouseMove="Player_MouseMove" PreviewMouseDown="Player_PreviewMouseLeftButtonUp" />
+        <Grid x:Name="TopBar" Height="45" VerticalAlignment="Top">
             <local:BackButton HorizontalAlignment="Left" x:Name="BackBtn" Margin="5,0" />
         </Grid>
-        <local:Loading Height="32" Width="32" x:Name="Loading" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="Loading">
+            <local:Loading Height="24" Width="24" x:Name="LoadingAnim" />
+            <TextBlock Text="Buffering" Foreground="{StaticResource TextColor}" Margin="0,10,0,0" FontSize="16" />
+        </StackPanel>
+        <Border x:Name="BottomPanel" VerticalAlignment="Bottom" Height="40" Margin="10,0,10,0" Background="#8000" CornerRadius="5,5,0,0">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="85" x:Name="TimeProgressGrid" />
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="30" />
+                </Grid.ColumnDefinitions>
+                <Grid Background="Transparent" x:Name="PausePlay" MouseLeftButtonUp="Player_MouseLeftButtonUp" ToolTip="Pause/Play video">
+                    <Image x:Name="PausePlayIcon" Source="{StaticResource Pause}" Margin="9" />
+                </Grid>
+                <Grid Background="Transparent" x:Name="MuteVolume" MouseLeftButtonUp="MuteVolume_MouseLeftButtonUp" Grid.Column="1">
+                    <Image x:Name="VolumeIcon" Source="{StaticResource VolumeNormal}" Margin="8" />
+                </Grid>
+                <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Style="{StaticResource Horizontal_Slider}" Margin="5,2,5,0" Maximum="1" Minimum="0.65" Value="0.9" Grid.Column="2" VerticalAlignment="Center" />
+                <Slider Style="{StaticResource Horizontal_Slider}" Margin="5,2,5,0" Value="0" IsMoveToPointEnabled="True" Grid.Column="3" VerticalAlignment="Center" x:Name="PositionSlider" PreviewMouseLeftButtonDown="PositionSlider_MouseLeftButtonDown" PreviewMouseLeftButtonUp="PositionSlider_MouseLeftButtonUp" />
+                <TextBlock Background="Transparent" x:Name="TimeProgress"  MouseLeftButtonUp="Settings_MouseLeftButtonUp" Grid.Column="4" Text="00:00/00:00" Margin="0,0,0,1" HorizontalAlignment="Center" Foreground="#D5D5D5" VerticalAlignment="Center" />
+                <Grid Background="Transparent" x:Name="Settings" MouseLeftButtonUp="Settings_MouseLeftButtonUp" Grid.Column="5">
+                    <Image Source="{StaticResource SettingsCog}" Margin="8" />
+                </Grid>
+                <Grid Background="Transparent" x:Name="FullScreen" MouseLeftButtonUp="FullScreen_MouseLeftButtonUp" Grid.Column="6">
+                    <Image Source="{StaticResource Fullscreen}" Margin="8" />
+                </Grid>
+            </Grid>
+        </Border>
+        
+
     </Grid>
 </Page>

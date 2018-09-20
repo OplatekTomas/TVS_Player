@@ -21,9 +21,10 @@ namespace TVS_Player {
     }
 
     class View {
-        
+
         private static List<Page> Pages { get; set; } = new List<Page>();
         private static int PagesOnTopCount { get; set; } = 0;
+        public static Type CurrentPage { get; set; }
 
         static MainWindow Main { get; } = (MainWindow)Application.Current.MainWindow;
 
@@ -74,6 +75,7 @@ namespace TVS_Player {
             HandleBackButton();
             Main.MainContentOld.Source = Helper.RenderElement(Main.MainContent);
             Main.MainContent.Content = page;
+            CurrentPage = page.GetType();
             Panel.SetZIndex(Main.MainContent, 1);
             Panel.SetZIndex(Main.MainContentOld, 2);
             AnimateLocal(Main.MainContentOld, Main.MainContentOld.Margin, new Thickness(0, Main.ActualHeight * -1, 0, 0),()=> {
@@ -98,6 +100,7 @@ namespace TVS_Player {
             var anim = new ThicknessAnimation(new Thickness(0, Main.ActualHeight * -1, 0, 0), TimeSpan.FromMilliseconds(1));
             anim.Completed += (s, ev) => {
                 Main.MainContent.Content = page;
+                CurrentPage = page.GetType();
                 AnimateLocal(Main.MainContent, Main.MainContent.Margin, new Thickness(0), () => {
                     Main.MainContentOld.Source = null;
                 });
@@ -120,7 +123,7 @@ namespace TVS_Player {
                     if (result.ResultType.Text == "Series") {
                         View.SetPage(new SeriesView(await Series.GetSeries(item.SeriesId)));
                     } else {
-
+                        View.SetPage(new SeriesView(await Series.GetSeries(item.SeriesId), (int)(await Episode.GetEpisode(item.SeriesId, item.EpisodeId)).AiredSeason));
                     }
                     TopBar_MouseLeave();
                 };
@@ -147,8 +150,8 @@ namespace TVS_Player {
             SearchBarVisible = null
         };
         public static void SetPageCustomization(ViewCustomization custom) {
-            Main.TopBar.MouseEnter -= TopBar_MouseEnter;
-            Main.TopBar.MouseLeave -= TopBar_MouseLeave;
+            Main.CenterPartTopBar.MouseEnter -= TopBar_MouseEnter;
+            Main.CenterPartTopBar.MouseLeave -= TopBar_MouseLeave;
             switch (custom.SearchBarVisible) {
                 case true:
                     TopBar_MouseEnter();
@@ -157,8 +160,8 @@ namespace TVS_Player {
                     TopBar_MouseLeave();
                     break;
                 case null:
-                    Main.TopBar.MouseEnter += TopBar_MouseEnter;
-                    Main.TopBar.MouseLeave += TopBar_MouseLeave;
+                    Main.CenterPartTopBar.MouseEnter += TopBar_MouseEnter;
+                    Main.CenterPartTopBar.MouseLeave += TopBar_MouseLeave;
                     break;
             }
 

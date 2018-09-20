@@ -25,11 +25,18 @@ namespace TVS_Player {
     public partial class SeriesView : Page {
 
         Series series;
+        int startSeason = 0;
         Dictionary<int, List<Episode>> EpisodesSorted { get; set; } = new Dictionary<int, List<Episode>>();
 
         public SeriesView(Series series) {
             InitializeComponent();
             this.series = series;
+        }
+
+        public SeriesView(Series series, int season) {
+            InitializeComponent();
+            this.series = series;
+            startSeason = season;
         }
 
         private async void Grid_Loaded(object sender, RoutedEventArgs e) {
@@ -45,10 +52,13 @@ namespace TVS_Player {
                     }
                 }
             }
-           
+            
             var selector = new SeasonSelector(EpisodesSorted.Keys.Max(), async (s, ev) => await RenderSeason((int)s));
-            var notWatchedEp = episodes.FirstOrDefault(x => x.AiredSeason > 0 && !x.Watched);
-            if (notWatchedEp == default) {
+            var notWatchedEp = episodes.FirstOrDefault(x => x.AiredSeason > 0 && !x.Finished);
+
+            if (startSeason > 0) {
+                selector.SelectSeason(startSeason);
+            } else if (notWatchedEp == default) {
                 selector.SelectSeason((int)notWatchedEp.AiredSeason);
             } else {
                 selector.SelectSeason(1);
@@ -74,7 +84,7 @@ namespace TVS_Player {
                             Width = width
                         };
                         preview.EpisodeName.Text = item.EpisodeName;
-                        preview.MouseLeftButtonUp += (s, ev) => View.AddPage(new VideoPlayer(item));
+                        preview.MouseLeftButtonUp += (s, ev) => View.AddPage(new VideoPlayer(series, item));
 
                         preview.EpisodeNumber.Text = "Episode: " + item.AiredEpisodeNumber;
                         preview.EpisodeThumbnail.Source = await Helper.GetImage(item.URL);
