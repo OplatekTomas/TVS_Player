@@ -22,14 +22,26 @@ namespace TVS_Player_Base
         public int? SiteRatingCount { get; set; }
         public string URL { get; set; }
 
+        /// <summary>
+        /// Returns every single series in library
+        /// </summary>
+        /// <returns></returns>
         public static async Task<List<Series>> GetSeries() {
             return (await Api.GetDataArray("api/GetSeries")).ToObject<List<Series>>();
         }
 
+        /// <summary>
+        /// Returns info about some series in library by seriesiD
+        /// </summary>
+        /// <returns></returns>
         public static async Task<Series> GetSeries(int seriesId) {
             return (await Api.GetDataObject("api/GetSeries?seriesId=" + seriesId)).ToObject<Series>();
         }
 
+        /// <summary>
+        /// Searches online API for series (TVMaze instead of TVDb)
+        /// </summary>
+        /// <returns></returns>
         public static async Task<List<Series>> SearchSeries(string query) {
             return (await Api.GetDataArray("api/SearchSeries?query=" + query)).ToObject<List<Series>>();
         }

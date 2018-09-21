@@ -13,10 +13,19 @@ namespace TVS_Player_Base {
         public int? SortOrder { get; set; }
         public string URL { get; set; }
 
+        /// <summary>
+        /// Returns actors in series by seriesId
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <returns></returns>
         public static async Task<List<Actor>> GetActors(int seriesId) {
             return (await Api.GetDataArray("api/GetActors?seriesId=" + seriesId)).ToObject<List<Actor>>();
         }
-
+        /// <summary>
+        /// Returns info about single actor by actorId
+        /// </summary>
+        /// <param name="actorId"></param>
+        /// <returns></returns>
         public static async Task<Actor> GetActor(int actorId) {
             return (await Api.GetDataObject("api/GetActor?actorId=" + actorId)).ToObject<Actor>();
         }

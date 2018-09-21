@@ -18,14 +18,26 @@ namespace TVS_Player_Base {
         }
         public string URL { get; set; }
 
+        /// <summary>
+        /// Returns info about all posters for Series
+        /// </summary>
+        /// <returns></returns>
         public static async Task<List<Poster>> GetPosters(int seriesId) {
             return (await Api.GetDataArray("api/GetPosters?seriesId=" + seriesId)).ToObject<List<Poster>>();
         }
-
+        /// <summary>
+        /// Returns info for single poster by posterId
+        /// </summary>
+        /// <returns></returns>
         public static async Task<Poster> GetPoster(int posterId) {
             return (await Api.GetDataObject("api/GetPoster?posterId=" + posterId)).ToObject<Poster>();
         }
 
+        /// <summary>
+        /// Gets background image (FanArt) for series
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <returns></returns>
         public static async Task<Poster> GetBackground(int seriesId) {
             return (await Api.GetDataObject("api/GetBackground?seriesId=" + seriesId)).ToObject<Poster>();
         }

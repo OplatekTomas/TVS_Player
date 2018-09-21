@@ -28,10 +28,21 @@ namespace TVS_Player_Base {
         public bool FullInfo { get; set; }
         public bool Finished { get; set; }
 
+        /// <summary>
+        /// Returns epsisodes by seriesId. Server does not guarantee to return full data (check property FullInfo)
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <returns></returns>
         public static async Task<List<Episode>> GetEpisodes(int seriesId) {
             return (await Api.GetDataArray("api/GetEpisodes?seriesId=" + seriesId)).ToObject<List<Episode>>();
         }
 
+        /// <summary>
+        /// Returns episode by seriesId and episodeId. Guarantees that data will be Full
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <param name="episodeId"></param>
+        /// <returns></returns>
         public static async Task<Episode> GetEpisode(int seriesId, int episodeId) {
             return (await Api.GetDataObject("api/GetEpisode?seriesId=" + seriesId + "&episodeId=" + episodeId)).ToObject<Episode>();
         }

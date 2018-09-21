@@ -20,6 +20,10 @@ namespace TVS_Player_Base {
 
         static HttpClient Client { get; set; }
 
+        /// <summary>
+        /// Tries to connect to API servr using adress and a port. Can be awaited
+        /// </summary>
+        /// <returns></returns>
         public static async Task<bool> Connect(string ip, int port) {          
             Client = new HttpClient();
             Client.BaseAddress = new Uri("http://" + ip + ":" + port + "/");
@@ -67,10 +71,21 @@ namespace TVS_Player_Base {
            
         }
 
+        /// <summary>
+        /// Searches API for results
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public static async Task<HashSet<SearchResult>> Search(string query) {
             return (await GetDataArray("/api/Search?query=" + query)).ToObject<HashSet<SearchResult>>();
         }
 
+        /// <summary>
+        /// Logs in to the server using username and password, result is Tupple with results, token should be saved for further usage
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static async Task<(bool loggedin, string message, string token)> Login(string username, string password) {
             var result = await SendRequest(HttpMethod.Post, "login/", "{ \"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
             if (result.success) {
@@ -80,6 +95,12 @@ namespace TVS_Player_Base {
             return result; 
         }
 
+        /// <summary>
+        /// Registeres to server using same things, result Token should be saved
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static async Task<(bool registered, string message, string token)> Register(string username, string password) {
             if (username.Length > 3 && password.Length > 3) {
                 var result = await SendRequest(HttpMethod.Post, "register/", "{ \"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
@@ -93,17 +114,28 @@ namespace TVS_Player_Base {
             }
         }
 
+        /// <summary>
+        /// Sets saved token as login token
+        /// </summary>
+        /// <param name="token">Token that can be gained by logging in by username and password or by registering</param>
         public static void Login(string token) {
             Token = token;
             Client.DefaultRequestHeaders.Add("AuthToken", Token);
         }
 
+        /// <summary>
+        /// Sends data to URI using POST HTTP Method
+        /// </summary>
+        /// <returns></returns>
         public static async Task<bool> PostData(string requestUrl, string content) {
             var (success, message, data) = await SendRequest(HttpMethod.Post, requestUrl, content);
             return success;
         }
 
-
+        /// <summary>
+        /// Returns data from API as JArray
+        /// </summary>
+        /// <returns></returns>
         public static async Task<JArray> GetDataArray(string requestUrl) {
             var (success, message, data) = await SendRequest(HttpMethod.Get, requestUrl);
             if (success) {
@@ -114,6 +146,10 @@ namespace TVS_Player_Base {
             return new JArray();
         }
 
+        /// <summary>
+        /// Returns data from API as JObject
+        /// </summary>
+        /// <returns></returns>
         public static async Task<JObject> GetDataObject(string requestUrl) {
             var (success, message, data) = await SendRequest(HttpMethod.Get, requestUrl);
             if (success) {
@@ -124,6 +160,12 @@ namespace TVS_Player_Base {
             return new JObject();
         }
 
+        /// <summary>
+        /// Method for sending any kind of request.
+        /// </summary>
+        /// <param name="method">HTTP Method that will be used. Right now supports only POST and GET</param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static async Task<(bool success, string message, string data)> SendRequest(HttpMethod method, string requestUrl, string data = "") {
             if (IsConnected) {
                 requestUrl = requestUrl.StartsWith("/") ? requestUrl.Remove(0, 1) : requestUrl;

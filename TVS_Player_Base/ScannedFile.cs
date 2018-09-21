@@ -15,10 +15,19 @@ namespace TVS_Player_Base {
         public int SeriesId { get; set; }
         public int EpisodeId { get; set; }
 
+        /// <summary>
+        /// Returns all files for episode
+        /// </summary>
+        /// <param name="episodeId"></param>
+        /// <returns></returns>
         public static async Task<List<ScannedFile>> GetFiles(int episodeId) {
             return (await Api.GetDataArray("api/GetFiles?episodeId=" + episodeId)).ToObject<List<ScannedFile>>();
         }
 
+        /// <summary>
+        /// Returns file by IDs
+        /// </summary>
+        /// <returns></returns>
         public static async Task<ScannedFile> GetFile(int episodeId, int fileId) {
             return (await Api.GetDataObject("api/GetActor?episodeId=" + episodeId + "&fileId=" + fileId)).ToObject<ScannedFile>();
         }
@@ -32,6 +41,10 @@ namespace TVS_Player_Base {
             await Api.PostData("api/SetEpisodeProgress", "{ \"episodeId\":" + episodeId + ", \"fileId\":" + fileId + ", \"progress\": " + progress + "}");
         }
 
+        /// <summary>
+        /// Sets if episode has been finished watching
+        /// </summary>
+        /// <returns></returns>
         public static async Task SetEpisodeFinished(int episodeId, bool isFinished) {
             await Api.PostData("api/SetEpisodeFinished", "{ \"episodeId\":" + episodeId + ", \"isFinished\":" + (isFinished ? 1 : 0) + "}");
         }
