@@ -53,10 +53,13 @@ namespace TVS_Player
                 Player.MediaOpened += async (s, ev) => await MediaOpened();
                 Player.Source = new Uri(temp.URL);
                 Focus();
+       
             }
         }
 
         private async Task MediaOpened() {
+            //Force hiding background UI elemnts for better pefromance
+            ((MainWindow)Application.Current.MainWindow).MainContent.Visibility = Visibility.Collapsed;
             //Hiding and stopping buffering animations
             Animate.FadeOut(Loading);
             LoadingAnim.Stop();
@@ -245,6 +248,7 @@ namespace TVS_Player
         }
 
         private async void Player_Unloaded(object sender, RoutedEventArgs e) {
+            ((MainWindow)Application.Current.MainWindow).MainContent.Visibility = Visibility.Visible;
             //Re-enable screen saver
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
             //Make sure mouse is visible and won't hide

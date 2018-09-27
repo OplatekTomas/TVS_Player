@@ -36,7 +36,7 @@ namespace TVS_Player {
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
             //ResetData();
-            ForceData();
+            //ForceData();
             await HandleDefaultView();
             CreateSearchEvent();
         }
