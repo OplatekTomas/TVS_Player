@@ -41,11 +41,15 @@ namespace TVS_Player
                 using (TcpClient tcpClient = new TcpClient()) {
                     try {
                         await tcpClient.ConnectAsync(address, 5850);
-                        ServerFound.Invoke(address + ":" + 5850, new EventArgs());
-                    } catch { }
+                        var result = tcpClient.BeginConnect(address, 5850, null, null);
+                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                        if (success) {
+                            ServerFound.Invoke(address + ":" + 5850, new EventArgs());
+                        }
+                        tcpClient.EndConnect(result);
+                    } catch(Exception e) { }
                 }
             }
-
         }
 
         private double GetNumberOfIps(string mask) {

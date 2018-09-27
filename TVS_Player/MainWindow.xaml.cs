@@ -36,8 +36,16 @@ namespace TVS_Player {
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) {
             //ResetData();
+            ForceData();
             await HandleDefaultView();
             CreateSearchEvent();
+        }
+
+        private void ForceData() {
+            Settings.Default.ServerIp = "100.64.141.163";
+            Settings.Default.ServerPort = 5850;
+            Settings.Default.AuthToken = "";
+            Settings.Default.Save();
         }
 
         private void ResetData() {

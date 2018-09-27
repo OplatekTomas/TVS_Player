@@ -59,7 +59,6 @@ namespace TVS_Player_Base {
                         if (!success) {
                             return false;
                         }
-
                         client.EndConnect(result);
                     }
 

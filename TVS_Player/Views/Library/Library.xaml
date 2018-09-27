@@ -7,15 +7,23 @@
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="800"
       Title="Library">
-
-    <ScrollViewer Background="{StaticResource Background}" Loaded="FrameworkElement_OnLoaded" Margin="0,5">
-        <ScrollViewer.Resources>
-            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBar}" />
-        </ScrollViewer.Resources>
-        <WrapPanel x:Name="SeriesPanel">
-            <WrapPanel.Effect>
+    <Grid>
+        <ScrollViewer Background="{StaticResource Background}" Loaded="FrameworkElement_OnLoaded" Margin="0,5">
+            <ScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBar}" />
+            </ScrollViewer.Resources>
+            <WrapPanel x:Name="SeriesPanel">
+                <WrapPanel.Effect>
+                    <DropShadowEffect Direction="300" Opacity="0.5" />
+                </WrapPanel.Effect>
+            </WrapPanel>
+        </ScrollViewer>
+        <Border Background="{DynamicResource TopBarBackground}" Height="50" Width="50" CornerRadius="25" Margin="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" x:Name="AddSeriesButton" MouseLeftButtonUp="AddSeriesButton_MouseLeftButtonUp">
+            <Border.Effect>
                 <DropShadowEffect Direction="300" Opacity="0.5" />
-            </WrapPanel.Effect>
-        </WrapPanel>
-    </ScrollViewer>
+            </Border.Effect>
+            <Image Source="{StaticResource Maximize}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="17.5" RenderOptions.BitmapScalingMode="HighQuality" />
+        </Border>
+    </Grid>
+    
 </Page>

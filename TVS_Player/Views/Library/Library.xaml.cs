@@ -96,5 +96,9 @@ namespace TVS_Player
             }
             return (0, 0);
         }
+
+        private void AddSeriesButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+
+        }
     }
 }
